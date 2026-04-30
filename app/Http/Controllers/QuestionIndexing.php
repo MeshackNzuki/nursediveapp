@@ -40,7 +40,8 @@ class QuestionIndexing extends Controller
             ->take(4)
             ->get();
 
-        return $this->ResSuccess($question, [
+        return $this->ResSuccess([
+            'question' => $question,
             'related_questions' => $relatedQuestions
         ]);
     }
@@ -75,7 +76,8 @@ class QuestionIndexing extends Controller
             ->take(4)
             ->get();
 
-        return $this->ResSuccess($question, [
+        return $this->ResSuccess([
+            'question' => $question,
             'related_questions' => $relatedQuestions
         ]);
     }
