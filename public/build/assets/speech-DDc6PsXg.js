@@ -1,0 +1,6 @@
+const y=(()=>{let l=[],u=0,i=!1,a=null;const m={rate:.95,pitch:1,lang:"en-US",pauseBetweenChunks:700},g=e=>{e&&e.classList.add("tts-highlight")},o=()=>{a&&(a.classList.remove("tts-highlight"),a=null)},S=e=>{const t=speechSynthesis.getVoices().filter(c=>c.lang==="en-US"),s=["Google US English","Samantha","Allison","Jenny","Aria"],r=t.find(c=>s.some(d=>c.name.includes(d)))||t[0];r&&(e.voice=r)},f=(e,n,t)=>{const s=new SpeechSynthesisUtterance(e.trim());s.rate=t.rate,s.pitch=t.pitch,s.lang=t.lang,S(s),o(),a=n,g(n),s.onend=()=>{o(),setTimeout(p,t.pauseBetweenChunks)},speechSynthesis.speak(s)},p=()=>{if(!i)return;if(u>=l.length){i=!1,o();return}const{text:e,node:n,opts:t}=l[u++];f(e,n,t)},k=e=>{const t=new DOMParser().parseFromString(e,"text/html");return Array.from(t.body.querySelectorAll(`
+      h1, h2, h3, h4, h5, h6,
+      p,
+      li,
+      blockquote
+    `)).map(r=>{const c=r.innerText.trim();return c?{text:c,node:r}:null}).filter(Boolean)},h=(e,n={})=>{speechSynthesis.cancel(),o();const t={...m,...n};l=/<\/?[a-z][\s\S]*>/i.test(e)?k(e):[{text:e,node:null,opts:t}],l=l.map(r=>({...r,opts:t})),u=0,i=!0,p()};return h.pause=()=>speechSynthesis.pause(),h.resume=()=>speechSynthesis.resume(),h.stop=()=>{i=!1,speechSynthesis.cancel(),o()},h})();export{y as s};

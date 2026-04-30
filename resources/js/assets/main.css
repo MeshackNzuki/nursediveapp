@@ -1,0 +1,182 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@source inline("bg-{rose-500,teal-500}");
+
+/* ✅ Tailwind 4-compatible safelist using @source inline() */
+@source inline("from-{sky-400,lime-400,cyan-600,emerald-400}");
+@source inline("to-{sky-600,lime-600,cyan-800,emerald-600}");
+@source inline("font-{mono,serif,elegant,classic,sans,exo,custom,outfit}");
+@source inline("bg-{rose-500,teal-500,sky-500}");
+
+/* ✅ Custom variant (if needed) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+.bg-nursedive-primary{
+background: radial-gradient(60.63% 60.63% at 57.15% 51.07%, #0d5485 0, #0b2854 69.71%), linear-gradient(208deg, #193577 17.41%, #102962 84.05%), #074169;
+}
+
+.p-confirm-dialog-accept {
+  @apply bg-rose-500 text-white font-bold py-2 px-4 rounded-full border-0;
+}
+
+.p-confirm-dialog-reject {
+  @apply  bg-teal-600 text-white font-bold py-2 px-4 rounded-full border-0;
+}
+.p-confirm-dialog-accept,
+.p-confirm-dialog-reject {
+  @apply transition-colors duration-200 ease-in-out;
+}
+
+.slide-fade-enter-active {
+    transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+    transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    transform: translateX(-10px);
+    opacity: 0;
+}
+
+/** fade transition **/
+
+.slidedown-enter-active {
+    transition: all 0.3s ease-out;
+}
+
+.slidedown-leave-active {
+    transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slidedown-enter-from,
+.slidedown-leave-to {
+    transform: translateY(-100px);
+    opacity: 0;
+}
+
+/** Page transition **/
+.page-enter-active {
+    transition: all 0.5s ease-out;
+}
+
+.page-leave-active {
+    transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1) ease-in;
+}
+
+.page-enter-from {
+    transform: scale(0.8);
+    filter: blur(3px);
+    opacity: 0.5;
+}
+
+.page-enter-to {
+    transform: scale(1);
+    filter: blur(0);
+    opacity: 1;
+}
+
+.page-leave-from {
+    transform: scale(1);
+    filter: blur(0);
+    opacity: 1;
+}
+
+.page-leave-to {
+    transform: scale(1);
+    filter: blur(5px);
+    opacity: 0;
+}
+
+/** Modal transition **/
+
+
+
+::-webkit-scrollbar {
+    width: 8px; /* Set the thickness of the track */
+    height: 10px
+  }
+  
+  /* Style the scrollbar thumb (handle) */
+::-webkit-scrollbar-thumb {
+    background-color: rgb(223, 223, 223); /* Customize thumb color */
+    border-radius: 6px; /* Add rounded corners to the thumb */
+    height: 50px
+  }
+  
+  /* Style the scrollbar thumb on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(60, 58, 58, 0.7); /* Change color on hover */
+    height: 50px
+  }
+  
+   * {
+    @apply transition-all duration-350 ;
+    }
+
+
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: 
+    radial-gradient(farthest-side,#14b8a6 94%,#0000) top/8px 8px no-repeat,
+    conic-gradient(#0000 30%,#14b8a6);
+  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+  animation: l13 2s infinite linear;
+}
+@keyframes l13{ 
+  100%{transform: rotate(1turn)}
+}
+
+
+.custom-underline-red {
+ @apply relative inline-block after:content-[''] after:block after:h-0.5 after:w-1/2 after:bg-rose-500 after:mt-1  after:rounded-full
+}
+.custom-underline-teal {
+  @apply relative inline-block after:content-[''] after:block after:h-0.5 after:w-1/2 after:bg-teal-500 after:mt-1  after:rounded-full
+}
+
+button {
+    @apply cursor-pointer;
+}
+
+.shadow-custom {
+    --tw-shadow: 0px 5px 15px 0px rgba(0, 19, 119, .18);
+    /* --tw-shadow-colored: 0px 5px 15px 0px var(--tw-shadow-color); */
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.border-snuff-550 {
+    --tw-border-opacity: 1 !important;
+    border-color: rgb(211 211 231 / var(--tw-border-opacity)) !important;
+}
+
+  /* listing in vfors */
+
+.fade-enter-active, .fade-leave-active {
+  transition: all 0.3s ease-out;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0.5;
+  transform: translateY(2.5px);
+}
+
+.custom-border-r {
+    background-image: linear-gradient(#d3d3e7 58%, hsla(0, 0%, 100%, 0) 0);
+    background-position: 100%;
+    background-repeat: repeat-y;
+    background-size: 1px 21px;
+}
+
+.tts-highlight {
+    background-color: #ffff00;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+

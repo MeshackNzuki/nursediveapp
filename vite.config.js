@@ -1,0 +1,22 @@
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import laravel from "laravel-vite-plugin";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+    plugins: [    
+        vue(),
+        tailwindcss(),
+        laravel({
+            input: ["resources/css/app.css", "resources/js/main.ts"],
+            refresh: true,
+        }),
+    ],
+    define: {
+        "process.env": {},
+    },
+    build: {
+        outDir: "./public/build", // Output directory for compiled assets
+    },
+    
+});

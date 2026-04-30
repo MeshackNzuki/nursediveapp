@@ -1,0 +1,1 @@
+import{_ as t,f as o,g as r,h as s,p as a,C as c}from"./main-D7V3tYwM.js";const n={},l={class:"flex items-center mb-2 text-3xl font-light text-blue-950"};function _(i,e){return r(),o("div",l,e[0]||(e[0]=[s("img",{class:"w-10 h-10 mr-1",src:c,alt:"logo"},null,-1),a(" Nurse"),s("span",{class:"text-sky-500"},"Dive",-1)]))}const x=t(n,[["render",_]]);export{x as L};
