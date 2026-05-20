@@ -49,7 +49,7 @@
 
                 <section class="rounded-3xl border border-white/80 bg-white/90 p-6 backdrop-blur-sm md:p-8">
                     <div class="mb-6 flex items-center justify-between gap-3">
-                        <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Sign in</h1>
+                        <h1 class="text-2xl font-extrabold tracking-tight text-sky-600">Sign in</h1>
                         <button @click="step === 1 ? step++ : step--"
                             class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:bg-slate-100"
                             aria-label="Switch login step">
@@ -65,7 +65,8 @@
                         Step {{ step }} of 2. Use your email first, then confirm your password.
                     </p>
 
-                    <span v-if="message" class="mb-4 block rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                    <span v-if="message"
+                        class="mb-4 block rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
                         {{ message }}
                     </span>
 
@@ -88,7 +89,8 @@
 
                             <p class="text-end text-sm text-slate-600">
                                 No account yet?
-                                <router-link to="/register" class="font-semibold text-sky-700 hover:underline">Create one</router-link>
+                                <router-link to="/register" class="font-semibold text-sky-700 hover:underline">Create
+                                    one</router-link>
                             </p>
                         </form>
 
