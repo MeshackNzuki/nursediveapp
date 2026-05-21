@@ -34,18 +34,31 @@ class QuestionIndexing extends Controller
             ], 404);
         }
 
+        // NEXT questions first (deterministic)
         $relatedQuestions = NursingQuestion::where('sub_topic_id', $question->sub_topic_id)
-            ->where('id', '!=', $question->id)
-            ->inRandomOrder()
+            ->where('id', '>', $question->id)
+            ->orderBy('id', 'asc')
             ->take(4)
             ->get();
 
+        // Top up with previous if needed
+        if ($relatedQuestions->count() < 4) {
+            $remaining = 4 - $relatedQuestions->count();
+
+            $previousQuestions = NursingQuestion::where('sub_topic_id', $question->sub_topic_id)
+                ->where('id', '<', $question->id)
+                ->orderBy('id', 'desc')
+                ->take($remaining)
+                ->get();
+
+            $relatedQuestions = $relatedQuestions->merge($previousQuestions);
+        }
+
         return $this->ResSuccess([
             'question' => $question,
-            'related_questions' => $relatedQuestions
+            'related_questions' => $relatedQuestions->values()
         ]);
     }
-
 
     /**
      * Return TEAS questions by slug.
@@ -71,10 +84,22 @@ class QuestionIndexing extends Controller
         }
 
         $relatedQuestions = TeasQuestion::where('topic_id', $question->topic_id)
-            ->where('id', '!=', $question->id)
-            ->inRandomOrder()
+            ->where('id', '>', $question->id)
+            ->orderBy('id', 'asc')
             ->take(4)
             ->get();
+
+        if ($relatedQuestions->count() < 4) {
+            $remaining = 4 - $relatedQuestions->count();
+
+            $previousQuestions = TeasQuestion::where('topic_id', $question->topic_id)
+                ->where('id', '<', $question->id)
+                ->orderBy('id', 'desc')
+                ->take($remaining)
+                ->get();
+
+            $relatedQuestions = $relatedQuestions->merge($previousQuestions);
+        }
 
         return $this->ResSuccess([
             'question' => $question,
