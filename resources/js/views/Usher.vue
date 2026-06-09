@@ -226,8 +226,6 @@ onMounted(() => {
             <section
                 class="reveal-up relative overflow-hidden rounded-3xl border border-slate-200 bg-white/95  p-5 md:p-7"
                 style="animation-delay: 40ms;">
-                <div class="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-cyan-500 via-sky-500 to-emerald-500">
-                </div>
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
                     <div class="lg:col-span-8 flex flex-col gap-5">
                         <div class="flex flex-wrap items-center gap-3">
@@ -347,7 +345,7 @@ onMounted(() => {
                                     {{ feature }}
                                 </li>
                             </ul>
-                            
+
                             <div class="rounded-2xl border border-slate-200 bg-white/90 p-3">
                                 <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Access Status
                                 </p>

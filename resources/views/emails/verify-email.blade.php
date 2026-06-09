@@ -43,8 +43,6 @@
                             <p style="word-break:break-all; color:#172554;">
                                 {!! $url !!}
                             </p>
-
-
                             <p>This link will expire in 60 minutes.</p>
                             <p>If you verify from different device, make sure to log out and log in again on the other
                                 devices to refresh your session.</p>
