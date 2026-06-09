@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubTopic extends Model
 {
+
+    protected $fillable = [
+        'name',
+        'topic_id',
+        'slug',
+    ];
     /**
      * A subtopic has many questions
      */

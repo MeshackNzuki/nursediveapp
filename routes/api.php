@@ -78,7 +78,7 @@ Route::post('renew-subscription/{id}', [SubscriptionController::class, 'renew'])
 
 Route::get('/nursing/questions', [QuestionIndexing::class, 'indexNursingQuestions']);
 Route::get('/teas/questions', [QuestionIndexing::class, 'indexTeasQuestions']);
-
+Route::get('/sub-topics-seo/{id}', [QuestionIndexing::class, 'indexSubTopicsForSEO']);
 
 //start Protected routes
 Route::middleware('auth:sanctum')->group(function () {

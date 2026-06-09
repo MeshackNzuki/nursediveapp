@@ -38,12 +38,12 @@ class QuestionIndexing extends Controller
         $relatedQuestions = NursingQuestion::where('sub_topic_id', $question->sub_topic_id)
             ->where('id', '>', $question->id)
             ->orderBy('id', 'asc')
-            ->take(4)
+            ->take(3)
             ->get();
 
         // Top up with previous if needed
-        if ($relatedQuestions->count() < 4) {
-            $remaining = 4 - $relatedQuestions->count();
+        if ($relatedQuestions->count() < 3) {
+            $remaining = 3 - $relatedQuestions->count();
 
             $previousQuestions = NursingQuestion::where('sub_topic_id', $question->sub_topic_id)
                 ->where('id', '<', $question->id)
@@ -86,11 +86,11 @@ class QuestionIndexing extends Controller
         $relatedQuestions = TeasQuestion::where('topic_id', $question->topic_id)
             ->where('id', '>', $question->id)
             ->orderBy('id', 'asc')
-            ->take(4)
+            ->take(3)
             ->get();
 
-        if ($relatedQuestions->count() < 4) {
-            $remaining = 4 - $relatedQuestions->count();
+        if ($relatedQuestions->count() < 3) {
+            $remaining = 3 - $relatedQuestions->count();
 
             $previousQuestions = TeasQuestion::where('topic_id', $question->topic_id)
                 ->where('id', '<', $question->id)
@@ -107,68 +107,154 @@ class QuestionIndexing extends Controller
         ]);
     }
 
+    public function indexSubTopicsForSEO($id)
+    {
+        $subTopic = \App\Models\Nursing\SubTopic::with('questions')->find($id);
+
+        if (!$subTopic) {
+            return $this->ResError(['message' => 'Not found'], 404);
+        }
+
+        return $this->ResSuccess([
+            'sub_topic' => $subTopic,
+            'sample_questions' => $subTopic->questions->take(5),
+        ]);
+    }
+
+
+
     public function linkGenerator()
     {
         try {
-            // Nursing Questions
-            NursingQuestion::chunkById(1000, function ($rows) {
 
-                foreach ($rows as $q) {
-                    try {
-                        // Generate SEO-friendly slug from question
-                        $base = Str::slug($q->question);
+            $stopwords = ['a', 'an', 'the', 'and', 'or', 'of', 'to', 'in', 'on', 'at', 'for', 'with', 'is', 'are'];
 
-                        // Truncate at 60 chars without cutting words
-                        $words = explode('-', $base);
-                        $truncated = '';
-                        foreach ($words as $word) {
-                            if (strlen($truncated . ($truncated ? '-' : '') . $word) > 70) break;
-                            $truncated .= ($truncated ? '-' : '') . $word;
+            $todayStart = now()->startOfDay();
+
+            // =========================
+            // NURSING
+            // =========================
+            NursingQuestion::where('updated_at', '<', $todayStart)
+                ->select('id', 'question')
+                ->chunkById(1000, function ($rows) use ($stopwords) {
+
+                    foreach ($rows as $q) {
+
+                        try {
+
+                            if (empty($q->question)) {
+                                continue;
+                            }
+
+                            // Escape HTML
+                            $cleanQuestion = html_entity_decode(strip_tags($q->question));
+
+                            // Normalize spaces
+                            $cleanQuestion = preg_replace('/\s+/', ' ', $cleanQuestion);
+
+                            $base = Str::slug($cleanQuestion);
+
+                            $words = explode('-', $base);
+                            $truncated = '';
+
+                            foreach ($words as $word) {
+
+                                $next = $truncated
+                                    ? $truncated . '-' . $word
+                                    : $word;
+
+                                if (strlen($next) > 80) {
+                                    break;
+                                }
+
+                                $truncated = $next;
+                            }
+
+                            $parts = explode('-', $truncated);
+
+                            while (!empty($parts) && in_array(end($parts), $stopwords)) {
+                                array_pop($parts);
+                            }
+
+                            $newSlug = implode('-', $parts);
+
+                            $q->update([
+                                'question_slug' => $newSlug
+                            ]);
+                        } catch (\Exception $e) {
+
+                            echo "❌ Error Nursing ID {$q->id}: {$e->getMessage()}\n";
                         }
-                        $newSlug = $truncated;
-                        $q->update(['question_slug' => $newSlug]);
-                    } catch (\Exception $e) {
-                        echo "❌ Error updating Nursing ID {$q->id}: " . $e->getMessage() . "\n";
                     }
-                }
 
-                echo "Processed Nursing chunk (IDs {$rows->first()->id} → {$rows->last()->id})\n";
-            });
+                    echo "Processed Nursing chunk\n";
+                });
 
-            // TEAS Questions
-            TeasQuestion::chunkById(1000, function ($rows) {
 
-                foreach ($rows as $q) {
-                    try {
-                        if (empty($q->question)) {
-                            echo "⚠️ Skipping TEAS ID {$q->id}: question empty\n";
-                            continue;
+            // =========================
+            // TEAS
+            // =========================
+            TeasQuestion::where('updated_at', '<', $todayStart)
+                ->select('id', 'question', 'question_slug')
+                ->chunkById(1000, function ($rows) use ($stopwords) {
+
+                    foreach ($rows as $q) {
+
+                        try {
+
+                            if (empty($q->question)) {
+                                continue;
+                            }
+
+                            // Escape HTML
+                            $cleanQuestion = html_entity_decode(strip_tags($q->question));
+
+                            // Normalize spaces
+                            $cleanQuestion = preg_replace('/\s+/', ' ', $cleanQuestion);
+
+                            $base = Str::slug($cleanQuestion);
+
+                            $words = explode('-', $base);
+                            $truncated = '';
+
+                            foreach ($words as $word) {
+
+                                $next = $truncated
+                                    ? $truncated . '-' . $word
+                                    : $word;
+
+                                if (strlen($next) > 80) {
+                                    break;
+                                }
+
+                                $truncated = $next;
+                            }
+
+                            $parts = explode('-', $truncated);
+
+                            while (!empty($parts) && in_array(end($parts), $stopwords)) {
+                                array_pop($parts);
+                            }
+
+                            $newSlug = implode('-', $parts);
+
+                            if ($q->question_slug !== $newSlug) {
+
+                                $q->update([
+                                    'question_slug' => $newSlug
+                                ]);
+                            }
+                        } catch (\Exception $e) {
+
+                            echo "❌ Error TEAS ID {$q->id}: {$e->getMessage()}\n";
                         }
-
-                        $base = Str::slug($q->question);
-
-                        $words = explode('-', $base);
-                        $truncated = '';
-                        foreach ($words as $word) {
-                            if (strlen($truncated . ($truncated ? '-' : '') . $word) > 70) break;
-                            $truncated .= ($truncated ? '-' : '') . $word;
-                        }
-
-                        $newSlug = $truncated;
-
-                        if ($q->question_slug !== $newSlug) {
-                            $q->update(['question_slug' => $newSlug]);
-                            echo "✅ Updated TEAS ID {$q->id} → {$newSlug}\n";
-                        }
-                    } catch (\Exception $e) {
-                        echo "❌ Error updating TEAS ID {$q->id}: " . $e->getMessage() . "\n";
                     }
-                }
 
-                echo "Processed TEAS chunk (IDs {$rows->first()->id} → {$rows->last()->id})\n";
-            });
+                    echo "Processed TEAS chunk\n";
+                });
         } catch (\Exception $e) {
-            echo "❌ Fatal error: " . $e->getMessage() . "\n";
+
+            echo "❌ Fatal error: " . $e->getMessage();
         }
 
         return "Slug update finished.";
