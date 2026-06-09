@@ -29,7 +29,7 @@
                 <span>
                     <img class="w-9 h-9 drop-shadow-sm" src="../../assets/logo.png" alt="logo" /></span>
                 <span><router-link v-if="mainStore.sidebarOpen"
-                        class="md:block text-sky-950 dark:text-gray-50 text-base uppercase tracking-wide font-bold p-4 px-0 ms-0.5 "
+                        class="md:block text-sky-950 dark:text-gray-50 text-base uppercase  p-4 px-0 ms-0.5 bg-transparent border-0 font-bold tracking-wider"
                         to="/">
                         Nurse<span class="text-sky-600">dive</span>
                     </router-link></span>

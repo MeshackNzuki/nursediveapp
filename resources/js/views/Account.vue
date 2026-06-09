@@ -11,21 +11,21 @@
         </div>
 
         <div class="max-w-6xl mx-auto space-y-6">
-            <Navigation />
+
 
             <section class="text-center px-2">
-                <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 custom-underline-teal tracking-tight">
+                <h1 class="text-2xl md:text-3xl font-bold tracking-wide text-slate-900 custom-underline-red">
                     Account Center
                 </h1>
                 <p class="mt-3 text-sm md:text-base text-slate-600 max-w-2xl mx-auto">
                     Manage your profile details and keep your account information up to date.
                 </p>
             </section>
+            <Navigation />
 
             <section class="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <article
-                    class="lg:col-span-2 relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_14px_35px_-20px_rgba(15,23,42,0.45)]">
-                    <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
+                    class="lg:col-span-2 relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 ]">
 
                     <div class="flex flex-col items-center text-center">
                         <div
@@ -48,7 +48,7 @@
                                 <span class="uppercase tracking-wide text-slate-500">Profile Photo</span>
                                 <span class="font-semibold text-emerald-700">{{ fileUrl ? "New file selected" :
                                     "Current"
-                                }}</span>
+                                    }}</span>
                             </div>
                             <p class="text-xs text-slate-600">Use a clear square image for the best result.</p>
                         </div>
@@ -56,8 +56,8 @@
                 </article>
 
                 <article
-                    class="lg:col-span-3 relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 md:p-7 shadow-[0_14px_35px_-20px_rgba(15,23,42,0.45)]">
-                    <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-400 to-sky-500"></div>
+                    class="lg:col-span-3 relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 md:p-7 ">
+                    <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 to-sky-600"></div>
 
                     <form @submit.prevent="saveSettings" class="space-y-6">
                         <div class="space-y-1">
@@ -127,7 +127,7 @@
                         <div class="flex items-start justify-between gap-2">
                             <div>
                                 <p class="text-xs uppercase tracking-wide text-slate-500">{{ product.code.toUpperCase()
-                                    }}</p>
+                                }}</p>
                                 <h3 class="text-base font-bold text-slate-900">{{ product.label }}</h3>
                             </div>
                             <span class="rounded-full px-2.5 py-1 text-xs font-semibold" :class="product.badgeClass">

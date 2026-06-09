@@ -1,6 +1,5 @@
 <template>
-    <nav
-        class="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-3.5 md:p-4 shadow-[0_14px_35px_-20px_rgba(15,23,42,0.45)] mb-3"
+    <nav class="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-3.5 md:p-4 shadow-xs mb-3"
         aria-label="Product navigation">
         <div class="absolute inset-0 pointer-events-none opacity-80">
             <div
@@ -19,8 +18,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 <router-link v-for="item in navItems" :key="item.to" :to="item.to"
-                    class="group rounded-2xl border p-3 transition duration-200"
-                    :class="isActive(item.to)
+                    class="group rounded-2xl border p-3 transition duration-200" :class="isActive(item.to)
                         ? `${item.activeClass} border-transparent shadow-[0_14px_28px_-18px_rgba(15,23,42,0.55)]`
                         : 'border-slate-200 bg-white/90 hover:border-slate-300 hover:-translate-y-0.5'">
                     <div class="flex items-center gap-2.5">
@@ -30,17 +28,17 @@
                             <i :class="item.icon"></i>
                         </span>
                         <div class="min-w-0">
-                            <p class="text-sm font-extrabold tracking-tight" :class="isActive(item.to) ? 'text-white' : 'text-slate-800'">
+                            <p class="text-sm font-extrabold tracking-tight"
+                                :class="isActive(item.to) ? 'text-white' : 'text-slate-800'">
                                 {{ item.label }}
                             </p>
                             <p class="text-[11px]" :class="isActive(item.to) ? 'text-white/90' : 'text-slate-500'">
                                 {{ item.subtitle }}
                             </p>
                         </div>
-                        <i class="pi pi-arrow-right ml-auto text-xs transition-transform duration-200"
-                            :class="isActive(item.to)
-                                ? 'text-white'
-                                : 'text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5'"></i>
+                        <i class="pi pi-arrow-right ml-auto text-xs transition-transform duration-200" :class="isActive(item.to)
+                            ? 'text-white'
+                            : 'text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5'"></i>
                     </div>
                 </router-link>
             </div>
