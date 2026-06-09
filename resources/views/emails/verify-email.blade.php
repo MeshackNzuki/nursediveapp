@@ -46,8 +46,8 @@
 
 
                             <p>This link will expire in 60 minutes.</p>
-                            <p>If you did not create an account, no further action is required.</p>
-
+                            <p>If you verify from different device, make sure to log out and log in again on the other
+                                devices to refresh your session.</p>
                             <p style="margin-top:30px;">
                                 Warm regards,<br>
                                 <strong>The Nursedive Team</strong>
