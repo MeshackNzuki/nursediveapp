@@ -28,11 +28,11 @@
                 class="flex mb-3 items-center w-full justify-center rounded-xl bg-white/50 dark:bg-slate-900/40 border border-white/50 dark:border-sky-800/60 p-2">
                 <span>
                     <img class="w-9 h-9 drop-shadow-sm" src="../../assets/logo.png" alt="logo" /></span>
-                <span><router-link v-if="mainStore.sidebarOpen"
+                <span><a v-if="mainStore.sidebarOpen"
                         class="md:block text-sky-950 dark:text-gray-50 text-base uppercase  p-4 px-0 ms-0.5 bg-transparent border-0 font-bold tracking-wider"
-                        to="/">
+                        href="/">
                         Nurse<span class="text-sky-600">dive</span>
-                    </router-link></span>
+                    </a></span>
             </div>
             <div class="flex flex-col justify-center items-center w-full">
                 <!-- User -->
@@ -148,7 +148,7 @@
                                     </div>
                                     <span v-if="mainStore.sidebarOpen">{{
                                         item.label
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </router-link>
                         </div>
@@ -176,7 +176,7 @@
                                     </div>
                                     <span v-if="mainStore.sidebarOpen">{{
                                         item.label
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </router-link>
                         </div>
@@ -208,7 +208,7 @@
                                     class="border-b border-gray-200 last:border-0">
                                     <router-link :to="link.route">{{
                                         link.label
-                                        }}</router-link>
+                                    }}</router-link>
                                 </li>
                             </ul>
                         </div>
@@ -235,7 +235,7 @@
                                     </div>
                                     <span v-if="mainStore.sidebarOpen">{{
                                         item.label
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </router-link>
                         </div>
@@ -264,7 +264,7 @@
                                     class="border-b border-gray-200 last:border-0">
                                     <router-link :to="link.route">{{
                                         link.label
-                                        }}</router-link>
+                                    }}</router-link>
                                 </li>
                             </ul>
                         </div>
@@ -298,7 +298,7 @@
                         </div>
                         <span v-if="mainStore.sidebarOpen">{{
                             item.label
-                            }}</span>
+                        }}</span>
                     </div>
                 </router-link>
             </div>
