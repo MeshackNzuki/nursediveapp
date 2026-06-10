@@ -2,7 +2,7 @@
   <Tabs :tabs="['ATI_LPN_EXIT_EXAMS', 'HESI_LPN_EXIT_EXAMS']">
     <template #tab-ATI_LPN_EXIT_EXAMS>
       <section
-        class="relative overflow-hidden rounded-[28px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 mb-5 shadow-[0_20px_55px_-34px_rgba(14,116,144,0.55)] dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950">
+        class="relative overflow-hidden rounded-[28px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 mb-5 dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950">
         <div
           class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_15%_18%,rgba(56,189,248,0.22),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.14),transparent_42%)] dark:bg-[radial-gradient(circle_at_15%_18%,rgba(34,211,238,0.20),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(52,211,153,0.14),transparent_42%)]">
         </div>
@@ -40,7 +40,7 @@
             <div class="flex items-start justify-between gap-3">
               <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">{{ normalizeText(exam.name) }}</h3>
               <span
-                class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-xs font-semibold text-white">
+                class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-sky-600/90 to-sky-600 text-xs font-semibold text-white">
                 {{ exam?.questions_count }}
               </span>
             </div>
@@ -72,7 +72,7 @@
                   classes="border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none"
                   :action="() => resumeExam(getAttemptId(exam))" />
               </template>
-              <Small :button-text="examScore(exam) ? 'Retake' : 'Take Exam'"
+              <Small button-text="Open Exams"
                 :icon="examScore(exam) ? 'pi pi-refresh' : ''"
                 :classes="examScore(exam)
                   ? 'border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none'
@@ -86,7 +86,7 @@
 
     <template #tab-HESI_LPN_EXIT_EXAMS>
       <section
-        class="relative overflow-hidden rounded-[28px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 mb-5 shadow-[0_20px_55px_-34px_rgba(14,116,144,0.55)] dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950">
+        class="relative overflow-hidden rounded-[28px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 mb-5 dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950">
         <div
           class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_15%_18%,rgba(56,189,248,0.22),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.14),transparent_42%)] dark:bg-[radial-gradient(circle_at_15%_18%,rgba(34,211,238,0.20),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(52,211,153,0.14),transparent_42%)]">
         </div>
@@ -124,7 +124,7 @@
             <div class="flex items-start justify-between gap-3">
               <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">{{ normalizeText(exam.name) }}</h3>
               <span
-                class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-xs font-semibold text-white">
+                class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-sky-600/90 to-sky-600 text-xs font-semibold text-white">
                 {{ exam?.questions_count }}
               </span>
             </div>
@@ -156,7 +156,7 @@
                   classes="border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none"
                   :action="() => resumeExam(getAttemptId(exam))" />
               </template>
-              <Small :button-text="examScore(exam) ? 'Retake' : 'Take Exam'"
+              <Small button-text="Open Exams"
                 :icon="examScore(exam) ? 'pi pi-refresh' : ''"
                 :classes="examScore(exam)
                   ? 'border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none'

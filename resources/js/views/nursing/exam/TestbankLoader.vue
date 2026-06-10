@@ -3,19 +3,17 @@
         class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-slate-50 dark:bg-sky-950 text-slate-800 dark:text-slate-100">
         <div class="absolute inset-0 pointer-events-none -z-10">
             <div
-                class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-cyan-300 via-sky-300 to-emerald-200 opacity-30 blur-[120px] rounded-full">
+                class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-cyan-50 via-sky-100/80 to-emerald-50 opacity-30 blur-[120px] rounded-full">
             </div>
             <div
-                class="absolute top-32 right-10 h-[420px] w-[420px] bg-gradient-to-r from-indigo-200 via-sky-300 to-emerald-200 opacity-30 blur-[100px] rounded-full">
+                class="absolute top-32 right-10 h-[420px] w-[420px] bg-gradient-to-r from-indigo-50 via-sky-100/80 to-emerald-50 opacity-30 blur-[100px] rounded-full">
             </div>
         </div>
 
         <div class="max-w-screen-2xl mx-auto">
             <section
-                class="relative overflow-hidden rounded-[30px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 lg:p-7 shadow-[0_24px_72px_-36px_rgba(14,116,144,0.55)] dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950 dark:shadow-[0_24px_72px_-36px_rgba(2,132,199,0.65)]">
-                <div
-                    class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_15%_18%,rgba(56,189,248,0.22),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.16),transparent_42%)] dark:bg-[radial-gradient(circle_at_15%_18%,rgba(34,211,238,0.22),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(52,211,153,0.14),transparent_42%)]">
-                </div>
+                class="relative overflow-hidden rounded-[30px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 lg:p-7  dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950 ]">
+
 
                 <div class="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
                     <div>
@@ -76,7 +74,7 @@
                                     {{ normalizeText(exam.name) }}
                                 </h3>
                                 <span
-                                    class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-xs font-semibold text-white">
+                                    class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-sky-600/90 to-sky-600 text-xs font-semibold text-white">
                                     {{ exam.questions_count }}
                                 </span>
                             </div>
@@ -113,7 +111,7 @@
                                     :icon="examScore(exam) ? 'pi pi-refresh' : ''"
                                     :classes="examScore(exam)
                                         ? 'border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none'
-                                        : 'border border-cyan-500 bg-white text-slate-900 hover:bg-cyan-500 hover:text-white shadow-none'"
+                                        : 'border border-sky-600 bg-white text-slate-900 hover:bg-cyan-500 hover:text-white shadow-none'"
                                     :action="() => openModal(exam)" />
                             </div>
                         </div>

@@ -2,10 +2,7 @@
   <Tabs :tabs="['ATI_LPN', 'HESI_LPN', 'REGULAR_LPN']">
     <template #tab-ATI_LPN>
       <section
-        class="relative overflow-hidden rounded-[28px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 mb-5 shadow-[0_20px_55px_-34px_rgba(14,116,144,0.55)] dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950">
-        <div
-          class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_15%_18%,rgba(56,189,248,0.22),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.14),transparent_42%)] dark:bg-[radial-gradient(circle_at_15%_18%,rgba(34,211,238,0.20),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(52,211,153,0.14),transparent_42%)]">
-        </div>
+        class="relative overflow-hidden rounded-[28px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 mb-5 dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950">
         <div class="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
           <div>
             <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">ATI LPN Test Bank</h2>
@@ -28,22 +25,23 @@
       <div v-if="filteredAti.length === 0" class="text-center text-slate-400 dark:text-slate-500">No exams available.</div>
 
       <transition-group v-else name="fade" tag="div" class="grid grid-cols-1 sm:grid-cols-2 gap-4" appear>
-        <article v-for="(sub, index) in filteredAti" :key="sub.slug"
-          class="group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]">
+        <article v-for="(sub, index) in filteredAti" :key="sub.slug" @click="() => goToExams(sub.slug)"
+          class="group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_20px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]">
           <div :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]"></div>
           <div class="relative flex h-full flex-col">
             <div class="flex items-start justify-between gap-3">
               <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">{{ normalizeText(sub.name) }}</h3>
               <span
-                class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-xs font-semibold text-white">
+                class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-sky-600/90 to-sky-600 text-xs font-semibold text-white">
                 {{ sub?.examsCount }}
               </span>
             </div>
-            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Open this category to view all available ATI LPN exams.</p>
+            <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Click item to view all available ATI LPN {{
+              normalizeText(sub.name) }} exams.</p>
 
             <div class="mt-4">
               <CommonButton button-text="Open Exams" :action="() => goToExams(sub.slug)"
-                classes="bg-gradient-to-r from-sky-600 to-cyan-500 text-white border-0 rounded-lg" />
+                classes="bg-gradient-to-r from-sky-600/90 to-sky-700/80 text-white border-0 rounded-full" />
             </div>
           </div>
         </article>
@@ -52,10 +50,7 @@
 
     <template #tab-HESI_LPN>
       <section
-        class="relative overflow-hidden rounded-[28px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 mb-5 shadow-[0_20px_55px_-34px_rgba(14,116,144,0.55)] dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950">
-        <div
-          class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_15%_18%,rgba(56,189,248,0.22),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.14),transparent_42%)] dark:bg-[radial-gradient(circle_at_15%_18%,rgba(34,211,238,0.20),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(52,211,153,0.14),transparent_42%)]">
-        </div>
+        class="relative overflow-hidden rounded-[28px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 mb-5 dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950">
         <div class="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
           <div>
             <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">HESI LPN Test Bank</h2>
@@ -78,22 +73,23 @@
       <div v-if="filteredHesi.length === 0" class="text-center text-slate-400 dark:text-slate-500">No exams available.</div>
 
       <transition-group v-else name="fade" tag="div" class="grid grid-cols-1 sm:grid-cols-2 gap-4" appear>
-        <article v-for="(sub, index) in filteredHesi" :key="sub.slug"
-          class="group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]">
+        <article v-for="(sub, index) in filteredHesi" :key="sub.slug" @click="() => goToExams(sub.slug)"
+          class="group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_20px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]">
           <div :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]"></div>
           <div class="relative flex h-full flex-col">
             <div class="flex items-start justify-between gap-3">
               <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">{{ normalizeText(sub.name) }}</h3>
               <span
-                class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-xs font-semibold text-white">
+                class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-sky-600/90 to-sky-600 text-xs font-semibold text-white">
                 {{ sub?.examsCount }}
               </span>
             </div>
-            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Open this category to view all available HESI LPN exams.</p>
+            <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Click item to view all available HESI LPN {{
+              normalizeText(sub.name) }} exams.</p>
 
             <div class="mt-4">
               <CommonButton button-text="Open Exams" :action="() => goToExams(sub.slug)"
-                classes="bg-gradient-to-r from-sky-600 to-cyan-500 text-white border-0 rounded-lg" />
+                classes="bg-gradient-to-r from-sky-600/90 to-sky-700/80 text-white border-0 rounded-full" />
             </div>
           </div>
         </article>
@@ -102,10 +98,7 @@
 
     <template #tab-REGULAR_LPN>
       <section
-        class="relative overflow-hidden rounded-[28px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 mb-5 shadow-[0_20px_55px_-34px_rgba(14,116,144,0.55)] dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950">
-        <div
-          class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_15%_18%,rgba(56,189,248,0.22),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.14),transparent_42%)] dark:bg-[radial-gradient(circle_at_15%_18%,rgba(34,211,238,0.20),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(52,211,153,0.14),transparent_42%)]">
-        </div>
+        class="relative overflow-hidden rounded-[28px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 mb-5 dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950">
         <div class="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
           <div>
             <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Regular LPN Test Bank</h2>
@@ -128,22 +121,23 @@
       <div v-if="filteredRegular.length === 0" class="text-center text-slate-400 dark:text-slate-500">No exams available.</div>
 
       <transition-group v-else name="fade" tag="div" class="grid grid-cols-1 sm:grid-cols-2 gap-4" appear>
-        <article v-for="(sub, index) in filteredRegular" :key="sub.slug"
-          class="group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]">
+        <article v-for="(sub, index) in filteredRegular" :key="sub.slug" @click="() => goToExams(sub.slug)"
+          class="group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_20px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]">
           <div :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]"></div>
           <div class="relative flex h-full flex-col">
             <div class="flex items-start justify-between gap-3">
               <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">{{ normalizeText(sub.name) }}</h3>
               <span
-                class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-xs font-semibold text-white">
+                class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-sky-600/90 to-sky-600 text-xs font-semibold text-white">
                 {{ sub?.examsCount }}
               </span>
             </div>
-            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Open this category to view all available Regular LPN exams.</p>
+            <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Click item to view all available Regular LPN {{
+              normalizeText(sub.name) }} exams.</p>
 
             <div class="mt-4">
               <CommonButton button-text="Open Exams" :action="() => goToExams(sub.slug)"
-                classes="bg-gradient-to-r from-sky-600 to-cyan-500 text-white border-0 rounded-lg" />
+                classes="bg-gradient-to-r from-sky-600/90 to-sky-700/80 text-white border-0 rounded-full" />
             </div>
           </div>
         </article>

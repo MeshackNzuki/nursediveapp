@@ -20,7 +20,6 @@ const products = [
         pricingRoute: "/teas-pricing",
         accent: "from-cyan-500 to-sky-600",
         chip: "bg-cyan-100 text-cyan-800",
-        surface: "from-cyan-50 via-white to-sky-50",
         features: ["Adaptive practice flow", "Detailed rationales", "Progress tracking"],
     },
     {
@@ -33,7 +32,6 @@ const products = [
         pricingRoute: "/nursing-pricing",
         accent: "from-emerald-500 to-teal-600",
         chip: "bg-emerald-100 text-emerald-800",
-        surface: "from-emerald-50 via-white to-teal-50",
         features: ["Weak-area focus", "Performance analytics", "High-yield review"],
     },
     {
@@ -46,7 +44,6 @@ const products = [
         pricingRoute: "/nclex-pricing",
         accent: "from-blue-600 to-indigo-600",
         chip: "bg-blue-100 text-blue-800",
-        surface: "from-blue-50 via-white to-indigo-50",
         features: ["NCLEX-style items", "CAT simulation", "Readiness insights"],
     },
 ];
@@ -156,6 +153,58 @@ const focusTip = computed(() => {
     return "Keep your streak alive with one focused timed quiz today.";
 });
 
+const primaryProduct = computed(() => {
+    return (
+        products.find((product) => planStatus(product.code) === "active") ||
+        products.find((product) => planStatus(product.code) === "trial") ||
+        products[0]
+    );
+});
+
+const primaryActionRoute = computed(() => {
+    const product = primaryProduct.value;
+    return planStatus(product.code) === "expired" ? product.pricingRoute : product.dashboardRoute;
+});
+
+const primaryActionLabel = computed(() => {
+    const product = primaryProduct.value;
+    return planStatus(product.code) === "expired"
+        ? `View ${product.name} Plans`
+        : `Continue ${product.name}`;
+});
+
+const summaryStats = computed(() => [
+    {
+        label: "Active Plans",
+        value: activeCount.value,
+        detail: "Ready to use",
+        icon: "pi pi-check-circle",
+        tone: "text-emerald-600 dark:text-emerald-300",
+    },
+    {
+        label: "Trials",
+        value: trialCount.value,
+        detail: "Temporary access",
+        icon: "pi pi-clock",
+        tone: "text-amber-600 dark:text-amber-300",
+    },
+    {
+        label: "Need Upgrade",
+        value: needsUpgradeCount.value,
+        detail: "Locked or expired",
+        icon: "pi pi-lock",
+        tone: "text-rose-600 dark:text-rose-300",
+    },
+    {
+        label: "Study Streak",
+        value: `${streakDays.value}d`,
+        detail: streakMessage.value,
+        icon: "",
+        blob: "🔥",
+        tone: "text-sky-600 dark:text-sky-300",
+    },
+]);
+
 const toLocalDateKey = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -212,211 +261,243 @@ onMounted(() => {
 
 <template>
     <div
-        class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-4 md:p-6 bg-white">
-        <div class="absolute inset-0 pointer-events-none -z-10">
-            <div
-                class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-cyan-200 via-sky-200 to-emerald-200 opacity-40 blur-[120px] rounded-full">
-            </div>
-            <div
-                class="absolute top-28 right-8 h-[420px] w-[420px] bg-gradient-to-r from-blue-200 via-cyan-200 to-teal-200 opacity-35 blur-[100px] rounded-full">
-            </div>
-        </div>
-
-        <div class="max-w-7xl mx-auto space-y-6">
+        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-slate-100 p-4 md:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh] dark:bg-slate-950">
+        <div class="mx-auto max-w-7xl space-y-6">
             <section
-                class="reveal-up relative overflow-hidden rounded-3xl border border-slate-200 bg-white/95  p-5 md:p-7"
-                style="animation-delay: 40ms;">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
-                    <div class="lg:col-span-8 flex flex-col gap-5">
-                        <div class="flex flex-wrap items-center gap-3">
+                class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm md:p-7 dark:border-slate-800 dark:bg-slate-900">
+                <div class="grid gap-6 lg:grid-cols-[1fr_340px]">
+                    <div>
+                        <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
                             <div v-if="user?.avatar"
-                                class="h-14 w-14 rounded-full ring-2 ring-sky-300 border-2 border-white overflow-hidden shadow-sm bg-white">
-                                <img :src="'/storage/' + user.avatar" class="w-full h-full object-cover"
+                                class="h-16 w-16 shrink-0 overflow-hidden rounded-full border-2 border-white bg-white ring-2 ring-sky-200 dark:border-slate-900 dark:bg-slate-800 dark:ring-sky-900">
+                                <img :src="'/storage/' + user.avatar" class="h-full w-full object-cover"
                                     alt="User Avatar" />
                             </div>
                             <div v-else
-                                class="h-14 w-14 rounded-full bg-gradient-to-br from-sky-600 to-cyan-500 text-white font-bold flex items-center justify-center shadow-md ring-2 ring-sky-300">
+                                class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sky-600 to-cyan-500 text-lg font-bold text-white ring-2 ring-sky-200 dark:ring-sky-900">
                                 {{ initials }}
                             </div>
 
-                            <div>
-                                <h1 class="text-2xl md:text-3xl font-light tracking-tight text-slate-900">
-                                    Welcome back,<span class="font-semibold"> {{ firstName }}</span>
+                            <div class="min-w-0 flex-1">
+                                <p
+                                    class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-300">
+                                    NurseDive Nursing Exam Prep
+                                </p>
+                                <h1
+                                    class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl dark:text-slate-100">
+                                    <span class="font-light">Welcome back</span>, {{ firstName }}
                                 </h1>
-                                <p class="text-sm text-slate-600 mt-1">
-                                    Stay consistent today. Small focused sessions compound into exam success.
+                                <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-500 dark:text-slate-400">
+                                    Choose a track, review your access, and keep today's study session focused.
                                 </p>
-                            </div>
-                        </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
-                                <p class="text-xs uppercase tracking-wide text-emerald-700 font-semibold">Active Plans
-                                </p>
-                                <p class="text-2xl font-extrabold text-emerald-800 mt-1">{{ activeCount }}</p>
-                            </div>
-                            <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4">
-                                <p class="text-xs uppercase tracking-wide text-amber-700 font-semibold">Trials</p>
-                                <p class="text-2xl font-extrabold text-amber-800 mt-1">{{ trialCount }}</p>
-                            </div>
-                            <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4">
-                                <p class="text-xs uppercase tracking-wide text-rose-700 font-semibold">Need Upgrade</p>
-                                <p class="text-2xl font-extrabold text-rose-800 mt-1">{{ needsUpgradeCount }}</p>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 reveal-fade" style="animation-delay: 160ms;">
-                            <div class="rounded-2xl border border-sky-200 bg-sky-50 p-3.5">
-                                <p class="text-[11px] uppercase tracking-wide text-sky-700 font-semibold">Study Streak
-                                </p>
-                                <p class="text-lg font-extrabold text-sky-900 mt-1">&#128293; {{ streakDays }} day<span
-                                        v-if="streakDays > 1">s</span></p>
-                                <p class="text-xs text-sky-700 mt-1">{{ streakMessage }}</p>
-                            </div>
-                            <div class="rounded-2xl border border-indigo-200 bg-indigo-50 p-3.5">
-                                <p class="text-[11px] uppercase tracking-wide text-indigo-700 font-semibold">Last
-                                    Activity</p>
-                                <p class="text-lg font-extrabold text-indigo-900 mt-1">{{ lastActivityText }}</p>
-                                <p class="text-xs text-indigo-700 mt-1">Based on your latest account activity.</p>
-                            </div>
-                            <div class="rounded-2xl border border-teal-200 bg-teal-50 p-3.5">
-                                <p class="text-[11px] uppercase tracking-wide text-teal-700 font-semibold">Focus Today
-                                </p>
-                                <p class="text-sm font-semibold text-teal-900 mt-1">{{ focusTip }}</p>
+                                <dl
+                                    class="mt-6 grid gap-y-4 border-y border-slate-200 py-4 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-slate-200 dark:border-slate-800 dark:lg:divide-slate-800">
+                                    <div v-for="stat in summaryStats" :key="stat.label"
+                                        class="lg:px-4 first:lg:pl-0 bg-sky-50/50 rounded-lg p-2">
+                                        <dt
+                                            class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                            <span v-if="stat.blob"
+                                                class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-orange-100 text-[13px] ring-1 ring-orange-200 dark:bg-orange-900/30 dark:ring-orange-800/60">
+                                                {{ stat.blob }}
+                                            </span>
+                                            <i v-else :class="[stat.icon, stat.tone]"></i>
+                                            {{ stat.label }}
+                                        </dt>
+                                        <dd class="mt-2 text-2xl font-bold text-slate-950 dark:text-slate-100">
+                                            {{ stat.value }}
+                                        </dd>
+                                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                            {{ stat.detail }}
+                                        </p>
+                                    </div>
+                                </dl>
                             </div>
                         </div>
                     </div>
 
-                    <div class="lg:col-span-4 flex flex-col gap-3">
-                        <EmailVerification v-if="!user?.email_verified" class="relative" />
-                        <CommonButton buttonText="View Subscription Plans" icon="pi pi-credit-card me-1"
-                            :action="() => router.push('/subscription')"
-                            classes="w-full bg-sky-600 text-white hover:bg-sky-700 py-2.5" />
-                        <router-link v-if="isAdmin" to="/admin"
-                            class="w-full text-center rounded-full border border-slate-300 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition">
-                            Open Admin Panel
-                        </router-link>
-                    </div>
+                    <aside class="flex flex-col gap-4 border-slate-200 lg:border-l lg:pl-6 dark:border-slate-800">
+                        <EmailVerification v-if="!user?.email_verified" class="max-w-none" />
+
+                        <div>
+                            <p
+                                class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
+                                Focus Today
+                            </p>
+                            <p class="mt-2 text-sm font-semibold leading-6 text-slate-900 dark:text-slate-100">
+                                {{ focusTip }}
+                            </p>
+                            <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                                Last activity: {{ lastActivityText }}
+                            </p>
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <CommonButton :buttonText="primaryActionLabel" icon2="pi pi-arrow-right"
+                                :action="() => router.push(primaryActionRoute)"
+                                classes="w-full bg-sky-600 py-2.5 text-white shadow-none hover:bg-sky-700" />
+                            <CommonButton buttonText="View Subscription Plans" icon="pi pi-credit-card me-1"
+                                :action="() => router.push('/subscription')"
+                                classes="w-full border border-slate-200 bg-white py-2.5 text-slate-700 shadow-none hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800" />
+                            <router-link v-if="isAdmin" to="/admin"
+                                class="flex w-full items-center justify-center rounded-full border border-slate-200 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800">
+                                <i class="pi pi-cog mr-2 text-xs"></i>
+                                Open Admin Panel
+                            </router-link>
+                        </div>
+                    </aside>
                 </div>
             </section>
-            <section class="space-y-4 reveal-up" style="animation-delay: 100ms;">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900">Your Learning Products
-                    </h2>
-                    <p class="text-xs md:text-sm text-slate-500">Choose a track and continue from where you left off</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                    <article v-for="(product, index) in products" :key="product.code"
-                        class="reveal-up group relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-custom transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_48px_-22px_rgba(15,23,42,0.45)]"
-                        :style="{ animationDelay: `${180 + index * 90}ms` }">
 
-                        <div class="absolute inset-0 opacity-80 bg-gradient-to-br" :class="product.surface"></div>
+            <section class="space-y-4">
+                <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-300">
+                            Learning Products
+                        </p>
+                        <h2
+                            class="mt-1 text-xl font-semibold tracking-tight text-slate-950 md:text-2xl dark:text-slate-100">
+                            Continue Your Prep
+                        </h2>
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                        Choose a track and continue from where you left off.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    <article v-for="product in products" :key="product.code"
+                        class="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_48px_-28px_rgba(15,23,42,0.45)] dark:border-slate-800 dark:bg-slate-900">
                         <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r" :class="product.accent"></div>
 
-                        <div class="relative p-5 md:p-6 space-y-4">
-                            <div class="flex items-start justify-between gap-2">
-                                <div class="inline-flex items-center gap-2.5">
-                                    <div class="min-h-8 min-w-8 rounded-lg p-2 bg-gradient-to-br text-white font-bold flex items-center justify-center shadow-sm"
+                        <div class="p-5 md:p-6">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex min-w-0 items-start gap-3">
+                                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-sm font-bold text-white"
                                         :class="product.accent">
                                         {{ product.abb }}
                                     </div>
-                                    <div>
-                                        <h3 class="text-lg font-extrabold tracking-tight text-slate-900">{{ product.name
-                                            }}</h3>
-                                        <p class="text-xs text-slate-600 mt-0.5">{{ product.subtitle }}</p>
+                                    <div class="min-w-0">
+                                        <h3
+                                            class="text-lg font-semibold tracking-tight text-slate-950 dark:text-slate-100">
+                                            {{ product.name }}
+                                        </h3>
+                                        <p class="mt-1 text-sm leading-5 text-slate-500 dark:text-slate-400">
+                                            {{ product.subtitle }}
+                                        </p>
                                     </div>
                                 </div>
-                                <span class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-bold"
+                                <span
+                                    class="inline-flex shrink-0 items-center rounded-full border px-2.5 py-1 text-xs font-bold"
                                     :class="statusClass(product.code)">
                                     {{ statusLabel(product.code) }}
                                 </span>
                             </div>
 
-                            <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
-                                :class="product.chip">
-                                {{ product.tag }}
-                            </span>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
+                                    :class="product.chip">
+                                    {{ product.tag }}
+                                </span>
+                            </div>
 
-                            <ul class="space-y-2">
+                            <ul class="mt-5 space-y-2">
                                 <li v-for="feature in product.features" :key="feature"
-                                    class="flex items-center gap-2 text-sm text-slate-700">
+                                    class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
                                     <span
-                                        class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-teal-700 border border-teal-200 text-xs font-bold">&#10003;</span>
+                                        class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-teal-200 bg-teal-50 text-xs font-bold text-teal-700 dark:border-teal-800 dark:bg-teal-950 dark:text-teal-300">
+                                        <i class="pi pi-check text-[10px]"></i>
+                                    </span>
                                     {{ feature }}
                                 </li>
                             </ul>
 
-                            <div class="rounded-2xl border border-slate-200 bg-white/90 p-3">
-                                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Access Status
+                            <div class="mt-5 border-t border-slate-200 pt-4 dark:border-slate-800">
+                                <p
+                                    class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                    Access Status
                                 </p>
-                                <p class="text-sm text-slate-700 mt-1">{{ statusMessage(product.code) }}</p>
+                                <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                                    {{ statusMessage(product.code) }}
+                                </p>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div class="mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                                 <CommonButton buttonText="Open Dashboard" icon2="pi pi-arrow-right"
                                     :action="() => router.push(product.dashboardRoute)"
-                                    classes="w-full text-white hover:bg-slate-800 py-2.5" />
+                                    classes="w-full bg-slate-900 py-2.5 text-white shadow-none hover:bg-slate-800 dark:bg-sky-600 dark:hover:bg-sky-700" />
                                 <CommonButton buttonText="View Plans" icon="pi pi-star"
                                     :action="() => router.push(product.pricingRoute)"
-                                    classes="w-full bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 py-2.5" />
+                                    classes="w-full border border-slate-200 bg-white py-2.5 text-slate-700 shadow-none hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800" />
                             </div>
                         </div>
                     </article>
                 </div>
             </section>
-            <section class="grid grid-cols-1 xl:grid-cols-3 gap-5 reveal-fade" style="animation-delay: 220ms;">
-                <div class="xl:col-span-2 rounded-3xl border border-slate-200 bg-white p-5 md:p-6 shadow-sm">
-                    <h3 class="text-lg font-extrabold text-slate-900">Why Nursedive</h3>
-                    <p class="text-sm text-slate-600 mt-1">Designed for high performance, consistency, and measurable
-                        outcomes.</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                        <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">
-                            <p class="text-sm font-semibold text-slate-800">Realistic Question Quality</p>
-                            <p class="text-xs text-slate-600 mt-1">Well-crafted questions aligned with real exam style
-                                and difficulty.</p>
-                        </div>
-                        <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">
-                            <p class="text-sm font-semibold text-slate-800">Weak-Area Focus</p>
-                            <p class="text-xs text-slate-600 mt-1">Target your gaps and improve with smart feedback
-                                loops.</p>
-                        </div>
-                        <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">
-                            <p class="text-sm font-semibold text-slate-800">Comprehensive Analytics</p>
-                            <p class="text-xs text-slate-600 mt-1">Track momentum, confidence, and readiness over time.
+
+            <section class="grid grid-cols-1 gap-5 xl:grid-cols-3">
+                <div
+                    class="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6 xl:col-span-2 dark:border-slate-800 dark:bg-slate-900">
+                    <h3 class="text-lg font-semibold text-slate-950 dark:text-slate-100">Why NurseDive</h3>
+                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                        Designed for consistent practice, measurable progress, and readiness decisions.
+                    </p>
+                    <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div class="border-l-2 border-sky-500 pl-3">
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Realistic Question
+                                Quality</p>
+                            <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                                Questions aligned with real exam style and difficulty.
                             </p>
                         </div>
-                        <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">
-                            <p class="text-sm font-semibold text-slate-800">High Pass-Rate Strategy</p>
-                            <p class="text-xs text-slate-600 mt-1">Structured routines and guided practice built for
-                                exam success.</p>
+                        <div class="border-l-2 border-emerald-500 pl-3">
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Weak-Area Focus</p>
+                            <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                                Target gaps and improve with feedback loops.
+                            </p>
+                        </div>
+                        <div class="border-l-2 border-amber-500 pl-3">
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Comprehensive Analytics
+                            </p>
+                            <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                                Track momentum, confidence, and readiness over time.
+                            </p>
+                        </div>
+                        <div class="border-l-2 border-rose-500 pl-3">
+                            <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">High Pass-Rate Strategy
+                            </p>
+                            <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                                Structured routines and guided practice built for exam success.
+                            </p>
                         </div>
                     </div>
                 </div>
 
                 <div
-                    class="rounded-3xl border border-slate-200 bg-white p-5 md:p-6 shadow-sm flex flex-col justify-between gap-4">
+                    class="flex flex-col justify-between gap-4 rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6 dark:border-slate-800 dark:bg-slate-900">
                     <div>
-                        <h3 class="text-lg font-extrabold text-slate-900">Need Help?</h3>
-                        <p class="text-sm text-slate-600 mt-1">
+                        <h3 class="text-lg font-semibold text-slate-950 dark:text-slate-100">Need Help?</h3>
+                        <p class="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">
                             We value your feedback and are here to support your preparation journey.
                         </p>
                     </div>
 
                     <div class="space-y-2.5">
                         <CommonButton buttonText="Contact Support" icon="pi pi-envelope me-1" :action="goToSupport"
-                            classes="w-full bg-sky-600 text-white hover:bg-sky-700 py-2.5" />
-                        <p class="text-xs text-slate-500">
+                            classes="w-full bg-sky-600 py-2.5 text-white shadow-none hover:bg-sky-700" />
+                        <p class="text-xs text-slate-500 dark:text-slate-400">
                             You can also use the live chat at the bottom-right corner.
                         </p>
                     </div>
                 </div>
             </section>
 
-            <section class="rounded-3xl border border-slate-200 bg-white p-5 md:p-6 shadow-sm reveal-fade"
-                style="animation-delay: 280ms;">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
-                    <h3 class="text-lg font-extrabold text-slate-900">Share and Connect</h3>
-                    <p class="text-sm text-slate-600">Join our social channels for updates, tips, and success stories.
+            <section
+                class="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6 dark:border-slate-800 dark:bg-slate-900">
+                <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                    <h3 class="text-lg font-semibold text-slate-950 dark:text-slate-100">Share and Connect</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                        Join our social channels for updates, tips, and success stories.
                     </p>
                 </div>
                 <Socials />
@@ -424,48 +505,3 @@ onMounted(() => {
         </div>
     </div>
 </template>
-
-<style scoped>
-.reveal-up {
-    opacity: 0;
-    transform: translateY(12px);
-    animation: usherFadeUp 560ms ease-out forwards;
-}
-
-.reveal-fade {
-    opacity: 0;
-    animation: usherFade 620ms ease-out forwards;
-}
-
-@keyframes usherFadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes usherFade {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-    .reveal-up,
-    .reveal-fade {
-        animation: none;
-        opacity: 1;
-        transform: none;
-    }
-}
-</style>
