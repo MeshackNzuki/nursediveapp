@@ -294,7 +294,7 @@ onMounted(() => {
                                 <dl
                                     class="mt-6 grid gap-y-4 border-y border-slate-200 py-4 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-slate-200 dark:border-slate-800 dark:lg:divide-slate-800">
                                     <div v-for="stat in summaryStats" :key="stat.label"
-                                        class="lg:px-4 first:lg:pl-0 bg-sky-50/50 rounded-lg p-2">
+                                        class="lg:px-4 first:lg:pl-0 bg-sky-50/50 rounded-lg p-2 m-0.5">
                                         <dt
                                             class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                                             <span v-if="stat.blob"
