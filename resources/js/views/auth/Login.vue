@@ -89,7 +89,7 @@
 
                             <p class="text-end text-sm text-slate-600">
                                 No account yet?
-                                <router-link to="/register" class="font-semibold text-sky-700 hover:underline">Create
+                                <router-link to="/register" class="font-semibold text-sky-500 hover:underline">Create
                                     one</router-link>
                             </p>
                         </form>
@@ -117,7 +117,7 @@
                             <router-link :to="`/reset-password?email=${email}`"
                                 class="block text-end text-sm text-slate-600 hover:text-slate-800">
                                 Forgot password?
-                                <span class="font-semibold text-sky-700 hover:underline">Request reset</span>
+                                <span class="font-semibold text-sky-500 hover:underline">Request reset</span>
                             </router-link>
                         </form>
                     </Transition>

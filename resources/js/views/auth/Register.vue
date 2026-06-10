@@ -52,7 +52,7 @@
                         <Logo />
                     </div>
 
-                    <h1 class="mb-2 text-2xl font-extrabold tracking-tight text-sky-900">Create account</h1>
+                    <h1 class="mb-2 text-2xl font-extrabold tracking-tight text-sky-600">Create account</h1>
                     <p class="mb-5 text-sm text-slate-600">Set up your profile to start your prep journey.</p>
 
                     <span v-if="message"
@@ -100,7 +100,7 @@
 
                         <p class="text-end text-sm text-slate-600">
                             Already have an account?
-                            <router-link to="/login" class="font-semibold text-sky-700 hover:underline">Sign
+                            <router-link to="/login" class="font-semibold text-sky-500 hover:underline">Sign
                                 in</router-link>
                         </p>
                     </form>
