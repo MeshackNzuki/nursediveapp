@@ -1,13 +1,17 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
 import { useAuthStore } from "../stores/authStore";
+import { useMainStore } from "../stores";
 import CommonButton from "../components/Buttons/CommonButton.vue";
 import EmailVerification from "../components/EmailVerification.vue";
 import Socials from "../components/Socials.vue";
+import { secondsToHms } from "../utils/secondsToHms";
 
 const router = useRouter();
-const { user, active, isTrial, wasTrial } = useAuthStore();
+const mainStore = useMainStore();
+const { user, active, isTrial, wasTrial, daysLeft } = useAuthStore();
 
 const products = [
     {
@@ -15,40 +19,62 @@ const products = [
         name: "TEAS 7",
         abb: "ATI",
         subtitle: "Exam-focused prep for reading, math, science, and language",
-        tag: "Math, Science, Language, Reading",
+        bundleLabel: "Exam Prep Combo",
         dashboardRoute: "/teas",
         pricingRoute: "/teas-pricing",
-        accent: "from-cyan-500 to-sky-600",
-        chip: "bg-cyan-100 text-cyan-800",
-        features: ["Adaptive practice flow", "Detailed rationales", "Progress tracking"],
+        cardClass: "border-cyan-200 bg-cyan-50/80 dark:border-cyan-900/70 dark:bg-cyan-950/30",
+        bundleClass: "bg-cyan-100 text-cyan-900 dark:bg-cyan-900/70 dark:text-cyan-100",
+        ribbonClass: "border-cyan-200 bg-cyan-100 text-cyan-800 dark:border-cyan-800 dark:bg-cyan-900 dark:text-cyan-100",
+        moduleShellClass: "border-cyan-200 bg-sky-50/70 dark:border-cyan-800 dark:bg-cyan-950/40",
+        modules: [
+            { label: "Q-Bank", icon: "pi pi-book", iconClass: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/60 dark:text-emerald-200" },
+            { label: "Timed Tests", icon: "pi pi-clock", iconClass: "bg-sky-100 text-sky-600 dark:bg-sky-900/70 dark:text-sky-200" },
+            { label: "Analytics", icon: "pi pi-chart-line", iconClass: "bg-indigo-100 text-indigo-600 dark:bg-indigo-900/60 dark:text-indigo-200" },
+        ],
     },
     {
         code: "nursing",
         name: "Nursing School",
         abb: "BSN",
         subtitle: "Comprehensive nursing school test bank and targeted remediation",
-        tag: "Q-bank, Exit Exams, Rationales",
+        bundleLabel: "Nursing Success Kit",
         dashboardRoute: "/nursing",
         pricingRoute: "/nursing-pricing",
-        accent: "from-emerald-500 to-teal-600",
-        chip: "bg-emerald-100 text-emerald-800",
-        features: ["Weak-area focus", "Performance analytics", "High-yield review"],
+        cardClass: "border-emerald-200 bg-emerald-50/75 dark:border-emerald-900/70 dark:bg-emerald-950/30",
+        bundleClass: "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/70 dark:text-emerald-100",
+        ribbonClass: "border-emerald-200 bg-emerald-100 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-900 dark:text-emerald-100",
+        moduleShellClass: "border-emerald-200 bg-teal-50/70 dark:border-emerald-800 dark:bg-emerald-950/40",
+        modules: [
+            { label: "Q-Bank", icon: "pi pi-book", iconClass: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/60 dark:text-emerald-200" },
+            { label: "Exit Exams", icon: "pi pi-file-edit", iconClass: "bg-amber-100 text-amber-600 dark:bg-amber-900/60 dark:text-amber-200" },
+            { label: "Lessons", icon: "pi pi-play", iconClass: "bg-rose-100 text-rose-500 dark:bg-rose-900/60 dark:text-rose-200" },
+        ],
     },
     {
         code: "nclex",
         name: "NCLEX RN/PN",
         abb: "RN",
         subtitle: "High-fidelity NCLEX-style practice with readiness intelligence",
-        tag: "CATs, Readiness, Simulations",
+        bundleLabel: "Readiness Combo",
         dashboardRoute: "/nclex",
         pricingRoute: "/nclex-pricing",
-        accent: "from-blue-600 to-indigo-600",
-        chip: "bg-blue-100 text-blue-800",
-        features: ["NCLEX-style items", "CAT simulation", "Readiness insights"],
+        cardClass: "border-blue-200 bg-blue-50/75 dark:border-blue-900/70 dark:bg-blue-950/30",
+        bundleClass: "bg-blue-100 text-blue-900 dark:bg-blue-900/70 dark:text-blue-100",
+        ribbonClass: "border-blue-200 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-900 dark:text-blue-100",
+        moduleShellClass: "border-blue-200 bg-indigo-50/60 dark:border-blue-800 dark:bg-blue-950/40",
+        modules: [
+            { label: "CAT Exams", icon: "pi pi-sliders-h", iconClass: "bg-blue-100 text-blue-600 dark:bg-blue-900/60 dark:text-blue-200" },
+            { label: "Q-Bank", icon: "pi pi-book", iconClass: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/60 dark:text-emerald-200" },
+            { label: "Readiness", icon: "pi pi-chart-line", iconClass: "bg-violet-100 text-violet-600 dark:bg-violet-900/60 dark:text-violet-200" },
+        ],
     },
 ];
 
 const streakDays = ref(1);
+const latestAttempt = ref(null);
+const latestAttemptLoading = ref(false);
+const latestAttemptError = ref("");
+let latestAttemptRequestId = 0;
 
 const firstName = computed(() => {
     const fullName = user?.name || "Student";
@@ -81,11 +107,84 @@ const statusClass = (code) => {
     return "bg-rose-100 text-rose-700 border-rose-300";
 };
 
-const statusMessage = (code) => {
+const productPlans = (code) => {
+    const plans = user?.subscriptions?.[code];
+    return Array.isArray(plans) ? plans : [];
+};
+
+const productExpiryDate = (code) => {
+    const dates = productPlans(code)
+        .map((plan) => {
+            if (!plan?.expires) return null;
+            const date = new Date(`${plan.expires}T23:59:59`);
+            return Number.isNaN(date.getTime()) ? null : date;
+        })
+        .filter(Boolean);
+
+    if (!dates.length) return null;
+
+    const now = Date.now();
+    const future = dates
+        .filter((date) => date.getTime() >= now)
+        .sort((a, b) => a.getTime() - b.getTime());
+
+    if (future.length) return future[0];
+
+    return dates.sort((a, b) => b.getTime() - a.getTime())[0];
+};
+
+const formatProductDate = (date) => {
+    return date.toLocaleDateString(undefined, {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    });
+};
+
+const accessHeading = (code) => {
     const status = planStatus(code);
-    if (status === "active") return "Subscription active. Continue studying.";
-    if (status === "trial") return "Trial active. Upgrade for uninterrupted access.";
-    return "Access limited. Upgrade to continue full preparation.";
+    if (status === "active") return "Subscription expires:";
+    if (status === "trial") return "Trial expires:";
+    return productPlans(code).length ? "Access expired:" : "Access status:";
+};
+
+const accessValue = (code) => {
+    const expiry = productExpiryDate(code);
+    if (expiry) return formatProductDate(expiry);
+    return "Choose a plan to start";
+};
+
+const accessDetail = (code) => {
+    const status = planStatus(code);
+    const days = daysLeft(code);
+
+    if (status === "active") {
+        return days > 0 ? `${days} day${days === 1 ? "" : "s"} left` : "Expires today";
+    }
+
+    if (status === "trial") {
+        return days > 0 ? `${days} trial day${days === 1 ? "" : "s"} left` : "Trial ends today";
+    }
+
+    return productPlans(code).length ? "Renew to unlock every tool" : "Subscribe to unlock every tool";
+};
+
+const accessIconClass = (code) => {
+    const status = planStatus(code);
+    if (status === "active") return "pi pi-check-circle text-emerald-600 dark:text-emerald-300";
+    if (status === "trial") return "pi pi-clock text-amber-600 dark:text-amber-300";
+    return "pi pi-lock text-rose-600 dark:text-rose-300";
+};
+
+const productPrimaryLabel = (code) => {
+    const status = planStatus(code);
+    if (status === "active") return "Open Dashboard";
+    if (status === "trial") return "Continue Trial";
+    return productPlans(code).length ? "Renew Access" : "View Plans";
+};
+
+const productPrimaryRoute = (product) => {
+    return planStatus(product.code) === "expired" ? product.pricingRoute : product.dashboardRoute;
 };
 
 const activeCount = computed(() =>
@@ -153,24 +252,158 @@ const focusTip = computed(() => {
     return "Keep your streak alive with one focused timed quiz today.";
 });
 
-const primaryProduct = computed(() => {
-    return (
-        products.find((product) => planStatus(product.code) === "active") ||
-        products.find((product) => planStatus(product.code) === "trial") ||
-        products[0]
-    );
-});
+const lastProduct = computed(() =>
+    products.find((product) => product.code === mainStore.last_product_code) || null,
+);
+
+const fallbackProduct = computed(() =>
+    products.find((product) => planStatus(product.code) === "active") ||
+    products.find((product) => planStatus(product.code) === "trial") ||
+    null,
+);
+
+const primaryProduct = computed(() => lastProduct.value || fallbackProduct.value);
 
 const primaryActionRoute = computed(() => {
     const product = primaryProduct.value;
+    if (!product) return "/subscription";
     return planStatus(product.code) === "expired" ? product.pricingRoute : product.dashboardRoute;
 });
 
 const primaryActionLabel = computed(() => {
     const product = primaryProduct.value;
-    return planStatus(product.code) === "expired"
-        ? `View ${product.name} Plans`
-        : `Continue ${product.name}`;
+    if (!product) return "View Subscription Plans";
+    if (planStatus(product.code) === "expired") return `View ${product.name} Plans`;
+    if (lastProduct.value?.code === product.code) return `Continue ${product.name}`;
+    return `Open ${product.name}`;
+});
+
+const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
+
+const scoreToneClass = (score) => {
+    if (score >= 75) return "text-emerald-600 dark:text-emerald-300";
+    if (score >= 55) return "text-amber-600 dark:text-amber-300";
+    return "text-rose-600 dark:text-rose-300";
+};
+
+const scoreFillClass = (score) => {
+    if (score >= 75) return "bg-emerald-500";
+    if (score >= 55) return "bg-amber-500";
+    return "bg-rose-500";
+};
+
+const scoreSummary = (score) => {
+    if (score >= 85) return "Excellent momentum";
+    if (score >= 75) return "Strong readiness";
+    if (score >= 55) return "Improving steadily";
+    return "Needs focused review";
+};
+
+const attemptTimestamp = (attempt) => {
+    const raw = attempt?.completed_at || attempt?.updated_at || attempt?.created_at;
+    if (!raw) return 0;
+    const date = new Date(raw);
+    return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+};
+
+const isAttemptCompleted = (attempt) => attempt?.completed === true || Number(attempt?.completed) === 1;
+
+const normalizeAttempt = (attempt, productCode, source = "exam") => ({
+    ...attempt,
+    productCode,
+    source,
+    attempt_id: attempt?.attempt_id || attempt?.id,
+    sub_topic_name:
+        attempt?.sub_topic_name ||
+        (source === "cat" ? "Computer Adaptive Test" : "Practice Attempt"),
+});
+
+const sortAttemptsByLatest = (attempts) => {
+    return [...attempts].sort((a, b) => {
+        const dateDiff = attemptTimestamp(b) - attemptTimestamp(a);
+        if (dateDiff !== 0) return dateDiff;
+        return Number(b?.attempt_id || b?.id || 0) - Number(a?.attempt_id || a?.id || 0);
+    });
+};
+
+const fetchLatestAttempt = async () => {
+    const product = lastProduct.value;
+    const requestId = ++latestAttemptRequestId;
+
+    latestAttempt.value = null;
+    latestAttemptError.value = "";
+
+    if (!product) return;
+
+    latestAttemptLoading.value = true;
+
+    try {
+        const responses = await Promise.all([
+            axios.get(`${product.code}/previous-attempts`, { showLoader: false }),
+            product.code === "nclex"
+                ? axios.get("nclex/cat-attempts", { showLoader: false }).catch(() => ({ data: { data: [] } }))
+                : Promise.resolve({ data: { data: [] } }),
+        ]);
+
+        if (requestId !== latestAttemptRequestId) return;
+
+        const regularAttempts = Array.isArray(responses[0]?.data?.data)
+            ? responses[0].data.data.map((attempt) => normalizeAttempt(attempt, product.code))
+            : [];
+        const catAttempts = Array.isArray(responses[1]?.data?.data)
+            ? responses[1].data.data.map((attempt) => normalizeAttempt(attempt, "nclex", "cat"))
+            : [];
+        const attempts = sortAttemptsByLatest([...regularAttempts, ...catAttempts]);
+
+        latestAttempt.value = attempts[0] || null;
+    } catch {
+        if (requestId === latestAttemptRequestId) {
+            latestAttemptError.value = "Latest report is unavailable right now.";
+        }
+    } finally {
+        if (requestId === latestAttemptRequestId) {
+            latestAttemptLoading.value = false;
+        }
+    }
+};
+
+const latestAttemptScore = computed(() => clampPercent(Math.round(Number(latestAttempt.value?.score) || 0)));
+
+const latestAttemptLinearStyle = computed(() => ({
+    width: `${latestAttemptScore.value}%`,
+}));
+
+const latestAttemptRingStyle = computed(() => ({
+    "--value": latestAttemptScore.value,
+    "--size": "4.75rem",
+    "--thickness": "7px",
+}));
+
+const latestAttemptDate = computed(() => {
+    const timestamp = attemptTimestamp(latestAttempt.value);
+    if (!timestamp) return "Date unavailable";
+    return new Date(timestamp).toLocaleDateString(undefined, {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    });
+});
+
+const latestAttemptTime = computed(() => {
+    const formatted = secondsToHms(latestAttempt.value?.time_taken || 0);
+    return formatted || "No timer";
+});
+
+const latestAttemptStatusLabel = computed(() =>
+    isAttemptCompleted(latestAttempt.value) ? "Completed" : "In progress",
+);
+
+const latestAttemptReportRoute = computed(() => {
+    if (!latestAttempt.value?.attempt_id) return "";
+    if (latestAttempt.value.source === "cat") {
+        return `/nclex/adaptive-report/${latestAttempt.value.attempt_id}`;
+    }
+    return `/${latestAttempt.value.productCode}/performance-report/${latestAttempt.value.attempt_id}`;
 });
 
 const summaryStats = computed(() => [
@@ -254,6 +487,12 @@ const goToSupport = () => {
     window.location.href = "mailto:support@nursedive.com";
 };
 
+watch(
+    () => mainStore.last_product_code,
+    fetchLatestAttempt,
+    { immediate: true },
+);
+
 onMounted(() => {
     updateVisitStreak();
 });
@@ -264,7 +503,7 @@ onMounted(() => {
         class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-slate-100 p-4 md:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh] dark:bg-slate-950">
         <div class="mx-auto max-w-7xl space-y-6">
             <section
-                class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-5 shadow-sm md:p-7 dark:border-slate-800 dark:bg-slate-900">
+                class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6 dark:border-slate-800 dark:bg-slate-900">
                 <div class="grid gap-6 lg:grid-cols-[1fr_340px]">
                     <div>
                         <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
@@ -279,39 +518,105 @@ onMounted(() => {
                             </div>
 
                             <div class="min-w-0 flex-1">
-                                <p
-                                    class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-300">
-                                    NurseDive Nursing Exam Prep
-                                </p>
                                 <h1
                                     class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl dark:text-slate-100">
-                                    <span class="font-light">Welcome back</span>, {{ firstName }}
+                                    <span class="font-light">Welcome to Nurse<span
+                                            class="text-sky-500/95">Dive</span>,<span
+                                            class="font- custom-underline-teal ml-1">{{
+                                                firstName }}
+                                        </span> </span>
                                 </h1>
                                 <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-500 dark:text-slate-400">
-                                    Choose a track, review your access, and keep today's study session focused.
+                                    Choose a track and keep today's study session focused.
                                 </p>
+                            </div>
+                        </div>
 
-                                <dl
-                                    class="mt-6 grid gap-y-4 border-y border-slate-200 py-4 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-slate-200 dark:border-slate-800 dark:lg:divide-slate-800">
-                                    <div v-for="stat in summaryStats" :key="stat.label"
-                                        class="lg:px-4 first:lg:pl-0 bg-sky-50/50 dark:bg-sky-900/30 rounded-lg p-2 m-0.5">
-                                        <dt
-                                            class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                                            <span v-if="stat.blob"
-                                                class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-orange-100 text-[13px] ring-1 ring-orange-200 dark:bg-orange-900/30 dark:ring-orange-800/60">
-                                                {{ stat.blob }}
-                                            </span>
-                                            <i v-else :class="[stat.icon, stat.tone]"></i>
-                                            {{ stat.label }}
-                                        </dt>
-                                        <dd class="mt-2 text-2xl font-bold text-slate-950 dark:text-slate-100">
-                                            {{ stat.value }}
-                                        </dd>
+                        <div
+                            class="mt-5 rounded-lg border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/50">
+                            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <p
+                                            class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-600 dark:text-sky-300">
+                                            Latest Report
+                                        </p>
+                                        <span v-if="lastProduct"
+                                            class="rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-600 ring-1 ring-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-800">
+                                            {{ lastProduct.name }}
+                                        </span>
+                                    </div>
+
+                                    <div v-if="latestAttemptLoading" class="mt-3">
+                                        <div class="h-4 w-44 animate-pulse rounded bg-slate-200 dark:bg-slate-800">
+                                        </div>
+                                        <div
+                                            class="mt-3 h-2 w-full animate-pulse rounded-full bg-slate-200 dark:bg-slate-800">
+                                        </div>
+                                    </div>
+
+                                    <div v-else-if="latestAttempt" class="mt-3">
+                                        <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+                                            <div class="min-w-0">
+                                                <h3
+                                                    class="truncate text-base font-semibold text-slate-950 dark:text-slate-100">
+                                                    {{ latestAttempt.sub_topic_name }}
+                                                </h3>
+                                                <p
+                                                    class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+                                                    <span>{{ latestAttemptDate }}</span>
+                                                    <span aria-hidden="true">&middot;</span>
+                                                    <span>{{ latestAttemptTime }}</span>
+                                                    <span aria-hidden="true">&middot;</span>
+                                                    <span>{{ latestAttemptStatusLabel }}</span>
+                                                </p>
+                                            </div>
+                                            <p class="text-sm font-semibold"
+                                                :class="scoreToneClass(latestAttemptScore)">
+                                                {{ scoreSummary(latestAttemptScore) }}
+                                            </p>
+                                        </div>
+
+                                        <div class="mt-4">
+                                            <div class="flex items-center justify-between text-xs font-semibold">
+                                                <span class="text-slate-500 dark:text-slate-400">Score progress</span>
+                                                <span :class="scoreToneClass(latestAttemptScore)">
+                                                    {{ latestAttemptScore }}%
+                                                </span>
+                                            </div>
+                                            <div
+                                                class="mt-2 h-2.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+                                                <div class="h-full rounded-full transition-all duration-500"
+                                                    :class="scoreFillClass(latestAttemptScore)"
+                                                    :style="latestAttemptLinearStyle"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div v-else class="mt-3">
+                                        <h3 class="text-base font-semibold text-slate-950 dark:text-slate-100">
+                                            {{ latestAttemptError || "No recent attempt yet" }}
+                                        </h3>
                                         <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                            {{ stat.detail }}
+                                            Open a product and complete an attempt to light up this report.
                                         </p>
                                     </div>
-                                </dl>
+                                </div>
+
+                                <div v-if="latestAttempt && !latestAttemptLoading"
+                                    class="flex shrink-0 items-center justify-between gap-4 md:flex-col md:items-center md:justify-center">
+                                    <div class="radial-progress bg-white text-sm font-bold shadow-sm dark:bg-slate-900"
+                                        :class="scoreToneClass(latestAttemptScore)" :style="latestAttemptRingStyle"
+                                        role="progressbar" :aria-valuenow="latestAttemptScore">
+                                        {{ latestAttemptScore }}%
+                                    </div>
+                                    <button v-if="latestAttemptReportRoute" type="button"
+                                        class="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-sky-500/95 px-4 py-2 text-xs font-semibold text-white transition hover:bg-slate-800 dark:bg-sky-600 dark:hover:bg-sky-500"
+                                        @click="router.push(latestAttemptReportRoute)">
+                                        <span>View Report</span>
+                                        <i class="pi pi-arrow-right text-[10px]"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -352,12 +657,9 @@ onMounted(() => {
             <section class="space-y-4">
                 <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-300">
-                            Learning Products
-                        </p>
                         <h2
                             class="mt-1 text-xl font-semibold tracking-tight text-slate-950 md:text-2xl dark:text-slate-100">
-                            Continue Your Prep
+                            Choose Your Path
                         </h2>
                     </div>
                     <p class="text-sm text-slate-500 dark:text-slate-400">
@@ -367,72 +669,136 @@ onMounted(() => {
 
                 <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
                     <article v-for="product in products" :key="product.code"
-                        class="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_48px_-28px_rgba(15,23,42,0.45)] dark:border-slate-800 dark:bg-slate-900">
-                        <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r" :class="product.accent"></div>
+                        class="group relative flex min-h-full flex-col overflow-hidden rounded-lg border p-5 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-26px_rgba(15,23,42,0.45)] md:p-6"
+                        :class="product.cardClass">
+                        <div class="absolute right-0 top-0 rounded-bl-lg border-b border-l px-3 py-1 text-xs font-medium italic"
+                            :class="product.ribbonClass">
+                            {{ product.abb }}
+                        </div>
 
-                        <div class="p-5 md:p-6">
-                            <div class="flex items-start justify-between gap-3">
-                                <div class="flex min-w-0 items-start gap-3">
-                                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-sm font-bold text-white"
-                                        :class="product.accent">
-                                        {{ product.abb }}
-                                    </div>
-                                    <div class="min-w-0">
-                                        <h3
-                                            class="text-lg font-semibold tracking-tight text-slate-950 dark:text-slate-100">
-                                            {{ product.name }}
-                                        </h3>
-                                        <p class="mt-1 text-sm leading-5 text-slate-500 dark:text-slate-400">
-                                            {{ product.subtitle }}
-                                        </p>
-                                    </div>
-                                </div>
-                                <span
-                                    class="inline-flex shrink-0 items-center rounded-full border px-2.5 py-1 text-xs font-bold"
+                        <div class="flex items-center justify-between gap-3 pr-12">
+                            <span
+                                class="inline-flex max-w-full items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold"
+                                :class="product.bundleClass">
+                                <span class="inline-flex shrink-0 items-center gap-1">
+                                    <span
+                                        class="inline-flex h-5 w-5 items-center justify-center rounded bg-white/75 text-[10px] text-blue-600 shadow-sm dark:bg-white/15 dark:text-blue-100">
+                                        <i class="pi pi-book"></i>
+                                    </span>
+                                    <span class="text-[10px] font-bold text-slate-400 dark:text-slate-300">+</span>
+                                    <span
+                                        class="inline-flex h-5 w-5 items-center justify-center rounded bg-white/75 text-[10px] text-sky-600 shadow-sm dark:bg-white/15 dark:text-sky-100">
+                                        <i class="pi pi-play"></i>
+                                    </span>
+                                </span>
+                                <span class="truncate">{{ product.bundleLabel }}</span>
+                            </span>
+                        </div>
+
+                        <div class="mt-5">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <h3 class="text-lg font-semibold tracking-tight text-slate-950 dark:text-slate-100">
+                                    {{ product.name }}
+                                </h3>
+                                <span class="rounded-full border px-2 py-0.5 text-[11px] font-semibold"
                                     :class="statusClass(product.code)">
                                     {{ statusLabel(product.code) }}
                                 </span>
                             </div>
+                            <p class="mt-1 text-sm leading-5 text-slate-600 dark:text-slate-300">
+                                {{ product.subtitle }}
+                            </p>
 
-                            <div class="mt-4 flex flex-wrap gap-2">
-                                <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold"
-                                    :class="product.chip">
-                                    {{ product.tag }}
-                                </span>
-                            </div>
-
-                            <ul class="mt-5 space-y-2">
-                                <li v-for="feature in product.features" :key="feature"
-                                    class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                            <div class="mt-4 flex flex-wrap items-center rounded-lg border px-2.5 py-2.5"
+                                :class="product.moduleShellClass">
+                                <button v-for="(module, index) in product.modules" :key="module.label" type="button"
+                                    class="inline-flex min-h-9 min-w-0 flex-1 items-center justify-center gap-2 px-2 py-1.5 text-sm font-medium text-slate-700 transition hover:text-sky-700 dark:text-slate-200 dark:hover:text-sky-200"
+                                    :class="index < product.modules.length - 1 ? 'border-r border-sky-200/80 dark:border-slate-700' : ''"
+                                    @click="router.push(product.dashboardRoute)">
                                     <span
-                                        class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-teal-200 bg-teal-50 text-xs font-bold text-teal-700 dark:border-teal-800 dark:bg-teal-950 dark:text-teal-300">
-                                        <i class="pi pi-check text-[10px]"></i>
+                                        class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs"
+                                        :class="module.iconClass">
+                                        <i :class="module.icon"></i>
                                     </span>
-                                    {{ feature }}
-                                </li>
-                            </ul>
-
-                            <div class="mt-5 border-t border-slate-200 pt-4 dark:border-slate-800">
-                                <p
-                                    class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                                    Access Status
-                                </p>
-                                <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                                    {{ statusMessage(product.code) }}
-                                </p>
+                                    <span class="truncate">{{ module.label }}</span>
+                                </button>
                             </div>
 
-                            <div class="mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                                <CommonButton buttonText="Open Dashboard" icon2="pi pi-arrow-right"
-                                    :action="() => router.push(product.dashboardRoute)"
-                                    classes="w-full bg-slate-900 py-2.5 text-white shadow-none hover:bg-slate-800 dark:bg-sky-600 dark:hover:bg-sky-700" />
-                                <CommonButton buttonText="View Plans" icon="pi pi-star"
-                                    :action="() => router.push(product.pricingRoute)"
-                                    classes="w-full border border-slate-200 bg-white py-2.5 text-slate-700 shadow-none hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800" />
+                            <div
+                                class="mt-4 flex items-start gap-3 rounded-lg bg-white/90 p-4 shadow-sm ring-1 ring-white/70 dark:bg-slate-950/60 dark:ring-slate-800">
+                                <span
+                                    class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-base dark:border-slate-700 dark:bg-slate-900">
+                                    <i :class="accessIconClass(product.code)"></i>
+                                </span>
+                                <div class="min-w-0">
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                                        {{ accessHeading(product.code) }}
+                                    </p>
+                                    <p class="mt-0.5 text-sm font-bold text-slate-950 dark:text-slate-100">
+                                        {{ accessValue(product.code) }}
+                                    </p>
+                                    <p class="mt-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+                                        {{ accessDetail(product.code) }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]">
+                                <button type="button"
+                                    class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-sky-500/95 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-sky-600/95 focus:outline-none focus:ring-2 focus:ring-sky-300 dark:bg-sky-600 dark:hover:bg-sky-500"
+                                    @click="router.push(productPrimaryRoute(product))">
+                                    <span>{{ productPrimaryLabel(product.code) }}</span>
+                                    <i class="pi pi-arrow-right text-xs"></i>
+                                </button>
+                                <button type="button"
+                                    class="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/80 bg-white/90 px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-700 dark:hover:bg-slate-800 dark:hover:text-sky-200"
+                                    @click="router.push(product.pricingRoute)">
+                                    <i class="pi pi-credit-card text-xs"></i>
+                                    <span>Pricing</span>
+                                </button>
                             </div>
                         </div>
                     </article>
                 </div>
+            </section>
+
+            <section
+                class="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6 dark:border-slate-800 dark:bg-slate-900">
+                <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-300">
+                            Study Snapshot
+                        </p>
+
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                        Quick access, trial, and streak visibility.
+                    </p>
+                </div>
+
+                <dl class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                    <div v-for="stat in summaryStats" :key="stat.label"
+                        class="rounded-lg border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/50">
+                        <dt
+                            class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                            <span v-if="stat.blob"
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-orange-100 text-[13px] ring-1 ring-orange-200 dark:bg-orange-900/30 dark:ring-orange-800/60">
+                                {{ stat.blob }}
+                            </span>
+                            <span v-else
+                                class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-white ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
+                                <i :class="[stat.icon, stat.tone]"></i>
+                            </span>
+                            {{ stat.label }}
+                        </dt>
+                        <dd class="mt-3 text-2xl font-bold text-slate-950 dark:text-slate-100">
+                            {{ stat.value }}
+                        </dd>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                            {{ stat.detail }}
+                        </p>
+                    </div>
+                </dl>
             </section>
 
             <section class="grid grid-cols-1 gap-5 xl:grid-cols-3">

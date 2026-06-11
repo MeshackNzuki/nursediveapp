@@ -34,6 +34,7 @@ onMounted(async () => {
     mainStore.initializeStoreServices();
     checkExcludedPages();
     manageChat();
+    trackCurrentProductActivity();
     scheduleModalOpen();
 });
 
@@ -182,6 +183,12 @@ const resolveProductFromPath = (path: string): ProductCode | "" => {
 const currentProduct = computed<ProductCode | "">(() =>
     resolveProductFromPath(route.path),
 );
+
+const trackCurrentProductActivity = () => {
+    if (currentProduct.value) {
+        mainStore.setLastProductActivity(currentProduct.value);
+    }
+};
 
 const paywallBenefits = [
     "Unlimited exam attempts",
@@ -339,6 +346,7 @@ const handleUpgradeClick = () => {
 watch(
     () => route.path,
     () => {
+        trackCurrentProductActivity();
         closeModal({ suppressCooldown: true });
         scheduleModalOpen();
     },

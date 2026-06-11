@@ -20,23 +20,23 @@
                             class="mt-4 inline-flex items-center rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-cyan-700">
                             Welcome Back
                         </p>
-                        <h2 class="mt-4 text-3xl font-extrabold tracking-tight text-slate-900">
+                        <h2 class="mt-4 text-3xl  tracking-tight text-slate-900">
                             Continue your exam prep momentum
                         </h2>
                         <p class="mt-3 max-w-md text-sm leading-relaxed text-slate-600">
-                            Sign in to resume practice tests, track your progress, and keep your study streak alive.
+                            Log In to resume practice tests, track your progress, and keep your study streak alive.
                         </p>
                     </div>
 
                     <ul class="space-y-3 text-sm text-slate-700">
                         <li class="flex items-start gap-2">
                             <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-teal-100 text-teal-700 text-xs font-bold">1</span>
+                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs font-bold">1</span>
                             Start from where you left off
                         </li>
                         <li class="flex items-start gap-2">
                             <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-teal-100 text-teal-700 text-xs font-bold">2</span>
+                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-700 text-xs font-bold">2</span>
                             Secure account access
                         </li>
                         <li class="flex items-start gap-2">
@@ -49,7 +49,7 @@
 
                 <section class="rounded-3xl border border-white/80 bg-white/90 p-6 backdrop-blur-sm md:p-8">
                     <div class="mb-6 flex items-center justify-between gap-3">
-                        <h1 class="text-2xl font-extrabold tracking-tight text-sky-600">Sign in</h1>
+                        <h1 class="text-2xl font-extrabold tracking-tight text-sky-600">Log In</h1>
                         <button @click="step === 1 ? step++ : step--"
                             class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:bg-slate-100"
                             aria-label="Switch login step">
@@ -89,8 +89,8 @@
 
                             <p class="text-end text-sm text-slate-600">
                                 No account yet?
-                                <router-link to="/register" class="font-semibold text-sky-500 hover:underline">Create
-                                    one</router-link>
+                                <router-link to="/register" class="text-sky-500 hover:underline">Register now
+                                </router-link>
                             </p>
                         </form>
 
@@ -117,7 +117,7 @@
                             <router-link :to="`/reset-password?email=${email}`"
                                 class="block text-end text-sm text-slate-600 hover:text-slate-800">
                                 Forgot password?
-                                <span class="font-semibold text-sky-500 hover:underline">Request reset</span>
+                                <span class="text-sky-500 hover:underline">Request reset</span>
                             </router-link>
                         </form>
                     </Transition>

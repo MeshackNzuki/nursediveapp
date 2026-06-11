@@ -2,6 +2,13 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import { useAuthStore } from "./authStore";
 
+type ProductCode = "teas" | "nursing" | "nclex";
+
+const validProductCodes: ProductCode[] = ["teas", "nursing", "nclex"];
+
+const isProductCode = (value: string): value is ProductCode =>
+    validProductCodes.includes(value as ProductCode);
+
 export const useMainStore = defineStore("mainStore", {
     persist: true,
 
@@ -18,6 +25,8 @@ export const useMainStore = defineStore("mainStore", {
         payment_event: false,
         payment_id: null,
         intervalId: null,
+        last_product_code: "" as ProductCode | "",
+        last_product_activity_at: null as string | null,
     }),
     getters: {
         currentZoom: (state) => state.zoom_levels[state.zoom_counter], // Get the current zoom class
@@ -41,6 +50,13 @@ export const useMainStore = defineStore("mainStore", {
         //primariry for click outside
         closeSidebar() {
             this.sidebarOpen = false;
+        },
+
+        setLastProductActivity(productCode: string) {
+            if (!isProductCode(productCode)) return;
+
+            this.last_product_code = productCode;
+            this.last_product_activity_at = new Date().toISOString();
         },
 
         updateGreeting() {

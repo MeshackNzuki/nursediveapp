@@ -16,27 +16,36 @@
                     class="hidden lg:flex flex-col justify-between rounded-3xl border border-white/70 bg-white/65 p-8 backdrop-blur-sm">
                     <div>
                         <Logo />
-                        <p
-                            class="mt-4 inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
-                            New Account
-                        </p>
-                        <h2 class="mt-4 text-3xl font-extrabold tracking-tight text-slate-900">
+
+                        <h2 class="mt-4 text-3xl  tracking-tight text-slate-900">
                             Build your best exam-ready routine
                         </h2>
                         <p class="mt-3 max-w-md text-sm leading-relaxed text-slate-600">
                             Join Nursedive to access realistic exam banks, focused remediation, and progress tracking.
                         </p>
                     </div>
+                    <div>
+                        <h5>Why Nursedive is the best choice for your prep journey</h5>
+                        <div class="mt-3 space-y-2 text-sm text-slate-600">
+                            <p>Our Exams are expertly crafted to reflect the actual test format and difficulty level.
+                                <strong>No AI-generated content.</strong>
+                            </p>
+                            <p><strong>Questions</strong> are from <strong>real past exams,</strong> ensuring you get
+                                authentic practice that builds
+                                confidence and readiness for test day.
+                            </p>
+                        </div>
+                    </div>
 
                     <ul class="space-y-3 text-sm text-slate-700">
                         <li class="flex items-start gap-2">
                             <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">1</span>
+                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs font-bold">1</span>
                             Exam-style questions and rationales
                         </li>
                         <li class="flex items-start gap-2">
                             <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">2</span>
+                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-700 text-xs font-bold">2</span>
                             Weak-area focus and adaptive practice
                         </li>
                         <li class="flex items-start gap-2">
@@ -48,11 +57,12 @@
                 </section>
 
                 <section class="rounded-3xl border border-white/80 bg-white/90 p-6 backdrop-blur-sm md:p-8">
+
+
+                    <h1 class="mb-2 text-2xl font-extrabold tracking-tight text-sky-600">Register</h1>
                     <div class="mb-6 lg:hidden">
                         <Logo />
                     </div>
-
-                    <h1 class="mb-2 text-2xl font-extrabold tracking-tight text-sky-600">Create account</h1>
                     <p class="mb-5 text-sm text-slate-600">Set up your profile to start your prep journey.</p>
 
                     <span v-if="message"
@@ -100,8 +110,8 @@
 
                         <p class="text-end text-sm text-slate-600">
                             Already have an account?
-                            <router-link to="/login" class="font-semibold text-sky-500 hover:underline">Sign
-                                in</router-link>
+                            <router-link to="/login" class=" text-sky-500 hover:underline">Log In
+                            </router-link>
                         </p>
                     </form>
                 </section>
