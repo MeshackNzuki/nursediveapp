@@ -128,8 +128,8 @@
                     <i class="pi pi-sign-out"></i>
                     <span class="">End</span>
                 </button>
-
-                <button class="px-4 py-2 cursor-pointer rounded flex justify-center items-center gap-1 font-semibold"
+                <button
+                    class="px-4 py-2 cursor-pointer rounded hidden md:flex justify-center items-center gap-1 font-semibold"
                     @click="pauseExam">
                     <i class="pi pi-pause"></i>
                     <span class="flex items-center gap-1 font-semibold ">Pause</span>

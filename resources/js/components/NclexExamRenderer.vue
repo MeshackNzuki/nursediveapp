@@ -110,7 +110,7 @@
                                     class="flex items-center gap-1">
                                     <i class="pi pi-user-edit text-teal-500"></i>
                                     <span>Your Answer was {{ examStore.answers[examStore.currentQuestion.id]
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +158,7 @@
                         <div v-if="examStore.answers[examStore.currentQuestion.id]" class="flex items-center gap-1">
                             <i class="pi pi-user-edit text-teal-500"></i>
                             <span>Your Answer was {{ examStore.answers[examStore.currentQuestion.id]
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
                 </div>
@@ -187,7 +187,8 @@
                     <span class="">End</span>
                 </button>
 
-                <button class="px-4 py-2 cursor-pointer rounded flex justify-center items-center gap-1 font-semibold"
+                <button
+                    class="px-4 hidden md:flex py-2 cursor-pointer rounded  justify-center items-center gap-1 font-semibold"
                     @click="pauseExam">
                     <i class="pi pi-pause"></i>
                     <span class="flex items-center gap-1 font-semibold ">Pause</span>

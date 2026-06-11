@@ -21,8 +21,8 @@ export function dynamicProgressStyle(score) {
 }
 
 export function gradeComment (score) {
-if (score >= 90) return 'Excellent🏆';
-if (score >= 70) return 'Good Job! 💪';
+if (score >= 90) return 'Excellent';
+if (score >= 70) return 'Good Job!';
 if (score >= 50) return 'Try again';
 if (score >= 30) return 'try harder';
 return 'Failed!';
