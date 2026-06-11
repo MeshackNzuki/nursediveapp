@@ -2,16 +2,16 @@
     <nav v-if="!login" ref="sidebar_id" :class="'rounded-2xl border border-white/40 dark:border-sky-800/70 text-gray-950 font-sans fixed left-1 top-1 overflow-scroll bottom-1 dark:text-slate-200 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-[0_24px_60px_-30px_rgba(15,23,42,0.65)] flex-wrap items-center justify-between z-10 py-4 px-4 transition-all ease-in-out duration-300 select-none backdrop-blur-xl ' +
         (isDark
             ? ' bg-gradient-to-b from-slate-900 via-sky-950 to-slate-900 '
-            : ' bg-gradient-to-b from-white/95 via-slate-50/95 to-sky-50/95 ') +
+            : ' bg-gray-50 ') +
         (mainStore.isMobile ? (mainStore.sidebarOpen ? 'w-52  ' : 'w-1 opacity-0 ') : mainStore.sidebarOpen ? 'w-64' : 'w-24')
         ">
         <div v-if="!isDark" class="absolute inset-0  pointer-events-none -z-10">
             <!-- Purple to Sky to Green Gradient Cloud -->
             <div
-                class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-purple-300 via-sky-200 to-teal-200 opacity-30 blur-[120px] rounded-full">
+                class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-purple-100 via-blue-50 to-slate-50 opacity-30 blur-[120px] rounded-full">
             </div>
             <div
-                class="absolute bottom-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-300 via-sky-200 to-purple-200 opacity-30 blur-[100px] rounded-full">
+                class="absolute bottom-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-50 via-sky-50 to-purple-50 opacity-30 blur-[100px] rounded-full">
             </div>
         </div>
         <div v-else class="absolute inset-0 pointer-events-none -z-10">
@@ -148,7 +148,7 @@
                                     </div>
                                     <span v-if="mainStore.sidebarOpen">{{
                                         item.label
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </router-link>
                         </div>
@@ -176,7 +176,7 @@
                                     </div>
                                     <span v-if="mainStore.sidebarOpen">{{
                                         item.label
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </router-link>
                         </div>
@@ -208,7 +208,7 @@
                                     class="border-b border-gray-200 last:border-0">
                                     <router-link :to="link.route">{{
                                         link.label
-                                    }}</router-link>
+                                        }}</router-link>
                                 </li>
                             </ul>
                         </div>
@@ -235,7 +235,7 @@
                                     </div>
                                     <span v-if="mainStore.sidebarOpen">{{
                                         item.label
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </router-link>
                         </div>
@@ -264,7 +264,7 @@
                                     class="border-b border-gray-200 last:border-0">
                                     <router-link :to="link.route">{{
                                         link.label
-                                    }}</router-link>
+                                        }}</router-link>
                                 </li>
                             </ul>
                         </div>
@@ -298,7 +298,7 @@
                         </div>
                         <span v-if="mainStore.sidebarOpen">{{
                             item.label
-                        }}</span>
+                            }}</span>
                     </div>
                 </router-link>
             </div>

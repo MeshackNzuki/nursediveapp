@@ -94,10 +94,10 @@ const isRecommended = (plan: any) => plan.id === recommendedPlanId.value;
         </button>
         <div class="absolute inset-0 pointer-events-none -z-10">
             <div
-                class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-blue-200 via-sky-200 to-indigo-200 opacity-40 blur-[120px] rounded-full">
+                class="absolute -top-24 -left-40 h-[620px] w-[620px] rounded-full bg-gradient-to-r from-sky-50 via-cyan-50 to-emerald-50 opacity-45 blur-[125px]">
             </div>
             <div
-                class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-indigo-200 via-blue-200 to-sky-200 opacity-35 blur-[100px] rounded-full">
+                class="absolute top-28 right-8 h-[420px] w-[420px] rounded-full bg-gradient-to-r from-emerald-50 via-teal-200 to-sky-50 opacity-35 blur-[110px]">
             </div>
         </div>
 
@@ -135,7 +135,7 @@ const isRecommended = (plan: any) => plan.id === recommendedPlanId.value;
                 </div>
 
                 <h3 class="text-2xl font-extrabold mt-4 text-slate-900 dark:text-white tracking-tight">{{ PRODUCT_TITLE
-                    }}</h3>
+                }}</h3>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">{{ tierMessage(plan.name) }}</p>
 
                 <div

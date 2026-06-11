@@ -1,12 +1,12 @@
 <template>
     <div
         class="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-slate-50 via-amber-50/50 to-sky-100/70 text-slate-900">
-        <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute inset-0 pointer-events-none -z-10">
             <div
-                class="absolute -top-20 -left-24 h-[460px] w-[460px] rounded-full bg-gradient-to-r from-amber-200/60 to-orange-200/60 blur-[110px]">
+                class="absolute -top-24 -left-40 h-[620px] w-[620px] rounded-full bg-gradient-to-r from-sky-50 via-cyan-50 to-emerald-50 opacity-45 blur-[125px]">
             </div>
             <div
-                class="absolute top-20 -right-14 h-[420px] w-[420px] rounded-full bg-gradient-to-r from-sky-200/70 to-cyan-200/60 blur-[100px]">
+                class="absolute top-28 right-8 h-[420px] w-[420px] rounded-full bg-gradient-to-r from-emerald-50 via-teal-200 to-sky-50 opacity-35 blur-[110px]">
             </div>
         </div>
 
@@ -48,8 +48,7 @@
                     </div>
                 </section>
 
-                <section
-                    class="rounded-3xl border border-white/80 bg-white/90 p-5 shadow-sm backdrop-blur-sm md:p-7">
+                <section class="rounded-3xl border border-white/80 bg-white/90 p-5 shadow-sm backdrop-blur-sm md:p-7">
                     <button
                         class="mb-5 inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-100"
                         @click="goToHome">
@@ -62,8 +61,7 @@
                             <p class="text-[11px] font-semibold uppercase tracking-wide text-amber-700">Verify Email</p>
                             <h2 class="text-2xl font-extrabold tracking-tight text-slate-900">Secure your account</h2>
                         </div>
-                        <span
-                            class="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold"
+                        <span class="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold"
                             :class="statusClasses">
                             {{ statusLabel }}
                         </span>

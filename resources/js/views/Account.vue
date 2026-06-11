@@ -3,10 +3,10 @@
         class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:min-h-[94vh] 2xl:max-h-[94vh] overflow-y-scroll p-4 sm:p-6 bg-white">
         <div class="absolute inset-0 pointer-events-none -z-10">
             <div
-                class="absolute -top-24 -left-40 h-[620px] w-[620px] rounded-full bg-gradient-to-r from-sky-200 via-cyan-200 to-emerald-200 opacity-45 blur-[125px]">
+                class="absolute -top-24 -left-40 h-[620px] w-[620px] rounded-full bg-gradient-to-r from-sky-50 via-cyan-50 to-emerald-50 opacity-45 blur-[125px]">
             </div>
             <div
-                class="absolute top-28 right-8 h-[420px] w-[420px] rounded-full bg-gradient-to-r from-emerald-200 via-teal-200 to-sky-200 opacity-35 blur-[110px]">
+                class="absolute top-28 right-8 h-[420px] w-[420px] rounded-full bg-gradient-to-r from-emerald-50 via-teal-200 to-sky-50 opacity-35 blur-[110px]">
             </div>
         </div>
 
@@ -48,7 +48,7 @@
                                 <span class="uppercase tracking-wide text-slate-500">Profile Photo</span>
                                 <span class="font-semibold text-emerald-700">{{ fileUrl ? "New file selected" :
                                     "Current"
-                                    }}</span>
+                                }}</span>
                             </div>
                             <p class="text-xs text-slate-600">Use a clear square image for the best result.</p>
                         </div>
@@ -127,7 +127,7 @@
                         <div class="flex items-start justify-between gap-2">
                             <div>
                                 <p class="text-xs uppercase tracking-wide text-slate-500">{{ product.code.toUpperCase()
-                                }}</p>
+                                    }}</p>
                                 <h3 class="text-base font-bold text-slate-900">{{ product.label }}</h3>
                             </div>
                             <span class="rounded-full px-2.5 py-1 text-xs font-semibold" :class="product.badgeClass">

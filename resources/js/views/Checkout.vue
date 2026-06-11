@@ -1,13 +1,12 @@
 <template>
   <div class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll
     p-6 bg-white flex flex-col items-center justify-center ">
-    <div class="absolute inset-0  pointer-events-none -z-10">
-      <!-- Purple to Sky to Green Gradient Cloud -->
+    <div class="absolute inset-0 pointer-events-none -z-10">
       <div
-        class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-purple-300 via-sky-300 to-teal-200 opacity-30 blur-[120px] rounded-full">
+        class="absolute -top-24 -left-40 h-[620px] w-[620px] rounded-full bg-gradient-to-r from-sky-50 via-cyan-50 to-emerald-50 opacity-45 blur-[125px]">
       </div>
       <div
-        class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-300 via-sky-300 to-purple-200 opacity-30 blur-[100px] rounded-full">
+        class="absolute top-28 right-8 h-[420px] w-[420px] rounded-full bg-gradient-to-r from-emerald-50 via-teal-200 to-sky-50 opacity-35 blur-[110px]">
       </div>
     </div>
     <h2 class="text-lg font-bold custom-underline-teal"><span><i class="pi pi-lock me-1 text-teal-500"></i></span>Secure
