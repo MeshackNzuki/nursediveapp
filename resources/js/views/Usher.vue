@@ -58,10 +58,10 @@ const products = [
         bundleLabel: "Readiness Combo",
         dashboardRoute: "/nclex",
         pricingRoute: "/nclex-pricing",
-        cardClass: "border-blue-200 bg-blue-50/75 dark:border-blue-900/70 dark:bg-blue-950/30",
+        cardClass: "border-blue-200 bg-blue-50/75 dark:border-blue-900/70 dark:bg-sky-950/95/30",
         bundleClass: "bg-blue-100 text-blue-900 dark:bg-blue-900/70 dark:text-blue-100",
         ribbonClass: "border-blue-200 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-900 dark:text-blue-100",
-        moduleShellClass: "border-blue-200 bg-indigo-50/60 dark:border-blue-800 dark:bg-blue-950/40",
+        moduleShellClass: "border-blue-200 bg-indigo-50/60 dark:border-blue-800 dark:bg-sky-950/95/40",
         modules: [
             { label: "CAT Exams", icon: "pi pi-sliders-h", iconClass: "bg-blue-100 text-blue-600 dark:bg-blue-900/60 dark:text-blue-200" },
             { label: "Q-Bank", icon: "pi pi-book", iconClass: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/60 dark:text-emerald-200" },
@@ -611,7 +611,7 @@ onMounted(() => {
                                         {{ latestAttemptScore }}%
                                     </div>
                                     <button v-if="latestAttemptReportRoute" type="button"
-                                        class="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-sky-500/95 px-4 py-2 text-xs font-semibold text-white transition hover:bg-slate-800 dark:bg-sky-600 dark:hover:bg-sky-500"
+                                        class="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-sky-500/95 px-4 py-2 text-xs font-semibold text-white transition hover:bg-slate-800 dark:bg-sky-500/95 dark:hover:bg-sky-500"
                                         @click="router.push(latestAttemptReportRoute)">
                                         <span>View Report</span>
                                         <i class="pi pi-arrow-right text-[10px]"></i>
@@ -640,7 +640,7 @@ onMounted(() => {
                         <div class="flex flex-col gap-2">
                             <CommonButton :buttonText="primaryActionLabel" icon2="pi pi-arrow-right"
                                 :action="() => router.push(primaryActionRoute)"
-                                classes="w-full bg-sky-600 py-2.5 text-white shadow-none hover:bg-sky-700" />
+                                classes="w-full bg-sky-500/95 py-2.5 text-white shadow-none hover:bg-sky-700" />
                             <CommonButton buttonText="View Subscription Plans" icon="pi pi-credit-card me-1"
                                 :action="() => router.push('/subscription')"
                                 classes="w-full border border-slate-200 bg-white py-2.5 text-slate-700 shadow-none hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800" />
@@ -745,7 +745,7 @@ onMounted(() => {
 
                             <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]">
                                 <button type="button"
-                                    class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-sky-500/95 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-sky-600/95 focus:outline-none focus:ring-2 focus:ring-sky-300 dark:bg-sky-600 dark:hover:bg-sky-500"
+                                    class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-sky-500/95 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-sky-500/95/95 focus:outline-none focus:ring-2 focus:ring-sky-300 dark:bg-sky-500/95 dark:hover:bg-sky-500"
                                     @click="router.push(productPrimaryRoute(product))">
                                     <span>{{ productPrimaryLabel(product.code) }}</span>
                                     <i class="pi pi-arrow-right text-xs"></i>
@@ -850,7 +850,7 @@ onMounted(() => {
 
                     <div class="space-y-2.5">
                         <CommonButton buttonText="Contact Support" icon="pi pi-envelope me-1" :action="goToSupport"
-                            classes="w-full bg-sky-600 py-2.5 text-white shadow-none hover:bg-sky-700" />
+                            classes="w-full bg-sky-500/95 py-2.5 text-white shadow-none hover:bg-sky-700" />
                         <p class="text-xs text-slate-500 dark:text-slate-400">
                             You can also use the live chat at the bottom-right corner.
                         </p>

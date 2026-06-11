@@ -42,8 +42,9 @@
             </div>
 
             <div v-if="showRevealButton" class="mt-4 text-center">
-                <button class="px-6 py-2 text-white rounded-sm bg-sky-600 border-0 cursor-pointer"
-                    :disabled="!answerSlot.items.length" :class="!answerSlot.items.length ? 'opacity-50 cursor-not-allowed' : ''"
+                <button class="px-6 py-2 text-white rounded-sm bg-sky-500/95 border-0 cursor-pointer"
+                    :disabled="!answerSlot.items.length"
+                    :class="!answerSlot.items.length ? 'opacity-50 cursor-not-allowed' : ''"
                     @click="revealAnswersAndExplanation">
                     Submit
                 </button>

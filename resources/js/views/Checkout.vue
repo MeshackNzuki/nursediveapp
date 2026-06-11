@@ -16,7 +16,7 @@
       <i class="pi pi-info-circle "></i>Important: We do not auto-bill our clients, instead they renew their
       subscriptions with us
     </p>
-    <form class="p-4 bg-blue-950 rounded-2xl md:w-md" v-if="stripeLoaded" @submit.prevent="handleSubmit">
+    <form class="p-4 bg-sky-950/95 rounded-2xl md:w-md" v-if="stripeLoaded" @submit.prevent="handleSubmit">
       <div class="mb-4 text-white font-semibold">
         Payment Options
       </div>

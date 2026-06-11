@@ -1,10 +1,10 @@
 <template>
     <button :class="[
         'py-1 px-2 rounded-full shadow-lg dark:shadow-slate-300 dark:shadow-sm',
-        'hover:translate-x-0.5 hover:scale-05 transition duration-200 ease-out text-sm cursor-pointer hover:bg-sky-600',
+        'hover:translate-x-0.5 hover:scale-05 transition duration-200 ease-out text-sm cursor-pointer hover:bg-sky-500/95',
         // Conditionally apply bg-sky-500 if the theme is Light, else use the current theme's background
         theme?.currentTheme === 'Light'
-            ? 'bg-sky-600'
+            ? 'bg-sky-500/95'
             : theme?.themes[theme.currentTheme]?.bg,
         // Conditionally apply text-gray-50 if the theme is Light, else use the current theme's text color
         theme?.currentTheme === 'Light'

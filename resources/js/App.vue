@@ -371,7 +371,7 @@ onBeforeUnmount(() => {
     ]">
         <div class="loader"></div>
     </div>
-    <div :class="[dark ? 'bg-sky-950' : 'bg-nursedive-primary']">
+    <div :class="[dark ? 'bg-sky-950' : 'bg-sky-950/95']">
         <div :class="[
             `min-h-screen select-none relative antialiased overflow-hidden ${(themeStore as any).fonts[themeStore.currentFont].font}`,
             authPages || testMode

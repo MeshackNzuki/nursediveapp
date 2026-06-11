@@ -146,7 +146,7 @@
                     {{ track.community }}
                   </span>
                   <RouterLink :to="track.route"
-                    class="bg-sky-600 hover:bg-sky-700 text-white rounded-full px-4 py-1 text-xs text-center">
+                    class="bg-sky-500/95 hover:bg-sky-700 text-white rounded-full px-4 py-1 text-xs text-center">
                     Start
                   </RouterLink>
                 </div>
@@ -182,7 +182,7 @@
 
               <div class="mt-4 grid grid-cols-2 gap-2">
                 <RouterLink to="/nclex/readiness"
-                  class="text-center rounded-full px-3 py-2 text-sm font-semibold bg-sky-600 text-white hover:bg-sky-700 transition">
+                  class="text-center rounded-full px-3 py-2 text-sm font-semibold bg-sky-500/95 text-white hover:bg-sky-700 transition">
                   Start Readiness
                 </RouterLink>
                 <RouterLink to="/nclex/performance-analysis"

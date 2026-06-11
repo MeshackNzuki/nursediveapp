@@ -1,5 +1,6 @@
 <template>
-    <button type="submit" :disabled="props.disabled" :class="`flex items-center justify-center ${computedClasses}`" @click="handleClick">
+    <button type="submit" :disabled="props.disabled" :class="`flex items-center justify-center ${computedClasses}`"
+        @click="handleClick">
         <i :class="`${icon} font-extralight text-sm`"></i>
         {{ buttonText }}
         <i :class="`${icon2} font-extralight text-sm ms-0.5`"></i>
@@ -29,10 +30,10 @@ const handleClick = () => {
 }
 
 const computedClasses = computed(() => {
-    const base = 'px-4 py-1 rounded-full transition delay-50 ease-in-out cursor-pointer hover:scale-105 whitespace-nowrap shadow-md select-none text-sm hover:bg-sky-600 dark:shadow-slate-300 dark:shadow-sm'
+    const base = 'px-4 py-1 rounded-full transition delay-50 ease-in-out cursor-pointer hover:scale-105 whitespace-nowrap shadow-md select-none text-sm hover:bg-sky-500/95 dark:shadow-slate-300 dark:shadow-sm'
 
     const themeClass = theme?.currentTheme === 'Light'
-        ? 'bg-sky-600 text-gray-100' //works when i remove the bg-sky-500
+        ? 'bg-sky-500/95 text-gray-100' //works when i remove the bg-sky-500
         : `${theme?.themes[theme.currentTheme]?.bg} ${theme?.themes[theme.currentTheme]?.text}`
 
     const attribClass = props.attrib !== '' ? 'bg-gray-300' : ''

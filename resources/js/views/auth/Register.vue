@@ -40,17 +40,17 @@
                     <ul class="space-y-3 text-sm text-slate-700">
                         <li class="flex items-start gap-2">
                             <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs font-bold">1</span>
+                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs ">1</span>
                             Exam-style questions and rationales
                         </li>
                         <li class="flex items-start gap-2">
                             <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-700 text-xs font-bold">2</span>
+                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-700 text-xs ">2</span>
                             Weak-area focus and adaptive practice
                         </li>
                         <li class="flex items-start gap-2">
                             <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">3</span>
+                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs ">3</span>
                             Performance analytics across products
                         </li>
                     </ul>
@@ -103,7 +103,7 @@
                         </div>
 
                         <button type="submit"
-                            class="w-full cursor-pointer rounded-full bg-blue-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700">
+                            class="w-full cursor-pointer rounded-full bg-sky-950/95 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700">
                             <span v-if="isLoading">Creating...</span>
                             <span v-else>Register</span>
                         </button>

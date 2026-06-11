@@ -32,7 +32,7 @@
                             class="relative h-28 w-28 rounded-full overflow-hidden ring-4 ring-sky-200 border-2 border-white shadow-md">
                             <img :src="avatarPreview" class="h-full w-full object-cover" alt="User avatar" />
                             <label
-                                class="absolute bottom-1 right-1 inline-flex items-center rounded-full bg-teal-500 px-2 py-1 text-[10px] font-bold text-white shadow hover:bg-sky-600 transition cursor-pointer">
+                                class="absolute bottom-1 right-1 inline-flex items-center rounded-full bg-teal-500 px-2 py-1 text-[10px] font-bold text-white shadow hover:bg-sky-500/95 transition cursor-pointer">
                                 <input type="file" accept="image/*" class="hidden" @change="handleAvatarUpload" />
                                 Edit
                             </label>
@@ -48,7 +48,7 @@
                                 <span class="uppercase tracking-wide text-slate-500">Profile Photo</span>
                                 <span class="font-semibold text-emerald-700">{{ fileUrl ? "New file selected" :
                                     "Current"
-                                }}</span>
+                                    }}</span>
                             </div>
                             <p class="text-xs text-slate-600">Use a clear square image for the best result.</p>
                         </div>
@@ -118,7 +118,8 @@
                         </p>
                     </div>
                     <CommonButton button-text="Manage All Subscriptions"
-                        classes="bg-sky-600 text-white hover:bg-sky-700" :action="() => router.push('/subscription')" />
+                        classes="bg-sky-500/95 text-white hover:bg-sky-700"
+                        :action="() => router.push('/subscription')" />
                 </div>
 
                 <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -127,7 +128,7 @@
                         <div class="flex items-start justify-between gap-2">
                             <div>
                                 <p class="text-xs uppercase tracking-wide text-slate-500">{{ product.code.toUpperCase()
-                                    }}</p>
+                                }}</p>
                                 <h3 class="text-base font-bold text-slate-900">{{ product.label }}</h3>
                             </div>
                             <span class="rounded-full px-2.5 py-1 text-xs font-semibold" :class="product.badgeClass">

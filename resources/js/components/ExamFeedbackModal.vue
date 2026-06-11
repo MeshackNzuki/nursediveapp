@@ -1,14 +1,15 @@
 <template>
     <button type="button" class="inline-flex items-center gap-1 cursor-pointer" @click="open = true">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="size-6">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round"
                 d="M10.05 4.575a1.575 1.575 0 1 0-3.15 0v3m3.15-3v-1.5a1.575 1.575 0 0 1 3.15 0v1.5m-3.15 0 .075 5.925m3.075.75V4.575m0 0a1.575 1.575 0 0 1 3.15 0V15M6.9 7.575a1.575 1.575 0 1 0-3.15 0v8.175a6.75 6.75 0 0 0 6.75 6.75h2.018a5.25 5.25 0 0 0 3.712-1.538l1.732-1.732a5.25 5.25 0 0 0 1.538-3.712l.003-2.024a.668.668 0 0 1 .198-.471 1.575 1.575 0 1 0-2.228-2.228 3.818 3.818 0 0 0-1.12 2.687M6.9 7.575V12m6.27 4.318A4.49 4.49 0 0 1 16.35 15m.002 0h-.002" />
         </svg>
         <span class="hidden 2xl:block">Report</span>
     </button>
 
-    <div v-if="open" class="fixed inset-0 z-[80] bg-slate-950/55 backdrop-blur-[1px] flex items-center justify-center p-4">
+    <div v-if="open"
+        class="fixed inset-0 z-[80] bg-slate-950/55 backdrop-blur-[1px] flex items-center justify-center p-4">
         <div class="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-5 text-slate-800 shadow-2xl">
             <div class="flex items-start justify-between gap-2">
                 <div>
@@ -24,7 +25,8 @@
 
             <div class="mt-4 space-y-3">
                 <label class="block text-sm">
-                    <span class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Issue Type</span>
+                    <span class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">Issue
+                        Type</span>
                     <select v-model="issueType"
                         class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-sky-500">
                         <option value="technical_issue">Technical issue</option>
@@ -50,12 +52,13 @@
             </div>
 
             <div class="mt-4 flex items-center justify-end gap-2">
-                <button type="button" class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100"
+                <button type="button"
+                    class="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100"
                     @click="closeModal">
                     Cancel
                 </button>
                 <button type="button"
-                    class="rounded-full bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+                    class="rounded-full bg-sky-500/95 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
                     :disabled="submitting || message.trim().length < 5" @click="submitFeedback">
                     {{ submitting ? 'Sending...' : 'Send Report' }}
                 </button>

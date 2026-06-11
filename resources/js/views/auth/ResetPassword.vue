@@ -24,7 +24,8 @@
                             Regain secure access fast
                         </h2>
                         <p class="mt-3 max-w-md text-sm leading-relaxed text-slate-600">
-                            Use your reset link to create a new password and continue your study journey without losing momentum.
+                            Use your reset link to create a new password and continue your study journey without losing
+                            momentum.
                         </p>
                     </div>
 
@@ -71,7 +72,7 @@
 
                     <div v-if="step === 1" class="mt-5">
                         <CommonButton buttonText="Send reset link" :disabled="isBusy || !email"
-                            classes="w-full rounded-full bg-blue-950 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
+                            classes="w-full rounded-full bg-sky-950/95 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
                             :action="InitiateResetLink" />
                     </div>
 
@@ -79,24 +80,27 @@
                         <p class="text-sm text-slate-600">
                             Check your inbox and open the reset link. If it does not arrive, request another one.
                         </p>
-                        <CommonButton :buttonText="isBusy ? 'Sending...' : 'Resend reset link'" :disabled="isBusy || !email"
-                            classes="w-full rounded-full bg-blue-950 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
+                        <CommonButton :buttonText="isBusy ? 'Sending...' : 'Resend reset link'"
+                            :disabled="isBusy || !email"
+                            classes="w-full rounded-full bg-sky-950/95 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
                             :action="InitiateResetLink" />
                     </div>
 
                     <div v-if="step === 3" class="mt-5 space-y-4">
                         <div>
-                            <label for="password" class="mb-2 block text-sm font-semibold text-slate-800">New Password</label>
+                            <label for="password" class="mb-2 block text-sm font-semibold text-slate-800">New
+                                Password</label>
                             <input v-model="password" type="password" id="password" required
                                 class="block w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-rose-500" />
                         </div>
                         <div>
-                            <label for="password_confirmation" class="mb-2 block text-sm font-semibold text-slate-800">Confirm Password</label>
+                            <label for="password_confirmation"
+                                class="mb-2 block text-sm font-semibold text-slate-800">Confirm Password</label>
                             <input v-model="password_confirmation" type="password" id="password_confirmation" required
                                 class="block w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-rose-500" />
                         </div>
                         <CommonButton :buttonText="isBusy ? 'Resetting...' : 'Reset password'" :disabled="isBusy"
-                            classes="w-full rounded-full bg-blue-950 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
+                            classes="w-full rounded-full bg-sky-950/95 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
                             :action="changePassword" />
                     </div>
                 </section>

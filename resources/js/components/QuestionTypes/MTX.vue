@@ -63,7 +63,7 @@
 
             <div v-if="showRevealButton" class="mt-4 text-center">
 
-                <button class="px-6 py-2 text-white rounded-sm bg-sky-600 border-0 cursor-pointer"
+                <button class="px-6 py-2 text-white rounded-sm bg-sky-500/95 border-0 cursor-pointer"
                     @click="revealAnswersAndExplanation">
 
                     Submit

@@ -113,7 +113,7 @@ const handleExamDateUpdated = (date: string) => {
                     <div class="lg:col-span-4 flex flex-col items-center gap-3">
                         <DaysLeft product_code="teas" />
                         <router-link to="/teas/guide-topics"
-                            class="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold bg-sky-600 text-white hover:bg-sky-700 transition">
+                            class="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold bg-sky-500/95 text-white hover:bg-sky-700 transition">
                             Open Study Guides
                         </router-link>
                         <router-link to="/teas/performance-analysis"

@@ -17,7 +17,7 @@
                     <div>
                         <Logo />
                         <p
-                            class="mt-4 inline-flex items-center rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-cyan-700">
+                            class="mt-4 inline-flex items-center rounded-full border border-gray-200 bg-gray-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-cyan-700">
                             Welcome Back
                         </p>
                         <h2 class="mt-4 text-3xl  tracking-tight text-slate-900">
@@ -31,17 +31,17 @@
                     <ul class="space-y-3 text-sm text-slate-700">
                         <li class="flex items-start gap-2">
                             <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs font-bold">1</span>
+                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs">1</span>
                             Start from where you left off
                         </li>
                         <li class="flex items-start gap-2">
                             <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-700 text-xs font-bold">2</span>
+                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-700 text-xs ">2</span>
                             Secure account access
                         </li>
                         <li class="flex items-start gap-2">
                             <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-teal-100 text-teal-700 text-xs font-bold">3</span>
+                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-teal-100 text-teal-700 text-xs ">3</span>
                             Personalized prep dashboard
                         </li>
                     </ul>
@@ -82,7 +82,7 @@
                             </div>
 
                             <button @click="handleNextStep"
-                                class="w-full cursor-pointer rounded-full bg-blue-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700">
+                                class="w-full cursor-pointer rounded-full bg-sky-950/95 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700">
                                 <span v-if="isLoading">Authorizing...</span>
                                 <span v-else>Next <i class="pi pi-arrow-right ms-1"></i></span>
                             </button>
@@ -109,7 +109,7 @@
                             </div>
 
                             <button @click="handleLogin"
-                                class="w-full cursor-pointer rounded-full bg-blue-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700">
+                                class="w-full cursor-pointer rounded-full bg-sky-950/95 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700">
                                 <span v-if="isLoading">Authorizing...</span>
                                 <span v-else>Login</span>
                             </button>

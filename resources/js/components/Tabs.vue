@@ -1,7 +1,7 @@
 <template>
   <div
-    class="w-full h-[calc(100vh-45px)] max-h-[calc(100vh-45px)] flex flex-col overflow-hidden bg-blue-950 dark:bg-sky-950  p-2 ">
-    <div ref="tabContainer" class=" flex space-x-2 pb-2 ps-3 pt-2 bg-blue-950 dark:bg-sky-950 sticky top-0 z-10">
+    class="w-full h-[calc(100vh-45px)] max-h-[calc(100vh-45px)] flex flex-col overflow-hidden bg-sky-950/95 dark:bg-sky-950  p-2 ">
+    <div ref="tabContainer" class=" flex space-x-2 pb-2 ps-3 pt-2 bg-sky-950/95  sticky top-0 z-10">
       <!-- Sliding Bubble -->
       <div
         class="absolute h-12 mx-3.5 rounded-t-lg w-24 bg-gray-50 bubble-box -bottom-0.5 2xl:bottom-0 transition-all duration-300 z-0"

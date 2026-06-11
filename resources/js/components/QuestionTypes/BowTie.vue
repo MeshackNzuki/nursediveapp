@@ -76,8 +76,8 @@
             <div class="mt-5 grid gap-4 md:grid-cols-3">
                 <section class="pool-panel">
                     <h5 class="pool-title">{{ labels.actions }}</h5>
-                    <VueDraggable v-model="actionPool" group="bow-action" item-key="id" :disabled="testMode === 'review'"
-                        class="pool-box min-h-[84px]">
+                    <VueDraggable v-model="actionPool" group="bow-action" item-key="id"
+                        :disabled="testMode === 'review'" class="pool-box min-h-[84px]">
                         <div v-for="item in actionPool" :key="item.id" class="pool-item">{{ item.text }}</div>
                     </VueDraggable>
                 </section>
@@ -85,8 +85,7 @@
                 <section class="pool-panel">
                     <h5 class="pool-title">{{ labels.potential }}</h5>
                     <VueDraggable v-model="potentialPool" group="bow-potential" item-key="id"
-                        :disabled="testMode === 'review'"
-                        class="pool-box min-h-[84px]">
+                        :disabled="testMode === 'review'" class="pool-box min-h-[84px]">
                         <div v-for="item in potentialPool" :key="item.id" class="pool-item">{{ item.text }}</div>
                     </VueDraggable>
                 </section>
@@ -94,8 +93,7 @@
                 <section class="pool-panel">
                     <h5 class="pool-title">{{ labels.parameters }}</h5>
                     <VueDraggable v-model="parameterPool" group="bow-parameter" item-key="id"
-                        :disabled="testMode === 'review'"
-                        class="pool-box min-h-[84px]">
+                        :disabled="testMode === 'review'" class="pool-box min-h-[84px]">
                         <div v-for="item in parameterPool" :key="item.id" class="pool-item">{{ item.text }}</div>
                     </VueDraggable>
                 </section>
@@ -112,7 +110,7 @@
             </div>
 
             <div v-if="showRevealButton" class="mt-4 p-4 text-center">
-                <button class="px-6 py-2 text-white rounded-sm bg-sky-600 border-0 cursor-pointer"
+                <button class="px-6 py-2 text-white rounded-sm bg-sky-500/95 border-0 cursor-pointer"
                     @click="revealAnswersAndExplanation">
                     Submit
                 </button>

@@ -88,11 +88,11 @@
 
                     <div class="mt-5 space-y-2.5">
                         <CommonButton :buttonText="resendButtonText" :disabled="!canResend"
-                            classes="w-full rounded-full bg-blue-950 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
+                            classes="w-full rounded-full bg-sky-950/95 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
                             :action="sendVerificationLink" />
 
                         <CommonButton v-if="state === 'verified'" buttonText="Go to Dashboard" icon2="pi pi-arrow-right"
-                            classes="w-full rounded-full bg-blue-950 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
+                            classes="w-full rounded-full bg-sky-950/95 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
                             :action="goToHome" />
                     </div>
 

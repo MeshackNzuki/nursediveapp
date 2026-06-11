@@ -166,7 +166,7 @@ const primaryButtonText = (productCode: string) => {
                         classes="w-full bg-white text-slate-700 border border-slate-300 hover:bg-slate-100"
                         :action="() => buildCheckoutUrl(plan)" />
                     <CommonButton :buttonText="primaryButtonText(plan.product_code)"
-                        classes="w-full bg-sky-600 text-white hover:bg-sky-700"
+                        classes="w-full bg-sky-500/95 text-white hover:bg-sky-700"
                         :action="() => buildCheckoutUrl(plan)" />
                     <CommonButton buttonText="View All Plan Tiers"
                         classes="w-full bg-emerald-500 text-white hover:bg-emerald-600"

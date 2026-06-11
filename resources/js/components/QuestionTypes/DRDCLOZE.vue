@@ -40,7 +40,7 @@
 
             <div v-if="showRevealButton" class="mt-4 text-center">
 
-                <button class="px-6 py-2 text-white rounded-sm bg-sky-600 border-0 cursor-pointer"
+                <button class="px-6 py-2 text-white rounded-sm bg-sky-500/95 border-0 cursor-pointer"
                     :disabled="!canSubmit" @click="revealSolution">
                     Submit
                 </button>
@@ -357,7 +357,7 @@ function setDropdownVisualState() {
         select.style.color = '#111827'
         select.style.backgroundColor = '#ffffff'
         select.style.borderColor = '#d1d5db'
-        ; (select.style as any).webkitTextFillColor = '#111827'
+            ; (select.style as any).webkitTextFillColor = '#111827'
 
         // Reset per-option styling first, then apply feedback coloring.
         Array.from(select.options).forEach((opt, index) => {
@@ -396,7 +396,7 @@ function setDropdownVisualState() {
             select.style.color = '#047857'
             select.style.backgroundColor = '#ecfdf5'
             select.style.borderColor = '#10b981'
-            ; (select.style as any).webkitTextFillColor = '#047857'
+                ; (select.style as any).webkitTextFillColor = '#047857'
             return
         }
 
@@ -405,7 +405,7 @@ function setDropdownVisualState() {
             select.style.color = '#be123c'
             select.style.backgroundColor = '#fff1f2'
             select.style.borderColor = '#f43f5e'
-            ; (select.style as any).webkitTextFillColor = '#be123c'
+                ; (select.style as any).webkitTextFillColor = '#be123c'
             return
         }
 
@@ -414,7 +414,7 @@ function setDropdownVisualState() {
             select.style.color = '#b45309'
             select.style.backgroundColor = '#fffbeb'
             select.style.borderColor = '#f59e0b'
-            ; (select.style as any).webkitTextFillColor = '#b45309'
+                ; (select.style as any).webkitTextFillColor = '#b45309'
             return
         }
 

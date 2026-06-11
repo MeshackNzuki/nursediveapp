@@ -124,7 +124,7 @@
                                     <div class="flex items-center justify-between">
                                         <span>Active subscribers</span>
                                         <span class="font-semibold">{{ formatNumber(product.active_subscribers)
-                                            }}</span>
+                                        }}</span>
                                     </div>
                                     <div class="flex items-center justify-between">
                                         <span>Unique payers</span>
@@ -183,7 +183,7 @@
                             <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">14-Day Signup Trend
                             </h2>
                             <span class="text-xs text-slate-500 dark:text-slate-300">{{ formatNumber(totalTrendSignups)
-                                }} signups</span>
+                            }} signups</span>
                         </div>
                         <div class="mt-4 h-64">
                             <Line v-if="signupChartData" :data="signupChartData" :options="chartOptions" />
@@ -259,7 +259,7 @@
                             </label>
                         </div>
                         <button
-                            class="mt-4 rounded-full bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+                            class="mt-4 rounded-full bg-sky-500/95 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
                             :disabled="filtering" @click="apply">
                             {{ filtering ? "Applying..." : "Apply Range" }}
                         </button>

@@ -18,7 +18,8 @@
                         <strong class="text-gray-700">{{ setting.key }}:</strong>
                         <span class="text-gray-600">{{ setting.value }}</span>
                     </div>
-                    <button @click="editSetting(setting)" class="bg-sky-500 text-white p-2 rounded-md hover:bg-sky-600">
+                    <button @click="editSetting(setting)"
+                        class="bg-sky-500 text-white p-2 rounded-md hover:bg-sky-500/95">
                         Edit
                     </button>
                 </li>
@@ -66,7 +67,7 @@
                         class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
                 <div class="flex space-x-4">
-                    <button type="submit" class="bg-sky-500 text-white p-2 rounded-md hover:bg-sky-600 w-full">
+                    <button type="submit" class="bg-sky-500 text-white p-2 rounded-md hover:bg-sky-500/95 w-full">
                         Update Setting
                     </button>
                     <button @click="cancelEdit" type="button"

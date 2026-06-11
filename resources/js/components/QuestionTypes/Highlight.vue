@@ -9,7 +9,7 @@
         </div>
 
         <div v-if="examMode === 'tutor' && !tutorSubmitted" class="mt-3 flex justify-end">
-            <button type="button" class="rounded-full bg-sky-600 px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60
+            <button type="button" class="rounded-full bg-sky-500/95 px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60
                 " :disabled="selectedKeys.length === 0" @click="submitTutorHighlights">
                 Submit Highlight
             </button>

@@ -4,10 +4,10 @@
     <div class="absolute inset-0  pointer-events-none -z-10">
       <!-- Purple to Sky to Green Gradient Cloud -->
       <div
-        class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-purple-300 via-sky-300 to-teal-200 opacity-30 blur-[120px] rounded-full">
+        class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-purple-100 via-sky-200 to-teal-100 opacity-30 blur-[120px] rounded-full">
       </div>
       <div
-        class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-300 via-sky-300 to-purple-200 opacity-30 blur-[100px] rounded-full">
+        class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-100 via-sky-200 to-purple-100 opacity-30 blur-[100px] rounded-full">
       </div>
     </div>
     <div class="max-w-screen-2xl m-auto">

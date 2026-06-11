@@ -2,14 +2,16 @@
     <section class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-sky-600 dark:text-sky-300">Study Schedule</p>
+                <p class="text-xs font-semibold uppercase tracking-wide text-sky-600 dark:text-sky-300">Study Schedule
+                </p>
                 <h3 class="mt-1 text-xl font-semibold text-slate-800 dark:text-slate-100">{{ title }}</h3>
                 <p class="mt-2 text-sm text-slate-500 dark:text-slate-300">
                     Set your exam date once, and your weekly focus updates automatically.
                 </p>
             </div>
 
-            <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-sky-800 dark:bg-sky-950/70">
+            <div
+                class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-sky-800 dark:bg-sky-950/70">
                 <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-300">Target Exam Date</p>
                 <p class="mt-1 text-base font-semibold text-slate-800 dark:text-slate-100">
                     {{ formattedExamDate || "Not set yet" }}
@@ -19,15 +21,18 @@
         </div>
 
         <div class="mt-4 grid gap-2 sm:grid-cols-3">
-            <button class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-sky-700 dark:text-slate-100 dark:hover:bg-sky-800/70"
+            <button
+                class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-sky-700 dark:text-slate-100 dark:hover:bg-sky-800/70"
                 @click="setPresetDate(30)">
                 In 30 days
             </button>
-            <button class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-sky-700 dark:text-slate-100 dark:hover:bg-sky-800/70"
+            <button
+                class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-sky-700 dark:text-slate-100 dark:hover:bg-sky-800/70"
                 @click="setPresetDate(60)">
                 In 60 days
             </button>
-            <button class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-sky-700 dark:text-slate-100 dark:hover:bg-sky-800/70"
+            <button
+                class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-sky-700 dark:text-slate-100 dark:hover:bg-sky-800/70"
                 @click="setPresetDate(90)">
                 In 90 days
             </button>
@@ -36,7 +41,8 @@
         <div class="mt-3 flex flex-col gap-3 md:flex-row">
             <input v-model="examDateInput" type="date"
                 class="input input-bordered w-full bg-white dark:border-sky-700 dark:bg-sky-950 dark:text-slate-100" />
-            <button class="rounded-lg bg-sky-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+            <button
+                class="rounded-lg bg-sky-500/95 px-4 py-2 text-sm font-medium text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
                 :disabled="saving" @click="saveExamDate">
                 {{ saving ? "Saving..." : "Save Exam Date" }}
             </button>
@@ -53,7 +59,7 @@
 
         <div class="mt-5 flex flex-col gap-2 sm:flex-row">
             <RouterLink :to="progressRoute"
-                class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-sky-600 dark:hover:bg-sky-500">
+                class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-sky-500/95 dark:hover:bg-sky-500">
                 Check Progress
             </RouterLink>
             <RouterLink :to="studyRoute"

@@ -48,7 +48,7 @@
                     </td>
                     <td class="p-2 whitespace-nowrap">
                         <button type="button"
-                            class="rounded-full bg-sky-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-sky-700"
+                            class="rounded-full bg-sky-500/95 px-3 py-1.5 text-xs font-semibold text-white hover:bg-sky-700"
                             @click="openIssueModal(item)">
                             View
                         </button>
@@ -76,25 +76,29 @@
                     <div><span class="font-semibold">Question ID:</span> {{ selectedIssue.question_id || '-' }}</div>
                     <div class="md:col-span-2"><span class="font-semibold">Type:</span> {{
                         humanizeIssueType(selectedIssue.issue_type) }}</div>
-                    <div class="md:col-span-2"><span class="font-semibold">Route:</span> {{ selectedIssue.route || '-' }}
+                    <div class="md:col-span-2"><span class="font-semibold">Route:</span> {{ selectedIssue.route || '-'
+                        }}
                     </div>
                     <div class="md:col-span-2">
                         <span class="font-semibold">Issue Message:</span>
                         <pre
-                            class="mt-1 whitespace-pre-wrap rounded-xl bg-slate-100 p-3 text-xs text-slate-700 dark:bg-slate-900 dark:text-slate-200">{{
-                                selectedIssue.message || '-'
-                            }}</pre>
+                            class="mt-1 whitespace-pre-wrap rounded-xl bg-slate-100 p-3 text-xs text-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                    {{
+                        selectedIssue.message || '-'
+                    }}</pre>
                     </div>
                     <div class="md:col-span-2">
                         <span class="font-semibold">Metadata:</span>
                         <pre
-                            class="mt-1 whitespace-pre-wrap rounded-xl bg-slate-100 p-3 text-xs text-slate-700 dark:bg-slate-900 dark:text-slate-200">{{
-                                formatMetadata(selectedIssue.metadata)
-                            }}</pre>
+                            class="mt-1 whitespace-pre-wrap rounded-xl bg-slate-100 p-3 text-xs text-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                    {{
+                        formatMetadata(selectedIssue.metadata)
+                    }}</pre>
                     </div>
                 </div>
 
-                <div class="mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-3 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+                <div
+                    class="mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-3 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
                     Future workflow placeholder: question pull and editing will remain on the admin side only.
                 </div>
 

@@ -28,7 +28,7 @@
 </head>
 
 <body class="">
-    <div id="loading" class="fixed inset-0 bg-blue-950 z-50 flex items-center justify-center">
+    <div id="loading" class="fixed inset-0 bg-sky-950/95 z-50 flex items-center justify-center">
         <div class="loader"></div>
     </div>
 

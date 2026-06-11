@@ -57,7 +57,7 @@
             :class="sidebarOpen ? 'w-50' : 'w-6'">
             <!-- Toggle Handle (Always Visible) -->
             <button @click="toggleSidebar"
-                class="absolute cursor-pointer left-0 top-1/2 -translate-x-full -translate-y-1/2 bg-blue-950 text-white w-6 h-20 rounded-l-lg flex items-center justify-center hover:bg-sky-500">
+                class="absolute cursor-pointer left-0 top-1/2 -translate-x-full -translate-y-1/2 bg-sky-950/95 text-white w-6 h-20 rounded-l-lg flex items-center justify-center hover:bg-sky-500">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform transition-transform duration-300"
                     :class="sidebarOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />

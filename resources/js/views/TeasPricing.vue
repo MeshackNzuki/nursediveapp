@@ -129,13 +129,13 @@ const isRecommended = (plan: any) => plan.id === recommendedPlanId.value;
                         {{ formatPlanName(plan.name) }}
                     </span>
                     <span v-if="isRecommended(plan)"
-                        class="inline-flex items-center rounded-full bg-sky-600 text-white px-3 py-1 text-xs font-bold">
+                        class="inline-flex items-center rounded-full bg-sky-500/95 text-white px-3 py-1 text-xs font-bold">
                         MOST POPULAR
                     </span>
                 </div>
 
                 <h3 class="text-2xl font-extrabold mt-4 text-slate-900 dark:text-white tracking-tight">{{ PRODUCT_TITLE
-                    }}</h3>
+                }}</h3>
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">{{ tierMessage(plan.name) }}</p>
 
                 <div
@@ -167,7 +167,7 @@ const isRecommended = (plan: any) => plan.id === recommendedPlanId.value;
                         classes="w-full bg-white text-slate-700 border border-slate-300 hover:bg-slate-100"
                         :action="() => buildCheckoutUrl(plan)" />
                     <CommonButton :buttonText="primaryButtonText"
-                        classes="w-full bg-sky-600 text-white hover:bg-sky-700"
+                        classes="w-full bg-sky-500/95 text-white hover:bg-sky-700"
                         :action="() => buildCheckoutUrl(plan)" />
                 </div>
 

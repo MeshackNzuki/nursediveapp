@@ -1,27 +1,29 @@
 <template>
     <nav v-if="!login" ref="sidebar_id" :class="sidebarShellClass" aria-label="Primary navigation">
-        <div class="sidebar-surface"></div>
+        <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-sky-400/10 via-transparent to-teal-400/10">
+        </div>
 
         <div class="relative z-10 flex h-full min-h-0 flex-col">
             <router-link to="/" :class="brandClass" :title="isSidebarOpen ? undefined : 'NurseDive'">
-                <span class="brand-mark">
-                    <img src="../../assets/logo.png" alt="NurseDive logo" />
+                <span
+                    class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/95 shadow-lg shadow-sky-950/20">
+                    <img src="../../assets/logo.png" class="h-8 w-8 object-contain" alt="NurseDive logo" />
                 </span>
                 <span v-if="isSidebarOpen" class="min-w-0">
-                    <span class="block text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-200/80">
+                    <span class="block text-xs font-semibold uppercase tracking-widest text-cyan-200/80">
                         NurseDive
                     </span>
                     <span class="block text-base font-bold leading-5 text-white">
-                        Prep Studio
+                        Nursing Prep
                     </span>
                 </span>
             </router-link>
 
             <router-link to="/account" :class="profileClass" :title="isSidebarOpen ? undefined : 'Account'">
-                <span v-if="user?.avatar" class="profile-avatar overflow-hidden">
+                <span v-if="user?.avatar" :class="[profileAvatarClass, 'overflow-hidden']">
                     <img :src="'/storage/' + user.avatar" class="h-full w-full object-cover" alt="User avatar" />
                 </span>
-                <span v-else class="profile-avatar">
+                <span v-else :class="profileAvatarClass">
                     {{ userInitial }}
                 </span>
 
@@ -35,22 +37,10 @@
                 </span>
             </router-link>
 
-            <router-link :to="scheduleRoute" :class="scheduleClass" :title="isSidebarOpen ? undefined : scheduleLabel">
-                <span class="schedule-illustration">
-                    <i class="pi pi-calendar-clock"></i>
-                </span>
-                <span v-if="isSidebarOpen" class="min-w-0">
-                    <span class="block text-sm font-bold text-white">
-                        {{ scheduleLabel }}
-                    </span>
-                    <span class="block truncate text-xs text-cyan-100/70">
-                        {{ scheduleDetail }}
-                    </span>
-                </span>
-            </router-link>
+
 
             <div class="sidebar-scroll mt-4 min-h-0 flex-1 overflow-y-auto px-3 pb-4">
-                <p v-if="isSidebarOpen" class="sidebar-kicker">
+                <p v-if="isSidebarOpen" class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
                     {{ menuSectionTitle }}
                 </p>
 
@@ -73,7 +63,8 @@
                             <span v-if="isSidebarOpen" class="min-w-0 flex-1 truncate">
                                 {{ item.label }}
                             </span>
-                            <span v-if="isSidebarOpen && item.badge" class="sidebar-badge">
+                            <span v-if="isSidebarOpen && item.badge"
+                                class="rounded-full bg-white/10 px-2 py-0.5 text-xs font-black uppercase text-sky-100/90">
                                 {{ item.badge }}
                             </span>
                         </a>
@@ -90,15 +81,18 @@
                             <span v-if="isSidebarOpen" class="min-w-0 flex-1 truncate">
                                 {{ dropdown.label }}
                             </span>
-                            <span v-if="isSidebarOpen && dropdown.badge" class="sidebar-badge sidebar-badge-hot">
+                            <span v-if="isSidebarOpen && dropdown.badge"
+                                class="rounded-full bg-amber-400/20 px-2 py-0.5 text-xs font-black uppercase text-amber-100">
                                 {{ dropdown.badge }}
                             </span>
                             <i v-if="isSidebarOpen" class="pi pi-angle-down text-xs text-cyan-100/60"></i>
                         </button>
 
-                        <ul tabindex="0" class="dropdown-content sidebar-dropdown-menu z-50 w-64 rounded-2xl p-2">
+                        <ul tabindex="0"
+                            class="dropdown-content z-50 w-64 rounded-2xl border border-sky-950/10 bg-white/95 p-2 shadow-2xl shadow-slate-950/20">
                             <li v-for="link in dropdown.links" :key="link.route">
-                                <router-link :to="link.route" class="sidebar-dropdown-link">
+                                <router-link :to="link.route"
+                                    class="block rounded-xl px-3 py-2.5 text-sm font-bold text-slate-800 hover:bg-sky-100 hover:text-sky-800 focus-visible:bg-sky-100 focus-visible:text-sky-800">
                                     {{ link.label }}
                                 </router-link>
                             </li>
@@ -107,7 +101,7 @@
                 </div>
 
                 <div v-if="activeSecondaryMenuItems.length" class="mt-5">
-                    <p v-if="isSidebarOpen" class="sidebar-kicker">
+                    <p v-if="isSidebarOpen" class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
                         Manage
                     </p>
                     <div class="space-y-1.5">
@@ -127,8 +121,8 @@
                 </div>
 
                 <div v-if="!isAdminArea" class="mt-5">
-                    <p v-if="isSidebarOpen" class="sidebar-kicker">
-                        Workspace
+                    <p v-if="isSidebarOpen" class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
+                        Utilities
                     </p>
                     <div class="space-y-1.5">
                         <router-link v-for="item in welcomeMenu" :key="item.route" :to="item.route" custom
@@ -147,7 +141,7 @@
                 </div>
 
                 <div v-if="!isAdminArea" :class="switcherClass">
-                    <p v-if="isSidebarOpen" class="sidebar-kicker mb-2">
+                    <p v-if="isSidebarOpen" class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
                         Switch Prep Area
                     </p>
                     <div :class="isSidebarOpen ? 'space-y-2' : 'space-y-1.5'">
@@ -155,14 +149,14 @@
                             v-slot="{ href, navigate, isActive, isExactActive }">
                             <a :href="href" :class="switchItemClass(isActive || isExactActive)"
                                 :title="isSidebarOpen ? undefined : area.label" @click="navigate">
-                                <span class="switch-icon">
+                                <span :class="switchIconClass">
                                     <i :class="area.icon"></i>
                                 </span>
                                 <span v-if="isSidebarOpen" class="min-w-0 flex-1">
                                     <span class="block truncate text-sm font-bold">{{ area.short }}</span>
-                                    <span class="block truncate text-[11px] text-cyan-100/60">{{ area.label }}</span>
+                                    <span class="block truncate text-xs text-cyan-100/60">{{ area.label }}</span>
                                 </span>
-                                <i v-if="isSidebarOpen" class="pi pi-arrow-right text-[10px] text-cyan-100/50"></i>
+                                <i v-if="isSidebarOpen" class="pi pi-arrow-right text-xs text-cyan-100/50"></i>
                             </a>
                         </router-link>
                     </div>
@@ -170,15 +164,16 @@
             </div>
 
             <div class="border-t border-cyan-200/10 px-3 py-3">
-                <router-link v-if="isSidebarOpen && !isAdminArea" to="/subscription" class="sidebar-promo">
-                    <span class="promo-icon">
+                <router-link v-if="isSidebarOpen && !isAdminArea" to="/subscription"
+                    class="flex items-center gap-3 rounded-2xl border border-amber-300/20 bg-gradient-to-br from-amber-300/20 to-sky-500/10 p-3 transition hover:-translate-y-px hover:border-amber-300/40 hover:from-amber-300/25 hover:to-sky-500/20">
+                    <span :class="promoIconClass">
                         <i class="pi pi-bolt"></i>
                     </span>
                     <span class="min-w-0">
                         <span class="block text-xs font-extrabold uppercase tracking-wide text-amber-200">
                             Explore more products
                         </span>
-                        <span class="block truncate text-[11px] text-cyan-100/70">
+                        <span class="block truncate text-xs text-cyan-100/70">
                             Build your full prep stack
                         </span>
                     </span>
@@ -491,16 +486,6 @@ const menuSectionTitle = computed(() => {
     return currentProductArea.value?.label || "Learning Products";
 });
 
-const scheduleRoute = computed(() => currentProductArea.value?.route || "/");
-
-const scheduleLabel = computed(() =>
-    currentProductArea.value ? "Select Exam Date" : "Choose Your Path",
-);
-
-const scheduleDetail = computed(() =>
-    currentProductArea.value ? currentProductArea.value.label : "Open your learning hub",
-);
-
 const activeMenuItems = computed(() => {
     if (isAdminArea.value) return adminMenuItems.value;
     if (isAreaPath("/nursing")) return nursingMenuItems.value;
@@ -529,7 +514,7 @@ const showBackButton = computed(() =>
 );
 
 const sidebarShellClass = computed(() => [
-    "sidebar-shell fixed bottom-2 left-2 top-2 z-10 flex flex-col overflow-hidden rounded-[1.35rem] border border-cyan-300/15 text-slate-100 transition-all duration-300 ease-out",
+    "fixed bottom-2 left-2 top-2 z-10 flex flex-col overflow-hidden rounded-3xl border border-cyan-300/20 bg-gradient-to-b from-sky-950 via-cyan-950 to-slate-950 text-slate-100 shadow-2xl shadow-slate-950/40 transition-all duration-300 ease-out",
     mainStore.isMobile
         ? mainStore.sidebarOpen
             ? "w-52 translate-x-0 opacity-100"
@@ -540,23 +525,34 @@ const sidebarShellClass = computed(() => [
 ]);
 
 const brandClass = computed(() => [
-    "sidebar-brand mx-3 mt-3 flex min-h-14 items-center gap-3 rounded-2xl",
+    "mx-3 mt-3 flex min-h-14 items-center gap-3 rounded-2xl border border-sky-300/20 bg-white/5 text-white transition hover:border-sky-300/30 hover:bg-white/10",
     isSidebarOpen.value ? "justify-start px-3" : "justify-center px-2",
 ]);
 
 const profileClass = computed(() => [
-    "sidebar-profile mx-3 mt-3 flex items-center gap-3 rounded-2xl",
+    "mx-3 mt-3 flex items-center gap-3 rounded-2xl border border-sky-300/20 bg-white/5 text-white transition hover:-translate-y-px hover:border-sky-300/30 hover:bg-white/10",
     isSidebarOpen.value ? "justify-start px-3 py-3" : "justify-center px-2 py-2.5",
 ]);
 
-const scheduleClass = computed(() => [
-    "sidebar-schedule mx-3 mt-3 flex items-center gap-3 rounded-[1.25rem]",
-    isSidebarOpen.value ? "justify-start px-3 py-3.5" : "justify-center px-2 py-3",
-]);
+const profileAvatarClass =
+    "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-teal-500 text-sm font-extrabold text-white shadow-lg shadow-cyan-950/20";
+
+const sidebarIconBaseClass =
+    "inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-sky-300/20 bg-sky-950/70 text-sm text-cyan-300 transition";
+
+const switchIconClass = [
+    sidebarIconBaseClass,
+    "border-cyan-300/30 bg-sky-500/20 text-white",
+];
+
+const promoIconClass = [
+    sidebarIconBaseClass,
+    "border-cyan-300/30 bg-sky-500/20 text-white",
+];
 
 const switcherClass = computed(() => [
     "mt-5",
-    isSidebarOpen.value ? "rounded-2xl border border-cyan-200/10 bg-white/[0.04] p-3" : "",
+    isSidebarOpen.value ? "rounded-2xl border border-cyan-200/10 bg-white/5 p-3" : "",
 ]);
 
 const dropdownShellClass = computed(() => [
@@ -565,49 +561,36 @@ const dropdownShellClass = computed(() => [
 ]);
 
 const navItemClass = (active = false, item = {}) => [
-    "sidebar-nav-item",
+    "flex min-h-11 w-full items-center gap-3 rounded-2xl border border-transparent text-sm font-bold leading-tight text-slate-100/90 outline-none transition hover:-translate-y-px hover:bg-white/10 hover:text-white focus-visible:-translate-y-px focus-visible:bg-white/10 focus-visible:text-white",
     isSidebarOpen.value ? "justify-start px-3" : "justify-center px-2",
-    active ? "is-active" : "",
-    item.featured ? "is-featured" : "",
+    active
+        ? "border-cyan-300/30 bg-gradient-to-r from-sky-500/25 to-teal-500/10 text-white shadow-lg shadow-sky-950/20"
+        : "",
+    item.featured ? "text-amber-100" : "",
 ];
 
 const sidebarIconClass = (active = false, item = {}) => [
-    "sidebar-icon",
-    active ? "is-active" : "",
-    item.danger ? "is-danger" : "",
-    item.featured ? "is-featured" : "",
+    sidebarIconBaseClass,
+    active ? "border-cyan-300/30 bg-sky-500/20 text-white" : "",
+    item.danger ? "text-rose-200" : "",
+    item.featured ? "border-amber-300/30 bg-amber-300/20 text-amber-100" : "",
 ];
 
 const switchItemClass = (active = false) => [
-    "sidebar-switch-item",
+    "flex min-h-11 w-full items-center gap-3 rounded-2xl border border-transparent text-sm font-bold leading-tight text-slate-100/90 outline-none transition hover:-translate-y-px hover:bg-white/10 hover:text-white focus-visible:-translate-y-px focus-visible:bg-white/10 focus-visible:text-white",
     isSidebarOpen.value ? "justify-start px-2.5 py-2" : "justify-center px-2 py-2",
-    active ? "is-active" : "",
+    active
+        ? "border-cyan-300/30 bg-gradient-to-r from-sky-500/25 to-teal-500/10 text-white shadow-lg shadow-sky-950/20"
+        : "",
 ];
 
 const logoutClass = computed(() => [
-    "sidebar-nav-item w-full",
+    "flex min-h-11 w-full items-center gap-3 rounded-2xl border border-transparent text-sm font-bold leading-tight text-slate-100/90 outline-none transition hover:-translate-y-px hover:bg-white/10 hover:text-white focus-visible:-translate-y-px focus-visible:bg-white/10 focus-visible:text-white",
     isSidebarOpen.value ? "justify-start px-3" : "justify-center px-2",
 ]);
 </script>
 
 <style scoped>
-.sidebar-shell {
-    background:
-        linear-gradient(180deg, rgba(7, 47, 75, 0.98) 0%, rgba(5, 35, 60, 0.98) 48%, rgba(4, 28, 48, 0.98) 100%);
-    box-shadow:
-        0 24px 55px -34px rgba(2, 6, 23, 0.95),
-        inset 0 1px 0 rgba(255, 255, 255, 0.07);
-}
-
-.sidebar-surface {
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(135deg, rgba(56, 189, 248, 0.12), transparent 38%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 24%),
-        linear-gradient(0deg, rgba(20, 184, 166, 0.08), transparent 42%);
-}
-
 .sidebar-scroll {
     scrollbar-color: rgba(103, 232, 249, 0.32) transparent;
     scrollbar-width: thin;
@@ -620,216 +603,5 @@ const logoutClass = computed(() => [
 .sidebar-scroll::-webkit-scrollbar-thumb {
     background: rgba(103, 232, 249, 0.28);
     border-radius: 999px;
-}
-
-.sidebar-brand {
-    color: white;
-    background: rgba(255, 255, 255, 0.045);
-    border: 1px solid rgba(125, 211, 252, 0.13);
-    transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.sidebar-brand:hover {
-    background: rgba(255, 255, 255, 0.075);
-    border-color: rgba(125, 211, 252, 0.24);
-}
-
-.brand-mark {
-    display: inline-flex;
-    height: 2.5rem;
-    width: 2.5rem;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: 0 12px 24px -18px rgba(8, 145, 178, 0.8);
-}
-
-.brand-mark img {
-    height: 1.9rem;
-    width: 1.9rem;
-    object-fit: contain;
-}
-
-.sidebar-profile,
-.sidebar-schedule {
-    color: white;
-    border: 1px solid rgba(125, 211, 252, 0.12);
-    background: rgba(255, 255, 255, 0.055);
-    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-}
-
-.sidebar-profile:hover,
-.sidebar-schedule:hover {
-    border-color: rgba(125, 211, 252, 0.25);
-    background: rgba(255, 255, 255, 0.085);
-    transform: translateY(-1px);
-}
-
-.profile-avatar {
-    display: inline-flex;
-    height: 2.35rem;
-    width: 2.35rem;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #0ea5e9, #14b8a6);
-    color: white;
-    font-size: 0.9rem;
-    font-weight: 800;
-    box-shadow: 0 10px 18px -14px rgba(34, 211, 238, 0.9);
-}
-
-.schedule-illustration {
-    display: inline-flex;
-    height: 2.55rem;
-    width: 2.55rem;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1rem;
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.26), rgba(20, 184, 166, 0.18));
-    color: #a5f3fc;
-}
-
-.sidebar-kicker {
-    margin-bottom: 0.55rem;
-    padding-left: 0.4rem;
-    color: rgba(186, 230, 253, 0.66);
-    font-size: 0.66rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-}
-
-.sidebar-nav-item,
-.sidebar-switch-item {
-    display: flex;
-    min-height: 2.7rem;
-    width: 100%;
-    align-items: center;
-    gap: 0.7rem;
-    border-radius: 1rem;
-    color: rgba(241, 245, 249, 0.86);
-    font-size: 0.9rem;
-    font-weight: 700;
-    line-height: 1.2;
-    outline: none;
-    transition:
-        background 0.18s ease,
-        color 0.18s ease,
-        transform 0.18s ease,
-        box-shadow 0.18s ease;
-}
-
-.sidebar-nav-item:hover,
-.sidebar-nav-item:focus-visible,
-.sidebar-switch-item:hover,
-.sidebar-switch-item:focus-visible {
-    background: rgba(255, 255, 255, 0.075);
-    color: #ffffff;
-    transform: translateY(-1px);
-}
-
-.sidebar-nav-item.is-active,
-.sidebar-switch-item.is-active {
-    background: linear-gradient(90deg, rgba(14, 165, 233, 0.26), rgba(20, 184, 166, 0.12));
-    color: #ffffff;
-    box-shadow:
-        inset 3px 0 0 rgba(103, 232, 249, 0.95),
-        0 16px 30px -26px rgba(14, 165, 233, 0.7);
-}
-
-.sidebar-icon,
-.switch-icon,
-.promo-icon {
-    display: inline-flex;
-    height: 1.95rem;
-    width: 1.95rem;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.8rem;
-    border: 1px solid rgba(125, 211, 252, 0.16);
-    background: rgba(8, 47, 73, 0.72);
-    color: #67e8f9;
-    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
-}
-
-.sidebar-icon i,
-.switch-icon i,
-.promo-icon i {
-    font-size: 0.88rem;
-}
-
-.sidebar-icon.is-active,
-.switch-icon,
-.promo-icon {
-    border-color: rgba(103, 232, 249, 0.3);
-    background: rgba(14, 165, 233, 0.2);
-    color: #ffffff;
-}
-
-.sidebar-icon.is-danger {
-    color: #fecdd3;
-}
-
-.sidebar-badge {
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.18rem 0.45rem;
-    color: rgba(224, 242, 254, 0.9);
-    font-size: 0.62rem;
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-.sidebar-badge-hot {
-    background: rgba(251, 191, 36, 0.2);
-    color: #fde68a;
-}
-
-.sidebar-dropdown-menu {
-    border: 1px solid rgba(8, 47, 73, 0.12);
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 26px 55px -28px rgba(2, 6, 23, 0.55);
-}
-
-.sidebar-dropdown-link {
-    display: block;
-    border-radius: 0.8rem;
-    padding: 0.65rem 0.75rem;
-    color: #0f2742;
-    font-size: 0.84rem;
-    font-weight: 700;
-}
-
-.sidebar-dropdown-link:hover,
-.sidebar-dropdown-link:focus-visible {
-    background: #e0f2fe;
-    color: #075985;
-}
-
-.sidebar-switch-item {
-    color: rgba(241, 245, 249, 0.9);
-}
-
-.sidebar-promo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    border-radius: 1.1rem;
-    border: 1px solid rgba(251, 191, 36, 0.2);
-    background: linear-gradient(135deg, rgba(251, 191, 36, 0.14), rgba(14, 165, 233, 0.1));
-    padding: 0.75rem;
-    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-}
-
-.sidebar-promo:hover {
-    border-color: rgba(251, 191, 36, 0.34);
-    background: linear-gradient(135deg, rgba(251, 191, 36, 0.19), rgba(14, 165, 233, 0.14));
-    transform: translateY(-1px);
 }
 </style>
