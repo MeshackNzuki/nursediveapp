@@ -109,7 +109,7 @@
                             </div>
 
                             <button @click="handleLogin"
-                                class="w-full cursor-pointer rounded-full bg-sky-950/95 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700">
+                                class="w-full cursor-pointer rounded-full bg-sky-500/95 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700">
                                 <span v-if="isLoading">Authorizing...</span>
                                 <span v-else>Login</span>
                             </button>
