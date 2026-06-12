@@ -124,7 +124,7 @@ export const useMainStore = defineStore("mainStore", {
 
         async getEssentials() {
             //get all plans
-            await axios.get("/plans").then((res) => {
+            await axios.get("/plans", { showLoader: false }).then((res) => {
                 this.plans = res.data.data;
             });
         },

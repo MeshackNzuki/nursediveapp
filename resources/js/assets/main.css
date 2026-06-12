@@ -212,15 +212,41 @@ background: radial-gradient(60.63% 60.63% at 57.15% 51.07%, #0d5485 0, #0b2854 6
 .loader {
   width: 50px;
   aspect-ratio: 1;
+  position: relative;
   border-radius: 50%;
-  background: 
-    radial-gradient(farthest-side,#14b8a6 94%,#0000) top/8px 8px no-repeat,
-    conic-gradient(#0000 30%,#14b8a6);
-  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
-  animation: l13 2s infinite linear;
+  background: conic-gradient(
+    from 90deg,
+    #0000 0 28%,
+    rgb(20 184 166 / 0.35) 45%,
+    #14b8a6 78%,
+    #99f6e4 100%
+  );
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 7px), #000 0);
+  mask: radial-gradient(farthest-side, #0000 calc(100% - 7px), #000 0);
+  animation: loader-spin 0.85s linear infinite;
+  transform: translateZ(0);
+  transform-origin: center;
+  will-change: transform;
 }
-@keyframes l13{ 
-  100%{transform: rotate(1turn)}
+
+.loader::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(farthest-side, #14b8a6 94%, #0000) top/7px 7px no-repeat;
+}
+
+@keyframes loader-spin {
+  to {
+    transform: translateZ(0) rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader {
+    animation-duration: 1.8s;
+  }
 }
 
 
