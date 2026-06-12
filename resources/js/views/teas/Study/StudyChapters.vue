@@ -3,25 +3,23 @@
     class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-slate-50 dark:bg-sky-950 text-slate-800 dark:text-slate-100">
     <div class="absolute inset-0 pointer-events-none -z-10">
       <div
-        class="absolute -top-20 -left-40 h-[300px] w-[300px] lg:h-[620px] lg:w-[620px] bg-gradient-to-r from-cyan-300 via-sky-300 to-emerald-200 opacity-30 blur-[120px] rounded-full">
+        class="absolute -top-20 -left-40 h-[300px] w-[300px] lg:h-[620px] lg:w-[620px] bg-gradient-to-r from-cyan-50 via-sky-50 to-emerald-50 opacity-30 blur-[120px] rounded-full">
       </div>
       <div
-        class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-300 via-cyan-300 to-indigo-200 opacity-30 blur-[100px] rounded-full">
+        class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-50 via-cyan-50 to-indigo-50 opacity-30 blur-[100px] rounded-full">
       </div>
     </div>
 
     <div class="max-w-screen-2xl mx-auto">
       <section
-        class="relative overflow-hidden rounded-[30px] border border-cyan-100 bg-gradient-to-br from-white via-cyan-50 to-emerald-50 p-6 lg:p-8 shadow-[0_24px_72px_-36px_rgba(13,148,136,0.55)] dark:border-cyan-800 dark:from-slate-900 dark:via-sky-900 dark:to-emerald-950 dark:shadow-[0_24px_72px_-36px_rgba(6,182,212,0.65)]">
-        <div
-          class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_15%_18%,rgba(14,165,233,0.20),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.18),transparent_45%)] dark:bg-[radial-gradient(circle_at_15%_18%,rgba(34,211,238,0.20),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(52,211,153,0.18),transparent_45%)]">
-        </div>
+        class="relative overflow-hidden rounded-[30px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-blue-50 p-6 lg:p-8  dark:border-cyan-800 dark:from-slate-900 dark:via-sky-900 dark:to-emerald-950 dark:shadow-[0_24px_72px_-36px_rgba(6,182,212,0.65)]">
+
         <div class="relative">
           <p
             class="inline-flex items-center rounded-full border border-cyan-200 bg-white/80 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-700 dark:border-cyan-700 dark:bg-slate-900/70 dark:text-cyan-300">
             TEAS Chapter Guide
           </p>
-          <h1 class="mt-4 text-2xl lg:text-4xl font-black text-slate-900 dark:text-white">
+          <h1 class="mt-4 text-2xl font-black text-slate-900 dark:text-white">
             {{ normalizeText(chapter_name_backend || 'TEAS Study Guide') }} Chapters
           </h1>
           <p class="mt-3 max-w-3xl text-sm lg:text-base text-slate-600 dark:text-slate-300">
@@ -29,11 +27,11 @@
           </p>
           <div class="mt-5 flex flex-wrap gap-3">
             <span
-              class="rounded-2xl border border-cyan-200 bg-white/85 px-4 py-2 text-sm font-semibold text-cyan-700 dark:border-cyan-700 dark:bg-slate-900/70 dark:text-cyan-200">
+              class="rounded-2xl border border-sky-400 bg-white/85 px-4 py-2 text-sm font-semibold text-cyan-700 dark:border-cyan-700 dark:bg-slate-900/70 dark:text-cyan-200">
               {{ topicCount }} chapters available
             </span>
             <span
-              class="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-200">
+              class="rounded-2xl border border-emerald-400 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-200">
               Lesson + quiz workflow
             </span>
           </div>
@@ -46,13 +44,17 @@
       </div>
 
       <div v-else class="relative mt-8 w-full">
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 transition-all" :class="{ 'blur-sm': !active('teas') }">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 transition-all"
+          :class="{ 'blur-sm': !active('teas') }">
           <article v-for="(sub, index) in subChapters" :key="sub.id"
             class="group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]">
-            <div :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]"></div>
+            <div
+              :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]">
+            </div>
             <div class="relative flex h-full flex-col">
               <div class="flex items-start justify-between gap-3">
-                <span :class="['inline-flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold', accentBadgeClass(index)]">
+                <span
+                  :class="['inline-flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold', accentBadgeClass(index)]">
                   {{ index + 1 }}
                 </span>
                 <span
@@ -111,7 +113,8 @@
         </div>
 
         <div class="max-h-[55vh] overflow-y-auto pr-1">
-          <div class="flex flex-col gap-4 prose prose-sm max-w-none dark:prose-invert" v-html="selectedSub?.description"></div>
+          <div class="flex flex-col gap-4 prose prose-sm max-w-none dark:prose-invert"
+            v-html="selectedSub?.description"></div>
         </div>
 
         <div class="modal-action">

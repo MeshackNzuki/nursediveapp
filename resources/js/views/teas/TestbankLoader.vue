@@ -1,21 +1,11 @@
 <template>
     <div
         class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-slate-50 dark:bg-sky-950 text-slate-800 dark:text-slate-100">
-        <div class="absolute inset-0 pointer-events-none -z-10">
-            <div
-                class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-cyan-300 via-sky-300 to-emerald-200 opacity-30 blur-[120px] rounded-full">
-            </div>
-            <div
-                class="absolute top-32 right-10 h-[420px] w-[420px] bg-gradient-to-r from-emerald-300 via-cyan-300 to-indigo-200 opacity-30 blur-[100px] rounded-full">
-            </div>
-        </div>
 
         <div class="max-w-screen-2xl mx-auto">
             <section
-                class="relative overflow-hidden rounded-[30px] border border-cyan-100 bg-gradient-to-br from-white via-cyan-50 to-emerald-50 p-5 lg:p-7 shadow-[0_24px_72px_-36px_rgba(13,148,136,0.55)] dark:border-cyan-800 dark:from-slate-900 dark:via-sky-900 dark:to-emerald-950 dark:shadow-[0_24px_72px_-36px_rgba(6,182,212,0.65)]">
-                <div
-                    class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_15%_18%,rgba(14,165,233,0.20),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.18),transparent_45%)] dark:bg-[radial-gradient(circle_at_15%_18%,rgba(34,211,238,0.20),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(52,211,153,0.18),transparent_45%)]">
-                </div>
+                class="relative overflow-hidden rounded-[30px] border border-cyan-100 bg-gradient-to-br from-white via-sky-50 to-blue-50 p-5 lg:p-7  shadow-xs dark:border-cyan-800 dark:from-slate-900 dark:via-sky-900 dark:to-emerald-950 dark:shadow-[0_24px_72px_-36px_rgba(6,182,212,0.65)]">
+
                 <div class="relative flex flex-col items-start justify-between gap-5">
                     <div class="">
                         <p
@@ -25,9 +15,7 @@
                         <h2 class="mt-3 text-2xl lg:text-2xl font-black text-slate-900 dark:text-white">
                             {{ subject || 'Loading subject...' }} Exams
                         </h2>
-                        <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                            Pick a focused set, practice in tutor mode, or run a timed exam simulation.
-                        </p>
+
                         <div class="mt-4 flex flex-wrap gap-2">
                             <span
                                 class="rounded-2xl border border-cyan-200 bg-white/85 px-3 py-1.5 text-xs font-semibold text-cyan-700 dark:border-cyan-700 dark:bg-slate-900/70 dark:text-cyan-200">

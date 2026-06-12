@@ -22,7 +22,7 @@
                             class="inline-flex items-center rounded-full border border-cyan-200 bg-white/80 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-700 dark:border-cyan-700 dark:bg-slate-900/70 dark:text-cyan-300">
                             NCLEX Readiness
                         </p>
-                        <h2 class="mt-3 text-2xl lg:text-4xl font-black text-slate-900 dark:text-white">
+                        <h2 class="mt-3 text-2xl font-black text-slate-900 dark:text-white">
                             Readiness Assessment Tests
                         </h2>
                         <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
@@ -40,7 +40,8 @@
                         </div>
                     </div>
 
-                    <input v-model="searchTerm" type="search" :placeholder="`Search in ${subject || 'Readiness assessments'}...`"
+                    <input v-model="searchTerm" type="search"
+                        :placeholder="`Search in ${subject || 'Readiness assessments'}...`"
                         class="h-10 px-4 w-full lg:w-80 border border-cyan-300 rounded-full bg-white/90 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 dark:bg-slate-900/80 dark:border-cyan-700" />
                 </div>
             </section>
@@ -55,15 +56,17 @@
                     No exams found for that search.
                 </div>
 
-                <transition-group v-else name="fade" tag="div" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" appear>
-                    <article v-for="(exam, index) in filteredExams" :key="exam.id"
-                        :class="[
-                            'group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 dark:border-sky-800/70 dark:bg-slate-900/70',
-                            isExamLocked(exam)
-                                ? 'opacity-85'
-                                : 'hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]'
-                        ]">
-                        <div :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]"></div>
+                <transition-group v-else name="fade" tag="div"
+                    class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" appear>
+                    <article v-for="(exam, index) in filteredExams" :key="exam.id" :class="[
+                        'group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 dark:border-sky-800/70 dark:bg-slate-900/70',
+                        isExamLocked(exam)
+                            ? 'opacity-85'
+                            : 'hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]'
+                    ]">
+                        <div
+                            :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]">
+                        </div>
                         <div class="relative flex h-full flex-col">
                             <div class="flex items-start justify-between gap-3">
                                 <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">
@@ -93,7 +96,8 @@
                                         ? 'border-0 bg-rose-500 text-white hover:bg-rose-500 cursor-not-allowed shadow-none'
                                         : 'border border-cyan-500 bg-white text-slate-900 hover:bg-cyan-500 hover:text-white shadow-none'"
                                     :action="() => goToExam(exam)" />
-                                <span class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
+                                <span
+                                    class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
                                     {{ isExamLocked(exam) ? 'Locked set' : 'Exam mode' }}
                                 </span>
                             </div>

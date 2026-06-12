@@ -3,19 +3,17 @@
     class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-slate-50 dark:bg-sky-950 text-slate-800 dark:text-slate-100">
     <div class="absolute inset-0 pointer-events-none -z-10">
       <div
-        class="absolute -top-20 -left-40 h-[500px] w-[500px] bg-gradient-to-r from-cyan-300 via-sky-300 to-emerald-200 opacity-35 blur-[120px] rounded-full">
+        class="absolute -top-20 -left-40 h-[500px] w-[500px] bg-gradient-to-r from-cyan-50 via-sky-50 to-emerald-50 opacity-35 blur-[120px] rounded-full">
       </div>
       <div
-        class="absolute top-28 right-2 h-[380px] w-[380px] bg-gradient-to-r from-teal-300 via-amber-200 to-cyan-200 opacity-30 blur-[100px] rounded-full">
+        class="absolute top-28 right-2 h-[380px] w-[380px] bg-gradient-to-r from-teal-50 via-amber-50 to-cyan-50 opacity-30 blur-[100px] rounded-full">
       </div>
     </div>
 
     <div class="max-w-screen-2xl mx-auto">
       <section
-        class="relative overflow-hidden rounded-[32px] border border-cyan-100 bg-gradient-to-br from-white via-cyan-50 to-emerald-50 p-6 lg:p-8 shadow-[0_24px_70px_-36px_rgba(13,148,136,0.55)] dark:border-cyan-800 dark:from-slate-900 dark:via-sky-900 dark:to-emerald-950">
-        <div
-          class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_18%_22%,rgba(14,165,233,0.20),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.20),transparent_45%)] dark:bg-[radial-gradient(circle_at_18%_22%,rgba(34,211,238,0.22),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(52,211,153,0.18),transparent_45%)]">
-        </div>
+        class="relative overflow-hidden rounded-[32px] border border-blue-100 bg-gradient-to-br from-white via-sky-50 to-blue-50 p-6 lg:p-8 shadow-xs dark:border-cyan-800 dark:from-slate-900 dark:via-sky-900 dark:to-emerald-950">
+
         <div class="relative">
           <p
             class="inline-flex items-center rounded-full border border-cyan-200 bg-white/80 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-700 dark:border-cyan-700 dark:bg-slate-900/70 dark:text-cyan-300">
@@ -157,7 +155,7 @@ const subjects = ref([
     meta: "Grammar, usage, clarity",
     iconBg: "bg-gradient-to-br from-indigo-100 to-violet-100 text-indigo-700 dark:from-indigo-900/70 dark:to-violet-900/70 dark:text-indigo-200",
     glow: "bg-gradient-to-br from-indigo-200/40 via-transparent to-transparent dark:from-indigo-500/20",
-    button: "bg-gradient-to-r from-indigo-600 to-violet-500 text-white hover:from-indigo-500 hover:to-violet-400 dark:from-indigo-500 dark:to-violet-400",
+    button: "bg-gradient-to-r from-sky-600 to-violet-500/90 text-white hover:from-indigo-500 hover:to-violet-400 dark:from-indigo-500 dark:to-violet-400",
   },
   {
     id: "science_guide",
