@@ -520,10 +520,8 @@ onMounted(() => {
                             <div class="min-w-0 flex-1">
                                 <h1
                                     class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl dark:text-slate-100">
-                                    <span class="font-light">Welcome to Nurse<span
-                                            class="text-sky-500/95">Dive</span>,<span
-                                            class="font- custom-underline-teal ml-1">{{
-                                                firstName }}
+                                    <span class="">Happy Studies,<span class="italic font-light ml-1">{{
+                                        firstName }}
                                         </span> </span>
                                 </h1>
                                 <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-500 dark:text-slate-400">
@@ -539,7 +537,7 @@ onMounted(() => {
                                     <div class="flex flex-wrap items-center gap-2">
                                         <p
                                             class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-600 dark:text-sky-300">
-                                            Latest Report
+                                            Latest Attempt -
                                         </p>
                                         <span v-if="lastProduct"
                                             class="rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-600 ring-1 ring-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-800">
@@ -605,7 +603,7 @@ onMounted(() => {
 
                                 <div v-if="latestAttempt && !latestAttemptLoading"
                                     class="flex shrink-0 items-center justify-between gap-4 md:flex-col md:items-center md:justify-center">
-                                    <div class="radial-progress bg-white text-sm font-bold shadow-sm dark:bg-slate-900"
+                                    <div class="radial-progress bg-gray-200/80 text-sm font-bold shadow-sm dark:bg-slate-900"
                                         :class="scoreToneClass(latestAttemptScore)" :style="latestAttemptRingStyle"
                                         role="progressbar" :aria-valuenow="latestAttemptScore">
                                         {{ latestAttemptScore }}%

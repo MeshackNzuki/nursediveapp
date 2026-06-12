@@ -3,10 +3,10 @@
         class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-4 sm:p-6 bg-white">
         <div class="absolute inset-0 pointer-events-none -z-10">
             <div
-                class="absolute -top-24 -left-40 h-[620px] w-[620px] rounded-full bg-gradient-to-r from-sky-200 via-cyan-200 to-emerald-200 opacity-45 blur-[125px]">
+                class="absolute -top-24 -left-40 h-[620px] w-[620px] rounded-full bg-gradient-to-r from-sky-100 via-cyan-100 to-emerald-100 opacity-45 blur-[125px]">
             </div>
             <div
-                class="absolute top-28 right-8 h-[420px] w-[420px] rounded-full bg-gradient-to-r from-emerald-200 via-teal-200 to-sky-200 opacity-35 blur-[110px]">
+                class="absolute top-28 right-8 h-[420px] w-[420px] rounded-full bg-gradient-to-r from-emerald-100 via-teal-100 to-sky-100 opacity-35 blur-[110px]">
             </div>
         </div>
 
@@ -18,19 +18,21 @@
                     Referral Program
                 </h1>
                 <p class="mt-3 text-sm md:text-base text-slate-600 max-w-2xl mx-auto">
-                    Invite classmates and peers to join your prep platform. Share your unique link and track progress in one place.
+                    Invite classmates and peers to join your prep platform. Share your unique link and track progress in
+                    one place.
                 </p>
             </section>
 
             <section class="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <article
                     class="lg:col-span-3 relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 md:p-7 shadow-[0_14px_35px_-20px_rgba(15,23,42,0.45)]">
-                    <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-400 to-sky-500"></div>
+
 
                     <div class="space-y-5">
                         <div>
                             <h2 class="text-lg md:text-xl font-extrabold text-slate-900">Your Referral Link</h2>
-                            <p class="text-sm text-slate-600 mt-1">Copy and send this link to people you want to invite.</p>
+                            <p class="text-sm text-slate-600 mt-1">Copy and send this link to people you want to invite.
+                            </p>
                         </div>
 
                         <div class="flex flex-col sm:flex-row gap-3">
@@ -47,7 +49,8 @@
                         </p>
 
                         <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 md:p-5">
-                            <h3 class="text-sm font-bold uppercase tracking-wide text-slate-600 mb-3">Share On Social Media</h3>
+                            <h3 class="text-sm font-bold uppercase tracking-wide text-slate-600 mb-3">Share On Social
+                                Media</h3>
                             <Socials />
                         </div>
                     </div>
@@ -55,7 +58,7 @@
 
                 <article
                     class="lg:col-span-2 relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_14px_35px_-20px_rgba(15,23,42,0.45)]">
-                    <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
+
 
                     <h3 class="text-lg font-extrabold text-slate-900 mb-4">Referral Stats</h3>
 
@@ -74,7 +77,7 @@
 
             <section
                 class="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 md:p-7 shadow-[0_14px_35px_-20px_rgba(15,23,42,0.45)] pb-8">
-                <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
+
 
                 <h2 class="text-lg md:text-xl font-extrabold text-slate-900 mb-4">Referred Users</h2>
 
@@ -85,7 +88,8 @@
                         <span class="text-sm text-slate-500">{{ referredUser.email }}</span>
                     </li>
                 </ul>
-                <div v-else class="rounded-2xl border border-dashed border-slate-300 bg-slate-50/70 px-4 py-8 text-center">
+                <div v-else
+                    class="rounded-2xl border border-dashed border-slate-300 bg-slate-50/70 px-4 py-8 text-center">
                     <p class="text-slate-500 text-sm">No referrals yet. Share your link to get started.</p>
                 </div>
             </section>

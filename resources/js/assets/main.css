@@ -225,12 +225,31 @@ background: radial-gradient(60.63% 60.63% at 57.15% 51.07%, #0d5485 0, #0b2854 6
 
 
 .custom-underline-red {
- @apply relative inline-block after:content-[''] after:block after:h-0.5 after:w-1/2 after:bg-rose-500 after:mt-1  after:rounded-full
+  @apply relative inline-block
+    after:content-['']
+    after:block
+    after:h-0.5
+    after:w-1/2
+    after:mt-1
+    after:rounded-full
+    after:bg-gradient-to-r
+    after:from-rose-400
+    after:via-pink-400
+    after:to-rose-500;
 }
 .custom-underline-teal {
-  @apply relative inline-block after:content-[''] after:block after:h-0.5 after:w-1/2 after:bg-teal-500 after:mt-1  after:rounded-full
+  @apply relative inline-block
+    after:content-['']
+    after:block
+    after:h-0.5
+    after:w-1/2
+    after:mt-1
+    after:rounded-full
+    after:bg-gradient-to-r
+    after:from-teal-400
+    after:via-cyan-500
+    after:to-blue-500;
 }
-
 button {
     @apply cursor-pointer;
 }
