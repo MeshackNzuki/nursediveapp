@@ -129,7 +129,10 @@ class QuestionIndexing extends Controller
 
             $stopwords = ['a', 'an', 'the', 'and', 'or', 'of', 'to', 'in', 'on', 'at', 'for', 'with', 'is', 'are'];
 
-            $todayStart = now()->startOfDay();
+            //$todayStart = now()->startOfDay();
+
+
+            $todayStart = now()->subMonth()->startOfDay();
 
             // =========================
             // NURSING
@@ -370,6 +373,62 @@ class QuestionIndexing extends Controller
         }
 
         return "✅ All sitemap chunks generated successfully!";
+    }
+
+
+    public function linkIncremental()
+    {
+        $stopwords = ['a', 'an', 'the', 'and', 'or', 'of', 'to', 'in', 'on', 'at', 'for', 'with', 'is', 'are'];
+
+        $startDate = now()->subWeeks(2)->startOfDay();
+
+        $rows = NursingQuestion::where('updated_at', '>=', $startDate)
+            ->select('id', 'question')
+            ->get();
+
+        foreach ($rows as $q) {
+
+            try {
+
+                if (empty($q->question)) {
+                    continue;
+                }
+
+                $cleanQuestion = html_entity_decode(strip_tags($q->question));
+                $cleanQuestion = preg_replace('/\s+/', ' ', $cleanQuestion);
+
+                $base = Str::slug($cleanQuestion);
+
+                $words = explode('-', $base);
+                $truncated = '';
+
+                foreach ($words as $word) {
+                    $next = $truncated ? $truncated . '-' . $word : $word;
+
+                    if (strlen($next) > 80) {
+                        break;
+                    }
+
+                    $truncated = $next;
+                }
+
+                $parts = explode('-', $truncated);
+
+                while (!empty($parts) && in_array(end($parts), $stopwords)) {
+                    array_pop($parts);
+                }
+
+                $newSlug = implode('-', $parts);
+
+                if ($q->question_slug !== $newSlug) {
+                    $q->update([
+                        'question_slug' => $newSlug
+                    ]);
+                }
+            } catch (\Exception $e) {
+                echo "❌ Error Nursing ID {$q->id}: {$e->getMessage()}\n";
+            }
+        }
     }
 
 

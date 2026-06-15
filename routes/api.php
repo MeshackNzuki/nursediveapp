@@ -187,6 +187,10 @@ Route::get('/generate-sitemap', [QuestionIndexing::class, 'sitemap']);
 //sitemap incremental update
 Route::get('/sitemap-incremental/{startId?}', [QuestionIndexing::class, 'sitemapIncremental']);
 
+//link incremental update
+Route::get('/link-incremental', [QuestionIndexing::class, 'linkIncremental']);
+
+
 //update question slugs (linkGenerator)
 Route::get('/update-slugs', [QuestionIndexing::class, 'linkGenerator']);
 
