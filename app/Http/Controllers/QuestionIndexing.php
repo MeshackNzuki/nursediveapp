@@ -383,7 +383,7 @@ class QuestionIndexing extends Controller
         $startDate = now()->subWeeks(2)->startOfDay();
 
         $rows = NursingQuestion::where('updated_at', '>=', $startDate)
-            ->select('id', 'question')
+            ->select('id', 'question', 'question_slug')
             ->get();
 
         foreach ($rows as $q) {
@@ -420,6 +420,12 @@ class QuestionIndexing extends Controller
 
                 $newSlug = implode('-', $parts);
 
+                // 🔧 FIX 1: prevent empty slug
+                if (empty($newSlug)) {
+                    continue;
+                }
+
+                // 🔧 FIX 2: avoid unnecessary writes
                 if ($q->question_slug !== $newSlug) {
                     $q->update([
                         'question_slug' => $newSlug
