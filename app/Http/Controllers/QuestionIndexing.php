@@ -371,4 +371,55 @@ class QuestionIndexing extends Controller
 
         return "✅ All sitemap chunks generated successfully!";
     }
+
+
+    public function sitemapIncremental($startId = 0)
+    {
+        $domain = 'https://www.nursedive.com';
+        $type = 'nursing';
+
+        try {
+            $query = NursingQuestion::select('id', 'question_slug', 'updated_at')
+                ->where('id', '>=', $startId)
+                ->orderBy('id');
+
+            $fileName = "{$type}_sitemap_from_{$startId}.xml";
+
+            $xmlContent = '
+<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+            $xmlContent .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+
+            $lastId = $startId + 1;
+
+            // chunk internally ONLY for memory safety (not sitemap splitting)
+            $query->chunk(2000, function ($questions) use (&$xmlContent, $domain, $type, &$lastId) {
+                foreach ($questions as $q) {
+
+                    if (empty($q->question_slug)) {
+                        continue;
+                    }
+
+                    $lastId = $q->id;
+
+                    $lastMod = $q->updated_at
+                        ? $q->updated_at->toAtomString()
+                        : now()->toAtomString();
+
+                    $xmlContent .= " <url>\n";
+                    $xmlContent .= " <loc>{$domain}/questions/{$type}/{$q->question_slug}</loc>\n";
+                    $xmlContent .= " <lastmod>{$lastMod}</lastmod>\n";
+                    $xmlContent .= " <changefreq>weekly</changefreq>\n";
+                    $xmlContent .= " </url>\n";
+                }
+            });
+
+            $xmlContent .= '</urlset>';
+
+            Storage::put("sitemaps/{$fileName}", $xmlContent);
+
+            return "✅ Generated {$fileName} (from {$startId} → {$lastId})";
+        } catch (\Exception $e) {
+            return "❌ Error generating {$type} sitemap: " . $e->getMessage();
+        }
+    }
 }

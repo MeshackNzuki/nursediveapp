@@ -184,6 +184,9 @@ Route::middleware('auth:sanctum')->group(function () {
 //generate sitemap
 Route::get('/generate-sitemap', [QuestionIndexing::class, 'sitemap']);
 
+//sitemap incremental update
+Route::get('/sitemap-incremental/{startId?}', [QuestionIndexing::class, 'sitemapIncremental']);
+
 //update question slugs (linkGenerator)
 Route::get('/update-slugs', [QuestionIndexing::class, 'linkGenerator']);
 
