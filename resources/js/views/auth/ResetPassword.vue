@@ -78,7 +78,8 @@
 
                     <div v-if="step === 2" class="mt-5 space-y-3">
                         <p class="text-sm text-slate-600">
-                            Check your inbox and open the reset link. If it does not arrive, request another one.
+                            Check your inbox and open the reset link (Including the spam folder). If it does not arrive,
+                            request another one.
                         </p>
                         <CommonButton :buttonText="isBusy ? 'Sending...' : 'Resend reset link'"
                             :disabled="isBusy || !email"

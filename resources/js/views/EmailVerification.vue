@@ -33,7 +33,8 @@
                         <div class="flex items-start gap-2.5 rounded-2xl border border-slate-200 bg-white p-3">
                             <span
                                 class="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">1</span>
-                            <p class="text-sm text-slate-700">Open the verification email in your inbox.</p>
+                            <p class="text-sm text-slate-700">Open the verification email in your inbox (Including the
+                                spam folder).</p>
                         </div>
                         <div class="flex items-start gap-2.5 rounded-2xl border border-slate-200 bg-white p-3">
                             <span
