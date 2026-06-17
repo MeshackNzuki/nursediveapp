@@ -13,11 +13,13 @@ class MainTeasController extends Controller
         $userId = $request->user()->id;
 
         $attemptsCount = ExamAttempt::where('user_id', $userId)->count();
-        $averageScore  = ExamAttempt::where('user_id', $userId)->get();
+
+        $averageScore = ExamAttempt::where('user_id', $userId)
+            ->avg('score');
 
         return $this->ResSuccess([
             'teas_attempts' => $attemptsCount,
-            'average_score' => round($averageScore, 2), // rounded to 2 decimals
+            'average_score' => round($averageScore ?? 0, 2),
         ]);
     }
 }
