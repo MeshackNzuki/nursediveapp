@@ -180,11 +180,11 @@ const productPrimaryLabel = (code) => {
     const status = planStatus(code);
     if (status === "active") return "Open Dashboard";
     if (status === "trial") return "Continue Trial";
-    return productPlans(code).length ? "Renew Access" : "View Plans";
+    return productPlans(code).length ? "Free Access" : "Free Access";
 };
 
 const productPrimaryRoute = (product) => {
-    return planStatus(product.code) === "expired" ? product.pricingRoute : product.dashboardRoute;
+    return planStatus(product.code) === "expired" ? product.dashboardRoute : product.dashboardRoute;
 };
 
 const activeCount = computed(() =>
