@@ -180,7 +180,7 @@ const productPrimaryLabel = (code) => {
     const status = planStatus(code);
     if (status === "active") return "Open Dashboard";
     if (status === "trial") return "Continue Trial";
-    return productPlans(code).length ? "Free Access" : "Free Access";
+    return productPlans(code).length ? "Limited Access" : "Limited Access";
 };
 
 const productPrimaryRoute = (product) => {
