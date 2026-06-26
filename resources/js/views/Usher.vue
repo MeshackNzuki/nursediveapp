@@ -289,7 +289,7 @@ const scoreToneClass = (score) => {
 const scoreFillClass = (score) => {
     if (score >= 75) return "bg-emerald-500";
     if (score >= 55) return "bg-amber-500";
-    return "bg-rose-500";
+    return "bg-rose-500/80 dark:bg-rose-500/50";
 };
 
 const scoreSummary = (score) => {
