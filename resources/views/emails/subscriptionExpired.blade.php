@@ -24,13 +24,13 @@
                     </tr>
                     <tr>
                         <td style="padding:30px; font-size:16px; line-height:1.6; color:#444;">
-                            <p>Hey <strong>{{ explode(' ', trim($user->name))[0] }}</strong>,</p>
+                            <p>Hello <strong>{{ explode(' ', trim($user->name))[0] }}</strong>,</p>
 
                             <p>Your <strong>Nursedive {{ $product }}</strong> subscription expired on
                                 <strong>{{ $expired_date }}</strong>.
                             </p>
 
-                            <p>You no longer have access to premium exams and reports — renew now to continue your
+                            <p>Renew now to continue tracking your
                                 progress without losing your history.</p>
 
                             <p style="text-align:center; margin:30px 0;">

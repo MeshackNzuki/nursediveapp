@@ -32,8 +32,7 @@
                                 <strong>{{ $expired_date }}</strong>.
                             </p>
 
-                            <p>You no longer have access to premium exams and reports — renew now to continue your
-                                progress without losing your history.</p>
+                            <p>Renew now to continue tracking your progress without losing your history.</p>
 
                             <p style="text-align:center; margin:30px 0;">
                                 <a href="https://app.nursedive.com/subscription"

@@ -27,7 +27,7 @@
                     <!-- Body -->
                     <tr>
                         <td style="padding:30px; font-size:16px; line-height:1.6; color:#444;">
-                            <p>Hey <strong>{{ explode(' ', trim($user->name))[0] }}</strong>,</p>
+                            <p>Hello <strong>{{ explode(' ', trim($user->name))[0] }}</strong>,</p>
 
                             <p>It’s been a few days since you joined <strong>Nursedive</strong>, and I just wanted to
                                 check in personally — how’s everything going so far?</p>
@@ -58,7 +58,7 @@
 
                             <p style="margin-top:30px;">
                                 Wishing you confidence and calm as you study,<br>
-                                <strong>Emma from Nursedive 💙</strong>
+                                <strong>Ryan from Nursedive</strong>
                             </p>
                         </td>
                     </tr>

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Your Nursedive Subscription Has Expired</title>
+    <title>Your Nursedive Trial Has Ended</title>
 </head>
 
 <body style="margin:0; padding:0; font-family: Arial, sans-serif; background:#eff6ff; color:#333;">
@@ -18,7 +18,7 @@
                             <img src="https://app.nursedive.com/assets/favicon.png" width="60" height="60"
                                 alt="Nursedive Logo" style="display:block; margin-bottom:15px;">
                             <h1 style="margin:0; font-size:24px; color:#ffffff; font-weight:bold;">
-                                Your Subscription Has Expired
+                                Your Trial Has Ended
                             </h1>
                         </td>
                     </tr>
@@ -26,18 +26,18 @@
                         <td style="padding:30px; font-size:16px; line-height:1.6; color:#444;">
                             <p>Dear <strong>{{ explode(' ', trim($user->name))[0] }}</strong>,</p>
 
-                            <p>Your <strong>Nursedive {{ $product }}</strong> subscription expired on
+                            <p>Your <strong>Nursedive {{ $product }}</strong> trial has ended on
                                 <strong>{{ $expired_date }}</strong>.
                             </p>
 
-                            <p>You no longer have access to premium exams and reports — renew now to continue your
-                                progress without losing your history.</p>
+                            <p>Upgrade to a premium plan at any time to continue tracking your progress without losing
+                                your history.</p>
 
                             <p style="text-align:center; margin:30px 0;">
                                 <a href="https://app.nursedive.com/subscription"
                                     style="background:#172554; color:#fff; text-decoration:none; 
                                     padding:12px 26px; border-radius:25px; font-size:15px; font-weight:bold;">
-                                    Renew Subscription
+                                    Upgrade Plan
                                 </a>
                             </p>
 

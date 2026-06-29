@@ -19,7 +19,7 @@
                             <img src="https://app.nursedive.com/assets/favicon.png" alt="Nursedive Logo" width="60"
                                 height="60" style="display:block; margin-bottom:15px;">
                             <h1 style="margin:0; font-size:28px; color:#ffffff; font-weight:bold;">
-                                Welcome to Nursedive 💙
+                                Welcome to Nursedive
                             </h1>
                         </td>
                     </tr>
