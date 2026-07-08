@@ -27,7 +27,9 @@
                             <p>Dear <strong>{{ explode(' ', trim($user->name))[0] }}</strong>,</p>
 
                             <p>Your <strong>Nursedive {{ $product }}</strong> trial has ended on
-                                <strong>{{ $expired_date }}</strong>.
+                                <strong>{{ $expired_date }}</strong>. However, you can still continue your journey with
+                                Nursedive basic or upgrading to a premium plan.
+                            </p>
                             </p>
 
                             <p>Upgrade to a premium plan at any time to continue tracking your progress without losing

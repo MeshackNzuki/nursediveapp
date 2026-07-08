@@ -15,22 +15,22 @@
                     <i class="pi pi-share text-teal-500"></i>
                 </a>
 
-                <a href="https://www.youtube.com/channel/UCwMYB_ZSYEzi8K-AlYb_K8g
-" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center cursor-pointer hover:opacity-80">
+                <a href="https://youtube.com/@nursedive?si=caWeCTLUB4plfk8s" target="_blank" rel="noopener noreferrer"
+                    class="flex flex-col items-center cursor-pointer hover:opacity-80">
                     <i class="pi pi-youtube text-red-500 mr-2"></i>
                     <h5 class="text-sm text-gray-500">YouTube</h5>
                     <i class="pi pi-share text-teal-500"></i>
                 </a>
 
-                <a href="https://facebook.com/profile.php?id=61580496143234" target="_blank" rel="noopener noreferrer"
-                    class="flex flex-col items-center cursor-pointer hover:opacity-80">
+                <a href="https://www.facebook.com/profile.php?id=61590998518288" target="_blank"
+                    rel="noopener noreferrer" class="flex flex-col items-center cursor-pointer hover:opacity-80">
                     <i class="pi pi-facebook text-blue-500 mr-2"></i>
                     <h5 class="text-sm text-gray-500">Facebook</h5>
                     <i class="pi pi-share text-teal-500"></i>
                 </a>
 
-                <a href="https://www.linkedin.com/company/108532924/admin/dashboard/" target="_blank"
-                    rel="noopener noreferrer" class="flex flex-col items-center cursor-pointer hover:opacity-80">
+                <a href="https://www.linkedin.com/groups/31020012/" target="_blank" rel="noopener noreferrer"
+                    class="flex flex-col items-center cursor-pointer hover:opacity-80">
                     <i class="pi pi-linkedin text-blue-500 mr-2"></i>
                     <h5 class="text-sm text-gray-500">LinkedIn</h5>
                     <i class="pi pi-share text-teal-500"></i>
@@ -49,8 +49,8 @@
                     <h5 class="text-sm text-gray-500">X (Twitter)</h5>
                     <i class="pi pi-share text-teal-500"></i>
                 </a>
-                <a href="https://discord.com/channels/1413155347354484833/1413155348143017986" target="_blank"
-                    rel="noopener noreferrer" class="flex flex-col items-center cursor-pointer hover:opacity-80">
+                <a href="#" target="_blank" rel="noopener noreferrer"
+                    class="flex flex-col items-center cursor-pointer hover:opacity-80">
                     <i class="pi pi-discord text-indigo-500 mr-2"></i>
                     <h5 class="text-sm text-gray-500">Discord</h5>
                     <i class="pi pi-share text-teal-500"></i>
