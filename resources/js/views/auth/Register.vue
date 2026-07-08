@@ -17,8 +17,8 @@
                     <section
                         class="hidden lg:flex flex-col justify-between    border-r border-gray-200 p-8 backdrop-blur-sm">
                         <div>
-                            <h2 class="text-3xl  tracking-tight text-slate-900">
-                                Build your best exam-ready routine
+                            <h2 class="text-2xl  font-bold text-slate-900  brush-underline-hover">
+                                Build an exam-ready routine
                             </h2>
                             <p class="mt-2 max-w-md text-sm leading-relaxed text-slate-600">
                                 Join Nursedive to access realistic exam banks, focused remediation, and progress

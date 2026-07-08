@@ -25,8 +25,8 @@
                                 class="mt-4 inline-flex items-center rounded-full border border-gray-200 bg-gray-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-cyan-700">
                                 Welcome Back
                             </p>
-                            <h2 class="mt-4 text-3xl  tracking-tight text-slate-900">
-                                Continue your exam prep momentum
+                            <h2 class="mt-4 text-2xl  font-bold text-slate-900  brush-underline-hover">
+                                Pick up where you left off
                             </h2>
                             <p class="mt-3 max-w-md text-sm leading-relaxed text-slate-600">
                                 Log In to resume practice tests, track your progress, and keep your study streak alive.

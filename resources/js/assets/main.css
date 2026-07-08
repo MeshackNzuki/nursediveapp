@@ -313,3 +313,46 @@ button {
     padding: 1px;
     border-radius: 3px;
 }
+
+/* 1. Realistic Red Brush Underline (With Bristle Edges) */
+      .brush-underline {
+        position: relative;
+        display: inline-block;
+        text-decoration: none;
+        padding-bottom: 14px;
+
+        /* Base64 SVG featuring complex multi-line bristle marks at edges */
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmNGE1YSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNSw0IFEyNSwxIDUwLDUgVDk1LDUiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHBhdGggZD0iTTIsNSBRMjUsMyA0NSw3IFQ5OCw0IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLW9wYWNpdHk9IjAuODUiLz48cGF0aCBkPSJNOSw2IFFTMzAsNSA1NSw0IFQ5MSw3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1vcGFjaXR5PSIwLjYiLz48L2c+PC9zdmc+");
+        background-position: 0 100%;
+        background-size: 100% 16px;
+        background-repeat: no-repeat;
+      }
+
+      /* 2. Interactive Blue Brush Underline (With Bristle Edges) */
+      .brush-underline-hover {
+        position: relative;
+        display: inline-block;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .brush-underline-hover::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -10px;
+        width: 100%;
+        height: 16px;
+
+        /* Base64 SVG featuring complex multi-line bristle marks at edges */
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzRhOTBlMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNSw0IFEyNSwxIDUwLDUgVDk1LDUiIHN0cm9rZS13aWR0aD0iMS41Ii8+PHBhdGggZD0iTTIsNSBRMjUsMyA0NSw3IFQ5OCw0IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLW9wYWNpdHk9IjAuODUiLz48cGF0aCBkPSJNOSw2IFFTMzAsNSA1NSw0IFQ5MSw3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1vcGFjaXR5PSIwLjYiLz48L2c+PC9zdmc+");
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        transition: transform 0.2s ease-in-out;
+        transform-origin: bottom;
+      }
+
+      /* Dynamic lift effect on hover */
+      .brush-underline-hover:hover::after {
+        transform: scaleY(1.3);
+      }
