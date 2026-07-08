@@ -1,0 +1,1 @@
+import{_ as t,f as s,g as o,h as r,p as c,C as a}from"./main-BjFOCNfA.js";const n={},l={class:"flex items-center mb-2 text-3xl font-light uppercase text-blue-950"};function _(i,e){return o(),s("div",l,e[0]||(e[0]=[r("img",{class:"w-10 h-10 mr-1",src:a,alt:"logo"},null,-1),c(" Nursedive ")]))}const f=t(n,[["render",_]]);export{f as L};
