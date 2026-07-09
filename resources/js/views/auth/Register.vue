@@ -59,13 +59,11 @@
                         </ul>
                     </section>
 
-                    <section class="rounded-3xl border border-white/80 bg-white/90 p-6 backdrop-blur-sm md:p-8">
+                    <section class="rounded-3xl border border-white/80 bg-white/90 p-1 backdrop-blur-sm md:p-8">
 
 
                         <h1 class="mb-2 text-2xl font-extrabold tracking-tight text-sky-600">Register</h1>
-                        <div class="mb-6 lg:hidden">
-                            <Logo />
-                        </div>
+
                         <p class="mb-5 text-sm text-slate-600">Set up your profile to start your prep journey.</p>
 
                         <span v-if="message"

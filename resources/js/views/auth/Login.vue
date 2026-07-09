@@ -51,7 +51,7 @@
                             </li>
                         </ul>
                     </section>
-                    <section class="rounded-3xl border border-white/80 bg-transparent p-6 backdrop-blur-sm md:p-8 ">
+                    <section class="rounded-3xl border border-white/80 bg-transparent p-1 backdrop-blur-sm md:p-8 ">
                         <div class="mb-6 flex items-center justify-between gap-3">
                             <h1 class="text-2xl font-extrabold tracking-tight text-sky-600">Log In</h1>
                             <button @click="step === 1 ? step++ : step--"
@@ -59,10 +59,6 @@
                                 aria-label="Switch login step">
                                 <i :class="step === 1 ? 'pi pi-arrow-right' : 'pi pi-arrow-left'"></i>
                             </button>
-                        </div>
-
-                        <div class="mb-6 lg:hidden">
-                            <Logo />
                         </div>
 
                         <p class="mb-4 text-sm text-slate-600">
