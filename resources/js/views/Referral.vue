@@ -68,7 +68,7 @@
                             <p class="text-xs uppercase tracking-wide text-slate-500 mt-1">Successful Referrals</p>
                         </div>
                         <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
-                            <p class="text-2xl font-black text-sky-600">${{ totalRewards }}</p>
+                            <p class="text-2xl font-semibold text-sky-600">{{ totalRewards }} days</p>
                             <p class="text-xs uppercase tracking-wide text-slate-500 mt-1">Total Rewards</p>
                         </div>
                     </div>

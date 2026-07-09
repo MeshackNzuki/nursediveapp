@@ -1,6 +1,7 @@
 <template>
     <nav v-if="!login" ref="sidebar_id" :class="sidebarShellClass" aria-label="Primary navigation">
-        <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-sky-400/10 via-transparent to-teal-400/10">
+        <div
+            class="pointer-events-none absolute inset-0 bg-gradient-to-br from-sky-400/10 via-transparent to-teal-400/10">
         </div>
 
         <div class="relative z-10 flex h-full min-h-0 flex-col">
@@ -36,11 +37,9 @@
                     </span>
                 </span>
             </router-link>
-
-
-
             <div class="sidebar-scroll mt-4 min-h-0 flex-1 overflow-y-auto px-3 pb-4">
-                <p v-if="isSidebarOpen" class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
+                <p v-if="isSidebarOpen"
+                    class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
                     {{ menuSectionTitle }}
                 </p>
 
@@ -101,7 +100,8 @@
                 </div>
 
                 <div v-if="activeSecondaryMenuItems.length" class="mt-5">
-                    <p v-if="isSidebarOpen" class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
+                    <p v-if="isSidebarOpen"
+                        class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
                         Manage
                     </p>
                     <div class="space-y-1.5">
@@ -121,7 +121,8 @@
                 </div>
 
                 <div v-if="!isAdminArea" class="mt-5">
-                    <p v-if="isSidebarOpen" class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
+                    <p v-if="isSidebarOpen"
+                        class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
                         Utilities
                     </p>
                     <div class="space-y-1.5">
@@ -141,7 +142,8 @@
                 </div>
 
                 <div v-if="!isAdminArea" :class="switcherClass">
-                    <p v-if="isSidebarOpen" class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
+                    <p v-if="isSidebarOpen"
+                        class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
                         Switch Prep Area
                     </p>
                     <div :class="isSidebarOpen ? 'space-y-2' : 'space-y-1.5'">
@@ -164,17 +166,17 @@
             </div>
 
             <div class="border-t border-cyan-200/10 px-3 py-3">
-                <router-link v-if="isSidebarOpen && !isAdminArea" to="/subscription"
-                    class="flex items-center gap-3 rounded-2xl border border-amber-300/20 bg-gradient-to-br from-amber-300/20 to-sky-500/10 p-3 transition hover:-translate-y-px hover:border-amber-300/40 hover:from-amber-300/25 hover:to-sky-500/20">
+                <router-link v-if="isSidebarOpen && !isAdminArea" to="/referral"
+                    class="flex items-center gap-3 rounded-2xl border border-amber-300/20 bg-gradient-to-br from-amber-300/60 to-sky-600/10 p-3 transition hover:-translate-y-px hover:border-amber-300/40 hover:from-amber-300/25 hover:to-sky-500/20">
                     <span :class="promoIconClass">
                         <i class="pi pi-bolt"></i>
                     </span>
                     <span class="min-w-0">
                         <span class="block text-xs font-extrabold uppercase tracking-wide text-amber-200">
-                            Explore more products
+                            Get 14 days free
                         </span>
                         <span class="block truncate text-xs text-cyan-100/70">
-                            Build your full prep stack
+                            Refer a friend to earn
                         </span>
                     </span>
                 </router-link>
