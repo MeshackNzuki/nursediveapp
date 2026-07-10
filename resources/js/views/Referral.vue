@@ -22,19 +22,15 @@
                     one place.
                 </p>
             </section>
-
             <section class="grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <article
                     class="lg:col-span-3 relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 md:p-7 shadow-[0_14px_35px_-20px_rgba(15,23,42,0.45)]">
-
-
                     <div class="space-y-5">
                         <div>
                             <h2 class="text-lg md:text-xl font-extrabold text-slate-900">Your Referral Link</h2>
                             <p class="text-sm text-slate-600 mt-1">Copy and send this link to people you want to invite.
                             </p>
                         </div>
-
                         <div class="flex flex-col sm:flex-row gap-3">
                             <input v-model="referralLink" readonly
                                 class="w-full rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-700 focus:outline-none" />

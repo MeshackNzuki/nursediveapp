@@ -12,7 +12,9 @@
         <div class="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl items-center px-4 py-8 md:px-8">
             <div
                 class="flex flex-col items-center justify-center gap-3  bg-white py-6 px-10 lg:py-16 lg:px-16 rounded-3xl border border-white/70  backdrop-blur-sm">
-                <Logo />
+                <div class="w-full text-start">
+                    <Logo />
+                </div>
                 <div class="grid w-full gap-5 lg:grid-cols-2">
                     <section
                         class="hidden lg:flex flex-col justify-between    border-r border-gray-200 p-8 backdrop-blur-sm">
