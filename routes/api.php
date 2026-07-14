@@ -46,6 +46,7 @@ use App\Http\Controllers\Nursing\Study\StudyController;
 use App\Http\Controllers\QuestionIndexing;
 use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\ExamFeedbackController;
+use App\Http\Controllers\Ai\OpenAIController;
 
 //app routes(open)
 
@@ -196,3 +197,19 @@ Route::get('/update-slugs', [QuestionIndexing::class, 'linkGenerator']);
 
 //update subtopic slugs (linkGenerator)
 Route::get('/update-subtopic-slugs', [QuestionIndexing::class, 'subtopicLinkGenerator']);
+
+
+//AI routes
+Route::group([
+    'prefix' => 'ai',
+    'middleware' => [
+        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+        'optional.auth',
+    ],
+
+], function () {
+    Route::get('/incident-assistant', [OpenAIController::class, 'incidentAssistant']);
+    Route::post('/incident-assistant', [OpenAIController::class, 'incidentAssistant']);
+    Route::get('/incident-assistant-history', [OpenAIController::class, 'incidentAssistantHistory']);
+});
