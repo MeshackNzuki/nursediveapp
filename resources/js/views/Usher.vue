@@ -58,10 +58,10 @@ const products = [
         bundleLabel: "Readiness Combo",
         dashboardRoute: "/nclex",
         pricingRoute: "/nclex-pricing",
-        cardClass: "border-blue-200 bg-blue-50/75 dark:border-blue-900/70 dark:bg-sky-950/95/30",
+        cardClass: "border-blue-200 bg-blue-50/75 dark:border-blue-900/70 dark:bg-sky-950/30",
         bundleClass: "bg-blue-100 text-blue-900 dark:bg-blue-900/70 dark:text-blue-100",
         ribbonClass: "border-blue-200 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-900 dark:text-blue-100",
-        moduleShellClass: "border-blue-200 bg-indigo-50/60 dark:border-blue-800 dark:bg-sky-950/95/40",
+        moduleShellClass: "border-blue-200 bg-indigo-50/60 dark:border-blue-800 dark:bg-sky-950/40",
         modules: [
             { label: "CAT Exams", icon: "pi pi-sliders-h", iconClass: "bg-blue-100 text-blue-600 dark:bg-blue-900/60 dark:text-blue-200" },
             { label: "Q-Bank", icon: "pi pi-book", iconClass: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/60 dark:text-emerald-200" },

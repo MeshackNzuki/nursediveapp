@@ -5,16 +5,16 @@
         </div>
 
         <div class="relative z-10 flex h-full min-h-0 flex-col">
-            <router-link to="/" :class="brandClass" :title="isSidebarOpen ? undefined : 'NurseDive'">
+            <router-link to="/" :class="brandClass" :title="isSidebarOpen ? undefined : 'Nursedive'">
                 <span
                     class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/95 shadow-lg shadow-sky-950/20">
-                    <img src="../../assets/logo.png" class="h-8 w-8 object-contain" alt="NurseDive logo" />
+                    <img src="../../assets/logo.png" class="h-8 w-8 object-contain" alt="Nursedive logo" />
                 </span>
                 <span v-if="isSidebarOpen" class="min-w-0">
-                    <span class="block text-xs font-semibold uppercase tracking-widest text-cyan-200/80">
-                        NurseDive
+                    <span class="block text-xs font-bold uppercase tracking-widest text-white">
+                        Nursedive
                     </span>
-                    <span class="block text-base font-bold leading-5 text-white">
+                    <span class="block text-sm font-semibold leading-5 text-white">
                         Nursing Prep
                     </span>
                 </span>
@@ -32,7 +32,7 @@
                     <span class="block truncate text-sm font-bold text-white">
                         {{ userName }}
                     </span>
-                    <span class="block truncate text-xs text-cyan-100/70">
+                    <span class="block truncate text-xs text-cyan-50/90">
                         {{ workspaceLabel }}
                     </span>
                 </span>
@@ -81,7 +81,7 @@
                                 {{ dropdown.label }}
                             </span>
                             <span v-if="isSidebarOpen && dropdown.badge"
-                                class="rounded-full bg-amber-400/20 px-2 py-0.5 text-xs font-black uppercase text-amber-100">
+                                class="rounded-full bg-amber-400/20 px-2 py-0.5 text-xs font-black uppercase text-amber-200">
                                 {{ dropdown.badge }}
                             </span>
                             <i v-if="isSidebarOpen" class="pi pi-angle-down text-xs text-cyan-100/60"></i>
@@ -480,7 +480,7 @@ const userInitial = computed(() => {
 
 const workspaceLabel = computed(() => {
     if (isAdminArea.value) return "Administration";
-    return currentProductArea.value?.label || "Learning Hub";
+    return currentProductArea.value?.label || "";
 });
 
 const menuSectionTitle = computed(() => {
