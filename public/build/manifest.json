@@ -1,18 +1,11 @@
 {
-  "_CommonButton-7T02pDOR.js": {
-    "file": "assets/CommonButton-7T02pDOR.js",
-    "name": "CommonButton",
-    "imports": [
-      "resources/js/main.ts"
-    ]
+  "_AiChat-!~{01j}~.js": {
+    "file": "assets/AiChat-CP-ziv3X.css",
+    "src": "_AiChat-!~{01j}~.js"
   },
-  "_ExamFeedbackModal.vue_vue_type_script_setup_true_lang-!~{01j}~.js": {
-    "file": "assets/ExamFeedbackModal-CP-ziv3X.css",
-    "src": "_ExamFeedbackModal.vue_vue_type_script_setup_true_lang-!~{01j}~.js"
-  },
-  "_ExamFeedbackModal.vue_vue_type_script_setup_true_lang-kiPyiVaN.js": {
-    "file": "assets/ExamFeedbackModal.vue_vue_type_script_setup_true_lang-kiPyiVaN.js",
-    "name": "ExamFeedbackModal.vue_vue_type_script_setup_true_lang",
+  "_AiChat-C4Q8y7ft.js": {
+    "file": "assets/AiChat-C4Q8y7ft.js",
+    "name": "AiChat",
     "imports": [
       "resources/js/main.ts"
     ],
@@ -20,67 +13,74 @@
       "node_modules/quill/quill.js"
     ],
     "css": [
-      "assets/ExamFeedbackModal-CP-ziv3X.css"
+      "assets/AiChat-CP-ziv3X.css"
     ],
     "assets": [
       "assets/qn_arrow-CpnXGZsK.png"
     ]
   },
-  "_Gaunge-Cxo0wig0.js": {
-    "file": "assets/Gaunge-Cxo0wig0.js",
+  "_CommonButton-DQGLnUF-.js": {
+    "file": "assets/CommonButton-DQGLnUF-.js",
+    "name": "CommonButton",
+    "imports": [
+      "resources/js/main.ts"
+    ]
+  },
+  "_Gaunge-DsZPSNTP.js": {
+    "file": "assets/Gaunge-DsZPSNTP.js",
     "name": "Gaunge",
     "imports": [
       "resources/js/main.ts"
     ]
   },
-  "_Logo-DZvA2a8z.js": {
-    "file": "assets/Logo-DZvA2a8z.js",
+  "_Logo-DrNtDnjt.js": {
+    "file": "assets/Logo-DrNtDnjt.js",
     "name": "Logo",
     "imports": [
       "resources/js/main.ts"
     ]
   },
-  "_Navigation-DdAbtRNM.js": {
-    "file": "assets/Navigation-DdAbtRNM.js",
+  "_Navigation-CBws8dYu.js": {
+    "file": "assets/Navigation-CBws8dYu.js",
     "name": "Navigation",
     "imports": [
       "resources/js/main.ts"
     ]
   },
-  "_PerformanceAnalysisDashboard.vue_vue_type_script_setup_true_lang-Jt9HuVgS.js": {
-    "file": "assets/PerformanceAnalysisDashboard.vue_vue_type_script_setup_true_lang-Jt9HuVgS.js",
+  "_PerformanceAnalysisDashboard.vue_vue_type_script_setup_true_lang-DhJa3xlo.js": {
+    "file": "assets/PerformanceAnalysisDashboard.vue_vue_type_script_setup_true_lang-DhJa3xlo.js",
     "name": "PerformanceAnalysisDashboard.vue_vue_type_script_setup_true_lang",
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_Gaunge-Cxo0wig0.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Gaunge-DsZPSNTP.js",
       "_normalizeText-DpihFNnV.js"
     ]
   },
-  "_Primary-BUKq9t42.js": {
-    "file": "assets/Primary-BUKq9t42.js",
+  "_Primary-LB5ASrKv.js": {
+    "file": "assets/Primary-LB5ASrKv.js",
     "name": "Primary",
     "imports": [
       "resources/js/main.ts"
     ]
   },
-  "_Probability.vue_vue_type_script_setup_true_lang-5wt6PoQ9.js": {
-    "file": "assets/Probability.vue_vue_type_script_setup_true_lang-5wt6PoQ9.js",
+  "_Probability.vue_vue_type_script_setup_true_lang-CzFMUjbg.js": {
+    "file": "assets/Probability.vue_vue_type_script_setup_true_lang-CzFMUjbg.js",
     "name": "Probability.vue_vue_type_script_setup_true_lang",
     "imports": [
       "resources/js/main.ts",
-      "_Gaunge-Cxo0wig0.js"
+      "_Gaunge-DsZPSNTP.js"
     ]
   },
-  "_Small-DFgf9wG3.js": {
-    "file": "assets/Small-DFgf9wG3.js",
+  "_Small-CSbpsERC.js": {
+    "file": "assets/Small-CSbpsERC.js",
     "name": "Small",
     "imports": [
       "resources/js/main.ts"
     ]
   },
-  "_Socials-D5MHaYit.js": {
-    "file": "assets/Socials-D5MHaYit.js",
+  "_Socials-CDq2fqL0.js": {
+    "file": "assets/Socials-CDq2fqL0.js",
     "name": "Socials",
     "imports": [
       "resources/js/main.ts"
@@ -90,12 +90,12 @@
     "file": "assets/StreakCard-r6NL8mqP.css",
     "src": "_StreakCard-!~{01d}~.js"
   },
-  "_StreakCard-c7MttfOq.js": {
-    "file": "assets/StreakCard-c7MttfOq.js",
+  "_StreakCard-Dj0SOmSv.js": {
+    "file": "assets/StreakCard-Dj0SOmSv.js",
     "name": "StreakCard",
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js"
+      "_CommonButton-DQGLnUF-.js"
     ],
     "css": [
       "assets/StreakCard-r6NL8mqP.css"
@@ -105,8 +105,8 @@
     "file": "assets/Success-X0XaNXUP.css",
     "src": "_Success-!~{01a}~.js"
   },
-  "_Success-CY9-zxQe.js": {
-    "file": "assets/Success-CY9-zxQe.js",
+  "_Success-CqO2EDMb.js": {
+    "file": "assets/Success-CqO2EDMb.js",
     "name": "Success",
     "imports": [
       "resources/js/main.ts"
@@ -119,8 +119,8 @@
     "file": "assets/Tabs-DWwfCeVp.css",
     "src": "_Tabs-!~{01g}~.js"
   },
-  "_Tabs-BVw07Zqk.js": {
-    "file": "assets/Tabs-BVw07Zqk.js",
+  "_Tabs-QjPGsfco.js": {
+    "file": "assets/Tabs-QjPGsfco.js",
     "name": "Tabs",
     "imports": [
       "resources/js/main.ts"
@@ -136,8 +136,8 @@
       "assets/avatar-B0ud9FMu.png"
     ]
   },
-  "_catExamStore-DJCK-lM0.js": {
-    "file": "assets/catExamStore-DJCK-lM0.js",
+  "_catExamStore-DlvLOKGj.js": {
+    "file": "assets/catExamStore-DlvLOKGj.js",
     "name": "catExamStore",
     "imports": [
       "resources/js/main.ts"
@@ -147,8 +147,8 @@
     "file": "assets/grader-DHMBO53P.js",
     "name": "grader"
   },
-  "_index-BpZYJII4.js": {
-    "file": "assets/index-BpZYJII4.js",
+  "_index-CfY8UJ3N.js": {
+    "file": "assets/index-CfY8UJ3N.js",
     "name": "index",
     "imports": [
       "resources/js/main.ts"
@@ -158,8 +158,8 @@
     "file": "assets/mainTable-B7XthAhK.css",
     "src": "_mainTable-!~{019}~.js"
   },
-  "_mainTable-BNAXZ1dR.js": {
-    "file": "assets/mainTable-BNAXZ1dR.js",
+  "_mainTable-NzDLHydN.js": {
+    "file": "assets/mainTable-NzDLHydN.js",
     "name": "mainTable",
     "imports": [
       "resources/js/main.ts"
@@ -168,8 +168,8 @@
       "assets/mainTable-B7XthAhK.css"
     ]
   },
-  "_nclexExamStore-DhidQRdU.js": {
-    "file": "assets/nclexExamStore-DhidQRdU.js",
+  "_nclexExamStore-BNMdi7dH.js": {
+    "file": "assets/nclexExamStore-BNMdi7dH.js",
     "name": "nclexExamStore",
     "imports": [
       "resources/js/main.ts"
@@ -179,8 +179,8 @@
     "file": "assets/normalizeText-DpihFNnV.js",
     "name": "normalizeText"
   },
-  "_nursingExamStore-G9APn5Q_.js": {
-    "file": "assets/nursingExamStore-G9APn5Q_.js",
+  "_nursingExamStore-D7Jzq8kg.js": {
+    "file": "assets/nursingExamStore-D7Jzq8kg.js",
     "name": "nursingExamStore",
     "imports": [
       "resources/js/main.ts"
@@ -194,8 +194,8 @@
     "file": "assets/speech-DDc6PsXg.js",
     "name": "speech"
   },
-  "_teasExamStore-R7WFi8gF.js": {
-    "file": "assets/teasExamStore-R7WFi8gF.js",
+  "_teasExamStore-D3nWp0aF.js": {
+    "file": "assets/teasExamStore-D3nWp0aF.js",
     "name": "teasExamStore",
     "imports": [
       "resources/js/main.ts"
@@ -256,19 +256,19 @@
     "src": "resources/js/assets/logo.png"
   },
   "resources/js/components/CATExamRenderer.vue": {
-    "file": "assets/CATExamRenderer-xdDEd9nE.js",
+    "file": "assets/CATExamRenderer-DsdaDUU0.js",
     "name": "CATExamRenderer",
     "src": "resources/js/components/CATExamRenderer.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_catExamStore-DJCK-lM0.js",
-      "_ExamFeedbackModal.vue_vue_type_script_setup_true_lang-kiPyiVaN.js",
-      "_CommonButton-7T02pDOR.js"
+      "_catExamStore-DlvLOKGj.js",
+      "_AiChat-C4Q8y7ft.js",
+      "_CommonButton-DQGLnUF-.js"
     ]
   },
   "resources/js/main.ts": {
-    "file": "assets/main-BbGHYBdC.js",
+    "file": "assets/main-B0vwFK2x.js",
     "name": "main",
     "src": "resources/js/main.ts",
     "isEntry": true,
@@ -340,7 +340,7 @@
       "resources/js/views/Unauthorized.vue"
     ],
     "css": [
-      "assets/main-CFWkrjqp.css"
+      "assets/main-noYM0Ohc.css"
     ],
     "assets": [
       "assets/logo-DKoKSu9i.png",
@@ -354,63 +354,63 @@
     ]
   },
   "resources/js/views/404.vue": {
-    "file": "assets/404-CgEUFLXJ.js",
+    "file": "assets/404-4_FFI4TH.js",
     "name": "404",
     "src": "resources/js/views/404.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_CommonButton-7T02pDOR.js",
+      "_CommonButton-DQGLnUF-.js",
       "resources/js/main.ts"
     ]
   },
   "resources/js/views/Account.vue": {
-    "file": "assets/Account-JoUyZDHA.js",
+    "file": "assets/Account-BUx7ks9O.js",
     "name": "Account",
     "src": "resources/js/views/Account.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
+      "_CommonButton-DQGLnUF-.js",
       "_avatar-BluioEX5.js",
-      "_Navigation-DdAbtRNM.js"
+      "_Navigation-CBws8dYu.js"
     ]
   },
   "resources/js/views/Checkout.vue": {
-    "file": "assets/Checkout-DpOpWZ6N.js",
+    "file": "assets/Checkout-0IBuYrka.js",
     "name": "Checkout",
     "src": "resources/js/views/Checkout.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js"
+      "_CommonButton-DQGLnUF-.js"
     ],
     "assets": [
       "assets/paypal-icon-D2eqTqwB.svg"
     ]
   },
   "resources/js/views/EmailVerification.vue": {
-    "file": "assets/EmailVerification-BAK3wIyk.js",
+    "file": "assets/EmailVerification-B5tky6It.js",
     "name": "EmailVerification",
     "src": "resources/js/views/EmailVerification.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_Logo-DZvA2a8z.js"
+      "_CommonButton-DQGLnUF-.js",
+      "_Logo-DrNtDnjt.js"
     ]
   },
   "resources/js/views/NclexPricing.vue": {
-    "file": "assets/NclexPricing-Y5FuRuND.js",
+    "file": "assets/NclexPricing-D0A1IH3m.js",
     "name": "NclexPricing",
     "src": "resources/js/views/NclexPricing.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_CommonButton-7T02pDOR.js",
+      "_CommonButton-DQGLnUF-.js",
       "resources/js/main.ts"
     ]
   },
   "resources/js/views/Notifications.vue": {
-    "file": "assets/Notifications-D11kJN3D.js",
+    "file": "assets/Notifications-Dbt01xcV.js",
     "name": "Notifications",
     "src": "resources/js/views/Notifications.vue",
     "isDynamicEntry": true,
@@ -420,17 +420,17 @@
     ]
   },
   "resources/js/views/NursingPricing.vue": {
-    "file": "assets/NursingPricing-CDRM8X59.js",
+    "file": "assets/NursingPricing-BuGkdVAq.js",
     "name": "NursingPricing",
     "src": "resources/js/views/NursingPricing.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_CommonButton-7T02pDOR.js",
+      "_CommonButton-DQGLnUF-.js",
       "resources/js/main.ts"
     ]
   },
   "resources/js/views/OrderCompleted.vue": {
-    "file": "assets/OrderCompleted-CvP4ZFXd.js",
+    "file": "assets/OrderCompleted-BVX9y8fm.js",
     "name": "OrderCompleted",
     "src": "resources/js/views/OrderCompleted.vue",
     "isDynamicEntry": true,
@@ -442,7 +442,7 @@
     ]
   },
   "resources/js/views/Paypal.vue": {
-    "file": "assets/Paypal-BHCAIEil.js",
+    "file": "assets/Paypal-D3YCy_Cx.js",
     "name": "Paypal",
     "src": "resources/js/views/Paypal.vue",
     "isDynamicEntry": true,
@@ -451,72 +451,72 @@
     ]
   },
   "resources/js/views/Referral.vue": {
-    "file": "assets/Referral-CXCZeQeM.js",
+    "file": "assets/Referral-KjRTrgMy.js",
     "name": "Referral",
     "src": "resources/js/views/Referral.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_Socials-D5MHaYit.js",
-      "_Navigation-DdAbtRNM.js"
+      "_CommonButton-DQGLnUF-.js",
+      "_Socials-CDq2fqL0.js",
+      "_Navigation-CBws8dYu.js"
     ]
   },
   "resources/js/views/Settings.vue": {
-    "file": "assets/Settings-gNEuwzEb.js",
+    "file": "assets/Settings-EeEk7r34.js",
     "name": "Settings",
     "src": "resources/js/views/Settings.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_Navigation-DdAbtRNM.js"
+      "_CommonButton-DQGLnUF-.js",
+      "_Navigation-CBws8dYu.js"
     ]
   },
   "resources/js/views/Subscription.vue": {
-    "file": "assets/Subscription-DTZyE9yJ.js",
+    "file": "assets/Subscription-D3O9qNia.js",
     "name": "Subscription",
     "src": "resources/js/views/Subscription.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_CommonButton-7T02pDOR.js",
+      "_CommonButton-DQGLnUF-.js",
       "resources/js/main.ts"
     ]
   },
   "resources/js/views/TeasPricing.vue": {
-    "file": "assets/TeasPricing-CswYxJ31.js",
+    "file": "assets/TeasPricing-zZgxKCEE.js",
     "name": "TeasPricing",
     "src": "resources/js/views/TeasPricing.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_CommonButton-7T02pDOR.js",
+      "_CommonButton-DQGLnUF-.js",
       "resources/js/main.ts"
     ]
   },
   "resources/js/views/Unauthorized.vue": {
-    "file": "assets/Unauthorized-CR5OA4Sd.js",
+    "file": "assets/Unauthorized-agDAWDJ2.js",
     "name": "Unauthorized",
     "src": "resources/js/views/Unauthorized.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_CommonButton-7T02pDOR.js",
+      "_CommonButton-DQGLnUF-.js",
       "resources/js/main.ts"
     ]
   },
   "resources/js/views/Usher.vue": {
-    "file": "assets/Usher--jLpTvnR.js",
+    "file": "assets/Usher-Bde6ZfpM.js",
     "name": "Usher",
     "src": "resources/js/views/Usher.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_Socials-D5MHaYit.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Socials-CDq2fqL0.js",
       "_secondsToHms-B-PdILAj.js"
     ]
   },
   "resources/js/views/Welcome.vue": {
-    "file": "assets/Welcome-DNamBeUg.js",
+    "file": "assets/Welcome-BEHN13C4.js",
     "name": "Welcome",
     "src": "resources/js/views/Welcome.vue",
     "isDynamicEntry": true,
@@ -528,40 +528,40 @@
     ]
   },
   "resources/js/views/admin/AllPayments.vue": {
-    "file": "assets/AllPayments-DR7q-srA.js",
+    "file": "assets/AllPayments-zJjleHi4.js",
     "name": "AllPayments",
     "src": "resources/js/views/admin/AllPayments.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_mainTable-BNAXZ1dR.js",
-      "_CommonButton-7T02pDOR.js",
-      "_Small-DFgf9wG3.js",
-      "_Success-CY9-zxQe.js"
+      "_mainTable-NzDLHydN.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Small-CSbpsERC.js",
+      "_Success-CqO2EDMb.js"
     ]
   },
   "resources/js/views/admin/Dashboard.vue": {
-    "file": "assets/Dashboard-CUo8v2C5.js",
+    "file": "assets/Dashboard-hiMH_pQ_.js",
     "name": "Dashboard",
     "src": "resources/js/views/admin/Dashboard.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_index-BpZYJII4.js"
+      "_index-CfY8UJ3N.js"
     ]
   },
   "resources/js/views/admin/ExamFeedback.vue": {
-    "file": "assets/ExamFeedback-DW-wDzsC.js",
+    "file": "assets/ExamFeedback-nQ8OY6Ii.js",
     "name": "ExamFeedback",
     "src": "resources/js/views/admin/ExamFeedback.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_mainTable-BNAXZ1dR.js"
+      "_mainTable-NzDLHydN.js"
     ]
   },
   "resources/js/views/admin/Layout.vue": {
-    "file": "assets/Layout-CouXHc_o.js",
+    "file": "assets/Layout-BVeic7YB.js",
     "name": "Layout",
     "src": "resources/js/views/admin/Layout.vue",
     "isDynamicEntry": true,
@@ -570,27 +570,27 @@
     ]
   },
   "resources/js/views/admin/NclexPayments.vue": {
-    "file": "assets/NclexPayments-RRv-PI1e.js",
+    "file": "assets/NclexPayments-CIdSVjLS.js",
     "name": "NclexPayments",
     "src": "resources/js/views/admin/NclexPayments.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_mainTable-BNAXZ1dR.js",
+      "_mainTable-NzDLHydN.js",
       "resources/js/main.ts"
     ]
   },
   "resources/js/views/admin/NursingPayments.vue": {
-    "file": "assets/NursingPayments-CTADjIYz.js",
+    "file": "assets/NursingPayments-BIXV_XXe.js",
     "name": "NursingPayments",
     "src": "resources/js/views/admin/NursingPayments.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_mainTable-BNAXZ1dR.js",
+      "_mainTable-NzDLHydN.js",
       "resources/js/main.ts"
     ]
   },
   "resources/js/views/admin/Settings.vue": {
-    "file": "assets/Settings-Da3koubB.js",
+    "file": "assets/Settings-D_N8OdiS.js",
     "name": "Settings",
     "src": "resources/js/views/admin/Settings.vue",
     "isDynamicEntry": true,
@@ -602,7 +602,7 @@
     ]
   },
   "resources/js/views/admin/Tables.vue": {
-    "file": "assets/Tables-VzWdwRsq.js",
+    "file": "assets/Tables-CTL_3Oy_.js",
     "name": "Tables",
     "src": "resources/js/views/admin/Tables.vue",
     "isDynamicEntry": true,
@@ -611,88 +611,88 @@
     ]
   },
   "resources/js/views/admin/TeasPayments.vue": {
-    "file": "assets/TeasPayments-7bSzA6MA.js",
+    "file": "assets/TeasPayments-1IGw9KGE.js",
     "name": "TeasPayments",
     "src": "resources/js/views/admin/TeasPayments.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_mainTable-BNAXZ1dR.js",
+      "_mainTable-NzDLHydN.js",
       "resources/js/main.ts"
     ]
   },
   "resources/js/views/admin/Users.vue": {
-    "file": "assets/Users-Qz4lL0xj.js",
+    "file": "assets/Users-CBNmnj7Y.js",
     "name": "Users",
     "src": "resources/js/views/admin/Users.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_mainTable-BNAXZ1dR.js",
-      "_CommonButton-7T02pDOR.js",
-      "_Success-CY9-zxQe.js"
+      "_mainTable-NzDLHydN.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Success-CqO2EDMb.js"
     ]
   },
   "resources/js/views/auth/Login.vue": {
-    "file": "assets/Login-YlDqgc8K.js",
+    "file": "assets/Login-g4-GnLM0.js",
     "name": "Login",
     "src": "resources/js/views/auth/Login.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_Logo-DZvA2a8z.js"
+      "_Logo-DrNtDnjt.js"
     ],
     "css": [
       "assets/Login-6li6r-wi.css"
     ]
   },
   "resources/js/views/auth/Register.vue": {
-    "file": "assets/Register-BiiMiHNl.js",
+    "file": "assets/Register-CDkppCUe.js",
     "name": "Register",
     "src": "resources/js/views/auth/Register.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_Logo-DZvA2a8z.js"
+      "_Logo-DrNtDnjt.js"
     ]
   },
   "resources/js/views/auth/ResetPassword.vue": {
-    "file": "assets/ResetPassword-BhVF7nN-.js",
+    "file": "assets/ResetPassword-SK0bdwVT.js",
     "name": "ResetPassword",
     "src": "resources/js/views/auth/ResetPassword.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_Logo-DZvA2a8z.js"
+      "_CommonButton-DQGLnUF-.js",
+      "_Logo-DrNtDnjt.js"
     ]
   },
   "resources/js/views/nclex/AdaptiveTestReport.vue": {
-    "file": "assets/AdaptiveTestReport-B6Di2h4p.js",
+    "file": "assets/AdaptiveTestReport-CS8ewz1G.js",
     "name": "AdaptiveTestReport",
     "src": "resources/js/views/nclex/AdaptiveTestReport.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js"
+      "_CommonButton-DQGLnUF-.js"
     ]
   },
   "resources/js/views/nclex/Dashboard.vue": {
-    "file": "assets/Dashboard-2KLl20gh.js",
+    "file": "assets/Dashboard-te8t2ikB.js",
     "name": "Dashboard",
     "src": "resources/js/views/nclex/Dashboard.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_Primary-BUKq9t42.js",
-      "_StreakCard-c7MttfOq.js",
-      "_Probability.vue_vue_type_script_setup_true_lang-5wt6PoQ9.js",
-      "_CommonButton-7T02pDOR.js",
-      "_nclexExamStore-DhidQRdU.js",
-      "_Gaunge-Cxo0wig0.js"
+      "_Primary-LB5ASrKv.js",
+      "_StreakCard-Dj0SOmSv.js",
+      "_Probability.vue_vue_type_script_setup_true_lang-CzFMUjbg.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_nclexExamStore-BNMdi7dH.js",
+      "_Gaunge-DsZPSNTP.js"
     ]
   },
   "resources/js/views/nclex/Layout.vue": {
-    "file": "assets/Layout-CZZyVKAz.js",
+    "file": "assets/Layout-pbWwzfJ2.js",
     "name": "Layout",
     "src": "resources/js/views/nclex/Layout.vue",
     "isDynamicEntry": true,
@@ -701,115 +701,115 @@
     ]
   },
   "resources/js/views/nclex/PerformanceAnalysis.vue": {
-    "file": "assets/PerformanceAnalysis-RalG7uQ3.js",
+    "file": "assets/PerformanceAnalysis-Cd8yqDI8.js",
     "name": "PerformanceAnalysis",
     "src": "resources/js/views/nclex/PerformanceAnalysis.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_PerformanceAnalysisDashboard.vue_vue_type_script_setup_true_lang-Jt9HuVgS.js",
+      "_PerformanceAnalysisDashboard.vue_vue_type_script_setup_true_lang-DhJa3xlo.js",
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_Gaunge-Cxo0wig0.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Gaunge-DsZPSNTP.js",
       "_normalizeText-DpihFNnV.js"
     ]
   },
   "resources/js/views/nclex/PerformanceReport.vue": {
-    "file": "assets/PerformanceReport-CYlCsBRw.js",
+    "file": "assets/PerformanceReport-iVflmQ2a.js",
     "name": "PerformanceReport",
     "src": "resources/js/views/nclex/PerformanceReport.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
+      "_CommonButton-DQGLnUF-.js",
       "_normalizeText-DpihFNnV.js",
       "_secondsToHms-B-PdILAj.js"
     ]
   },
   "resources/js/views/nclex/PreviousAttempts.vue": {
-    "file": "assets/PreviousAttempts-Y_60qP6j.js",
+    "file": "assets/PreviousAttempts-j6PCNdQY.js",
     "name": "PreviousAttempts",
     "src": "resources/js/views/nclex/PreviousAttempts.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_mainTable-BNAXZ1dR.js",
-      "_Small-DFgf9wG3.js"
+      "_mainTable-NzDLHydN.js",
+      "_Small-CSbpsERC.js"
     ]
   },
   "resources/js/views/nclex/exam/CAT.vue": {
-    "file": "assets/CAT-DUeQjhBU.js",
+    "file": "assets/CAT-6oqwQXoh.js",
     "name": "CAT",
     "src": "resources/js/views/nclex/exam/CAT.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_catExamStore-DJCK-lM0.js"
+      "_CommonButton-DQGLnUF-.js",
+      "_catExamStore-DlvLOKGj.js"
     ]
   },
   "resources/js/views/nclex/exam/ExamConsole.vue": {
-    "file": "assets/ExamConsole-DNyMXzPZ.js",
+    "file": "assets/ExamConsole-BaG8Ah04.js",
     "name": "ExamConsole",
     "src": "resources/js/views/nclex/exam/ExamConsole.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_nclexExamStore-DhidQRdU.js",
-      "_ExamFeedbackModal.vue_vue_type_script_setup_true_lang-kiPyiVaN.js",
-      "_CommonButton-7T02pDOR.js"
+      "_nclexExamStore-BNMdi7dH.js",
+      "_AiChat-C4Q8y7ft.js",
+      "_CommonButton-DQGLnUF-.js"
     ]
   },
   "resources/js/views/nclex/exam/Linear.vue": {
-    "file": "assets/Linear-3zt-TTfE.js",
+    "file": "assets/Linear-Gee8aJYt.js",
     "name": "Linear",
     "src": "resources/js/views/nclex/exam/Linear.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_Small-DFgf9wG3.js",
+      "_Small-CSbpsERC.js",
       "_normalizeText-DpihFNnV.js",
       "_grader-DHMBO53P.js",
-      "_CommonButton-7T02pDOR.js"
+      "_CommonButton-DQGLnUF-.js"
     ]
   },
   "resources/js/views/nclex/exam/Readiness.vue": {
-    "file": "assets/Readiness-N3fK5AJi.js",
+    "file": "assets/Readiness-vcuYI49I.js",
     "name": "Readiness",
     "src": "resources/js/views/nclex/exam/Readiness.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_Small-DFgf9wG3.js",
+      "_Small-CSbpsERC.js",
       "_normalizeText-DpihFNnV.js"
     ]
   },
   "resources/js/views/nclex/study/StudyChapters.vue": {
-    "file": "assets/StudyChapters-BNWfZnmc.js",
+    "file": "assets/StudyChapters-BYp6nBGM.js",
     "name": "StudyChapters",
     "src": "resources/js/views/nclex/study/StudyChapters.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js"
+      "_CommonButton-DQGLnUF-.js"
     ]
   },
   "resources/js/views/nursing/Dashboard.vue": {
-    "file": "assets/Dashboard-B_kK-2HU.js",
+    "file": "assets/Dashboard-CVGI5w2L.js",
     "name": "Dashboard",
     "src": "resources/js/views/nursing/Dashboard.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_index-BpZYJII4.js",
-      "_CommonButton-7T02pDOR.js",
-      "_nursingExamStore-G9APn5Q_.js",
-      "_StreakCard-c7MttfOq.js",
-      "_Probability.vue_vue_type_script_setup_true_lang-5wt6PoQ9.js",
-      "_Gaunge-Cxo0wig0.js"
+      "_index-CfY8UJ3N.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_nursingExamStore-D7Jzq8kg.js",
+      "_StreakCard-Dj0SOmSv.js",
+      "_Probability.vue_vue_type_script_setup_true_lang-CzFMUjbg.js",
+      "_Gaunge-DsZPSNTP.js"
     ]
   },
   "resources/js/views/nursing/Layout.vue": {
-    "file": "assets/Layout-DnLopQ_N.js",
+    "file": "assets/Layout-BSN2emWh.js",
     "name": "Layout",
     "src": "resources/js/views/nursing/Layout.vue",
     "isDynamicEntry": true,
@@ -818,129 +818,129 @@
     ]
   },
   "resources/js/views/nursing/PerformanceAnalysis.vue": {
-    "file": "assets/PerformanceAnalysis-DDzG4Cw4.js",
+    "file": "assets/PerformanceAnalysis-BlOJ0KtI.js",
     "name": "PerformanceAnalysis",
     "src": "resources/js/views/nursing/PerformanceAnalysis.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_PerformanceAnalysisDashboard.vue_vue_type_script_setup_true_lang-Jt9HuVgS.js",
+      "_PerformanceAnalysisDashboard.vue_vue_type_script_setup_true_lang-DhJa3xlo.js",
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_Gaunge-Cxo0wig0.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Gaunge-DsZPSNTP.js",
       "_normalizeText-DpihFNnV.js"
     ]
   },
   "resources/js/views/nursing/PerformanceReport.vue": {
-    "file": "assets/PerformanceReport-TuNr-B7m.js",
+    "file": "assets/PerformanceReport-B5--g8wr.js",
     "name": "PerformanceReport",
     "src": "resources/js/views/nursing/PerformanceReport.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
+      "_CommonButton-DQGLnUF-.js",
       "_normalizeText-DpihFNnV.js",
       "_secondsToHms-B-PdILAj.js"
     ]
   },
   "resources/js/views/nursing/PreviousAttempts.vue": {
-    "file": "assets/PreviousAttempts-DcKFAVfm.js",
+    "file": "assets/PreviousAttempts-WZm0ARrA.js",
     "name": "PreviousAttempts",
     "src": "resources/js/views/nursing/PreviousAttempts.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_mainTable-BNAXZ1dR.js",
-      "_Small-DFgf9wG3.js",
+      "_mainTable-NzDLHydN.js",
+      "_Small-CSbpsERC.js",
       "_normalizeText-DpihFNnV.js",
       "_grader-DHMBO53P.js"
     ]
   },
   "resources/js/views/nursing/exam/ExamConsole.vue": {
-    "file": "assets/ExamConsole-CTxBU4mr.js",
+    "file": "assets/ExamConsole-BwWxtzvK.js",
     "name": "ExamConsole",
     "src": "resources/js/views/nursing/exam/ExamConsole.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_nursingExamStore-G9APn5Q_.js",
-      "_ExamFeedbackModal.vue_vue_type_script_setup_true_lang-kiPyiVaN.js",
-      "_CommonButton-7T02pDOR.js"
+      "_nursingExamStore-D7Jzq8kg.js",
+      "_AiChat-C4Q8y7ft.js",
+      "_CommonButton-DQGLnUF-.js"
     ],
     "css": [
       "assets/ExamConsole-Ve-CDCKO.css"
     ]
   },
   "resources/js/views/nursing/exam/ExitLPN.vue": {
-    "file": "assets/ExitLPN-B4qHWC9K.js",
+    "file": "assets/ExitLPN--Cu6ocPC.js",
     "name": "ExitLPN",
     "src": "resources/js/views/nursing/exam/ExitLPN.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_nursingExamStore-G9APn5Q_.js",
-      "_CommonButton-7T02pDOR.js",
-      "_Tabs-BVw07Zqk.js",
+      "_nursingExamStore-D7Jzq8kg.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Tabs-QjPGsfco.js",
       "_normalizeText-DpihFNnV.js",
-      "_Small-DFgf9wG3.js",
+      "_Small-CSbpsERC.js",
       "_grader-DHMBO53P.js"
     ]
   },
   "resources/js/views/nursing/exam/ExitRN.vue": {
-    "file": "assets/ExitRN-Cx0TarIG.js",
+    "file": "assets/ExitRN-CWnaCBVt.js",
     "name": "ExitRN",
     "src": "resources/js/views/nursing/exam/ExitRN.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_nursingExamStore-G9APn5Q_.js",
-      "_CommonButton-7T02pDOR.js",
-      "_Tabs-BVw07Zqk.js",
-      "_Small-DFgf9wG3.js",
+      "_nursingExamStore-D7Jzq8kg.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Tabs-QjPGsfco.js",
+      "_Small-CSbpsERC.js",
       "_normalizeText-DpihFNnV.js",
       "_grader-DHMBO53P.js"
     ]
   },
   "resources/js/views/nursing/exam/LPN.vue": {
-    "file": "assets/LPN-eRfH9mW7.js",
+    "file": "assets/LPN-DWzK3Dc5.js",
     "name": "LPN",
     "src": "resources/js/views/nursing/exam/LPN.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_nursingExamStore-G9APn5Q_.js",
-      "_CommonButton-7T02pDOR.js",
-      "_Tabs-BVw07Zqk.js",
+      "_nursingExamStore-D7Jzq8kg.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Tabs-QjPGsfco.js",
       "_normalizeText-DpihFNnV.js"
     ]
   },
   "resources/js/views/nursing/exam/RN.vue": {
-    "file": "assets/RN-CgyAMDUN.js",
+    "file": "assets/RN-CpabWxju.js",
     "name": "RN",
     "src": "resources/js/views/nursing/exam/RN.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_nursingExamStore-G9APn5Q_.js",
-      "_CommonButton-7T02pDOR.js",
-      "_Tabs-BVw07Zqk.js",
+      "_nursingExamStore-D7Jzq8kg.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Tabs-QjPGsfco.js",
       "_normalizeText-DpihFNnV.js"
     ]
   },
   "resources/js/views/nursing/exam/TestbankLoader.vue": {
-    "file": "assets/TestbankLoader-CCr_8hdJ.js",
+    "file": "assets/TestbankLoader-BVz3cRqn.js",
     "name": "TestbankLoader",
     "src": "resources/js/views/nursing/exam/TestbankLoader.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_Small-DFgf9wG3.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Small-CSbpsERC.js",
       "_normalizeText-DpihFNnV.js",
       "_grader-DHMBO53P.js"
     ]
   },
   "resources/js/views/nursing/study/LessonsRenderer.vue": {
-    "file": "assets/LessonsRenderer-DZjT2CTV.js",
+    "file": "assets/LessonsRenderer-HljjVaZx.js",
     "name": "LessonsRenderer",
     "src": "resources/js/views/nursing/study/LessonsRenderer.vue",
     "isDynamicEntry": true,
@@ -953,7 +953,7 @@
     ]
   },
   "resources/js/views/nursing/study/StudyChapters.vue": {
-    "file": "assets/StudyChapters-C4_kp4vb.js",
+    "file": "assets/StudyChapters-D3MO4hDj.js",
     "name": "StudyChapters",
     "src": "resources/js/views/nursing/study/StudyChapters.vue",
     "isDynamicEntry": true,
@@ -962,7 +962,7 @@
     ]
   },
   "resources/js/views/nursing/study/StudyTopics.vue": {
-    "file": "assets/StudyTopics-DKr0wUVW.js",
+    "file": "assets/StudyTopics-DMsSxwDg.js",
     "name": "StudyTopics",
     "src": "resources/js/views/nursing/study/StudyTopics.vue",
     "isDynamicEntry": true,
@@ -971,20 +971,20 @@
     ]
   },
   "resources/js/views/teas/Dashboard.vue": {
-    "file": "assets/Dashboard-CcNCpggm.js",
+    "file": "assets/Dashboard-EKiQhRMn.js",
     "name": "Dashboard",
     "src": "resources/js/views/teas/Dashboard.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_teasExamStore-R7WFi8gF.js",
-      "_Primary-BUKq9t42.js",
-      "_StreakCard-c7MttfOq.js",
-      "_CommonButton-7T02pDOR.js"
+      "_teasExamStore-D3nWp0aF.js",
+      "_Primary-LB5ASrKv.js",
+      "_StreakCard-Dj0SOmSv.js",
+      "_CommonButton-DQGLnUF-.js"
     ]
   },
   "resources/js/views/teas/Layout.vue": {
-    "file": "assets/Layout-UgzfFLWI.js",
+    "file": "assets/Layout-IMtxtW49.js",
     "name": "Layout",
     "src": "resources/js/views/teas/Layout.vue",
     "isDynamicEntry": true,
@@ -993,88 +993,88 @@
     ]
   },
   "resources/js/views/teas/PerformanceAnalysis.vue": {
-    "file": "assets/PerformanceAnalysis-s9obomfF.js",
+    "file": "assets/PerformanceAnalysis-DsIC4Js2.js",
     "name": "PerformanceAnalysis",
     "src": "resources/js/views/teas/PerformanceAnalysis.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_PerformanceAnalysisDashboard.vue_vue_type_script_setup_true_lang-Jt9HuVgS.js",
+      "_PerformanceAnalysisDashboard.vue_vue_type_script_setup_true_lang-DhJa3xlo.js",
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_Gaunge-Cxo0wig0.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Gaunge-DsZPSNTP.js",
       "_normalizeText-DpihFNnV.js"
     ]
   },
   "resources/js/views/teas/PerformanceReport.vue": {
-    "file": "assets/PerformanceReport-BU7jVcXH.js",
+    "file": "assets/PerformanceReport-BpbCc-rw.js",
     "name": "PerformanceReport",
     "src": "resources/js/views/teas/PerformanceReport.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
+      "_CommonButton-DQGLnUF-.js",
       "_normalizeText-DpihFNnV.js",
       "_secondsToHms-B-PdILAj.js"
     ]
   },
   "resources/js/views/teas/PreviousAttempts.vue": {
-    "file": "assets/PreviousAttempts-CpuDd3W9.js",
+    "file": "assets/PreviousAttempts-Dnkj0z-N.js",
     "name": "PreviousAttempts",
     "src": "resources/js/views/teas/PreviousAttempts.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_mainTable-BNAXZ1dR.js",
-      "_Small-DFgf9wG3.js",
+      "_mainTable-NzDLHydN.js",
+      "_Small-CSbpsERC.js",
       "_normalizeText-DpihFNnV.js",
       "_grader-DHMBO53P.js"
     ]
   },
   "resources/js/views/teas/Study/StudyChapters.vue": {
-    "file": "assets/StudyChapters-cD7K7Wu9.js",
+    "file": "assets/StudyChapters-CF7BbvKh.js",
     "name": "StudyChapters",
     "src": "resources/js/views/teas/Study/StudyChapters.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
+      "_CommonButton-DQGLnUF-.js",
       "_normalizeText-DpihFNnV.js",
       "_speech-DDc6PsXg.js"
     ]
   },
   "resources/js/views/teas/Study/StudyTopics.vue": {
-    "file": "assets/StudyTopics-fxRYOmlx.js",
+    "file": "assets/StudyTopics-BsotQBrA.js",
     "name": "StudyTopics",
     "src": "resources/js/views/teas/Study/StudyTopics.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js"
+      "_CommonButton-DQGLnUF-.js"
     ]
   },
   "resources/js/views/teas/TestbankLoader.vue": {
-    "file": "assets/TestbankLoader-BXWDO6sK.js",
+    "file": "assets/TestbankLoader-BTNo1IFR.js",
     "name": "TestbankLoader",
     "src": "resources/js/views/teas/TestbankLoader.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_CommonButton-7T02pDOR.js",
-      "_Small-DFgf9wG3.js",
+      "_CommonButton-DQGLnUF-.js",
+      "_Small-CSbpsERC.js",
       "_normalizeText-DpihFNnV.js",
       "_grader-DHMBO53P.js"
     ]
   },
   "resources/js/views/teas/exam/ExamConsole.vue": {
-    "file": "assets/ExamConsole-B9K7FUhv.js",
+    "file": "assets/ExamConsole-DLKvTYKv.js",
     "name": "ExamConsole",
     "src": "resources/js/views/teas/exam/ExamConsole.vue",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/main.ts",
-      "_teasExamStore-R7WFi8gF.js",
-      "_ExamFeedbackModal.vue_vue_type_script_setup_true_lang-kiPyiVaN.js",
-      "_CommonButton-7T02pDOR.js"
+      "_teasExamStore-D3nWp0aF.js",
+      "_AiChat-C4Q8y7ft.js",
+      "_CommonButton-DQGLnUF-.js"
     ],
     "css": [
       "assets/ExamConsole-Ve-CDCKO.css"

@@ -12,8 +12,8 @@
                             alt="Nursedive" />
                     </a>
                     <div class="min-w-0">
-                        <h2 class="truncate text-base font-semibold leading-5">Nursedive AI Assistant</h2>
-                        <p class="mt-0.5 text-xs text-slate-300">Powered by OpenAI</p>
+                        <h2 class="truncate text-base font-semibold leading-5">Nursing AI Assistant</h2>
+                        <p class="mt-0.5 text-xs text-slate-300">Nursedive AI</p>
                     </div>
                 </div>
 
@@ -28,7 +28,7 @@
                 <label v-if="!isStreaming"
                     class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-slate-100 ring-1 ring-white/15"
                     for="customSwitch1">
-                    <span>Deep Thinking</span>
+                    <span>Deeper Reasoning</span>
                     <input id="customSwitch1" v-model="deepReasoning" type="checkbox" class="peer sr-only" />
                     <span
                         class="relative h-5 w-9 rounded-full bg-white/25 transition-colors after:absolute after:left-0.5 after:top-0.5 after:h-4 after:w-4 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:bg-teal-400 peer-checked:after:translate-x-4"
@@ -139,12 +139,15 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
-import CryptoJS from "crypto-js";
 
 const props = defineProps({
     question: {
-        type: Object,
+        type: [Object, String],
         default: null,
+    },
+    solution: {
+        type: String,
+        default: "",
     },
     chatOpened: {
         type: Boolean,
@@ -160,22 +163,32 @@ const inputText = ref("");
 const deepReasoning = ref(false);
 const isStreaming = ref(false);
 const isLoading = ref(false);
-const hasFirstToken = ref(false);
 const chatContainer = ref(null);
 const lastAutoQuestionPayload = ref("");
 const pendingAutoQuestionPayload = ref("");
 const questionHtml = computed(() => {
-    const rawQuestion = props.question && typeof props.question === "object"
-        ? props.question.question
-        : "";
-
+    const rawQuestion = typeof props.question === "string"
+        ? props.question
+        : props.question?.question;
     return typeof rawQuestion === "string" ? rawQuestion.trim() : "";
 });
 
-let eventSource = null;
-const encryptionKey = "!@$nursedive";
+const activeQuestionPayload = computed(() => {
+    if (!props.question) return null;
 
-const isThinking = computed(() => isStreaming.value && isLoading.value && !hasFirstToken.value);
+    if (typeof props.question === "string") {
+        return {
+            question: props.question,
+            solution: props.solution || undefined,
+        };
+    }
+
+    return props.question;
+});
+
+let eventSource = null;
+
+const isThinking = computed(() => isStreaming.value && isLoading.value);
 
 const escapeHtml = (value) => {
     return String(value ?? "")
@@ -205,26 +218,6 @@ const closeStream = () => {
     }
     isStreaming.value = false;
     isLoading.value = false;
-    hasFirstToken.value = false;
-};
-
-const getAuthHeaders = (headers = {}) => {
-    const config = {
-        ...headers,
-    };
-
-    // Encrypted token injection
-    const encryptedTokenKey = CryptoJS.SHA256("authToken").toString();
-    const authTokenDataEncrypted = localStorage.getItem(encryptedTokenKey);
-    if (authTokenDataEncrypted) {
-        const bytes = CryptoJS.AES.decrypt(authTokenDataEncrypted, encryptionKey);
-        const authToken = bytes.toString(CryptoJS.enc.Utf8);
-        if (authToken) {
-            config.Authorization = `Bearer ${authToken}`;
-        }
-    }
-
-    return config;
 };
 
 const pushAssistantMessage = () => {
@@ -240,7 +233,9 @@ const pushAssistantMessage = () => {
 };
 
 const questionIdParam = () => {
-    const questionId = props.question && props.question.id ? props.question.id : null;
+    const questionId = props.question && typeof props.question === "object" && props.question.id
+        ? props.question.id
+        : null;
     if (questionId === null || questionId === undefined || String(questionId).trim() === "") {
         return null;
     }
@@ -293,17 +288,16 @@ const startStream = async (messageOverride = null, options = {}) => {
     streamingText.value = "";
     isStreaming.value = true;
     isLoading.value = true;
-    hasFirstToken.value = false;
     eventSource = new AbortController();
 
     try {
         const response = await fetch(endpoint, {
             method: "POST",
             credentials: "include",
-            headers: getAuthHeaders({
+            headers: {
                 "Content-Type": "application/json",
                 Accept: "text/event-stream",
-            }),
+            },
             body: JSON.stringify(requestBody),
             signal: eventSource.signal,
         });
@@ -365,13 +359,12 @@ const startStream = async (messageOverride = null, options = {}) => {
                     eventSource = null;
                     isStreaming.value = false;
                     isLoading.value = false;
-                    hasFirstToken.value = true;
+
                     await scrollToBottom();
                     return true;
                 }
 
-                if (!hasFirstToken.value && payload.trim() !== "") {
-                    hasFirstToken.value = true;
+                if (payload.trim() !== "") {
                     isLoading.value = false;
                 }
 
@@ -384,7 +377,6 @@ const startStream = async (messageOverride = null, options = {}) => {
         eventSource = null;
         isStreaming.value = false;
         isLoading.value = false;
-        hasFirstToken.value = false;
         await scrollToBottom();
         return true;
     } catch (error) {
@@ -404,7 +396,6 @@ const startStream = async (messageOverride = null, options = {}) => {
         eventSource = null;
         isStreaming.value = false;
         isLoading.value = false;
-        hasFirstToken.value = false;
         await scrollToBottom();
         return false;
     }
@@ -418,7 +409,7 @@ const closeChat = () => {
 };
 
 watch(
-    () => [props.question, props.chatOpened],
+    () => [activeQuestionPayload.value, props.chatOpened],
     async ([value, chatOpened]) => {
         if (!chatOpened) return;
         if (!value || typeof value !== "object") return;

@@ -13,6 +13,11 @@
                         Number(examStore.currentIndex) + 1 }} <span class="hidden lg:block">of</span> <span
                     class="lg:hidden">/</span>
                 {{ examStore.questions.length }}</span>
+            <button v-if="examStore.testMode != 'exam'" type="button" aria-label="Discuss with AI"
+                @click="ChatOpenned = !ChatOpenned"
+                class="cursor-pointer whitespace-nowrap font-semibold hover:underline">
+                Discuss with AI
+            </button>
             <!-- Right side: Controls -->
             <div class="flex items-center gap-4">
                 <ExamFeedbackModal source-product="teas" :exam-mode="examStore.testMode"
@@ -104,6 +109,12 @@
                         v-html="examStore.currentQuestion?.solution">
                     </div>
                 </div>
+                <button type="button"
+                    class="group inline-flex w-fit items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-700 shadow-sm transition hover:border-teal-300 hover:bg-teal-100 hover:text-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 dark:border-teal-400/30 dark:bg-teal-400/10 dark:text-teal-200 dark:hover:bg-teal-400/15 dark:hover:text-teal-100 dark:focus:ring-offset-sky-950"
+                    @click="ChatOpenned = !ChatOpenned">
+                    <i class="pi pi-comments text-sm transition group-hover:scale-110"></i>
+                    Dive deeper with AI
+                </button>
             </div>
             <div v-if="examStore.showNotes && examStore.testMode != 'exam'"
                 class="flex mt-0 md:mt-24 mx-4  md:mb-16 flex-col gap-4 w-full md:max-w-1/2 border-l border-gray-400 border-dashed dark:border-gray-200 px-2 ">
@@ -194,6 +205,8 @@
                 </button>
             </div>
         </div>
+        <AiChat v-if="ChatOpenned && examStore.testMode != 'exam'" @close="ChatOpenned = false"
+            :question="examStore.currentQuestion" />
     </div>
 </template>
 
@@ -211,6 +224,7 @@ import ExamNotes from './ExamNotes.vue'
 import CommonButton from './Buttons/CommonButton.vue'
 import { useAuthStore } from '../stores/authStore'
 import ExamFeedbackModal from './ExamFeedbackModal.vue'
+import AiChat from './AiChat.vue'
 
 
 
@@ -228,6 +242,7 @@ const examStore = useTeasExamStore() as any
 const confirm = useConfirm()
 const notes = ref('')
 const difficulty = ref('')
+const ChatOpenned = ref(false);
 
 const { user, pricingRoute } = useAuthStore()
 

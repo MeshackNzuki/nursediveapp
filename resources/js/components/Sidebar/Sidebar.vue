@@ -69,7 +69,6 @@
                         </a>
                     </router-link>
                 </div>
-
                 <div v-if="activeDropdownItems.length" class="mt-2 space-y-1.5">
                     <div v-for="dropdown in activeDropdownItems" :key="dropdown.label" :class="dropdownShellClass">
                         <button type="button" tabindex="0" :class="navItemClass(false, dropdown)"

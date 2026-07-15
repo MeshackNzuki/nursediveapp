@@ -17,6 +17,11 @@
                     <span class="lg:hidden">/</span>
                     {{ catStore.maxQuestions }}
                 </span>
+                <button v-if="catStore.testMode != 'exam'" type="button" aria-label="Discuss with AI"
+                    @click="ChatOpenned = !ChatOpenned"
+                    class="cursor-pointer whitespace-nowrap font-semibold hover:underline">
+                    Discuss with AI
+                </button>
 
                 <!-- Right side: Controls -->
                 <div class="flex items-center gap-4">
@@ -185,6 +190,8 @@
                 classes="ml-4 text-white bg-rose-500 hover:bg-teal-600 px-6 py-3 rounded-full shadow-lg transition-all"
                 :action="() => catStore.startTimer()" button-text="Resume Exam" />
         </div>
+        <AiChat v-if="ChatOpenned && catStore.testMode != 'exam'" @close="ChatOpenned = false"
+            :question="catStore.currentQuestion" />
     </div>
 </template>
 
@@ -202,6 +209,7 @@ import ExamNotes from './ExamNotes.vue'
 import CommonButton from './Buttons/CommonButton.vue'
 import { useAuthStore } from '../stores/authStore'
 import ExamFeedbackModal from './ExamFeedbackModal.vue'
+import AiChat from './AiChat.vue'
 
 const isDark = useDark({ disableTransition: false })
 const toggleDark = useToggle(isDark)
@@ -213,6 +221,7 @@ const catStore = useCatExamStore() as any
 const confirm = useConfirm()
 const notes = ref('')
 const difficulty = ref('')
+const ChatOpenned = ref(false)
 
 const currentAnswer = computed({
     get: () => {
