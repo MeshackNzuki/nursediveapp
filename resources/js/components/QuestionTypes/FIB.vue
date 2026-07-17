@@ -1,12 +1,13 @@
 <template>
     <div :class="[question.tabs && ['nclex', 'cat'].includes(examStore.storeName) ? 'grid gap-4 md:grid-cols-2' : '']">
         <div>
-            <div v-if="question.intro" class="mb-2 font-bold" v-html="question.intro"></div>
+            <div v-if="question.intro" class="mb-2 font-bold text-gray-950 dark:text-white" v-html="question.intro">
+            </div>
             <TabRenderer v-if="question.tabs && ['nclex', 'cat'].includes(examStore.storeName)" :tabs="question.tabs" />
         </div>
         <div class="flex items-start gap-2">
-            <img v-if="['nclex', 'cat'].includes(examStore.storeName)" :src="qn_arrow" class="h-8 shrink-0" />
-            <div class="mb-2 font-base leading-relaxed" v-html="question.question"></div>
+            <img :src="qn_arrow" class="h-7 shrink-0" />
+            <div class="mb-2 font-bold text-gray-950 leading-relaxed dark:text-white" v-html="question.question"></div>
         </div>
 
         <div>
@@ -20,14 +21,14 @@
                 <span v-if="question.units">{{ question.units }}</span>
 
                 <i v-if="shouldShowExplanation" :class="`ms-2 pi text-lg ${isCorrect
-                    ? 'pi-check-circle text-teal-500'
+                    ? 'pi-check text-teal-600'
                     : isIncorrect
-                        ? 'pi-times-circle text-rose-600'
+                        ? 'pi-times text-rose-600'
                         : ''
                     }`"></i>
             </label>
 
-            <div v-if="shouldShowExplanation && question.solution" class="mt-2 bg-teal-50 text-teal-800 p-2 rounded"
+            <div v-if="shouldShowExplanation && question.solution" class="mt-2 bg-teal-100/90 text-teal-800 p-2 rounded"
                 v-html="question.solution"></div>
         </div>
     </div>

@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div v-if="question.intro" class="mb-2 font-bold" v-html="question.intro"></div>
+        <div v-if="question.intro" class="mb-2 font-bold text-gray-950 dark:text-white" v-html="question.intro"></div>
 
         <div class="flex items-start gap-2">
-            <img v-if="['nclex', 'cat'].includes(examStore.storeName)" :src="qn_arrow" class="h-8 shrink-0" />
-            <div class="hl-content mb-2 font-base leading-relaxed" @click="handleQuestionClick"
+            <img :src="qn_arrow" class="h-7 shrink-0" />
+            <div class="hl-content mb-2 font-bold text-gray-950 leading-relaxed dark:text-white" @click="handleQuestionClick"
                 @keydown="handleQuestionKeydown" v-html="interactiveQuestionHtml"></div>
         </div>
 

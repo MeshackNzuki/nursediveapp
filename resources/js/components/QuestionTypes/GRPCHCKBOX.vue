@@ -1,8 +1,11 @@
 <template>
     <div>
-        <div v-if="question.intro" class="mb-2 font-bold" v-html="question.intro"></div>
+        <div v-if="question.intro" class="mb-2 font-bold text-gray-950 dark:text-white" v-html="question.intro"></div>
         <TabRenderer v-if="showInlineTabs" :tabs="question.tabs" />
-        <div v-html="question.question" class="question-text" />
+        <div class="flex items-start gap-2">
+            <img :src="qn_arrow" class="h-7 shrink-0" />
+            <div class="mb-2 font-bold text-gray-950 leading-relaxed dark:text-white" v-html="question.question"></div>
+        </div>
 
         <table class="grouping-table border border-gray-200 w-full mt-2">
             <thead class="bg-gray-100">
@@ -47,6 +50,7 @@
 import { computed, createApp, inject, nextTick, onUnmounted, reactive, ref, toRaw, watch, watchEffect } from 'vue'
 import TabRenderer from '../TabRenderer.vue'
 import type { Question } from '../../types/question'
+import qn_arrow from '../../assets/images/qn_arrow.png'
 
 type GenericRecord = Record<string, any>
 type CheckboxSelection = Record<string, string[]>
@@ -290,9 +294,9 @@ const checkboxClass = (rowKey: string, colKey: string) => {
     const correct = isCorrect(rowKey, colKey)
     const picked = isChecked(rowKey, colKey)
 
-    if (correct && picked) return 'accent-teal-500'
+    if (correct && picked) return 'accent-teal-600'
     if (!correct && picked) return 'accent-rose-600'
-    if (correct && !picked) return 'ring-2 ring-teal-500'
+    if (correct && !picked) return 'ring-2 ring-teal-600'
     return ''
 }
 

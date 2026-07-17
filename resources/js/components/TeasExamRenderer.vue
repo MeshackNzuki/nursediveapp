@@ -26,8 +26,7 @@
                 <button @click="showModal('calculator_id')" class="inline-flex items-center gap-1 ">
                     <i class="pi pi-calculator"></i> <span class="hidden 2xl:block">Calculator</span>
                 </button>
-                <button v-if="examStore.testMode != 'exam'" @click="examStore.showNotes = !examStore.showNotes"
-                    class="inline-flex items-center gap-1">
+                <button v-if="examStore.testMode != 'exam'" @click="toggleNotes" class="inline-flex items-center gap-1">
                     <i class="pi pi-pencil"></i> <span class="hidden 2xl:block">Notes</span>
                 </button>
                 <Calculator />
@@ -63,6 +62,27 @@
                 <QuestionRenderer :examStore="examStore" :question="examStore.currentQuestion" v-model="currentAnswer"
                     :readonly="examStore.testMode === 'review'"
                     :result="examStore.results[examStore.currentQuestion.id]" />
+                <div v-if="examStore.testMode != 'exam'"
+                    class="mt-8 flex flex-col gap-4 border-t border-gray-200 pt-6 dark:border-gray-200/30">
+                    <div class="flex items flex-col ">
+                        <h3 class="text-lg font-semibold mb-6 underline underline-offset-2 decoration-teal-500">Full
+                            Question
+                            Solution <button @click="openNotes" class="ml-auto text-sm text-teal-500 hover:underline">
+                                <i class="pi pi-pencil ms-1"></i>Notes
+                            </button></h3>
+                        <span v-if="!showSolution" class="text-gray-500 mb-2">Answer the question to reveal
+                            solution.</span>
+                        <div :class="[!showSolution ? 'pb-12 mb-6 blur-sm bg-gray-950/25' : 'pb-12 mb-6', store?.currentZoom]"
+                            v-html="examStore.currentQuestion?.solution">
+                        </div>
+                    </div>
+                    <button type="button"
+                        class="group inline-flex w-fit items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-700 shadow-sm transition hover:border-teal-300 hover:bg-teal-100 hover:text-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 dark:border-teal-400/30 dark:bg-teal-400/10 dark:text-teal-200 dark:hover:bg-teal-400/15 dark:hover:text-teal-100 dark:focus:ring-offset-sky-950"
+                        @click="ChatOpenned = !ChatOpenned">
+                        <i class="pi pi-comments text-sm transition group-hover:scale-110"></i>
+                        Dive deeper with AI
+                    </button>
+                </div>
                 <div v-if="examStore.testMode === 'tutor'" class="text-center mt-2 text-lg font-semibold text-gray-800">
                 </div>
                 <div v-if="['tutor', 'review'].includes(examStore.testMode)"
@@ -93,35 +113,26 @@
                     </div>
                 </div>
             </div>
-            <div v-if="examStore.testMode != 'exam'"
-                :class="[showSolution ? ''
-                    : '', 'flex mt-0 md:mt-24 mx-4 mb-24 flex-col gap-4 w-full md:max-w-1/2 border-l border-gray-400 border-dashed dark:border-gray-200 px-2']">
-                <div class="flex items flex-col ">
-                    <h3 class="text-lg font-semibold mb-6 underline underline-offset-2 decoration-teal-500">Full
-                        Question
-                        Solution <button @click="examStore.showNotes = true"
-                            class="ml-auto text-sm text-teal-500 hover:underline">
-                            <i class="pi pi-pencil ms-1"></i>Notes
-                        </button></h3>
-                    <span v-if="!showSolution" class="text-sm text-gray-500 mb-2">Answer the question to reveal
-                        solution.</span>
-                    <div :class="[!showSolution ? 'pb-24 mb-12 blur-sm bg-gray-950/25' : 'pb-24 mb-12 ']"
-                        v-html="examStore.currentQuestion?.solution">
+            <div v-if="showQuestionNavigator"
+                :class="['flex mt-0 md:mt-24 mx-4 lg:mx-2 mb-24 flex-col gap-4 w-full lg:w-auto lg:max-w-[20rem] xl:max-w-[22rem] border-l border-gray-400 border-dashed dark:border-gray-200 px-2 lg:px-1', store?.currentZoom]">
+                <div class="bg-sky-950 p-2 lg:p-3 flex flex-col gap-4 rounded-xl">
+                    <div class="grid grid-cols-5 gap-2 sm:grid-cols-8 lg:grid-cols-5 xl:grid-cols-5">
+                        <button v-for="(question, index) in examStore.questions" :key="question.id" type="button"
+                            :aria-current="index === examStore.currentIndex ? 'true' : undefined"
+                            :title="questionNavTitle(question, index)" :class="questionNavClass(question, index)"
+                            @click="goToQuestion(index)">
+                            <span>{{ index + 1 }}</span>
+                            <span v-if="shouldShowQuestionResult(question)" :class="questionResultBadgeClass(question)"
+                                v-html="questionResultMark(question)"></span>
+                        </button>
                     </div>
                 </div>
-                <button type="button"
-                    class="group inline-flex w-fit items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-700 shadow-sm transition hover:border-teal-300 hover:bg-teal-100 hover:text-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 dark:border-teal-400/30 dark:bg-teal-400/10 dark:text-teal-200 dark:hover:bg-teal-400/15 dark:hover:text-teal-100 dark:focus:ring-offset-sky-950"
-                    @click="ChatOpenned = !ChatOpenned">
-                    <i class="pi pi-comments text-sm transition group-hover:scale-110"></i>
-                    Dive deeper with AI
-                </button>
             </div>
             <div v-if="examStore.showNotes && examStore.testMode != 'exam'"
                 class="flex mt-0 md:mt-24 mx-4  md:mb-16 flex-col gap-4 w-full md:max-w-1/2 border-l border-gray-400 border-dashed dark:border-gray-200 px-2 ">
                 <div class="flex items">
                     <h3 class="text-lg font-semibold">Revision Notes</h3>
-                    <button @click="examStore.showNotes = !examStore.showNotes"
-                        class="ml-auto text-sm text-sky-500 hover:underline font-semibold">
+                    <button @click="closeNotes" class="ml-auto text-sm text-sky-500 hover:underline font-semibold">
                         <i class="pi pi-times "></i> Close
                     </button>
                 </div>
@@ -245,6 +256,185 @@ const difficulty = ref('')
 const ChatOpenned = ref(false);
 
 const { user, pricingRoute } = useAuthStore()
+
+const showQuestionNavigator = computed(() => {
+    return examStore.questions.length > 0 && (examStore.testMode === 'exam' || !examStore.showNotes);
+})
+
+function openNotes() {
+    examStore.showNotes = true;
+}
+
+function closeNotes() {
+    examStore.showNotes = false;
+}
+
+function toggleNotes() {
+    examStore.showNotes ? closeNotes() : openNotes();
+}
+
+const tryParseAnswerJson = (value: string) => {
+    try {
+        return JSON.parse(value);
+    } catch {
+        return undefined;
+    }
+}
+
+const normalizeComparableObject = (value: any): any => {
+    if (Array.isArray(value)) {
+        return value.map((item) => normalizeComparableObject(item));
+    }
+
+    if (value && typeof value === 'object') {
+        return Object.keys(value).sort().reduce((acc, key) => {
+            acc[key] = normalizeComparableObject(value[key]);
+            return acc;
+        }, {} as Record<string, any>);
+    }
+
+    return value;
+}
+
+const stableAnswerStringify = (value: any) => JSON.stringify(normalizeComparableObject(value));
+
+function answerValueExists(value: any): boolean {
+    if (value == null) return false;
+
+    if (Array.isArray(value)) {
+        return value.some((item) => answerValueExists(item));
+    }
+
+    if (typeof value === 'string') {
+        const parsed = tryParseAnswerJson(value);
+        if (parsed !== undefined) return answerValueExists(parsed);
+
+        return value.trim().length > 0;
+    }
+
+    if (typeof value === 'object') {
+        return Object.values(value).some((item) => answerValueExists(item));
+    }
+
+    return true;
+}
+
+function normalizeAnswerForComparison(answer: any): string[] {
+    if (answer == null) return [];
+
+    if (typeof answer === 'string') {
+        const parsed = tryParseAnswerJson(answer);
+        if (parsed !== undefined) return normalizeAnswerForComparison(parsed);
+
+        const trimmed = answer.trim();
+        return trimmed ? [trimmed] : [];
+    }
+
+    if (Array.isArray(answer)) {
+        return answer
+            .flatMap((item) => normalizeAnswerForComparison(item))
+            .filter((item) => item.length > 0);
+    }
+
+    if (typeof answer === 'object') {
+        return [stableAnswerStringify(answer)];
+    }
+
+    return [String(answer)];
+}
+
+function answersMatch(userAnswer: any, correctAnswer: any) {
+    const userValues = normalizeAnswerForComparison(userAnswer);
+    const correctValues = normalizeAnswerForComparison(correctAnswer);
+
+    if (userValues.length === 0 || correctValues.length === 0) return false;
+
+    return JSON.stringify([...userValues].sort()) === JSON.stringify([...correctValues].sort());
+}
+
+function questionAnswer(question: any) {
+    return examStore.answers?.[question.id];
+}
+
+function hasQuestionAnswer(question: any) {
+    return answerValueExists(questionAnswer(question));
+}
+
+function isQuestionCorrect(question: any) {
+    const result = examStore.results?.[question.id];
+
+    if (typeof result?.correct === 'boolean') {
+        return result.correct;
+    }
+
+    if (!hasQuestionAnswer(question)) return false;
+
+    return answersMatch(questionAnswer(question), question.correct_answer);
+}
+
+function shouldShowQuestionResult(question: any) {
+    return ['tutor', 'review'].includes(examStore.testMode) && hasQuestionAnswer(question);
+}
+
+function questionNavClass(question: any, index: number) {
+    const baseClass = 'relative flex h-8 w-11 items-center justify-center rounded-md border text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 dark:focus:ring-offset-sky-950';
+    const activeClass = index === examStore.currentIndex
+        ? 'ring-2 ring-sky-500 ring-offset-2 dark:ring-offset-sky-950'
+        : 'hover:border-sky-300 hover:bg-sky-50';
+    const answered = hasQuestionAnswer(question);
+
+    let stateClass = 'border-gray-200 bg-white text-gray-600 dark:border-gray-600 dark:bg-sky-950 dark:text-slate-300';
+
+    if (['tutor', 'review'].includes(examStore.testMode) && answered) {
+        stateClass = isQuestionCorrect(question)
+            ? 'border-emerald-400 bg-emerald-50 text-emerald-800 dark:border-emerald-400/40 dark:bg-emerald-400/15 dark:text-emerald-100'
+            : 'border-rose-400 bg-rose-50 text-rose-700 dark:border-rose-400/40 dark:bg-rose-400/15 dark:text-rose-100';
+    } else if (examStore.testMode === 'exam' && answered) {
+        stateClass = 'border-teal-400 bg-teal-50 text-teal-800 dark:border-teal-400/40 dark:bg-teal-400/15 dark:text-teal-100';
+    }
+
+    return `${baseClass} ${stateClass} ${activeClass}`;
+}
+
+function questionResultBadgeClass(question: any) {
+    return isQuestionCorrect(question)
+        ? 'absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-600 text-[9px] text-white'
+        : 'absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] text-white';
+}
+
+function questionResultMark(question: any) {
+    return isQuestionCorrect(question) ? '&#x2713' : '&#10007;';
+}
+
+function questionNavTitle(question: any, index: number) {
+    const states = [`Question ${index + 1}`];
+
+    if (index === examStore.currentIndex) states.push('current');
+    if (examStore.testMode === 'exam' && hasQuestionAnswer(question)) states.push('attempted');
+    if (shouldShowQuestionResult(question)) states.push(isQuestionCorrect(question) ? 'correct' : 'incorrect');
+
+    return states.join(' - ');
+}
+
+function canNavigateToQuestion(index: number) {
+    if (index <= examStore.currentIndex) return true;
+
+    if (
+        !examStore.is_exam_full_length &&
+        index >= examStore.no_of_qns_before_paywall
+    ) {
+        examStore.show_paywall = true;
+        return false;
+    }
+
+    return true;
+}
+
+function goToQuestion(index: number) {
+    if (index === examStore.currentIndex || !canNavigateToQuestion(index)) return;
+
+    examStore.currentIndex = index;
+}
 
 const currentAnswer = computed({
     get: () => {

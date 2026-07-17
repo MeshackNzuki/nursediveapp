@@ -44,6 +44,24 @@ const normalizeObject = (value: unknown): unknown => {
 const stableStringify = (value: unknown): string =>
     JSON.stringify(normalizeObject(value));
 
+const normalizeNotes = (
+    notes?: Record<string | number, unknown> | null,
+): Record<number, string> => {
+    return Object.entries(notes ?? {}).reduce(
+        (acc, [questionId, note]) => {
+            if (note == null) return acc;
+
+            const normalized = String(note);
+            if (normalized.trim()) {
+                acc[Number(questionId)] = normalized;
+            }
+
+            return acc;
+        },
+        {} as Record<number, string>,
+    );
+};
+
 const toStringArray = (value: unknown): string[] => {
     if (value == null) return [];
     if (Array.isArray(value)) {
@@ -159,7 +177,7 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
         questions: [] as Array<Question>,
         testMode: "exam" as "exam" | "review" | "tutor",
         answers: {} as Record<number, string | string[]>,
-        notes: {} as Record<number, string | string[]>,
+        notes: {} as Record<number, string>,
         currentIndex: 0,
         results: {} as Record<
             number,
@@ -217,11 +235,13 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
             exam: object;
             questions: Question[];
             is_exam_full_length: boolean;
+            notes?: Record<string | number, unknown> | null;
         }) {
             this.reset();
             this.exam = payload.exam;
             this.questions = payload.questions;
             this.answers = {}; // reset previous answers
+            this.notes = normalizeNotes(payload.notes);
             this.currentIndex = 0;
             this.is_current_exam_full_length = payload.is_exam_full_length;
         },
@@ -236,11 +256,13 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
 
             suspend_index?: number;
             is_exam_full_length: boolean;
+            notes?: Record<string | number, unknown> | null;
         }) {
             this.reset();
             this.exam = payload.exam;
             this.questions = payload.questions;
             this.answers = payload.answers;
+            this.notes = normalizeNotes(payload.notes);
             this.results = payload.results;
             this.is_current_exam_full_length = payload.is_exam_full_length;
             this.currentIndex = payload.suspend_index || 0;
@@ -253,8 +275,45 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
             this.answers[questionId] = answer;
         },
 
-        answerQuestionNotes(questionId: number, notes: string | string[]) {
-            this.notes[questionId] = notes;
+        answerQuestionNotes(questionId: number, notes: string) {
+            if (notes.trim()) {
+                this.notes[questionId] = notes;
+                return;
+            }
+
+            delete this.notes[questionId];
+        },
+
+        async saveQuestionNote(questionId: number, note: string) {
+            const { data } = await axios.put(
+                `/nursing/question-notes/${questionId}`,
+                { note },
+                { showLoader: false },
+            );
+
+            const savedNote = data.data?.note;
+
+            if (savedNote) {
+                this.notes[questionId] = savedNote;
+            } else {
+                delete this.notes[questionId];
+            }
+
+            return savedNote ?? "";
+        },
+
+        async fetchQuestionNotes(questionIds: number[]) {
+            if (questionIds.length === 0) return;
+
+            const { data } = await axios.get("/nursing/question-notes", {
+                params: { question_ids: questionIds },
+                showLoader: false,
+            });
+
+            this.notes = {
+                ...this.notes,
+                ...normalizeNotes(data.data),
+            };
         },
 
         next() {
@@ -294,6 +353,7 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
             this.exam = null;
             this.questions = [];
             this.answers = {};
+            this.notes = {};
             this.results = {};
             this.currentIndex = 0;
             this.show_paywall = false;

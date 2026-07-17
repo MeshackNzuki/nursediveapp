@@ -2,14 +2,15 @@
     <div :class="[question.tabs && ['nclex', 'cat'].includes(examStore.storeName) ? 'grid gap-4 md:grid-cols-2' : '']">
 
         <div>
-            <div v-if="question.intro" class="mb-2 font-bold" v-html="question.intro"></div>
+            <div v-if="question.intro" class="mb-2 font-bold text-gray-950 dark:text-white" v-html="question.intro"></div>
             <TabRenderer v-if="question.tabs && ['nclex', 'cat'].includes(examStore.storeName)" :tabs="question.tabs" />
         </div>
 
         <div class="rounded-xl bg-gray-50 p-4 md:p-6">
             <div class="flex items-start gap-2">
-                <img v-if="['nclex', 'cat'].includes(examStore.storeName)" :src="qn_arrow" class="h-8 shrink-0" />
-                <div class="mb-2 font-base leading-relaxed" v-html="question.question"></div>
+                <img :src="qn_arrow" class="h-7 shrink-0" />
+                <div class="mb-2 font-bold text-gray-950 leading-relaxed dark:text-white" v-html="question.question">
+                </div>
             </div>
 
             <div class="mb-4">
@@ -171,14 +172,14 @@ const slotStatus = computed<SlotStatus>(() => {
 })
 
 const slotStateClass = computed(() => {
-    if (slotStatus.value === 'correct') return 'border-emerald-500 bg-emerald-50'
+    if (slotStatus.value === 'correct') return 'border-teal-500 bg-teal-50'
     if (slotStatus.value === 'incorrect') return 'border-rose-500 bg-rose-50'
     if (slotStatus.value === 'missed') return 'border-amber-500 bg-amber-50'
     return ''
 })
 
 const itemStateClass = computed(() => {
-    if (slotStatus.value === 'correct') return 'border-emerald-400 bg-emerald-100'
+    if (slotStatus.value === 'correct') return 'border-teal-400 bg-teal-100'
     if (slotStatus.value === 'incorrect') return 'border-rose-400 bg-rose-100'
     return ''
 })
@@ -198,14 +199,14 @@ const feedbackLabel = computed(() => {
 })
 
 const feedbackIcon = computed(() => {
-    if (slotStatus.value === 'correct') return 'pi-check-circle text-emerald-600'
-    if (slotStatus.value === 'incorrect') return 'pi-times-circle text-rose-600'
+    if (slotStatus.value === 'correct') return 'pi-check text-teal-600'
+    if (slotStatus.value === 'incorrect') return 'pi-times text-rose-600'
     if (slotStatus.value === 'missed') return 'pi-exclamation-triangle text-amber-600'
     return 'pi-circle text-gray-400'
 })
 
 const feedbackTextClass = computed(() => {
-    if (slotStatus.value === 'correct') return 'text-emerald-700 font-semibold'
+    if (slotStatus.value === 'correct') return 'text-teal-700 font-semibold'
     if (slotStatus.value === 'incorrect') return 'text-rose-700 font-semibold'
     if (slotStatus.value === 'missed') return 'text-amber-700 font-semibold'
     return 'text-gray-500'

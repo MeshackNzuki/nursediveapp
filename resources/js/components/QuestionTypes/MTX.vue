@@ -4,7 +4,8 @@
         <!-- LEFT PANEL -->
 
         <div>
-            <div v-if="question.intro" class="mb-2 font-bold" v-html="question.intro"></div>
+            <div v-if="question.intro" class="mb-2 font-bold text-gray-950 dark:text-white" v-html="question.intro">
+            </div>
             <TabRenderer v-if="question.tabs && ['nclex', 'cat'].includes(examStore.storeName)" :tabs="question.tabs" />
         </div>
 
@@ -15,8 +16,9 @@
         <div>
 
             <div class="flex items-start gap-2">
-                <img v-if="['nclex', 'cat'].includes(examStore.storeName)" :src="qn_arrow" class="h-8 shrink-0" />
-                <div class="mb-2 font-base leading-relaxed" v-html="question.question"></div>
+                <img :src="qn_arrow" class="h-7 shrink-0" />
+                <div class="mb-2 font-bold text-gray-950 leading-relaxed dark:text-white" v-html="question.question">
+                </div>
             </div>
 
             <!-- MATRIX TABLE -->
@@ -235,13 +237,13 @@ function checkboxClass(rowKey: string, colKey: string) {
     const picked = isChecked(rowKey, colKey)
 
     if (correct && picked)
-        return "accent-teal-500"
+        return "accent-teal-600"
 
     if (!correct && picked)
         return "accent-rose-600"
 
     if (correct && !picked)
-        return "ring-2 ring-teal-500"
+        return "ring-2 ring-teal-600"
 
     return ""
 

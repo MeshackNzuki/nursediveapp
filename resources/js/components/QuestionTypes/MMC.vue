@@ -2,11 +2,16 @@
     <div :class="[question.tabs && ['nclex', 'cat'].includes(examStore.storeName) ? 'grid gap-4 md:grid-cols-2' : '']">
         <!-- Intro & Tabs -->
         <div>
-            <div v-if="question.intro" class="mb-2 font-bold" v-html="question.intro"></div>
+            <div v-if="question.intro" class="mb-2 font-bold text-gray-950 dark:text-white" v-html="question.intro">
+            </div>
             <TabRenderer v-if="question.tabs && ['nclex', 'cat'].includes(examStore.storeName)" :tabs="question.tabs" />
         </div>
         <div>
-            <div v-html="question.question" class="question-text" />
+            <div class="flex items-start gap-2">
+                <img :src="qn_arrow" class="h-7 shrink-0" />
+                <div class="mb-2 font-bold text-gray-950 leading-relaxed dark:text-white" v-html="question.question">
+                </div>
+            </div>
             <!-- Table -->
             <table class="grouping-table border border-gray-200 w-full mt-2">
                 <thead class="bg-gray-100">
@@ -52,6 +57,7 @@
 import { ref, reactive, computed, watchEffect, inject, onUnmounted, toRaw } from "vue";
 import TabRenderer from '../TabRenderer.vue';
 import type { Question } from '../../types/question';
+import qn_arrow from '../../assets/images/qn_arrow.png'
 
 /* ======================
    Props & Emits
@@ -139,9 +145,9 @@ function radioClass(rowKey: string, colKey: string) {
     const correct = isCorrect(rowKey, colKey)
     const picked = selected[rowKey] === colKey
 
-    if (correct && picked) return "accent-teal-500"
+    if (correct && picked) return "accent-teal-600"
     if (!correct && picked) return "accent-rose-600"
-    if (correct && !picked) return "ring-2 ring-teal-500"
+    if (correct && !picked) return "ring-2 ring-teal-600"
     return ""
 }
 

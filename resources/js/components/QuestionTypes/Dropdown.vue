@@ -1,14 +1,15 @@
 <template>
   <div :class="[question.tabs && ['nclex', 'cat'].includes(examStore.storeName) ? 'grid gap-4 md:grid-cols-2' : '']">
     <div>
-      <div v-if="question.intro" class="mb-2 font-bold" v-html="question.intro"></div>
+      <div v-if="question.intro" class="mb-2 font-bold text-gray-950 dark:text-white" v-html="question.intro"></div>
       <TabRenderer v-if="question.tabs && ['nclex', 'cat'].includes(examStore.storeName)" :tabs="question.tabs" />
     </div>
     <div>
 
       <div class="flex items-start gap-2">
-        <img v-if="['nclex', 'cat'].includes(examStore.storeName)" :src="qn_arrow" class="h-8 shrink-0" />
-        <div ref="questionContainer" class="prose max-w-none text-base" v-html="question.question">
+        <img :src="qn_arrow" class="h-7 shrink-0" />
+        <div ref="questionContainer" class="prose max-w-none mb-2 font-bold text-gray-950 leading-relaxed dark:prose-invert dark:text-white"
+          v-html="question.question">
         </div>
       </div>
 
@@ -137,8 +138,8 @@ const feedbackLabel = (groupId: string) => {
 }
 
 const feedbackIcon = (groupId: string) => {
-  if (isCorrectAnswer(groupId)) return 'pi-check-circle text-teal-600'
-  if (isUserSelectedWrong(groupId)) return 'pi-times-circle text-rose-600'
+  if (isCorrectAnswer(groupId)) return 'pi-check text-teal-600'
+  if (isUserSelectedWrong(groupId)) return 'pi-times text-rose-600'
   if (isMissedCorrect(groupId)) return 'pi-exclamation-triangle text-amber-600'
   return 'pi-circle text-gray-400'
 }

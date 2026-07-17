@@ -2,12 +2,13 @@
     <div :class="[question.tabs && ['nclex', 'cat'].includes(examStore.storeName) ? 'grid gap-4 md:grid-cols-2' : '']">
         <!-- Question Prompt -->
         <div>
-            <div v-if="question.intro" class="mb-2 font-bold" v-html="question.intro"></div>
+            <div v-if="question.intro" class="mb-2 font-bold text-gray-950 dark:text-white" v-html="question.intro">
+            </div>
             <TabRenderer v-if="question.tabs && ['nclex', 'cat'].includes(examStore.storeName)" :tabs="question.tabs" />
         </div>
         <div class="flex items-start gap-2">
-            <img v-if="['nclex', 'cat'].includes(examStore.storeName)" :src="qn_arrow" class="h-8 shrink-0" />
-            <div class="mb-2 font-base leading-relaxed" v-html="question.question"></div>
+            <img :src="qn_arrow" class="h-7 shrink-0" />
+            <div class="mb-2 font-bold text-gray-950 leading-relaxed dark:text-white" v-html="question.question"></div>
         </div>
         <!-- Draggable Choices -->
         <Draggable v-model="ordering" item-key="id" :disabled="testMode !== 'exam'" class="space-y-3">
@@ -86,9 +87,9 @@ const getChoiceClass = (id: string, index: number) => {
     const correctIndex = correctOrder.indexOf(id)
     const userIndex = userAnswer.value.indexOf(id)
 
-    if (userIndex === -1) return 'bg-red-50 border-red-200'
-    if (userIndex === correctIndex) return 'bg-green-50 border-green-200'
-    return 'bg-yellow-50 border-yellow-200'
+    if (userIndex === -1) return 'bg-rose-50 border-rose-200'
+    if (userIndex === correctIndex) return 'bg-teal-50 border-teal-200'
+    return 'bg-amber-50 border-amber-200'
 }
 
 const tabApp = ref<ReturnType<typeof createApp> | null>(null)

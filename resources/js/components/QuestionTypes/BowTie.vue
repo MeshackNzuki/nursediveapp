@@ -1,14 +1,16 @@
 <template>
     <div :class="[question.tabs && ['nclex', 'cat'].includes(examStore.storeName) ? 'grid gap-4 md:grid-cols-2' : '']">
         <div>
-            <div v-if="question.intro" class="mb-2 font-bold" v-html="question.intro"></div>
+            <div v-if="question.intro" class="mb-2 font-bold text-gray-950 dark:text-white" v-html="question.intro">
+            </div>
             <TabRenderer v-if="question.tabs && ['nclex', 'cat'].includes(examStore.storeName)" :tabs="question.tabs" />
         </div>
 
         <div class="rounded-xl bg-gray-50 p-4 md:p-6">
             <div class="flex items-start gap-2">
-                <img v-if="['nclex', 'cat'].includes(examStore.storeName)" :src="qn_arrow" class="h-8 shrink-0" />
-                <div class="mb-2 font-base leading-relaxed" v-html="question.question"></div>
+                <img :src="qn_arrow" class="h-7 shrink-0" />
+                <div class="mb-2 font-bold text-gray-950 leading-relaxed dark:text-white" v-html="question.question">
+                </div>
             </div>
 
             <div class="bowtie-board">
@@ -336,7 +338,7 @@ function slotStateClass(group: Group, index: number): string {
 
     switch (slotStatus(slot, group)) {
         case 'correct':
-            return 'border-emerald-500 bg-emerald-50'
+            return 'border-teal-500 bg-teal-50'
         case 'incorrect':
             return 'border-rose-500 bg-rose-50'
         case 'missed':
@@ -357,7 +359,7 @@ function itemStateClass(group: Group, index: number): string {
     if (!slot) return ''
 
     const status = slotStatus(slot, group)
-    if (status === 'correct') return 'border-emerald-400 bg-emerald-100'
+    if (status === 'correct') return 'border-teal-400 bg-teal-100'
     if (status === 'incorrect') return 'border-rose-400 bg-rose-100'
     return ''
 }
@@ -438,14 +440,14 @@ function statusLabel(status: SlotStatus, slot: Slot, group: Group): string {
 }
 
 function feedbackIcon(status: SlotStatus): string {
-    if (status === 'correct') return 'pi-check-circle text-emerald-600'
-    if (status === 'incorrect') return 'pi-times-circle text-rose-600'
+    if (status === 'correct') return 'pi-check text-teal-600'
+    if (status === 'incorrect') return 'pi-times text-rose-600'
     if (status === 'missed') return 'pi-exclamation-triangle text-amber-600'
     return 'pi-circle text-gray-400'
 }
 
 function feedbackTextClass(status: SlotStatus): string {
-    if (status === 'correct') return 'text-emerald-700 font-semibold'
+    if (status === 'correct') return 'text-teal-700 font-semibold'
     if (status === 'incorrect') return 'text-rose-700 font-semibold'
     if (status === 'missed') return 'text-amber-700 font-semibold'
     return 'text-gray-500'

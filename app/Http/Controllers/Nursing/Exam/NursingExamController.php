@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Nursing\Exam;
 
 use App\Models\Nursing\SubTopic;
 use App\Models\Nursing\ExamAttempt;
+use App\Models\Nursing\QuestionNote;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -143,6 +144,10 @@ class NursingExamController extends Controller
             ];
         });
 
+        $censoredExam['notes'] = $this->questionNotesFor(
+            $request,
+            $exam->questions->pluck('id')->all()
+        );
         $censoredExam['full_length'] = $this->shouldTakeWholeExam($request);
 
         return $this->ResSuccess($censoredExam);
@@ -224,8 +229,12 @@ class NursingExamController extends Controller
             'exam' => $attempt->subTopic,
             'sub_topic' => $attempt->subTopic,
             'questions' => $attempt->subTopic->questions,
-            'answers' => json_decode($attempt->answers, true),
-            'results' => json_decode($attempt->results, true),
+            'notes' => $this->questionNotesFor(
+                $request,
+                $attempt->subTopic->questions->pluck('id')->all()
+            ),
+            'answers' => $this->decodeStoredJson($attempt->answers),
+            'results' => $this->decodeStoredJson($attempt->results),
             'score' => $attempt->score,
             'mode' => $attempt->mode,
             'completed_at' => $attempt->completed_at,
@@ -244,8 +253,12 @@ class NursingExamController extends Controller
             'exam' => $attempt->subTopic,
             'sub_topic' => $attempt->subTopic,
             'questions' => $attempt->subTopic->questions,
-            'answers' => json_decode($attempt->answers, true),
-            'results' => json_decode($attempt->results, true),
+            'notes' => $this->questionNotesFor(
+                $request,
+                $attempt->subTopic->questions->pluck('id')->all()
+            ),
+            'answers' => $this->decodeStoredJson($attempt->answers),
+            'results' => $this->decodeStoredJson($attempt->results),
             'mode' => $attempt->mode,
             'suspend_index' => $attempt->suspend_index,
             'full_length' => $this->shouldTakeWholeExam($request),
@@ -285,8 +298,8 @@ class NursingExamController extends Controller
 
         return $this->ResSuccess([
             'exam' => $attempt->subTopic,
-            'answers' => json_decode($attempt->answers, true),
-            'results' => json_decode($attempt->results, true),
+            'answers' => $this->decodeStoredJson($attempt->answers),
+            'results' => $this->decodeStoredJson($attempt->results),
             'score' => $attempt->score,
             'mode' => $attempt->mode,
             'completed_at' => $attempt->completed_at,
@@ -324,5 +337,37 @@ class NursingExamController extends Controller
         }
 
         return true;
+    }
+
+    private function questionNotesFor(Request $request, array $questionIds): array
+    {
+        if (empty($questionIds)) {
+            return [];
+        }
+
+        return QuestionNote::query()
+            ->where('user_id', $request->user()->id)
+            ->whereIn('question_id', $questionIds)
+            ->pluck('note', 'question_id')
+            ->toArray();
+    }
+
+    private function decodeStoredJson($value): array
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+
+        if (!is_string($value) || trim($value) === '') {
+            return [];
+        }
+
+        $decoded = json_decode($value, true);
+
+        if (is_string($decoded)) {
+            $decoded = json_decode($decoded, true);
+        }
+
+        return is_array($decoded) ? $decoded : [];
     }
 }

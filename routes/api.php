@@ -23,6 +23,7 @@ use App\Http\Controllers\Auth\PasswordResetController;
 
 //Nursing
 use App\Http\Controllers\Nursing\Exam\NursingExamController;
+use App\Http\Controllers\Nursing\Exam\QuestionNoteController;
 use App\Http\Controllers\Nclex\MainNclexController;
 use App\Http\Controllers\Nursing\MainNursingController;
 use App\Http\Controllers\Nclex\NclexExamController;
@@ -114,6 +115,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/subjects', [NursingExamController::class, 'getSubjects']);
         Route::get('/chapters/{id}', [StudyController::class, 'getChapters']);
         Route::get('/exam/{id}', [NursingExamController::class, 'showByTitle']);
+        Route::get('/question-notes', [QuestionNoteController::class, 'index']);
+        Route::put('/question-notes/{question}', [QuestionNoteController::class, 'upsert']);
         Route::post('/exam-attempts', [NursingExamController::class, 'store']);
         Route::get('/exam-attempts/{id}', [NursingExamController::class, 'review_attempt']);
         Route::get('/resume-attempt/{id}', [NursingExamController::class, 'resume_attempt']);

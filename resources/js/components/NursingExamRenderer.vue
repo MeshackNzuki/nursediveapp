@@ -1,5 +1,5 @@
 <template>
-    <div class="h-[100dvh] overflow-y-scroll bg-white dark:bg-sky-950 dark:text-slate-300 font-roboto relative">
+    <div class="h-[100dvh] overflow-y-scroll bg-white dark:bg-sky-950 dark:text-slate-300 font-sans relative px-2">
         <!-- Topbar -->
         <div
             class="p-2 2xl:p-3 bg-sky-700  flex items-center justify-between fixed top-0 left-0 right-0  mb-4 text-white z-50 select-none">
@@ -12,8 +12,8 @@
             <span v-if="examStore.questions.length > 0" class="flex flex-row gap-1"><span class="lg:hidden">Q</span>
                 <span class="hidden lg:block">Question</span> {{
                     Number(examStore.currentIndex) + 1
-
-                }} <span class="hidden lg:block">of</span> <span class="lg:hidden">/</span>
+                }} <span class="hidden lg:block">of</span>
+                <span class="lg:hidden">/</span>
                 {{ examStore.questions.length }}</span>
             <button v-if="examStore.testMode != 'exam'" type="button" aria-label="Discuss with AI"
                 @click="ChatOpenned = !ChatOpenned"
@@ -28,8 +28,7 @@
                 <button @click="showModal('calculator_id')" class="inline-flex items-center gap-1 cursor-pointer">
                     <i class="pi pi-calculator"></i> <span class="hidden 2xl:block">Calculator</span>
                 </button>
-                <button v-if="examStore.testMode != 'exam'" @click="examStore.showNotes = !examStore.showNotes"
-                    class="inline-flex items-center gap-1">
+                <button v-if="examStore.testMode != 'exam'" @click="toggleNotes" class="inline-flex items-center gap-1">
                     <i class="pi pi-pencil"></i> <span class="hidden 2xl:block">Notes</span>
                 </button>
                 <Calculator />
@@ -66,6 +65,35 @@
                 <QuestionRenderer :examStore="examStore" :question="examStore.currentQuestion" v-model="currentAnswer"
                     :readonly="examStore.testMode === 'review'"
                     :result="examStore.results[examStore.currentQuestion.id]" />
+                <div v-if="examStore.testMode != 'exam'"
+                    class="mt-8 flex flex-col gap-4 border-t border-gray-200 pt-6 dark:border-gray-200/30">
+                    <div class="flex items flex-col">
+                        <h3 class="text-lg font-semibold mb-6 underline underline-offset-2 decoration-teal-500">Full
+                            Question
+                            Solution <button @click="openNotes" class="ml-auto text-sm text-teal-500 hover:underline">
+                                <i class="pi pi-pencil ms-1"></i>Notes
+                            </button></h3>
+                        <span v-if="!showSolution" class="text-gray-500 mb-2">Answer the question to reveal
+                            solution.</span>
+                        <div :class="[!showSolution ? 'pb-12 mb-6 blur-sm bg-gray-950/25' : 'pb-12 mb-6', store?.currentZoom]"
+                            v-html="examStore.currentQuestion?.solution">
+                        </div>
+                    </div>
+                    <button type="button"
+                        class="group inline-flex w-fit items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-700 shadow-sm transition hover:border-teal-300 hover:bg-teal-100 hover:text-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 dark:border-teal-400/30 dark:bg-teal-400/10 dark:text-teal-200 dark:hover:bg-teal-400/15 dark:hover:text-teal-100 dark:focus:ring-offset-sky-950"
+                        @click="ChatOpenned = !ChatOpenned">
+                        <i class="pi pi-comments text-sm transition group-hover:scale-110"></i>
+                        Dive deeper with AI
+                    </button>
+                </div>
+                <div v-if="examStore.testMode === 'review' && hasCurrentReviewNote"
+                    class="mt-6 rounded-lg border border-amber-200 bg-amber-50/80 px-4 py-3 text-gray-800 shadow-sm dark:border-amber-300/30 dark:bg-amber-300/10 dark:text-amber-50">
+                    <div class="mb-2 flex items-center gap-2 text-sm font-semibold text-amber-700 dark:text-amber-200">
+                        <i class="pi pi-pencil"></i>
+                        <span>My Notes</span>
+                    </div>
+                    <div class="max-w-none text-sm leading-relaxed" v-html="currentReviewNote"></div>
+                </div>
                 <div v-if="examStore.testMode === 'tutor'" class="text-center mt-2 text-lg font-semibold text-gray-800">
                 </div>
                 <div v-if="['tutor', 'review'].includes(examStore.testMode)"
@@ -94,35 +122,26 @@
                     </div>
                 </div>
             </div>
-            <div v-if="examStore.testMode != 'exam'"
-                :class="[showSolution ? ''
-                    : '', 'flex mt-0 md:mt-24 mx-4 mb-24 flex-col gap-4 w-full md:max-w-1/2 border-l border-gray-400 border-dashed dark:border-gray-200 px-2', store?.currentZoom]">
-                <div class="flex items flex-col ">
-                    <h3 class="text-lg font-semibold mb-6 underline underline-offset-2 decoration-teal-500">Full
-                        Question
-                        Solution <button @click="examStore.showNotes = true"
-                            class="ml-auto text-sm text-teal-500 hover:underline">
-                            <i class="pi pi-pencil ms-1"></i>Notes
-                        </button></h3>
-                    <span v-if="!showSolution" class="text-gray-500 mb-2">Answer the question to reveal
-                        solution.</span>
-                    <div :class="[!showSolution ? 'pb-24 mb-12 blur-sm bg-gray-950/25' : 'pb-24 mb-12', store?.currentZoom]"
-                        v-html="examStore.currentQuestion?.solution">
+            <div v-if="showQuestionNavigator"
+                :class="['flex mt-0 md:mt-24 mx-4 lg:mx-2 mb-24 flex-col gap-4 w-full lg:w-auto lg:max-w-[20rem] xl:max-w-[22rem] border-l border-gray-400 border-dashed dark:border-gray-200 px-2 lg:px-1', store?.currentZoom]">
+                <div class="bg-sky-950 p-2 lg:p-3 flex flex-col gap-4 rounded-xl">
+                    <div class="grid grid-cols-5 gap-2 sm:grid-cols-8 lg:grid-cols-5 xl:grid-cols-5">
+                        <button v-for="(question, index) in examStore.questions" :key="question.id" type="button"
+                            :aria-current="index === examStore.currentIndex ? 'true' : undefined"
+                            :title="questionNavTitle(question, index as any)"
+                            :class="questionNavClass(question, index as any)" @click="goToQuestion(index as any)">
+                            <span>{{ index as any + 1 }}</span>
+                            <span v-if="shouldShowQuestionResult(question)" :class="questionResultBadgeClass(question)"
+                                v-html="questionResultMark(question)"></span>
+                        </button>
                     </div>
                 </div>
-                <button type="button"
-                    class="group inline-flex w-fit items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-700 shadow-sm transition hover:border-teal-300 hover:bg-teal-100 hover:text-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 dark:border-teal-400/30 dark:bg-teal-400/10 dark:text-teal-200 dark:hover:bg-teal-400/15 dark:hover:text-teal-100 dark:focus:ring-offset-sky-950"
-                    @click="ChatOpenned = !ChatOpenned">
-                    <i class="pi pi-comments text-sm transition group-hover:scale-110"></i>
-                    Dive deeper with AI
-                </button>
             </div>
             <div v-if="examStore.showNotes && examStore.testMode != 'exam'"
                 class="flex mt-0 md:mt-24 mx-4  md:mb-16 flex-col gap-4 w-full md:max-w-1/2 border-l border-gray-400 border-dashed dark:border-gray-200 px-2 ">
                 <div class="flex items">
                     <h3 class="text-lg font-semibold">Revision Notes</h3>
-                    <button @click="examStore.showNotes = !examStore.showNotes"
-                        class="ml-auto text-sm text-sky-500 hover:underline font-semibold">
+                    <button @click="closeNotes" class="ml-auto text-sm text-sky-500 hover:underline font-semibold">
                         <i class="pi pi-times "></i> Close
                     </button>
                 </div>
@@ -148,18 +167,19 @@
                 </button>
             </div>
             <div class="flex items-center justify-between flex-row  border-s border-e mx-2 gap-2 h-full">
-                <button v-if="!examStore.isFirstQuestion" @click="examStore.prev" :disabled="examStore.isFirstQuestion"
+                <button v-if="!examStore.isFirstQuestion" @click="goToPreviousQuestion"
+                    :disabled="examStore.isFirstQuestion"
                     class="px-4 py-2 cursor-pointer rounded flex justify-center items-center gap-1 font-semibold">
                     <i class="pi pi-arrow-left"></i> Previous
                 </button>
-                <button v-if="examStore.testMode === 'review'" @click="examStore.next"
+                <button v-if="examStore.testMode === 'review'" @click="goToNextQuestion"
                     :disabled="examStore.isLastQuestion"
                     class="px-4 py-2 cursor-pointer rounded flex justify-center items-center gap-1 font-semibold">
                     <span v-if="!examStore.isLastQuestion">Next</span>
                     <span v-else>Done</span>
                     <i class="pi pi-arrow-right"></i>
                 </button>
-                <button v-else @click="examStore.isLastQuestion ? examStore.submitResults() : examStore.next()"
+                <button v-else @click="submitOrNextQuestion"
                     class="px-4 py-2  cursor-pointer rounded flex justify-center items-center gap-1 font-semibold">
                     <span v-if="!examStore.isLastQuestion">Next</span>
                     <span v-else>Complete</span>
@@ -221,7 +241,6 @@
                         </li>
                     </ul>
                 </div>
-
                 <!-- CTA -->
                 <button @click="$router.push(pricingRoute('nursing'))" class="w-full py-4 rounded-full font-semibold text-white text-lg
              bg-gradient-to-r from-orange-500 to-yellow-400
@@ -263,15 +282,16 @@ const progress = ref('Preparing Test...')
 
 const { zoomIn, zoomOut } = useMainStore();
 const store = useMainStore();
-const { user, pricingRoute } = useAuthStore();
+const { user, pricingRoute, active } = useAuthStore();
 const route = useRoute()
 const examStore = useNursingExamStore() as any
 const confirm = useConfirm()
-const notes = ref('')
 const difficulty = ref('')
 const type = ref('')
 const provided_payload = ref(false);
 const ChatOpenned = ref(false);
+const pendingNoteValues = new Map<number, string>();
+const noteSaveTimers = new Map<number, ReturnType<typeof setTimeout>>();
 
 
 const showModal = async (modalId: any) => {
@@ -287,6 +307,175 @@ const toggleSolution = (payload) => {
 
 provide('showSolution', toggleSolution);
 
+const showQuestionNavigator = computed(() => {
+    return examStore.questions.length > 0 && (examStore.testMode === 'exam' || !examStore.showNotes);
+})
+
+function openNotes() {
+    examStore.showNotes = true;
+}
+
+function closeNotes() {
+    examStore.showNotes = false;
+}
+
+function toggleNotes() {
+    examStore.showNotes ? closeNotes() : openNotes();
+}
+
+const parseRecordPayload = (value: any, fallback = {}) => {
+    if (value == null) return fallback;
+    if (typeof value !== 'string') return value;
+
+    try {
+        return JSON.parse(value);
+    } catch {
+        return fallback;
+    }
+}
+
+const tryParseAnswerJson = (value: string) => {
+    try {
+        return JSON.parse(value);
+    } catch {
+        return undefined;
+    }
+}
+
+const normalizeComparableObject = (value: any): any => {
+    if (Array.isArray(value)) {
+        return value.map((item) => normalizeComparableObject(item));
+    }
+
+    if (value && typeof value === 'object') {
+        return Object.keys(value).sort().reduce((acc, key) => {
+            acc[key] = normalizeComparableObject(value[key]);
+            return acc;
+        }, {} as Record<string, any>);
+    }
+
+    return value;
+}
+
+const stableAnswerStringify = (value: any) => JSON.stringify(normalizeComparableObject(value));
+
+function answerValueExists(value: any): boolean {
+    if (value == null) return false;
+
+    if (Array.isArray(value)) {
+        return value.some((item) => answerValueExists(item));
+    }
+
+    if (typeof value === 'string') {
+        const parsed = tryParseAnswerJson(value);
+        if (parsed !== undefined) return answerValueExists(parsed);
+
+        return value.trim().length > 0;
+    }
+
+    if (typeof value === 'object') {
+        return Object.values(value).some((item) => answerValueExists(item));
+    }
+
+    return true;
+}
+
+function normalizeAnswerForComparison(answer: any): string[] {
+    if (answer == null) return [];
+
+    if (typeof answer === 'string') {
+        const parsed = tryParseAnswerJson(answer);
+        if (parsed !== undefined) return normalizeAnswerForComparison(parsed);
+
+        const trimmed = answer.trim();
+        return trimmed ? [trimmed] : [];
+    }
+
+    if (Array.isArray(answer)) {
+        return answer
+            .flatMap((item) => normalizeAnswerForComparison(item))
+            .filter((item) => item.length > 0);
+    }
+
+    if (typeof answer === 'object') {
+        return [stableAnswerStringify(answer)];
+    }
+
+    return [String(answer)];
+}
+
+function answersMatch(userAnswer: any, correctAnswer: any) {
+    const userValues = normalizeAnswerForComparison(userAnswer);
+    const correctValues = normalizeAnswerForComparison(correctAnswer);
+
+    if (userValues.length === 0 || correctValues.length === 0) return false;
+
+    return JSON.stringify([...userValues].sort()) === JSON.stringify([...correctValues].sort());
+}
+
+function questionAnswer(question: any) {
+    return examStore.answers?.[question.id];
+}
+
+function hasQuestionAnswer(question: any) {
+    return answerValueExists(questionAnswer(question));
+}
+
+function isQuestionCorrect(question: any) {
+    const result = examStore.results?.[question.id];
+
+    if (typeof result?.correct === 'boolean') {
+        return result.correct;
+    }
+
+    if (!hasQuestionAnswer(question)) return false;
+
+    return answersMatch(questionAnswer(question), question.correct_answer);
+}
+
+function shouldShowQuestionResult(question: any) {
+    return ['tutor', 'review'].includes(examStore.testMode) && hasQuestionAnswer(question);
+}
+
+function questionNavClass(question: any, index: number) {
+    const baseClass = 'relative flex h-8 w-11 items-center justify-center rounded-md border text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 dark:focus:ring-offset-sky-950';
+    const activeClass = index === examStore.currentIndex
+        ? 'ring-2 ring-sky-500 ring-offset-2 dark:ring-offset-sky-950'
+        : 'hover:border-sky-300 hover:bg-sky-50';
+    const answered = hasQuestionAnswer(question);
+
+    let stateClass = 'border-gray-200 bg-white text-gray-600 dark:border-gray-600 dark:bg-sky-950 dark:text-slate-300';
+
+    if (['tutor', 'review'].includes(examStore.testMode) && answered) {
+        stateClass = isQuestionCorrect(question)
+            ? 'border-emerald-400 bg-emerald-50 text-emerald-800 dark:border-emerald-400/40 dark:bg-emerald-400/15 dark:text-emerald-100'
+            : 'border-rose-400 bg-rose-50 text-rose-700 dark:border-rose-400/40 dark:bg-rose-400/15 dark:text-rose-100';
+    } else if (examStore.testMode === 'exam' && answered) {
+        stateClass = 'border-teal-400 bg-teal-50 text-teal-800 dark:border-teal-400/40 dark:bg-teal-400/15 dark:text-teal-100';
+    }
+    return `${baseClass} ${stateClass} ${activeClass}`;
+}
+
+function questionResultBadgeClass(question: any) {
+    return isQuestionCorrect(question)
+        ? 'absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-600 text-[9px] text-white'
+        : 'absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] text-white';
+}
+
+function questionResultMark(question: any) {
+    return isQuestionCorrect(question) ? '&#x2713' : '&#10007;';
+}
+
+function questionNavTitle(question: any, index: number) {
+    const states = [`Question ${index + 1}`];
+
+    if (index === examStore.currentIndex) states.push('current');
+    if (examStore.testMode === 'exam' && hasQuestionAnswer(question)) states.push('attempted');
+    if (shouldShowQuestionResult(question)) states.push(isQuestionCorrect(question) ? 'correct' : 'incorrect');
+
+    return states.join(' - ');
+}
+
 
 const currentAnswer = computed({
     get: () => {
@@ -296,14 +485,144 @@ const currentAnswer = computed({
 
     set: (val) => {
         const id = examStore.currentQuestion?.id
-        if (id && (examStore.testMode !== 'review' || examStore.testMode !== 'tutor')) {
+        if (id && examStore.testMode !== 'review') {
             examStore.answerQuestion(id, val)
-        }
-        if (notes.value?.trim()) {
-            examStore.answerQuestionNotes(id, notes.value)
         }
     }
 })
+
+const notes = computed({
+    get: () => {
+        const id = examStore.currentQuestion?.id;
+
+        return id ? examStore.notes[id] || '' : '';
+    },
+
+    set: (value: string) => {
+        const id = examStore.currentQuestion?.id;
+
+        if (!id) return;
+
+        examStore.answerQuestionNotes(id, value);
+        queueNoteSave(id, value);
+    }
+})
+
+const currentReviewNote = computed(() => {
+    const id = examStore.currentQuestion?.id;
+
+    return id ? examStore.notes[id] || '' : '';
+})
+
+const hasCurrentReviewNote = computed(() => hasVisibleNote(currentReviewNote.value))
+
+function hasVisibleNote(note: string) {
+    return note
+        .replace(/<[^>]*>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .trim()
+        .length > 0;
+}
+
+function queueNoteSave(questionId: number, note: string) {
+    pendingNoteValues.set(questionId, note);
+
+    const existingTimer = noteSaveTimers.get(questionId);
+    if (existingTimer) {
+        clearTimeout(existingTimer);
+    }
+
+    noteSaveTimers.set(
+        questionId,
+        setTimeout(() => {
+            flushNoteSave(questionId);
+        }, 600)
+    );
+}
+
+async function flushNoteSave(questionId: number) {
+    const timer = noteSaveTimers.get(questionId);
+    if (timer) {
+        clearTimeout(timer);
+        noteSaveTimers.delete(questionId);
+    }
+
+    if (!pendingNoteValues.has(questionId)) return;
+
+    const note = pendingNoteValues.get(questionId) || '';
+    pendingNoteValues.delete(questionId);
+
+    try {
+        await examStore.saveQuestionNote(questionId, note);
+    } catch (error) {
+        pendingNoteValues.set(questionId, note);
+        console.error('Error saving question note:', error);
+    }
+}
+
+async function flushCurrentNoteSave() {
+    const id = examStore.currentQuestion?.id;
+
+    if (id) {
+        await flushNoteSave(id);
+    }
+}
+
+async function flushAllNoteSaves() {
+    await Promise.all([...pendingNoteValues.keys()].map((questionId) => flushNoteSave(questionId)));
+}
+
+async function goToPreviousQuestion() {
+    await flushCurrentNoteSave();
+    examStore.prev();
+}
+
+async function goToNextQuestion() {
+    await flushCurrentNoteSave();
+    examStore.next();
+}
+
+function canNavigateToQuestion(index: number) {
+    if (index <= examStore.currentIndex) return true;
+
+    if (
+        index >= examStore.no_of_qns_before_paywall &&
+        !examStore.is_current_exam_full_length
+    ) {
+        examStore.show_paywall = true;
+        return false;
+    }
+
+    if (!active("nursing") && examStore.questions.length > 100 && index > 50) {
+        examStore.show_paywall = true;
+        return false;
+    }
+
+    return true;
+}
+
+async function goToQuestion(index: number) {
+    if (index === examStore.currentIndex || !canNavigateToQuestion(index)) return;
+
+    await flushCurrentNoteSave();
+    examStore.currentIndex = index;
+}
+
+async function submitOrNextQuestion() {
+    await flushCurrentNoteSave();
+
+    if (examStore.isLastQuestion) {
+        await examStore.submitResults();
+        return;
+    }
+
+    examStore.next();
+}
+
+async function finishExam() {
+    await flushCurrentNoteSave();
+    examStore.exitExam();
+}
 
 // const scoreDisplay = computed(() => {
 //     const total = examStore.questions.length
@@ -330,8 +649,9 @@ async function loadExam() {
                 description: attempt.sub_topic.description
             },
             questions: attempt.questions,
-            answers: JSON.parse(attempt.answers),
-            results: JSON.parse(attempt.results),
+            answers: parseRecordPayload(attempt.answers),
+            results: parseRecordPayload(attempt.results),
+            notes: parseRecordPayload(attempt.notes),
             is_exam_full_length: attempt.full_length,
             mode: mode
         })
@@ -352,8 +672,9 @@ async function loadExam() {
                     description: attempt.sub_topic.description
                 },
                 questions: attempt.questions,
-                answers: JSON.parse(attempt.answers),
-                results: JSON.parse(attempt.results),
+                answers: parseRecordPayload(attempt.answers),
+                results: parseRecordPayload(attempt.results),
+                notes: parseRecordPayload(attempt.notes),
                 mode: attempt.mode,
                 suspend_index: attempt.suspend_index,
                 is_exam_full_length: attempt.full_length,
@@ -371,6 +692,7 @@ async function loadExam() {
                             description: examData.description
                         },
                         questions: examData.questions,
+                        notes: parseRecordPayload(examData.notes),
                         is_exam_full_length: examData.full_length,
                     })
                 })
@@ -393,7 +715,7 @@ function exitExamConfirm() {
         rejectClass:
             "bg-teal-500 hover:bg-gray-400 bg-teal-500 text-white font-bold py-2 px-4 rounded-full",
         accept: () => {
-            examStore.exitExam()
+            finishExam()
         },
         reject: () => {
             //
@@ -444,14 +766,16 @@ function clearTimer() {
     }
 }
 
-
 watch(() => examStore.currentQuestion, (newId, oldId) => {
+    if (oldId?.id) {
+        flushNoteSave(oldId.id);
+    }
+
     provided_payload.value = false
     startTimer()
     difficulty.value = ['Easy',
         'Medium', 'Difficult'][Math.floor(Math.random() * 3)]
 })
-
 
 onMounted(() => {
     examStore.reset()
@@ -472,6 +796,7 @@ onMounted(() => {
 
 
 onBeforeUnmount(() => {
+    flushAllNoteSaves()
     examStore.reset()
     examStore.resetTimer()
     clearTimer()
@@ -481,6 +806,7 @@ onBeforeUnmount(() => {
         alert('Right click is disabled during the exam.');
     });
 })
+
 
 function pauseExam() {
     confirm.require({
@@ -493,7 +819,7 @@ function pauseExam() {
         rejectClass: "bg-teal-500 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded-full",
         accept: () => {
             examStore.pauseTimer()
-            examStore.exitExam()
+            finishExam()
         },
 
         reject: () => {

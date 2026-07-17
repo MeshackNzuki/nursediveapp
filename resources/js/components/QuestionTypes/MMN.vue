@@ -4,7 +4,8 @@
         <!-- LEFT PANEL -->
 
         <div>
-            <div v-if="question.intro" class="mb-2 font-bold" v-html="question.intro"></div>
+            <div v-if="question.intro" class="mb-2 font-bold text-gray-950 dark:text-white" v-html="question.intro">
+            </div>
             <TabRenderer v-if="question.tabs && ['nclex', 'cat'].includes(examStore.storeName)" :tabs="question.tabs" />
         </div>
 
@@ -14,8 +15,9 @@
         <div>
 
             <div class="flex items-start gap-2">
-                <img v-if="['nclex', 'cat'].includes(examStore.storeName)" :src="qn_arrow" class="h-8 shrink-0" />
-                <div class="mb-2 font-base leading-relaxed" v-html="question.question"></div>
+                <img :src="qn_arrow" class="h-7 shrink-0" />
+                <div class="mb-2 font-bold text-gray-950 leading-relaxed dark:text-white" v-html="question.question">
+                </div>
             </div>
 
             <!-- instruction -->
@@ -27,20 +29,13 @@
 
             <!-- OPTIONS -->
 
-            <div v-for="(option, label) in question.options" :key="label" class="mb-2 ms-4">
+            <div v-for="(option, label) in question.options" :key="label" class="mb-2 ms-2 md:ms-8">
 
                 <label v-if="option.choice != null && option.choice != '' && option.choice != 'None'"
                     class="flex items-start gap-2" :class="{
-                        'text-teal-500 font-semibold': isCorrectAnswer(String(label)) && shouldShowExplanation,
+                        'text-teal-600 font-semibold': isCorrectAnswer(String(label)) && shouldShowExplanation,
                         'text-rose-600 font-semibold': isUserSelectedWrong(String(label)) && shouldShowExplanation
                     }">
-
-                    <i :class="`pi mt-1.5 text-lg ${isCorrectAnswer(String(label)) && shouldShowExplanation
-                        ? 'pi-check-circle'
-                        : isUserSelectedWrong(String(label)) && shouldShowExplanation
-                            ? 'pi-times-circle'
-                            : ''
-                        }`"></i>
 
                     <input type="checkbox"
                         class="checkbox checkbox-sm mt-1 cursor-pointer border-gray-600 text-gray-700 dark:text-slate-100 dark:border-white"
@@ -49,11 +44,15 @@
 
                     <div>
                         <span v-html="label" class="font-semibold"></span>.
-                        <span v-html="option.choice"></span>
+                        <span v-html="option.choice"></span> <span class="text-lg font-normal">{{ isCorrectAnswer(String(label)) && shouldShowExplanation
+                            ? '&#x2713'
+                            : isUserSelectedWrong(String(label)) && shouldShowExplanation
+                                ? '&#10007;'
+                                : '' }}</span>
 
                         <div v-if="shouldShowExplanation && option.reason" :class="{
-                            'bg-teal-100 text-teal-800 p-0.5 rounded': isCorrectAnswer(String(label)),
-                            'bg-rose-100 text-rose-700 p-0.5 rounded': isUserSelectedWrong(String(label))
+                            'bg-teal-100/90 text-teal-800 p-0.5 rounded': isCorrectAnswer(String(label)),
+                            'bg-rose-100/90 text-rose-800 p-0.5 rounded': isUserSelectedWrong(String(label))
                         }" v-html="option.reason"></div>
                     </div>
 

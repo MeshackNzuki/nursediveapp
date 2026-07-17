@@ -6,7 +6,7 @@
 
         <div>
 
-            <div v-if="question.intro" class="mb-2 font-bold" v-html="question.intro">
+            <div v-if="question.intro" class="mb-2 font-bold text-gray-950 dark:text-white" v-html="question.intro">
             </div>
 
             <TabRenderer v-if="question.tabs && ['nclex', 'cat'].includes(examStore.storeName)" :tabs="question.tabs" />
@@ -21,8 +21,9 @@
 
 
             <div class="flex items-start gap-2">
-                <img v-if="['nclex', 'cat'].includes(examStore.storeName)" :src="qn_arrow" class="h-8 shrink-0" />
-                <div ref="questionContainer" class="prose max-w-none text-base" v-html="question.question">
+                <img :src="qn_arrow" class="h-7 shrink-0" />
+                <div ref="questionContainer" class="prose max-w-none mb-2 font-bold text-gray-950 leading-relaxed dark:prose-invert dark:text-white"
+                    v-html="question.question">
                 </div>
             </div>
 
@@ -392,7 +393,7 @@ function setDropdownVisualState() {
         }
 
         if (status === 'correct') {
-            select.className = `${baseClass} border-emerald-500 bg-emerald-50 text-emerald-800`
+            select.className = `${baseClass} border-teal-500 bg-teal-50 text-teal-800`
             select.style.color = '#047857'
             select.style.backgroundColor = '#ecfdf5'
             select.style.borderColor = '#10b981'
@@ -503,14 +504,14 @@ watch(
 )
 
 function feedbackIcon(status: ClozeStatus) {
-    if (status === 'correct') return 'pi-check-circle text-emerald-600'
-    if (status === 'incorrect') return 'pi-times-circle text-rose-600'
+    if (status === 'correct') return 'pi-check text-teal-600'
+    if (status === 'incorrect') return 'pi-times text-rose-600'
     if (status === 'missed') return 'pi-exclamation-triangle text-amber-600'
     return 'pi-circle text-gray-400'
 }
 
 function feedbackTextClass(status: ClozeStatus) {
-    if (status === 'correct') return 'text-emerald-700 font-semibold'
+    if (status === 'correct') return 'text-teal-700 font-semibold'
     if (status === 'incorrect') return 'text-rose-700 font-semibold'
     if (status === 'missed') return 'text-amber-700 font-semibold'
     return 'text-gray-500'
