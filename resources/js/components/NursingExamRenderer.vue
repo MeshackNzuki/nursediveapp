@@ -123,9 +123,9 @@
                 </div>
             </div>
             <div v-if="showQuestionNavigator"
-                :class="['flex mt-0 md:mt-24 mx-4 lg:mx-2 mb-24 flex-col gap-4 w-full lg:w-auto lg:max-w-[20rem] xl:max-w-[22rem] border-l border-gray-400 border-dashed dark:border-gray-200 px-2 lg:px-1', store?.currentZoom]">
-                <div class="bg-sky-950 p-2 lg:p-3 flex flex-col gap-4 rounded-xl">
-                    <div class="grid grid-cols-5 gap-2 sm:grid-cols-8 lg:grid-cols-5 xl:grid-cols-5">
+                :class="['flex mt-0 md:mt-24 mb-24 flex-col w-full lg:w-lg lg:max-w-[20rem] xl:max-w-[22rem] border-l border-gray-400 border-dashed dark:border-gray-200 px-2 ', store?.currentZoom]">
+                <div class="bg-sky-950 p-3 flex flex-col gap-4 rounded-xl">
+                    <div class="flex  gap-2 flex-wrap">
                         <button v-for="(question, index) in examStore.questions" :key="question.id" type="button"
                             :aria-current="index === examStore.currentIndex ? 'true' : undefined"
                             :title="questionNavTitle(question, index as any)"
@@ -440,7 +440,7 @@ function shouldShowQuestionResult(question: any) {
 function questionNavClass(question: any, index: number) {
     const baseClass = 'relative flex h-8 w-11 items-center justify-center rounded-md border text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 dark:focus:ring-offset-sky-950';
     const activeClass = index === examStore.currentIndex
-        ? 'ring-2 ring-sky-500 ring-offset-2 dark:ring-offset-sky-950'
+        ? 'ring-2 ring-sky-500 ring-offset-2 dark:ring-offset-sky-950 font-semibold'
         : 'hover:border-sky-300 hover:bg-sky-50';
     const answered = hasQuestionAnswer(question);
 
@@ -448,10 +448,10 @@ function questionNavClass(question: any, index: number) {
 
     if (['tutor', 'review'].includes(examStore.testMode) && answered) {
         stateClass = isQuestionCorrect(question)
-            ? 'border-emerald-400 bg-emerald-50 text-emerald-800 dark:border-emerald-400/40 dark:bg-emerald-400/15 dark:text-emerald-100'
-            : 'border-rose-400 bg-rose-50 text-rose-700 dark:border-rose-400/40 dark:bg-rose-400/15 dark:text-rose-100';
+            ? 'border-emerald-400 bg-emerald-100 text-emerald-800 dark:border-emerald-400/40 dark:bg-emerald-400/15 dark:text-emerald-100'
+            : 'border-rose-400 bg-rose-100 text-rose-700 dark:border-rose-400/40 dark:bg-rose-400/15 dark:text-rose-100';
     } else if (examStore.testMode === 'exam' && answered) {
-        stateClass = 'border-teal-400 bg-teal-50 text-teal-800 dark:border-teal-400/40 dark:bg-teal-400/15 dark:text-teal-100';
+        stateClass = 'border-teal-400 bg-teal-100 text-teal-800 dark:border-teal-400/40 dark:bg-teal-400/15 dark:text-teal-100';
     }
     return `${baseClass} ${stateClass} ${activeClass}`;
 }
