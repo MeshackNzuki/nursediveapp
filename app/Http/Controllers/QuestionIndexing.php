@@ -198,7 +198,7 @@ class QuestionIndexing extends Controller
             // =========================
             // TEAS
             // =========================
-            TeasQuestion::where()->select('id', 'question', 'question_slug')
+            TeasQuestion::where('updated_at', ">", $fiveMinutesAgo)->select('id', 'question', 'question_slug')
                 ->chunkById(1000, function ($rows) use ($stopwords) {
 
                     foreach ($rows as $q) {
