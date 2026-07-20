@@ -376,6 +376,8 @@ class QuestionIndexing extends Controller
 
     public function linkIncremental()
     {
+
+
         $stopwords = ['a', 'an', 'the', 'and', 'or', 'of', 'to', 'in', 'on', 'at', 'for', 'with', 'is', 'are'];
 
         $startDate = now()->subWeeks(2)->startOfDay();
@@ -424,9 +426,11 @@ class QuestionIndexing extends Controller
                 }
 
                 // 🔧 FIX 2: avoid unnecessary writes
-                if ($q->question_slug !== $newSlug) {
+                $finalSlug = $newSlug . '-' . $q->id;
+
+                if ($q->question_slug !== $finalSlug) {
                     $q->update([
-                        'question_slug' => $newSlug . '-' . $q->id
+                        'question_slug' => $finalSlug
                     ]);
                 }
             } catch (\Exception $e) {
