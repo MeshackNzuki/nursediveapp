@@ -182,7 +182,7 @@ class QuestionIndexing extends Controller
                             $newSlug = implode('-', $parts);
 
                             $q->update([
-                                'question_slug' => $newSlug
+                                'question_slug' => $newSlug . $q->id
                             ]);
                         } catch (\Exception $e) {
 
@@ -244,7 +244,7 @@ class QuestionIndexing extends Controller
                             if ($q->question_slug !== $newSlug) {
 
                                 $q->update([
-                                    'question_slug' => $newSlug
+                                    'question_slug' => $newSlug . $q->id
                                 ]);
                             }
                         } catch (\Exception $e) {
@@ -345,146 +345,146 @@ class QuestionIndexing extends Controller
                     $fileName = "{$type}_sitemap_{$startId}.xml";
 
                     $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-                    $xmlContent .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+$xmlContent .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
 
-                    foreach ($questions as $q) {
-                        // Skip empty slugs just in case
-                        if (empty($q->question_slug)) continue;
+    foreach ($questions as $q) {
+    // Skip empty slugs just in case
+    if (empty($q->question_slug)) continue;
 
-                        $lastMod = $q->updated_at ? $q->updated_at->toAtomString() : now()->toAtomString();
+    $lastMod = $q->updated_at ? $q->updated_at->toAtomString() : now()->toAtomString();
 
-                        $xmlContent .= " <url>\n";
-                        $xmlContent .= " <loc>{$domain}/questions/{$type}/{$q->question_slug}</loc>\n";
-                        $xmlContent .= " <lastmod>{$lastMod}</lastmod>\n";
-                        $xmlContent .= " <changefreq>weekly</changefreq>\n";
-                        $xmlContent .= " </url>\n";
-                    }
-
-                    $xmlContent .= '</urlset>';
-
-                    // Save sitemap to storage/app/sitemaps/
-                    Storage::put("sitemaps/{$fileName}", $xmlContent);
-
-                    echo "✅ Generated {$fileName} (IDs {$questions->first()->id} → {$questions->last()->id})\n";
-                }
-            } catch (\Exception $e) {
-                echo "❌ Error generating {$type} sitemap: " . $e->getMessage() . "\n";
-            }
-        }
-
-        return "✅ All sitemap chunks generated successfully!";
+    $xmlContent .= " <url>\n";
+        $xmlContent .= " <loc>{$domain}/questions/{$type}/{$q->question_slug}</loc>\n";
+        $xmlContent .= " <lastmod>{$lastMod}</lastmod>\n";
+        $xmlContent .= " <changefreq>weekly</changefreq>\n";
+        $xmlContent .= " </url>\n";
     }
 
+    $xmlContent .= '</urlset>';
 
-    public function linkIncremental()
-    {
-        $stopwords = ['a', 'an', 'the', 'and', 'or', 'of', 'to', 'in', 'on', 'at', 'for', 'with', 'is', 'are'];
+// Save sitemap to storage/app/sitemaps/
+Storage::put("sitemaps/{$fileName}", $xmlContent);
 
-        $startDate = now()->subWeeks(2)->startOfDay();
+echo "✅ Generated {$fileName} (IDs {$questions->first()->id} → {$questions->last()->id})\n";
+}
+} catch (\Exception $e) {
+echo "❌ Error generating {$type} sitemap: " . $e->getMessage() . "\n";
+}
+}
 
-        $rows = NursingQuestion::where('updated_at', '>=', $startDate)
-            ->select('id', 'question', 'question_slug')
-            ->get();
-
-        foreach ($rows as $q) {
-
-            try {
-
-                if (empty($q->question)) {
-                    continue;
-                }
-
-                $cleanQuestion = html_entity_decode(strip_tags($q->question));
-                $cleanQuestion = preg_replace('/\s+/', ' ', $cleanQuestion);
-
-                $base = Str::slug($cleanQuestion);
-
-                $words = explode('-', $base);
-                $truncated = '';
-
-                foreach ($words as $word) {
-                    $next = $truncated ? $truncated . '-' . $word : $word;
-
-                    if (strlen($next) > 80) {
-                        break;
-                    }
-
-                    $truncated = $next;
-                }
-
-                $parts = explode('-', $truncated);
-
-                while (!empty($parts) && in_array(end($parts), $stopwords)) {
-                    array_pop($parts);
-                }
-
-                $newSlug = implode('-', $parts);
-
-                // 🔧 FIX 1: prevent empty slug
-                if (empty($newSlug)) {
-                    continue;
-                }
-
-                // 🔧 FIX 2: avoid unnecessary writes
-                if ($q->question_slug !== $newSlug) {
-                    $q->update([
-                        'question_slug' => $newSlug
-                    ]);
-                }
-            } catch (\Exception $e) {
-                echo "❌ Error Nursing ID {$q->id}: {$e->getMessage()}\n";
-            }
-        }
-    }
+return "✅ All sitemap chunks generated successfully!";
+}
 
 
-    public function sitemapIncremental($startId = 0)
-    {
-        $domain = 'https://www.nursedive.com';
-        $type = 'nursing';
+public function linkIncremental()
+{
+$stopwords = ['a', 'an', 'the', 'and', 'or', 'of', 'to', 'in', 'on', 'at', 'for', 'with', 'is', 'are'];
 
-        try {
-            $query = NursingQuestion::select('id', 'question_slug', 'updated_at')
-                ->where('id', '>=', $startId)
-                ->orderBy('id');
+$startDate = now()->subWeeks(2)->startOfDay();
 
-            $fileName = "{$type}_sitemap_from_{$startId}.xml";
+$rows = NursingQuestion::where('updated_at', '>=', $startDate)
+->select('id', 'question', 'question_slug')
+->get();
 
-            $xmlContent = '
+foreach ($rows as $q) {
+
+try {
+
+if (empty($q->question)) {
+continue;
+}
+
+$cleanQuestion = html_entity_decode(strip_tags($q->question));
+$cleanQuestion = preg_replace('/\s+/', ' ', $cleanQuestion);
+
+$base = Str::slug($cleanQuestion);
+
+$words = explode('-', $base);
+$truncated = '';
+
+foreach ($words as $word) {
+$next = $truncated ? $truncated . '-' . $word : $word;
+
+if (strlen($next) > 70) {
+break;
+}
+
+$truncated = $next;
+}
+
+$parts = explode('-', $truncated);
+
+while (!empty($parts) && in_array(end($parts), $stopwords)) {
+array_pop($parts);
+}
+
+$newSlug = implode('-', $parts);
+
+// 🔧 FIX 1: prevent empty slug
+if (empty($newSlug)) {
+continue;
+}
+
+// 🔧 FIX 2: avoid unnecessary writes
+if ($q->question_slug !== $newSlug) {
+$q->update([
+'question_slug' => $newSlug . $q->id
+]);
+}
+} catch (\Exception $e) {
+echo "❌ Error Nursing ID {$q->id}: {$e->getMessage()}\n";
+}
+}
+}
+
+
+public function sitemapIncremental($startId = 0)
+{
+$domain = 'https://www.nursedive.com';
+$type = 'nursing';
+
+try {
+$query = NursingQuestion::select('id', 'question_slug', 'updated_at')
+->where('id', '>=', $startId)
+->orderBy('id');
+
+$fileName = "{$type}_sitemap_from_{$startId}.xml";
+
+$xmlContent = '
 <?xml version="1.0" encoding="UTF-8"?>' . "\n";
-            $xmlContent .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+$xmlContent .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
 
-            $lastId = $startId + 1;
+    $lastId = $startId + 1;
 
-            // chunk internally ONLY for memory safety (not sitemap splitting)
-            $query->chunk(2000, function ($questions) use (&$xmlContent, $domain, $type, &$lastId) {
-                foreach ($questions as $q) {
+    // chunk internally ONLY for memory safety (not sitemap splitting)
+    $query->chunk(2000, function ($questions) use (&$xmlContent, $domain, $type, &$lastId) {
+    foreach ($questions as $q) {
 
-                    if (empty($q->question_slug)) {
-                        continue;
-                    }
-
-                    $lastId = $q->id;
-
-                    $lastMod = $q->updated_at
-                        ? $q->updated_at->toAtomString()
-                        : now()->toAtomString();
-
-                    $xmlContent .= " <url>\n";
-                    $xmlContent .= " <loc>{$domain}/questions/{$type}/{$q->question_slug}</loc>\n";
-                    $xmlContent .= " <lastmod>{$lastMod}</lastmod>\n";
-                    $xmlContent .= " <changefreq>weekly</changefreq>\n";
-                    $xmlContent .= " </url>\n";
-                }
-            });
-
-            $xmlContent .= '</urlset>';
-
-            Storage::put("sitemaps/{$fileName}", $xmlContent);
-
-            return "✅ Generated {$fileName} (from {$startId} → {$lastId})";
-        } catch (\Exception $e) {
-            return "❌ Error generating {$type} sitemap: " . $e->getMessage();
-        }
+    if (empty($q->question_slug)) {
+    continue;
     }
+
+    $lastId = $q->id;
+
+    $lastMod = $q->updated_at
+    ? $q->updated_at->toAtomString()
+    : now()->toAtomString();
+
+    $xmlContent .= " <url>\n";
+        $xmlContent .= " <loc>{$domain}/questions/{$type}/{$q->question_slug}</loc>\n";
+        $xmlContent .= " <lastmod>{$lastMod}</lastmod>\n";
+        $xmlContent .= " <changefreq>weekly</changefreq>\n";
+        $xmlContent .= " </url>\n";
+    }
+    });
+
+    $xmlContent .= '</urlset>';
+
+Storage::put("sitemaps/{$fileName}", $xmlContent);
+
+return "✅ Generated {$fileName} (from {$startId} → {$lastId})";
+} catch (\Exception $e) {
+return "❌ Error generating {$type} sitemap: " . $e->getMessage();
+}
+}
 }
