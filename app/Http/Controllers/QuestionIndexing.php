@@ -131,13 +131,15 @@ class QuestionIndexing extends Controller
 
             $todayStart = now()->startOfDay();
 
+            $fiveMinutesAgo = now()->subMinutes(5);
+
 
             //$todayStart = now()->subMonth()->startOfDay();
 
             // =========================
             // NURSING
             // =========================
-            NursingQuestion::where('updated_at', ">", $todayStart)->select('id', 'question')
+            NursingQuestion::where('updated_at', ">", $fiveMinutesAgo)->select('id', 'question')
                 ->chunkById(1000, function ($rows) use ($stopwords) {
 
                     foreach ($rows as $q) {
