@@ -132,13 +132,12 @@ class QuestionIndexing extends Controller
             //$todayStart = now()->startOfDay();
 
 
-            $todayStart = now()->subMonth()->startOfDay();
+            //$todayStart = now()->subMonth()->startOfDay();
 
             // =========================
             // NURSING
             // =========================
-            NursingQuestion::where('updated_at', '<', $todayStart)
-                ->select('id', 'question')
+            NursingQuestion::select('id', 'question')
                 ->chunkById(1000, function ($rows) use ($stopwords) {
 
                     foreach ($rows as $q) {
@@ -197,8 +196,7 @@ class QuestionIndexing extends Controller
             // =========================
             // TEAS
             // =========================
-            TeasQuestion::where('updated_at', '<', $todayStart)
-                ->select('id', 'question', 'question_slug')
+            TeasQuestion::select('id', 'question', 'question_slug')
                 ->chunkById(1000, function ($rows) use ($stopwords) {
 
                     foreach ($rows as $q) {
