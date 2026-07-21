@@ -53,7 +53,7 @@ export const useAuthStore = defineStore("useAuthStore", {
             return Date.now() > expiry.getTime();
         },
         active(productCode) {
-            const subs = this.user.subscriptions;
+            const subs = this.user?.subscriptions;
             if (!subs || !subs[productCode]) return false;
             if (this.isTrial(productCode)) return false;
             const validPlans = ["premium", "standard", "premium_plus"];
@@ -66,14 +66,14 @@ export const useAuthStore = defineStore("useAuthStore", {
             return this.active(productCode);
         },
         isTrial(productCode) {
-            const subs = this.user.subscriptions;
+            const subs = this.user?.subscriptions;
             if (!subs || !subs[productCode]) return false;
             return subs[productCode].some(
                 (p) => !this.isPlanExpired(p) && p.plan_name === "trial",
             );
         },
         wasTrial(productCode) {
-            const subs = this.user.subscriptions;
+            const subs = this.user?.subscriptions;
             if (!subs || !subs[productCode]) return false;
             return subs[productCode].some(
                 (p) => this.isPlanExpired(p) && p.plan_name === "trial",
@@ -81,7 +81,7 @@ export const useAuthStore = defineStore("useAuthStore", {
         },
 
         daysLeft(productCode) {
-            const subs = this.user.subscriptions;
+            const subs = this.user?.subscriptions;
             if (!subs || !subs[productCode]) return 0;
             const nowDate = new Date();
             const future = subs[productCode]

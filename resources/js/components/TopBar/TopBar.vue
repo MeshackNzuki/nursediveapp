@@ -11,19 +11,18 @@
                     stroke="currentColor" :class="[
                         mainStore.isMobile ? 'size-6' : 'size-10 p-2'
                     ]">
-                    <!-- Hamburger -->
                     <path v-if="!mainStore.sidebarOpen" stroke-linecap="round" stroke-linejoin="round"
                         d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25" />
-
-                    <!-- Close -->
                     <path v-else stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </span>
+
             <!-- Greeting -->
             <div
-                class="hidden relative md:flex  bg-sky-900 rounded-full px-4 shadow-md text-white text-sm font-semibold">
-                <span class="font-light" v-if="user?.name">
-                    {{ greetingText }}, {{ user?.name.split(" ")[0] }}! </span>
+                class="hidden relative md:flex bg-sky-900 rounded-full px-4 shadow-md text-white text-sm font-semibold">
+                <span v-if="isAuthenticated && user?.name" class="font-light">
+                    {{ greetingText }}, {{ user.name.split(" ")[0] }}!
+                </span>
             </div>
 
             <!-- Mobile Back -->
@@ -35,14 +34,6 @@
 
             <!-- Right Icons -->
             <div class="flex justify-center items-center gap-4 h-full">
-                <!-- Notifications -->
-                <router-link to="/notifications" class="p-1 flex items-center justify-center">
-                    <div class="indicator">
-                        <i class="pi pi-bell"></i>
-                        <span class="badge badge-xs border-0 bg-rose-400 indicator-item"></span>
-                    </div>
-                </router-link>
-
                 <!-- Theme Toggle -->
                 <svg v-if="!isDark" @click="toggleDark()" class="cursor-pointer stroke-cyan-500 fill-sky-500"
                     xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -57,89 +48,82 @@
                         d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
                 </svg>
 
-                <!-- Logout -->
-                <div @click="logout" class="flex items-center justify-center">
-                    <div class="cursor-pointer text-gray-50 dark:text-amber-400">
-                        <i class="pi pi-power-off"></i>
-                    </div>
-                </div>
-
-                <!-- Settings -->
-                <router-link to="/settings" class="p-1 flex items-center justify-center" @click="toggleRightPanel">
-                    <i class="pi pi-cog"></i>
-                </router-link>
-
-                <!-- Profile -->
-                <router-link to="/account" class="cursor-pointer">
-                    <div
-                        class="w-7 h-7 rounded-full ring-2 ring-yellow-500 ring-offset-base-100 flex items-center justify-center">
-                        <span class="text-center">
-                            {{ user?.name?.charAt(0) }}
+                <template v-if="isAuthenticated">
+                    <!-- Logout -->
+                    <button type="button" @click="logout" class="flex items-center justify-center">
+                        <span class="cursor-pointer text-gray-50 dark:text-amber-400">
+                            <i class="pi pi-power-off"></i>
                         </span>
-                    </div>
-                </router-link>
+                    </button>
+
+                    <!-- Profile -->
+                    <router-link to="/account" class="cursor-pointer">
+                        <div
+                            class="w-7 h-7 rounded-full ring-2 ring-yellow-500 ring-offset-base-100 flex items-center justify-center">
+                            <span class="text-center">
+                                {{ user?.name?.charAt(0) }}
+                            </span>
+                        </div>
+                    </router-link>
+                </template>
+
+                <div v-else class="topbar-auth-actions">
+                    <router-link :to="loginRoute" class="topbar-auth-button topbar-auth-button--ghost">
+                        Login
+                    </router-link>
+                    <router-link :to="registerRoute" class="topbar-auth-button topbar-auth-button--primary">
+                        Register
+                    </router-link>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from "vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useDark, useToggle } from "@vueuse/core";
 import { useMainStore } from "../../stores";
 import { useAuthStore } from "../../stores/authStore";
 
-
 const mainStore = useMainStore();
-const { user, logout } = useAuthStore();
+const authStore = useAuthStore();
 const route = useRoute();
 
 const isDark = useDark({ disableTransition: false });
-
 const toggleDark = useToggle(isDark);
 
-const show = ref(false);
-const login = ref(false);
-const location = ref("");
-const greetingText = ref("");
+const user = computed(() => authStore.user);
+const isAuthenticated = computed(() => authStore.is_authenticated);
+const logout = () => authStore.logout();
 
-/* 🔹 Compute sidebar position cleanly */
-const sidebarPosition = computed(() => {
-    if (mainStore.isMobile) {
-        return mainStore.sidebarOpen ? "left-52" : "left-0";
-    }
-    return mainStore.sidebarOpen ? "left-64" : "left-24";
-});
-
-/* 🔹 Dynamic greeting every minute */
-const updateGreeting = () => {
+const greetingText = computed(() => {
     const h = new Date().getHours();
     if (h < 12) return "Good Morning";
     if (h < 18) return "Good Afternoon";
     return "Good Evening";
-};
-greetingText.value = updateGreeting();
-setInterval(() => {
-    greetingText.value = updateGreeting();
-}, 60000);
-
-/* 🔹 Toggle right panel */
-const toggleRightPanel = () => {
-    show.value = !show.value;
-};
-
-/* 🔹 Track route changes */
-onMounted(() => {
-    login.value = route.path === "/login";
-    location.value = route.path.split("/")[1];
 });
 
-watch(
-    () => route.path,
-    (path) => {
-        login.value = path === "/login";
-        location.value = path.split("/")[1];
+const authRedirectQuery = computed(() => ({
+    redirect: route.fullPath,
+}));
+
+const loginRoute = computed(() => ({
+    path: "/login",
+    query: authRedirectQuery.value,
+}));
+
+const registerRoute = computed(() => ({
+    path: "/register",
+    query: authRedirectQuery.value,
+}));
+
+const sidebarPosition = computed(() => {
+    if (mainStore.isMobile) {
+        return mainStore.sidebarOpen ? "left-52" : "left-0";
     }
-);
+
+    return mainStore.sidebarOpen ? "left-64" : "left-24";
+});
 </script>

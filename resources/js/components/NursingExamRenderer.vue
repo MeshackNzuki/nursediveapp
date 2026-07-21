@@ -206,7 +206,7 @@
            shadow-xl text-center">
                 <!-- Header -->
                 <h3 class="font-semibold text-2xl mb-2">
-                    Hello {{ user.name.split(' ')[0] }},
+                    Hello {{ user?.name.split(' ')[0] }},
                 </h3>
                 <p class="text-gray-600 mb-6">
                     Thank you for exploring <span class="font-semibold text-gray-900">Nursedive</span>.
@@ -220,7 +220,6 @@
                         Upgrade your plan to continue your full-length assessment and unlock all
                         premium features, including:
                     </p>
-
                     <!-- Feature checklist -->
                     <ul class="space-y-3">
                         <li class="flex items-start gap-3">
@@ -243,11 +242,10 @@
                 </div>
                 <!-- CTA -->
                 <button @click="$router.push(pricingRoute('nursing'))" class="w-full py-4 rounded-full font-semibold text-white text-lg
-             bg-gradient-to-r from-orange-500 to-yellow-400
-             hover:opacity-90 transition cursor-pointer shadow-md">
+                    bg-gradient-to-r from-orange-500 to-yellow-400
+                    hover:opacity-90 transition cursor-pointer shadow-md">
                     Upgrade Subscription
                 </button>
-
                 <!-- Subtle footer -->
                 <p class="mt-4 text-sm text-gray-500">
                     Upgrade anytime. No interruption to your progress.

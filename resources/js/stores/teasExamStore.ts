@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import router from "../router";
 import { useAuthStore } from "./authStore";
+import { savePendingAttempt } from "../utils/pendingAttempt";
 
 type Question = {
     id: number;
@@ -210,6 +211,29 @@ export const useTeasExamStore = defineStore("useTeasExamStore", {
                 time_taken: this.timeTaken,
             };
             this.testMode = "exam";
+
+            if (!useAuthStore().is_authenticated) {
+                savePendingAttempt({
+                    product: "teas",
+                    productLabel: "TEAS",
+                    endpoint: "/teas/exam-attempts",
+                    reportBaseRoute: "/teas/performance-report",
+                    fallbackRoute: "/teas/previous-attempts",
+                    payload,
+                    score: Math.round(score),
+                    examTitle: this.exam?.title || this.exam?.name,
+                });
+                this.reset();
+                router.push({
+                    path: "/register",
+                    query: {
+                        redirect: "/teas/previous-attempts",
+                        saveAttempt: "1",
+                    },
+                });
+                return;
+            }
+
             await axios.post("/teas/exam-attempts", payload).then((res) => {
                 this.reset();
                 router.push(`/teas/performance-report/${res.data.data.id}`);

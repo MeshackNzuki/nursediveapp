@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import router from "../router";
 import { useAuthStore } from "./authStore";
+import { savePendingAttempt } from "../utils/pendingAttempt";
 
 type Question = {
     id: number;
@@ -406,6 +407,29 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
                 time_taken: this.timeTaken,
             };
             this.testMode = "exam";
+
+            if (!useAuthStore().is_authenticated) {
+                savePendingAttempt({
+                    product: "nursing",
+                    productLabel: "Nursing",
+                    endpoint: "/nursing/exam-attempts",
+                    reportBaseRoute: "/nursing/performance-report",
+                    fallbackRoute: "/nursing/previous-attempts",
+                    payload,
+                    score: Math.round(score),
+                    examTitle: this.exam?.title || this.exam?.name,
+                });
+                this.reset();
+                router.push({
+                    path: "/register",
+                    query: {
+                        redirect: "/nursing/previous-attempts",
+                        saveAttempt: "1",
+                    },
+                });
+                return;
+            }
+
             await axios.post("/nursing/exam-attempts", payload).then((res) => {
                 this.reset();
                 router.push(`/nursing/performance-report/${res.data.data.id}`);

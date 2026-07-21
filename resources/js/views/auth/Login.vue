@@ -71,6 +71,10 @@
                             {{ message }}
                         </span>
 
+                        <GuestSavePrompt v-if="pendingAttempt" :product="pendingAttempt.product"
+                            :product-label="pendingAttempt.productLabel" compact :show-actions="false"
+                            :show-benefits="false" />
+
                         <Transition name="slide-fade" mode="out-in">
                             <form v-if="step === 1" key="step1" class="space-y-5" @submit.prevent>
                                 <div>
@@ -90,7 +94,10 @@
 
                                 <p class="text-end text-sm text-slate-600">
                                     No account yet?
-                                    <router-link to="/register" class="text-sky-500 hover:underline">Register now
+                                    <router-link :to="{
+                                        path: '/register',
+                                        query: route.query
+                                    }" class="text-sky-500 hover:underline">Register now
                                     </router-link>
                                 </p>
                             </form>
@@ -137,6 +144,8 @@ import { useRouter, useRoute } from "vue-router";
 import { useConfirm } from "primevue/useconfirm";
 import { useMainStore } from "../../stores";
 import Logo from "../../components/Logo.vue";
+import GuestSavePrompt from "../../components/GuestSavePrompt.vue";
+import { flushPendingAttempt, getPendingAttempt } from "../../utils/pendingAttempt";
 
 const { login } = useAuthStore();
 const { closeSidebar } = useMainStore();
@@ -149,6 +158,7 @@ const route = useRoute();
 const message = ref("");
 const type = ref("password");
 const step = ref(1);
+const pendingAttempt = ref(getPendingAttempt());
 
 const confirm = useConfirm();
 const handleNextStep = () => {
@@ -170,7 +180,13 @@ const handleNextStep = () => {
                     rejectClass:
                         "bg-sky-400 hover:bg-sky-500 bg-sky-500 text-white font-bold py-2 px-4 rounded-full",
                     accept: () => {
-                        router.push("/register?email=" + email.value);
+                        router.push({
+                            path: "/register",
+                            query: {
+                                ...route.query,
+                                email: email.value,
+                            },
+                        });
                         step.value = 1;
                         email.value = "";
                     },
@@ -203,7 +219,14 @@ const handleLogin = async () => {
         login(data.data);
         if (data.data.roles && data.data.token) {
             const redirectTo = route.query.redirect || "/";
-            router.push(redirectTo);
+
+            try {
+                const savedAttempt = await flushPendingAttempt();
+                router.push(savedAttempt?.redirectTo || redirectTo);
+            } catch (err) {
+                console.error("Could not save pending attempt:", err);
+                router.push(redirectTo);
+            }
         }
     } catch (error) {
         message.value = error.response?.data?.message || "Please try again!";

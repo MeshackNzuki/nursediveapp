@@ -388,36 +388,70 @@ router.beforeEach((to, from, next) => {
     const { user, is_authenticated, active, isTrial, pricingRoute } =
         useAuthStore();
 
-    if (is_authenticated) {
-        // Protect admin/super routes
-        if (to.path.startsWith("/admin")) {
-            const userRole = user?.roles?.[0];
-            if (["super-admin", "admin"].includes(userRole)) {
-                return next();
-            }
-            return next("/"); // redirect to home (or another safe page)
+    // Admin routes
+    if (to.path.startsWith("/admin")) {
+        if (!is_authenticated) {
+            return next({
+                path: "/login",
+                query: { redirect: to.fullPath },
+            });
         }
 
-        if (to.meta.requiresNclexSubscription) {
-            if (active("nclex") && !isTrial("nclex")) {
-                return next();
-            } else {
-                return next({
-                    path: pricingRoute("nclex"),
-                    query: { redirect: to.fullPath },
-                });
-            }
+        const userRole = user?.roles?.[0];
+
+        if (["super-admin", "admin"].includes(userRole)) {
+            return next();
         }
 
-        return next();
-    } else if (["/login", "/register", "/reset-password"].includes(to.path)) {
-        return next();
-    } else {
+        return next("/");
+    }
+
+    // NCLEX stays authenticated-only
+    if (/^\/nclex(\/|$)/.test(to.path) && !is_authenticated) {
         return next({
             path: "/login",
             query: { redirect: to.fullPath },
         });
     }
+
+    // NCLEX premium routes
+    if (to.meta.requiresNclexSubscription) {
+        if (!is_authenticated) {
+            return next({
+                path: "/login",
+                query: { redirect: to.fullPath },
+            });
+        }
+
+        if (active("nclex") && !isTrial("nclex")) {
+            return next();
+        }
+
+        return next({
+            path: pricingRoute("nclex"),
+            query: { redirect: to.fullPath },
+        });
+    }
+
+    // Everything else is public
+
+    //if to login or register - append params
+            if (
+                ["/login", "/register"].includes(to.path) &&
+                !to.query.redirect &&
+                from.fullPath
+            ) {
+                return next({
+                    path: to.path,
+                    query: {
+                        ...to.query,
+                        redirect: from.fullPath,
+                    },
+                });
+            }
+
+    return next();
+
 });
 
 export default router;

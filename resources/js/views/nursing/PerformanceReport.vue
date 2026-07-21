@@ -7,7 +7,7 @@
                     <div>
                         <h1 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">Performance Report</h1>
                     </div>
-                    <div class="flex flex-wrap gap-2">
+                    <div v-if="!isGuest" class="flex flex-wrap gap-2">
                         <CommonButton v-if="!isCompleted" icon2="pi pi-pause" buttonText="Resume Exam"
                             class="bg-gradient-to-r from-amber-500 to-orange-500" :action="resumeExam" />
                         <CommonButton icon2="pi pi-refresh" buttonText="Review Attempt" :action="reviewAnswers" />
@@ -17,7 +17,9 @@
                 </div>
             </div>
 
-            <div v-if="!report"
+            <GuestSavePrompt v-if="isGuest" product="nursing" product-label="Nursing" :redirect="route.fullPath" />
+
+            <div v-else-if="!report"
                 class="rounded-[2rem] bg-white p-10 text-center text-slate-500 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-800">
                 Loading report...
             </div>
@@ -268,9 +270,11 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CommonButton from '../../components/Buttons/CommonButton.vue'
+import GuestSavePrompt from '../../components/GuestSavePrompt.vue'
+import { useAuthStore } from '../../stores/authStore'
 import { normalizeText } from '../../utils/normalizeText'
 import { secondsToHms } from '../../utils/secondsToHms'
 
@@ -281,13 +285,15 @@ type ResultItem = {
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 
 const modalRef = ref<HTMLDialogElement | null>(null)
 const report = ref<any>(null)
+const isGuest = computed(() => !authStore.is_authenticated)
 
 const attemptId = route.path.split('/').pop()
 
-onMounted(() => {
+const fetchReport = () => {
     axios.get(`/nursing/performance-report/${attemptId}`)
         .then((res) => {
             report.value = res.data.data
@@ -296,6 +302,21 @@ onMounted(() => {
             console.error('Error fetching performance report:', err)
             report.value = null
         })
+}
+
+onMounted(() => {
+    if (!isGuest.value) {
+        fetchReport()
+    }
+})
+
+watch(isGuest, (guest) => {
+    if (guest) {
+        report.value = null
+        return
+    }
+
+    fetchReport()
 })
 
 

@@ -68,6 +68,10 @@
 
                         <p class="mb-5 text-sm text-slate-600">Set up your profile to start your prep journey.</p>
 
+                        <GuestSavePrompt v-if="pendingAttempt" :product="pendingAttempt.product"
+                            :product-label="pendingAttempt.productLabel" compact :show-actions="false"
+                            :show-benefits="false" />
+
                         <span v-if="message"
                             class="mb-4 block rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
                             {{ message }}
@@ -113,7 +117,8 @@
 
                             <p class="text-end text-sm text-slate-600">
                                 Already have an account?
-                                <router-link to="/login" class=" text-sky-500 hover:underline">Log In
+                                <router-link :to="{ path: '/login', query: route.query }"
+                                    class=" text-sky-500 hover:underline">Log In
                                 </router-link>
                             </p>
                         </form>
@@ -131,6 +136,8 @@ import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/authStore";
 import Logo from "../../components/Logo.vue";
 import { useMainStore } from "../../stores";
+import GuestSavePrompt from "../../components/GuestSavePrompt.vue";
+import { flushPendingAttempt, getPendingAttempt } from "../../utils/pendingAttempt";
 
 const { login, is_authenticated } = useAuthStore();
 const { device_has_account_created, setDeviceHasAccountCreated } = useMainStore();
@@ -144,6 +151,7 @@ const password = ref("");
 const type = ref("password");
 const message = ref();
 const isLoading = ref(false);
+const pendingAttempt = ref(getPendingAttempt());
 
 function togglePasswordVisibility() {
     type.value = type.value === "password" ? "text" : "password";
@@ -166,10 +174,18 @@ const handleRegister = async () => {
 
     isLoading.value = true;
     axios.post("/create-client-account", registration_data)
-        .then((res) => {
+        .then(async (res) => {
             login(res.data.data);
             setDeviceHasAccountCreated();
-            router.push("/welcome");
+            const redirectTo = route.query.redirect as string || '/welcome';
+
+            try {
+                const savedAttempt = await flushPendingAttempt();
+                router.push(savedAttempt?.redirectTo || redirectTo);
+            } catch (err) {
+                console.error("Could not save pending attempt:", err);
+                router.push(redirectTo);
+            }
         })
         .catch((err) => {
             message.value = err.response?.data.message;
@@ -188,7 +204,10 @@ onMounted(() => {
     }
     if (device_has_account_created) {
         alert("Please sign in to your existing account.");
-        router.push("/login");
+        router.push({
+            path: "/login",
+            query: route.query,
+        });
     }
 });
 </script>

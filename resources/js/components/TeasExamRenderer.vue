@@ -108,7 +108,7 @@
                         <div class="flex items-center gap-1">
                             <i class="pi pi-user-edit text-teal-500"></i>
                             <span>Your Answer: {{ examStore.answers[examStore.currentQuestion.id] || 'Not answered'
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
                 </div>
@@ -195,7 +195,7 @@
             class="fixed inset-0 bg-gray-900/20 bg-opacity-50 flex items-center justify-center z-50 text-gray-700">
             <div class="bg-gray-50 rounded-lg p-6 w-full max-w-sm text-center">
                 <h3 class="font-semibold text-lg dark">
-                    <span class="">Hello {{ user.name.split(' ')[0] }},</span> <span class="font-normal text-md">thank
+                    <span class="">Hello {{ user?.name.split(' ')[0] }},</span> <span class="font-normal text-md">thank
                         you
                         for trying
                         Nursedive!</span>

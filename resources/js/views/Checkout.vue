@@ -46,6 +46,7 @@ import { StripeElements, StripeElement } from "vue-stripe-js"
 import CommonButton from "../components/Buttons/CommonButton.vue"
 import axios from "axios"
 import { useMainStore, } from "../stores"
+import { useAuthStore } from "../stores/authStore.js"
 import { useRoute } from "vue-router"
 import paypalIcon from '../assets/images/paypal-icon.svg'
 import router from "../router"
@@ -58,6 +59,7 @@ const amount = ref(79)
 const route = useRoute()
 
 const mainStore = useMainStore()
+const { is_authenticated } = useAuthStore()
 
 
 const stripeOptions = ref({})
@@ -75,6 +77,12 @@ const paymentElementOptions = ref({})
 const elementsComponent = ref()
 
 onMounted(async () => {
+
+  if (!is_authenticated) {
+
+    router.push("/register");
+
+  }
 
   await loadStripe(stripeKey)
 

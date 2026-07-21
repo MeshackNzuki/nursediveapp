@@ -146,8 +146,8 @@ axios.interceptors.response.use(
     },
     function (error) {
         if (error.response?.status === 401) {
-            const { logout } = useAuthStore();
-            logout(true);
+            // const { logout } = useAuthStore();
+            // logout(true);  was openned due to partial auth nature on v2
         }
         if (error.config?.showLoader !== false) {
             showLoader.value = false;

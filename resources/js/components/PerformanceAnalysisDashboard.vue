@@ -18,15 +18,19 @@
                 </div>
             </div>
 
-            <div v-if="loading" class="analysis-state">
-                Loading performance analysis...
-            </div>
-
-            <div v-else-if="fetchError" class="analysis-state-error">
-                {{ fetchError }}
-            </div>
+            <GuestSavePrompt v-if="isGuest" :product="guestPromptProduct" :product-label="productLabel"
+                :redirect="reportsRoute" />
 
             <template v-else>
+                <div v-if="loading" class="analysis-state">
+                    Loading performance analysis...
+                </div>
+
+                <div v-else-if="fetchError" class="analysis-state-error">
+                    {{ fetchError }}
+                </div>
+
+                <template v-else>
                 <div class="analysis-stat-grid">
                     <StatCard icon="pi pi-file" label="Total Attempts" :quantity="attempts.length"
                         :description="`${completedCount} completed`" variant="sky" pattern="grid" />
@@ -222,6 +226,7 @@
                         </div>
                     </section>
                 </template>
+                </template>
             </template>
         </div>
     </div>
@@ -229,11 +234,13 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import CommonButton from './Buttons/CommonButton.vue'
+import GuestSavePrompt from './GuestSavePrompt.vue'
 import Gaunge from './Gaunge.vue'
 import StatCard from './Stats/NewStat.vue'
+import { useAuthStore } from '../stores/authStore'
 import { normalizeText } from '../utils/normalizeText'
 
 type Attempt = {
@@ -256,15 +263,24 @@ const props = withDefaults(defineProps<{
 })
 
 const router = useRouter()
+const authStore = useAuthStore()
 
 const attempts = ref<Attempt[]>([])
 const loading = ref(true)
 const fetchError = ref('')
+const isGuest = computed(() => !authStore.is_authenticated)
 
 const apiProduct = computed(() => props.product.replace(/^\/+/, ''))
 const baseRoute = computed(() => `/${apiProduct.value}`)
 const reportsRoute = computed(() => `${baseRoute.value}/previous-attempts`)
 const testsRoute = computed(() => `${baseRoute.value}/`)
+const guestPromptProduct = computed(() => {
+    if (apiProduct.value === 'nursing' || apiProduct.value === 'teas') {
+        return apiProduct.value
+    }
+
+    return undefined
+})
 
 const fetchAttempts = async () => {
     loading.value = true
@@ -281,7 +297,25 @@ const fetchAttempts = async () => {
     }
 }
 
-fetchAttempts()
+onMounted(() => {
+    if (isGuest.value) {
+        loading.value = false
+        return
+    }
+
+    fetchAttempts()
+})
+
+watch(isGuest, (guest) => {
+    if (guest) {
+        attempts.value = []
+        fetchError.value = ''
+        loading.value = false
+        return
+    }
+
+    fetchAttempts()
+})
 
 const scoreNumber = (score: number | string | undefined) => Number(score) || 0
 const hasAttempts = computed(() => attempts.value.length > 0)

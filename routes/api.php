@@ -82,7 +82,31 @@ Route::get('/nursing/questions', [QuestionIndexing::class, 'indexNursingQuestion
 Route::get('/teas/questions', [QuestionIndexing::class, 'indexTeasQuestions']);
 Route::get('/sub-topics-seo/{id}', [QuestionIndexing::class, 'indexSubTopicsForSEO']);
 
+
+//pages that do not require auth in v2
+Route::group(['prefix' => 'nursing', 'middleware' => 'optional.auth'], function () {
+    Route::get('/exams', [NursingExamController::class, 'index']);
+    Route::get('/subjects', [NursingExamController::class, 'getSubjects']);
+    Route::get('/chapters/{id}', [StudyController::class, 'getChapters']);
+    Route::get('/exam/{id}', [NursingExamController::class, 'showByTitle']);
+    Route::get('/exam-subjects/{slug}', [NursingExamController::class, 'getExamSubjects']);
+    Route::get('/exam-subtopics-per-subject/{slug}', [NursingExamController::class, 'getSubtopicsPerSubject']);
+    //study materials
+    Route::get('/study-topic/{topicId}/sub-chapters', [StudyController::class, 'getTopics']);
+    Route::get('/lessons/{sub_topic_id}', [StudyController::class, 'getSubtopicLessons']);
+    //search topics
+    Route::get('/search/subtopics', [NursingExamController::class, 'searchExamSubtopics']);
+});
+
+Route::group(['prefix' => 'teas', 'middleware' => 'optional.auth'], function () {
+    Route::get('/exam-topics-per-subject/{slug}', [TeasTopicController::class, 'getTopicsBySubject']);
+    Route::get('/study-chapters', [TeasTopicController::class, 'getGuideChapters']);
+    Route::get('/exam/{id}', [TeasExamController::class, 'showByTitle']);
+});
+
+
 //start Protected routes
+
 Route::middleware('auth:sanctum')->group(function () {
     //create payments 
     Route::prefix('payments')->group(function () {
@@ -109,36 +133,35 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //exams
     Route::group(['prefix' => 'nursing'], function () {
-
         Route::get('/dashdata', [MainNursingController::class, 'dashData']);
-        Route::get('/exams', [NursingExamController::class, 'index']);
-        Route::get('/subjects', [NursingExamController::class, 'getSubjects']);
-        Route::get('/chapters/{id}', [StudyController::class, 'getChapters']);
-        Route::get('/exam/{id}', [NursingExamController::class, 'showByTitle']);
+        // Route::get('/exams', [NursingExamController::class, 'index']);
+        // Route::get('/subjects', [NursingExamController::class, 'getSubjects']);
+        // Route::get('/chapters/{id}', [StudyController::class, 'getChapters']);
+        // Route::get('/exam/{id}', [NursingExamController::class, 'showByTitle']);
         Route::get('/question-notes', [QuestionNoteController::class, 'index']);
         Route::put('/question-notes/{question}', [QuestionNoteController::class, 'upsert']);
         Route::post('/exam-attempts', [NursingExamController::class, 'store']);
         Route::get('/exam-attempts/{id}', [NursingExamController::class, 'review_attempt']);
         Route::get('/resume-attempt/{id}', [NursingExamController::class, 'resume_attempt']);
-        Route::get('/exam-subjects/{slug}', [NursingExamController::class, 'getExamSubjects']);
-        Route::get('/exam-subtopics-per-subject/{slug}', [NursingExamController::class, 'getSubtopicsPerSubject']);
+        // Route::get('/exam-subjects/{slug}', [NursingExamController::class, 'getExamSubjects']);
+        // Route::get('/exam-subtopics-per-subject/{slug}', [NursingExamController::class, 'getSubtopicsPerSubject']);
         Route::get('/previous-attempts', [NursingExamController::class, 'previous_attempts']);
         Route::get('/performance-report/{attemptId}', [NursingExamController::class, 'performance_report']);
         //study materials
-        Route::get('/study-topic/{topicId}/sub-chapters', [StudyController::class, 'getTopics']);
-        Route::get('/lessons/{sub_topic_id}', [StudyController::class, 'getSubtopicLessons']);
+        // Route::get('/study-topic/{topicId}/sub-chapters', [StudyController::class, 'getTopics']);
+        // Route::get('/lessons/{sub_topic_id}', [StudyController::class, 'getSubtopicLessons']);
         //search topics
-        Route::get('/search/subtopics', [NursingExamController::class, 'searchExamSubtopics']);
+        // Route::get('/search/subtopics', [NursingExamController::class, 'searchExamSubtopics']);
     });
 
     Route::group(['prefix' => 'teas'], function () {
         Route::get('/dashdata', [MainTeasController::class, 'dashData']);
-        Route::get('/exam-topics-per-subject/{slug}', [TeasTopicController::class, 'getTopicsBySubject']);
-        Route::get('/study-chapters', [TeasTopicController::class, 'getGuideChapters']);
+        // Route::get('/exam-topics-per-subject/{slug}', [TeasTopicController::class, 'getTopicsBySubject']);
+        // Route::get('/study-chapters', [TeasTopicController::class, 'getGuideChapters']);
         Route::post('/exam-attempts', [TeasExamController::class, 'store_attempt']);
         Route::get('/exam-attempts/{id}', [TeasExamController::class, 'review_attempt']);
         Route::get('/resume-attempt/{id}', [TeasExamController::class, 'resume_attempt']);
-        Route::get('/exam/{id}', [TeasExamController::class, 'showByTitle']);
+        // Route::get('/exam/{id}', [TeasExamController::class, 'showByTitle']);
         Route::get('/previous-attempts', [TeasExamController::class, 'previous_attempts']);
         Route::get('/performance-report/{attemptId}', [TeasExamController::class, 'performance_report']);
     });

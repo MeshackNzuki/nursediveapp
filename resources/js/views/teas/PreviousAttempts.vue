@@ -10,7 +10,9 @@
                 class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-300 via-sky-300 to-purple-200 opacity-30 blur-[100px] rounded-full">
             </div>
         </div>
-        <Table :headers="['Exam Title', 'Attempted At', 'Scores', 'ACTIONS']" title="Previous Attempts"
+        <GuestSavePrompt v-if="isGuest" product="teas" product-label="TEAS" redirect="/teas/previous-attempts" />
+
+        <Table v-else :headers="['Exam Title', 'Attempted At', 'Scores', 'ACTIONS']" title="Previous Attempts"
             search_placeholder="Search Attempt" :rows="filteredAttempts.length" v-model:query="searchTerm">
             <template v-slot:content>
                 <tr v-for="(attempt, index) in filteredAttempts" :key="index">
@@ -43,19 +45,23 @@
     </div>
 </template>
 
-<script setup lang="ts">import { onMounted, ref, computed } from 'vue'
+<script setup lang="ts">import { onMounted, ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Table from '../../components/Tables/mainTable.vue'
 import axios from 'axios'
 import SmallButton from '../../components/Buttons/Small.vue'
+import GuestSavePrompt from '../../components/GuestSavePrompt.vue'
+import { useAuthStore } from '../../stores/authStore'
 import { normalizeText } from '../../utils/normalizeText'
 import { dynamicProgressStyle } from '../../utils/grader'
 
 
 const router = useRouter()
+const authStore = useAuthStore()
 
 const attempts = ref<any[]>([])
 const searchTerm = ref('')
+const isGuest = computed(() => !authStore.is_authenticated)
 
 // Computed filtered attempts
 const filteredAttempts = computed(() => {
@@ -75,7 +81,15 @@ const fetchAttempts = async () => {
 }
 
 onMounted(() => {
-    fetchAttempts()
+    if (!isGuest.value) {
+        fetchAttempts()
+    }
+})
+
+watch(isGuest, (guest) => {
+    if (!guest) {
+        fetchAttempts()
+    }
 })
 
 function viewReport(attemptId: number) {

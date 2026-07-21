@@ -319,10 +319,12 @@ class NursingExamController extends Controller
 
     public function shouldTakeWholeExam($request)
     {
-        $user = User::find($request->user()->id);
+
+        if ($request->user()) {
+            $user = User::find($request->user()->id);
+        } else return false;
 
         $nursing_sub = json_decode($user->subscription->subscriptions)->nursing;
-
 
         if ($nursing_sub[0]->plan_name == 'trial' ||  Carbon::parse($nursing_sub[0]->expires)->isPast()) {
             if (
@@ -341,7 +343,8 @@ class NursingExamController extends Controller
 
     private function questionNotesFor(Request $request, array $questionIds): array
     {
-        if (empty($questionIds)) {
+
+        if (empty($questionIds && $request->user())) {
             return [];
         }
 

@@ -19,24 +19,23 @@ class TeasExamController extends Controller
     public function showByTitle(Request $request, $id)
     {
         $user = $request->user();
+        $full_length = false;
 
-        $full_length = true;
+        if ($user) {
+            $full_length = true;
+            $subscriptionData = json_decode(optional($user->subscription)->subscriptions ?? '{}');
+            $teas_sub = $subscriptionData->teas ?? [];
 
+            if (!empty($teas_sub) && isset($teas_sub[0])) {
+                $plan = $teas_sub[0];
 
-        $subscriptionData = json_decode(optional($user->subscription)->subscriptions ?? '{}');
-        $teas_sub = $subscriptionData->teas ?? [];
-
-        if (empty($teas_sub) || !isset($teas_sub[0])) {
-            return $this->ResError([
-                'message' => 'no_subscription',
-                'details' => 'No valid TEAS subscription found.'
-            ]);
-        }
-        $plan = $teas_sub[0];
-
-        if ($plan->plan_name === 'trial' || Carbon::parse($plan->expires)->isPast()) {
-            $attemptCount = ExamAttempt::where('user_id', $user->id)->count();
-            if ($attemptCount >= 2) {
+                if ($plan->plan_name === 'trial' || Carbon::parse($plan->expires)->isPast()) {
+                    $attemptCount = ExamAttempt::where('user_id', $user->id)->count();
+                    if ($attemptCount >= 2) {
+                        $full_length = false;
+                    }
+                }
+            } else {
                 $full_length = false;
             }
         }
