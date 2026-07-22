@@ -87,8 +87,11 @@
                 </div>
                 <p class="mt-3 text-sm font-medium text-slate-700 dark:text-slate-100">Start a chat with Nursedive AI
                     tutor</p>
-                <p class="mt-1 max-w-xs text-xs leading-5 text-slate-500 dark:text-slate-400">
+                <p v-if="isAuthenticated" class="mt-1 max-w-xs text-xs leading-5 text-slate-500 dark:text-slate-400">
                     Ask about rationales, topics, or study strategy.
+                </p>
+                <p v-else class="mt-1 max-w-xs text-xs leading-5 text-slate-500 dark:text-slate-400">
+                    Open a question for an automatic explanation. Sign in to ask follow-up questions.
                 </p>
             </div>
 
@@ -122,7 +125,50 @@
         </div>
 
         <footer class="border-t border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-950">
-            <form @submit.prevent="startStream()"
+            <div v-if="!isAuthenticated" class="space-y-3">
+                <div
+                    class="rounded-2xl border border-sky-100 bg-sky-50 p-3 text-slate-700 dark:border-sky-900/60 dark:bg-sky-950/40 dark:text-slate-100">
+                    <div class="flex items-start gap-3">
+                        <span
+                            class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white text-sky-700 ring-1 ring-sky-100 dark:bg-slate-900 dark:text-sky-300 dark:ring-sky-900/80">
+                            <i class="pi pi-lock text-sm"></i>
+                        </span>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-semibold">Sign in to keep chatting</p>
+                            <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                                Guests can view the automatic question solution. Create an account or sign in to ask
+                                follow-up questions.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-3 grid grid-cols-2 gap-2">
+                        <router-link to="/register"
+                            class="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-teal-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400">
+                            <i class="pi pi-user-plus text-[11px]"></i>
+                            <span>Create Account</span>
+                        </router-link>
+                        <router-link to="/login"
+                            class="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800">
+                            <i class="pi pi-sign-in text-[11px]"></i>
+                            <span>Sign In</span>
+                        </router-link>
+                    </div>
+                </div>
+
+                <form @submit.prevent
+                    class="flex items-center gap-2 rounded-[1.5rem] bg-slate-100 p-2 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
+                    <input type="text"
+                        class="min-h-11 flex-1 rounded-full border-0 bg-transparent px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60 dark:text-white dark:placeholder:text-slate-500"
+                        placeholder="Sign in to ask follow-up questions" disabled />
+                    <button
+                        class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-slate-300 text-slate-500 shadow-none disabled:cursor-not-allowed dark:bg-slate-800 dark:text-slate-500"
+                        type="submit" disabled aria-label="Sign in to send messages">
+                        <i class="pi pi-arrow-up text-sm"></i>
+                    </button>
+                </form>
+            </div>
+
+            <form v-else @submit.prevent="startStream()"
                 class="flex items-center gap-2 rounded-[1.5rem] bg-slate-100 p-2 ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800">
                 <input v-model.trim="inputText" type="text"
                     class="min-h-11 flex-1 rounded-full border-0 bg-transparent px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60 dark:text-white dark:placeholder:text-slate-500"
@@ -139,6 +185,7 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
+import { useAuthStore } from "../stores/authStore";
 
 const props = defineProps({
     question: {
@@ -156,6 +203,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:chatOpened", "close"]);
+const authStore = useAuthStore();
 
 const messages = ref([]);
 const streamingText = ref("");
@@ -189,6 +237,7 @@ const activeQuestionPayload = computed(() => {
 let eventSource = null;
 
 const isThinking = computed(() => isStreaming.value && isLoading.value);
+const isAuthenticated = computed(() => authStore.is_authenticated);
 
 const escapeHtml = (value) => {
     return String(value ?? "")
@@ -251,6 +300,7 @@ const startStream = async (messageOverride = null, options = {}) => {
         showUserMessage = true,
         clearInput = true,
         showErrorMessage = true,
+        allowGuest = false,
     } = options;
 
     if (messageOverride && typeof messageOverride === "object" && "preventDefault" in messageOverride) {
@@ -259,6 +309,12 @@ const startStream = async (messageOverride = null, options = {}) => {
 
     const resolvedMessage = String(messageOverride ?? inputText.value ?? "").trim();
     if (!resolvedMessage || isStreaming.value) return false;
+
+    if (!isAuthenticated.value && !allowGuest) {
+        inputText.value = "";
+        await scrollToBottom();
+        return false;
+    }
 
     closeStream();
 
@@ -423,6 +479,7 @@ watch(
             showUserMessage: false,
             clearInput: false,
             showErrorMessage: false,
+            allowGuest: true,
         });
 
         if (started) {
@@ -452,6 +509,7 @@ watch(
             showUserMessage: false,
             clearInput: false,
             showErrorMessage: false,
+            allowGuest: true,
         });
 
         if (started) {

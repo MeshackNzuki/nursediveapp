@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
+import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { useAuthStore } from "../stores/authStore";
@@ -11,7 +12,10 @@ import { secondsToHms } from "../utils/secondsToHms";
 
 const router = useRouter();
 const mainStore = useMainStore();
-const { user, active, isTrial, wasTrial, daysLeft } = useAuthStore();
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
+const { active, isTrial, wasTrial, daysLeft } = authStore;
+const isAuthenticated = computed(() => authStore.is_authenticated);
 
 const products = [
     {
@@ -77,12 +81,12 @@ const latestAttemptError = ref("");
 let latestAttemptRequestId = 0;
 
 const firstName = computed(() => {
-    const fullName = user?.name || "Student";
+    const fullName = user.value?.name || "Student";
     return fullName.split(" ")[0];
 });
 
 const isAdmin = computed(() => {
-    const role = user?.roles?.[0];
+    const role = user.value?.roles?.[0];
     return role === "super-admin" || role === "admin";
 });
 
@@ -108,7 +112,7 @@ const statusClass = (code) => {
 };
 
 const productPlans = (code) => {
-    const plans = user?.subscriptions?.[code];
+    const plans = user.value?.subscriptions?.[code];
     return Array.isArray(plans) ? plans : [];
 };
 
@@ -200,8 +204,8 @@ const needsUpgradeCount = computed(() =>
 );
 
 const initials = computed(() => {
-    if (!user?.name) return "U";
-    return user.name
+    if (!user.value?.name) return "U";
+    return user.value.name
         .split(" ")
         .slice(0, 2)
         .map((chunk) => chunk[0])
@@ -217,7 +221,7 @@ const streakMessage = computed(() => {
 });
 
 const userActivityDate = computed(() => {
-    const raw = user?.last_login || user?.updated_at || user?.created_at;
+    const raw = user.value?.last_login || user.value?.updated_at || user.value?.created_at;
     if (!raw) return null;
     const parsed = new Date(raw);
     return Number.isNaN(parsed.getTime()) ? null : parsed;
@@ -332,7 +336,9 @@ const fetchLatestAttempt = async () => {
 
     latestAttempt.value = null;
     latestAttemptError.value = "";
+    latestAttemptLoading.value = false;
 
+    if (!isAuthenticated.value) return;
     if (!product) return;
 
     latestAttemptLoading.value = true;
@@ -448,7 +454,7 @@ const toLocalDateKey = (date) => {
 const updateVisitStreak = () => {
     if (typeof window === "undefined") return;
 
-    const uid = user?.id || user?.email || "guest";
+    const uid = user.value?.id || user.value?.email || "guest";
     const key = `nursedive_streak_${uid}`;
 
     const today = new Date();
@@ -488,7 +494,7 @@ const goToSupport = () => {
 };
 
 watch(
-    () => mainStore.last_product_code,
+    [() => mainStore.last_product_code, isAuthenticated],
     fetchLatestAttempt,
     { immediate: true },
 );
@@ -502,8 +508,8 @@ onMounted(() => {
     <div
         class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-slate-100 p-4 md:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh] dark:bg-slate-950">
         <div class="mx-auto max-w-7xl space-y-6">
-            <section
-                class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6 dark:border-slate-800 dark:bg-slate-900">
+            <section v-if="isAuthenticated"
+                class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white p-5  md:p-6 dark:border-slate-800 dark:bg-slate-900">
                 <div class="grid gap-6 lg:grid-cols-[1fr_340px]">
                     <div>
                         <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
@@ -647,6 +653,87 @@ onMounted(() => {
                                 <i class="pi pi-cog mr-2 text-xs"></i>
                                 Open Admin Panel
                             </router-link>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
+            <section v-else
+                class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white p-5  md:p-6 dark:border-slate-800 dark:bg-slate-900">
+                <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
+                    <div>
+                        <h1
+                            class="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl dark:text-slate-100">
+                            Practice smarter for <span class="text-amber-500">ATI TEAS, nursing school exams, <span
+                                    class="text-slate-950">and
+                                    the</span>
+                                NCLEX</span> with Nursedive
+                        </h1>
+                        <p class="mt-4 max-w-2xl text-sm leading-6 text-slate-600 md:text-base dark:text-slate-300">
+                            Build readiness with realistic questions, focused remediation, timed practice, and progress
+                            insights across every major nursing exam track.
+                        </p>
+
+                        <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                            <button type="button"
+                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-sky-500/95 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                                @click="router.push('/register')">
+                                <i class="pi pi-user-plus text-xs"></i>
+                                <span>Create Free Account</span>
+                            </button>
+                            <button type="button"
+                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                                @click="router.push('/login')">
+                                <i class="pi pi-sign-in text-xs"></i>
+                                <span>Sign In</span>
+                            </button>
+                            <button type="button"
+                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:border-sky-200 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:hover:border-sky-700 dark:hover:text-sky-200"
+                                @click="router.push('/subscription')">
+                                <i class="pi pi-credit-card text-xs"></i>
+                                <span>Explore Plans</span>
+                            </button>
+                        </div>
+
+                        <div
+                            class="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                            <span class="inline-flex items-center gap-2">
+                                <i class="pi pi-check-circle text-emerald-500"></i>
+                                TEAS 7
+                            </span>
+                            <span class="inline-flex items-center gap-2">
+                                <i class="pi pi-check-circle text-emerald-500"></i>
+                                Nursing School
+                            </span>
+                            <span class="inline-flex items-center gap-2">
+                                <i class="pi pi-check-circle text-emerald-500"></i>
+                                NCLEX RN/PN
+                            </span>
+                        </div>
+                    </div>
+
+                    <aside class="border-slate-200 pt-5 lg:border-l lg:pl-6 lg:pt-0 dark:border-slate-800">
+                        <p class="text-xs font-semibold italic text-slate-950 dark:text-slate-400">
+                            What are you studying today?
+                        </p>
+                        <div class="mt-4 divide-y divide-slate-200 dark:divide-slate-800">
+                            <div v-for="product in products" :key="`guest-${product.code}`"
+                                class="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0">
+                                <div class="min-w-0">
+                                    <p class="font-semibold text-slate-950 dark:text-slate-100">
+                                        {{ product.name }}
+                                    </p>
+                                    <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                                        {{ product.subtitle }}
+                                    </p>
+                                </div>
+                                <button type="button"
+                                    class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-sky-700 transition hover:border-sky-200 hover:bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-sky-300 dark:hover:border-sky-700 dark:hover:bg-slate-800"
+                                    :aria-label="`View ${product.name} plans`"
+                                    @click="router.push(product.pricingRoute)">
+                                    <i class="pi pi-arrow-right text-xs"></i>
+                                </button>
+                            </div>
                         </div>
                     </aside>
                 </div>
