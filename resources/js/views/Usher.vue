@@ -550,7 +550,6 @@ onMounted(() => {
                                             {{ lastProduct.name }}
                                         </span>
                                     </div>
-
                                     <div v-if="latestAttemptLoading" class="mt-3">
                                         <div class="h-4 w-44 animate-pulse rounded bg-slate-200 dark:bg-slate-800">
                                         </div>
@@ -558,7 +557,6 @@ onMounted(() => {
                                             class="mt-3 h-2 w-full animate-pulse rounded-full bg-slate-200 dark:bg-slate-800">
                                         </div>
                                     </div>
-
                                     <div v-else-if="latestAttempt" class="mt-3">
                                         <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                                             <div class="min-w-0">
@@ -580,7 +578,6 @@ onMounted(() => {
                                                 {{ scoreSummary(latestAttemptScore) }}
                                             </p>
                                         </div>
-
                                         <div class="mt-4">
                                             <div class="flex items-center justify-between text-xs font-semibold">
                                                 <span class="text-slate-500 dark:text-slate-400">Score progress</span>
@@ -596,7 +593,6 @@ onMounted(() => {
                                             </div>
                                         </div>
                                     </div>
-
                                     <div v-else class="mt-3">
                                         <h3 class="text-base font-semibold text-slate-950 dark:text-slate-100">
                                             {{ latestAttemptError || "No recent attempt yet" }}
@@ -606,7 +602,6 @@ onMounted(() => {
                                         </p>
                                     </div>
                                 </div>
-
                                 <div v-if="latestAttempt && !latestAttemptLoading"
                                     class="flex shrink-0 items-center justify-between gap-4 md:flex-col md:items-center md:justify-center">
                                     <div class="radial-progress bg-gray-200/80 text-sm font-bold shadow-sm dark:bg-slate-900"
@@ -624,7 +619,6 @@ onMounted(() => {
                             </div>
                         </div>
                     </div>
-
                     <aside class="flex flex-col gap-4 border-slate-200 lg:border-l lg:pl-6 dark:border-slate-800">
                         <EmailVerification v-if="!user?.email_verified" class="max-w-none" />
 
@@ -657,7 +651,6 @@ onMounted(() => {
                     </aside>
                 </div>
             </section>
-
             <section v-else
                 class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white p-5  md:p-6 dark:border-slate-800 dark:bg-slate-900">
                 <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">

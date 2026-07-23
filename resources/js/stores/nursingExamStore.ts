@@ -198,6 +198,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
         show_paywall: false,
 
         is_current_exam_full_length: true,
+        unauthenticated_test_count: 0,
+        unauthenticated_test_limit: 2,
+
         //RN Test Bank subjects
         ati_examsubjects_rn_exams_testbank: null,
         hesi_examsubjects_rn_exams_testbank: null,
@@ -232,6 +235,16 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
         },
     },
     actions: {
+        hasReachedUnathenticatedThreshold(): boolean {
+            return (
+                this.unauthenticated_test_count <
+                this.unauthenticated_test_limit
+            );
+        },
+        countUnauthenticatedTestAttempt() {
+            if (useAuthStore().is_authenticated) return;
+            this.unauthenticated_test_count++;
+        },
         setExamData(payload: {
             exam: object;
             questions: Question[];
@@ -409,6 +422,7 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
             this.testMode = "exam";
 
             if (!useAuthStore().is_authenticated) {
+                this.countUnauthenticatedTestAttempt();
                 savePendingAttempt({
                     product: "nursing",
                     productLabel: "Nursing",

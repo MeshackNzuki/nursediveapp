@@ -108,7 +108,7 @@
                         <div class="flex items-center gap-1">
                             <i class="pi pi-user-edit text-teal-500"></i>
                             <span>Your Answer: {{ examStore.answers[examStore.currentQuestion.id] || 'Not answered'
-                            }}</span>
+                                }}</span>
                         </div>
                     </div>
                 </div>
@@ -255,7 +255,7 @@ const notes = ref('')
 const difficulty = ref('')
 const ChatOpenned = ref(false);
 
-const { user, pricingRoute } = useAuthStore()
+const { user, pricingRoute, is_authenticated } = useAuthStore()
 
 const showQuestionNavigator = computed(() => {
     return examStore.questions.length > 0 && (examStore.testMode === 'exam' || !examStore.showNotes);
@@ -486,7 +486,7 @@ async function loadExam() {
             questions: attempt.questions,
             answers: JSON.parse(attempt.answers),
             results: JSON.parse(attempt.results),
-            is_exam_full_length: attempt.full_length,
+            is_exam_full_length: !is_authenticated ? examStore.hasReachedUnathenticatedThreshold() : attempt.full_length,
             mode: 'review'
 
         })
@@ -523,7 +523,7 @@ async function loadExam() {
                             description: examData.description
                         },
                         questions: examData.questions,
-                        is_exam_full_length: examData.full_length,
+                        is_exam_full_length: is_authenticated ? examData.full_length : examStore.hasReachedUnathenticatedThreshold(),
                     })
                 })
                 .catch((error) => {

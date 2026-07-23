@@ -117,7 +117,7 @@
                         <div v-if="examStore.answers[examStore.currentQuestion.id]" class="flex items-center gap-1">
                             <i class="pi pi-user-edit text-teal-500"></i>
                             <span>Your Answer was {{ examStore.answers[examStore.currentQuestion.id]
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
                 </div>
@@ -280,7 +280,7 @@ const progress = ref('Preparing Test...')
 
 const { zoomIn, zoomOut } = useMainStore();
 const store = useMainStore();
-const { user, pricingRoute, active } = useAuthStore();
+const { user, pricingRoute, active, is_authenticated } = useAuthStore();
 const route = useRoute()
 const examStore = useNursingExamStore() as any
 const confirm = useConfirm()
@@ -691,7 +691,7 @@ async function loadExam() {
                         },
                         questions: examData.questions,
                         notes: parseRecordPayload(examData.notes),
-                        is_exam_full_length: examData.full_length,
+                        is_exam_full_length: !is_authenticated ? examStore.hasReachedUnathenticatedThreshold() : examData.full_length,
                     })
                 })
                 .catch((error) => {

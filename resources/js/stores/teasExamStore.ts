@@ -77,6 +77,8 @@ export const useTeasExamStore = defineStore("useTeasExamStore", {
         no_of_qns_before_paywall: 4,
         show_paywall: false,
         is_exam_full_length: true,
+        unauthenticated_test_count: 0,
+        unauthenticated_test_limit: 2,
     }),
 
     getters: {
@@ -94,6 +96,16 @@ export const useTeasExamStore = defineStore("useTeasExamStore", {
     },
 
     actions: {
+        hasReachedUnathenticatedThreshold(): boolean {
+            return (
+                this.unauthenticated_test_count <
+                this.unauthenticated_test_limit
+            );
+        },
+        countUnauthenticatedTestAttempt() {
+            if (useAuthStore().is_authenticated) return;
+            this.unauthenticated_test_count++;
+        },
         setExamData(payload: {
             exam: object;
             questions: Question[];
@@ -213,6 +225,7 @@ export const useTeasExamStore = defineStore("useTeasExamStore", {
             this.testMode = "exam";
 
             if (!useAuthStore().is_authenticated) {
+                this.countUnauthenticatedTestAttempt();
                 savePendingAttempt({
                     product: "teas",
                     productLabel: "TEAS",

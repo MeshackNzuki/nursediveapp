@@ -322,7 +322,7 @@ class NursingExamController extends Controller
 
         if ($request->user()) {
             $user = User::find($request->user()->id);
-        } else return false;
+        } else return true;
 
         $nursing_sub = json_decode($user->subscription->subscriptions)->nursing;
 
