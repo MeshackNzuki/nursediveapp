@@ -656,7 +656,7 @@ onMounted(() => {
                 <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
                     <div>
                         <h1
-                            class="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl dark:text-slate-100">
+                            class="mt-3 max-w-3xl text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl dark:text-slate-100">
                             Practice smarter for <span class="text-amber-500">ATI TEAS, nursing school exams, <span
                                     class="text-slate-950">and
                                     the</span>
@@ -705,7 +705,8 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <aside class="border-slate-200 pt-5 lg:border-l lg:pl-6 lg:pt-0 dark:border-slate-800">
+                    <aside
+                        class="hidden lg:block border-slate-200 pt-5 lg:border-l lg:pl-6 lg:pt-0 dark:border-slate-800">
                         <p class="text-xs font-semibold italic text-slate-950 dark:text-slate-400">
                             What are you studying today?
                         </p>
