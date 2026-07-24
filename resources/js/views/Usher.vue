@@ -522,7 +522,6 @@ onMounted(() => {
                                 class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sky-600 to-cyan-500 text-lg font-bold text-white ring-2 ring-sky-200 dark:ring-sky-900">
                                 {{ initials }}
                             </div>
-
                             <div class="min-w-0 flex-1">
                                 <h1
                                     class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl dark:text-slate-100">
@@ -658,7 +657,7 @@ onMounted(() => {
                         <h1
                             class="mt-3 max-w-3xl text-2xl font-bold tracking-tight text-slate-950 md:text-3xl xl:text-4xl dark:text-slate-100">
                             Practice smarter for <span class="text-amber-500">ATI TEAS, nursing school exams, <span
-                                    class="text-slate-950">and
+                                    class="text-slate-950 dark:text-white">and
                                     the</span>
                                 NCLEX</span> with Nursedive
                         </h1>
