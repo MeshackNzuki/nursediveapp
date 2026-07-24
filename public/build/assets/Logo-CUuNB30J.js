@@ -1,0 +1,1 @@
+import{_ as s,f as t,g as o,h as r,q as c,C as a}from"./main-ChiGkksE.js";const n={},l={class:"flex items-center mb-2 text-2xl font-semibold uppercase text-blue-950"};function _(i,e){return o(),t("div",l,e[0]||(e[0]=[r("img",{class:"w-10 h-10 mr-1",src:a,alt:"logo"},null,-1),c(" Nursedive ")]))}const d=s(n,[["render",_]]);export{d as L};
