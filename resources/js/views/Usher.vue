@@ -531,7 +531,7 @@ onMounted(() => {
                                         </span> </span>
                                 </h1>
                                 <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-500 dark:text-slate-400">
-                                    Choose a track and keep today's study session focused.
+                                    Pick from where you left off
                                 </p>
                             </div>
                         </div>
@@ -656,12 +656,13 @@ onMounted(() => {
                 <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
                     <div>
                         <h1
-                            class="mt-3 max-w-3xl text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl xl:text-4xl 2xl:text-5xl dark:text-slate-100">
+                            class="mt-3 max-w-3xl text-2xl font-bold tracking-tight text-slate-950 md:text-3xl xl:text-4xl dark:text-slate-100">
                             Practice smarter for <span class="text-amber-500">ATI TEAS, nursing school exams, <span
                                     class="text-slate-950">and
                                     the</span>
                                 NCLEX</span> with Nursedive
                         </h1>
+
                         <p class="mt-4 max-w-2xl text-sm leading-6 text-slate-600 md:text-base dark:text-slate-300">
                             Build readiness with realistic questions, focused remediation, timed practice, and progress
                             insights across every major nursing exam track.
@@ -687,21 +688,20 @@ onMounted(() => {
                                 <span>Explore Plans</span>
                             </button>
                         </div>
-
                         <div
                             class="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-                            <span class="inline-flex items-center gap-2">
-                                <i class="pi pi-check-circle text-emerald-500"></i>
+                            <router-link to="/teas" class="rounded-full px-2 bg-sky-500 text-white
+                                py-0.5">
                                 TEAS 7
-                            </span>
-                            <span class="inline-flex items-center gap-2">
-                                <i class="pi pi-check-circle text-emerald-500"></i>
+                            </router-link>
+                            <router-link to="/teas" class="rounded-full px-2 bg-sky-500 text-white
+                                py-0.5">
                                 Nursing School
-                            </span>
-                            <span class="inline-flex items-center gap-2">
-                                <i class="pi pi-check-circle text-emerald-500"></i>
+                            </router-link>
+                            <router-link to="/teas" class="rounded-full px-2 bg-sky-500 text-white
+                                py-0.5">
                                 NCLEX RN/PN
-                            </span>
+                            </router-link>
                         </div>
                     </div>
 
@@ -846,7 +846,7 @@ onMounted(() => {
                 <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-300">
-                            Study Snapshot
+                            Account Snapshot
                         </p>
 
                     </div>

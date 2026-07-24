@@ -4,7 +4,7 @@
         sidebarPosition
     ]">
         <div
-            class="flex flex-row justify-between items-center mb-1 mt-2 rounded-lg py-1 h-10 px-2 mx-2 bg-transparent text-gray-50">
+            class="flex flex-row justify-between items-center mb-1 mt-1 rounded-lg py-1 h-10 px-2 mx-2 bg-transparent text-gray-50">
             <!-- Sidebar Toggle -->
             <span @click="mainStore.toggleSidebar" class="cursor-pointer flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -34,6 +34,19 @@
 
             <!-- Right Icons -->
             <div class="flex justify-center items-center gap-4 h-full">
+                <a href="https://t.me/+5QoS-sByO5BiYjQ0" target="_blank" rel="noopener noreferrer"
+                    class="flex items-center cursor-pointer hover:opacity-80 lg:flex-row lg:gap-1">
+                    <i class="pi pi-telegram text-cyan-500"></i>
+                    <h5 class="hidden text-sm text-gray-50 lg:block">Telegram</h5>
+                </a>
+
+                <a href="https://www.facebook.com/profile.php?id=61590998518288" target="_blank"
+                    rel="noopener noreferrer" class="flex items-center cursor-pointer hover:opacity-80 lg:flex-row lg:gap-1">
+                    <i class="pi pi-facebook text-blue-500"></i>
+                    <h5 class="hidden text-sm text-gray-50 lg:block">Facebook</h5>
+                    <i class="pi pi-share text-teal-500"></i>
+                </a>
+
                 <!-- Theme Toggle -->
                 <svg v-if="!isDark" @click="toggleDark()" class="cursor-pointer stroke-cyan-500 fill-sky-500"
                     xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"

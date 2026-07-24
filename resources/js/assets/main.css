@@ -166,7 +166,7 @@
   }
 
   .topbar-auth-button--primary {
-    @apply bg-sky-500 text-white ring-1 ring-sky-300 hover:bg-sky-400 dark:bg-sky-400 dark:text-slate-950 dark:ring-sky-300 dark:hover:bg-sky-300;
+    @apply bg-sky-500 text-white  ring-1 ring-sky-300 hover:bg-sky-400 dark:bg-sky-400 dark:text-slate-950 dark:ring-sky-300 dark:hover:bg-sky-300;
   }
 }
 
