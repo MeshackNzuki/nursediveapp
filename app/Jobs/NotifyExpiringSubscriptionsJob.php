@@ -18,7 +18,7 @@ class NotifyExpiringSubscriptionsJob implements ShouldQueue
      */
     public function __construct()
     {
-        (new ClientNotificationController())->notifyExpiringSubscriptions();
+        //
     }
 
     /**
@@ -26,6 +26,6 @@ class NotifyExpiringSubscriptionsJob implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+        (new ClientNotificationController())->notifyExpiringSubscriptions();
     }
 }

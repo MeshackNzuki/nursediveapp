@@ -25,8 +25,7 @@ class NotifyExpiredSubscriptionsJob implements ShouldQueue
      * Execute the job.
      */
     public function handle(): void
-    { {
-            (new ClientNotificationController())->notifyExpiredSubscriptions();
-        }
+    {
+        (new ClientNotificationController())->notifyExpiredSubscriptions();
     }
 }

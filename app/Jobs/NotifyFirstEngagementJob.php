@@ -26,6 +26,6 @@ class NotifyFirstEngagementJob implements ShouldQueue
      */
     public function handle(): void
     {
-        (new ClientNotificationController())->NotifyFirstEngagement();
+        (new ClientNotificationController())->notifyFirstEngagement();
     }
 }

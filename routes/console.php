@@ -1,61 +1,71 @@
 <?php
 
+use App\Http\Controllers\Notifications\ClientNotificationController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schedule;
-use App\Http\Controllers\Notifications\ClientNotificationController;
-
-$notifier = new ClientNotificationController();
 
 /**
- * A safe job wrapper that logs start, success, and failure.
+ * Wrap scheduled notification tasks with consistent logging.
  */
-function safeSchedule(string $name, callable $callback)
-{
+$safeSchedule = function (string $name, callable $callback) {
     return function () use ($name, $callback) {
-        // Log::info("🔹 [Scheduler] Starting job: {$name} @ " . now());
+        Log::info("[Scheduler] Starting job: {$name} @ " . now());
+
         try {
             $callback();
-            // Log::info("✅ [Scheduler] Completed job: {$name} @ " . now());
-        } catch (Throwable $e) {
-            // Log::error("❌ [Scheduler] Failed job: {$name}", [
-            //     'error' => $e->getMessage(),
-            //     'trace' => $e->getTraceAsString(),
-            // ]);
+            Log::info("[Scheduler] Completed job: {$name} @ " . now());
+        } catch (\Throwable $e) {
+            Log::error("[Scheduler] Failed job: {$name}", [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
         }
     };
-}
+};
 
 // =====================================================
-// Scheduled Jobs (run every cron tick — every 5 minutes)
+// Scheduled Jobs
 // =====================================================
 
-Schedule::call(safeSchedule(
+Schedule::call($safeSchedule(
     'notifyExpiringSubscriptions',
-    fn() => $notifier->notifyExpiringSubscriptions()
-));
+    fn() => (new ClientNotificationController())->notifyExpiringSubscriptions()
+))->name('notify-expiring-subscriptions')
+    ->dailyAt('08:00')
+    ->withoutOverlapping(30);
 
-Schedule::call(safeSchedule(
+Schedule::call($safeSchedule(
     'notifyExpiredSubscriptions',
-    fn() => $notifier->notifyExpiredSubscriptions()
-))->after(fn() => sleep(30));
+    fn() => (new ClientNotificationController())->notifyExpiredSubscriptions()
+))->name('notify-expired-subscriptions')
+    ->dailyAt('08:10')
+    ->withoutOverlapping(30);
 
-Schedule::call(safeSchedule(
+Schedule::call($safeSchedule(
     'notifyFreeTrialEnded',
-    fn() => $notifier->notifyFreeTrialEnded()
-))->after(fn() => sleep(60));
+    fn() => (new ClientNotificationController())->notifyFreeTrialEnded()
+))->name('notify-free-trial-ended')
+    ->dailyAt('08:20')
+    ->withoutOverlapping(30);
 
-Schedule::call(safeSchedule(
+Schedule::call($safeSchedule(
     'notifyFreeTrialEnding',
-    fn() => $notifier->notifyFreeTrialEnding()
-))->after(fn() => sleep(90));
+    fn() => (new ClientNotificationController())->notifyFreeTrialEnding()
+))->name('notify-free-trial-ending')
+    ->dailyAt('08:30')
+    ->withoutOverlapping(30);
 
-Schedule::call(safeSchedule(
+Schedule::call($safeSchedule(
     'notifyFirstEngagement',
-    fn() => $notifier->notifyFirstEngagement()
-))->after(fn() => sleep(120));
+    fn() => (new ClientNotificationController())->notifyFirstEngagement()
+))->name('notify-first-engagement')
+    ->dailyAt('08:40')
+    ->withoutOverlapping(30);
 
 // Optional daily summary (disabled)
-// Schedule::call(safeSchedule(
+// Schedule::call($safeSchedule(
 //     'sendDailySummary',
-//     fn() => $notifier->sendDailySummary()
-// ))->dailyAt('21:30');
+//     fn() => (new ClientNotificationController())->sendDailySummary()
+// ))->name('send-daily-notification-summary')
+//     ->dailyAt('21:30')
+//     ->withoutOverlapping(30);

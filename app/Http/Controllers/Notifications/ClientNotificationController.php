@@ -18,9 +18,18 @@ use App\Notifications\{
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Collection;
 
 class ClientNotificationController extends Controller
 {
+    protected const PRODUCTS = ['nursing', 'teas', 'nclex'];
+
+    protected const ATTEMPT_MODELS = [
+        'nursing' => NA::class,
+        'teas' => TA::class,
+        'nclex' => NCA::class,
+    ];
+
     protected array $summary = [
         'expiring' => 0,
         'expired' => 0,
@@ -31,39 +40,43 @@ class ClientNotificationController extends Controller
 
     protected $usersByProduct = [];
 
-    public function __construct()
+    protected function usersForProduct(string $product): Collection
     {
-        $this->loadUsersWithAttemptsAndSubscriptions();
+        if (!isset(self::ATTEMPT_MODELS[$product])) {
+            return collect();
+        }
+
+        return $this->usersByProduct[$product] ??= $this->loadUsersWithAttemptsAndSubscriptions($product);
     }
 
-    protected function loadUsersWithAttemptsAndSubscriptions(): void
+    protected function loadUsersWithAttemptsAndSubscriptions(string $product): Collection
     {
-        $this->usersByProduct = [
-            'nursing' => User::with('subscription')
-                ->whereIn('id', NA::pluck('user_id')->unique())
-                ->get()
-                ->filter(fn($u) => $u->subscription && $u->subscription->subscriptions),
+        $attemptModel = self::ATTEMPT_MODELS[$product];
+        $userIds = $attemptModel::query()
+            ->select('user_id')
+            ->whereNotNull('user_id')
+            ->distinct()
+            ->pluck('user_id');
 
-            'teas' => User::with('subscription')
-                ->whereIn('id', TA::pluck('user_id')->unique())
-                ->get()
-                ->filter(fn($u) => $u->subscription && $u->subscription->subscriptions),
+        if ($userIds->isEmpty()) {
+            return collect();
+        }
 
-            'nclex' => User::with('subscription')
-                ->whereIn('id', NCA::pluck('user_id')->unique())
-                ->get()
-                ->filter(fn($u) => $u->subscription && $u->subscription->subscriptions),
-        ];
+        return User::with('subscription')
+            ->whereIn('id', $userIds)
+            ->whereHas('subscription')
+            ->get()
+            ->filter(fn($user) => filled($user->subscription?->subscriptions));
     }
 
     protected function eachUserSubscription(string $product, callable $callback): void
     {
-        foreach ($this->usersByProduct[$product] as $user) {
-            $subscriptions = json_decode($user->subscription->subscriptions ?? '', true);
+        foreach ($this->usersForProduct($product) as $user) {
+            $subscriptions = $user->subscription->subscriptions ?? [];
             if (!$subscriptions || !isset($subscriptions[$product])) continue;
 
             foreach ($subscriptions[$product] as $plan) {
-                $callback($user->fresh(), $product, (object) $plan);
+                $callback($user, $product, (object) $plan);
             }
         }
     }
@@ -75,7 +88,7 @@ class ClientNotificationController extends Controller
     public function notifyFreeTrialEnded(): void
     {
 
-        foreach (['nursing', 'teas', 'nclex'] as $product) {
+        foreach (self::PRODUCTS as $product) {
             $this->eachUserSubscription($product, function ($user, $product, $plan) {
                 if (
                     $plan->plan_name === 'trial' &&
@@ -85,6 +98,7 @@ class ClientNotificationController extends Controller
                     try {
                         $user->notify(new TrialEnded($user, $product, $plan->expires));
                         $user->update(['trial_ended_sent' => 1]);
+                        $user->trial_ended_sent = 1;
                         $this->summary['trial_ended']++;
                     } catch (\Throwable $e) {
                         Log::error("❌ TrialEnded failed for user {$user->id}: {$e->getMessage()}");
@@ -100,7 +114,7 @@ class ClientNotificationController extends Controller
         $target = Carbon::now()->addDays(2)->toDateString();
 
 
-        foreach (['nursing', 'teas', 'nclex'] as $product) {
+        foreach (self::PRODUCTS as $product) {
             $this->eachUserSubscription($product, function ($user, $product, $plan) use ($target) {
                 if (
                     $plan->plan_name === 'trial' &&
@@ -110,6 +124,7 @@ class ClientNotificationController extends Controller
                     try {
                         $user->notify(new TrialEnding($user, $product, $plan->expires));
                         $user->update(['trial_ending_sent' => 1]);
+                        $user->trial_ending_sent = 1;
                         $this->summary['trial_ending']++;
                     } catch (\Throwable $e) {
                         Log::error("❌ TrialEnding failed for user {$user->id}: {$e->getMessage()}");
@@ -124,7 +139,7 @@ class ClientNotificationController extends Controller
     {
         $today = Carbon::today()->toDateString();
 
-        foreach (['nursing', 'teas', 'nclex'] as $product) {
+        foreach (self::PRODUCTS as $product) {
             $this->eachUserSubscription($product, function ($user, $product, $plan) use ($today) {
                 if (
                     $plan->plan_name !== 'trial' &&
@@ -134,6 +149,7 @@ class ClientNotificationController extends Controller
                     try {
                         $user->notify(new SubscriptionExpired($user, $product, $plan));
                         $user->update(['expired_sent' => 1]);
+                        $user->expired_sent = 1;
                         $this->summary['expired']++;
                     } catch (\Throwable $e) {
                         Log::error("❌ Expired notice failed for user {$user->id}: {$e->getMessage()}");
@@ -148,7 +164,7 @@ class ClientNotificationController extends Controller
     {
         $target = Carbon::now()->addDays(3)->toDateString();
 
-        foreach (['nursing', 'teas', 'nclex'] as $product) {
+        foreach (self::PRODUCTS as $product) {
             $this->eachUserSubscription($product, function ($user, $product, $plan) use ($target) {
                 if (
                     $plan->plan_name !== 'trial' &&
@@ -158,6 +174,7 @@ class ClientNotificationController extends Controller
                     try {
                         $user->notify(new SubscriptionExpiring($user, $product, $plan));
                         $user->update(['expiring_sent' => 1]);
+                        $user->expiring_sent = 1;
                         $this->summary['expiring']++;
                     } catch (\Throwable $e) {
                         Log::error("❌ Expiring notice failed for user {$user->id}: {$e->getMessage()}");
@@ -171,14 +188,13 @@ class ClientNotificationController extends Controller
     public function notifyFirstEngagement(): void
     {
 
-        foreach (['nursing', 'teas', 'nclex'] as $product) {
-            foreach ($this->usersByProduct[$product] as $user) {
-                $user = $user->fresh();
-
+        foreach (self::PRODUCTS as $product) {
+            foreach ($this->usersForProduct($product) as $user) {
                 if ($user->created_at->lte(Carbon::now()->subDays(3)) && !$user->first_engagement_sent) {
                     try {
                         $user->notify(new FirstEngagement($user, $product));
                         $user->update(['first_engagement_sent' => 1]);
+                        $user->first_engagement_sent = 1;
                         $this->summary['engagement']++;
                     } catch (\Throwable $e) {
                         Log::error("❌ First engagement failed for user {$user->id}: {$e->getMessage()}");
@@ -193,7 +209,7 @@ class ClientNotificationController extends Controller
     {
         $emails = json_decode(env('ADMIN_NOTIFICATION_EMAILS'), true);
         if (!is_array($emails)) {
-            $emails = array_map('trim', explode(',', env('ADMIN_NOTIFICATION_EMAILS', 'nursedivelearning@gmail.com')));
+            $emails = array_map('trim', explode(',', env('ADMIN_NOTIFICATION_EMAILS', 'info@nursedive.com')));
         }
 
         foreach ($emails as $email) {
