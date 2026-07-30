@@ -44,14 +44,7 @@ class LoginController extends Controller
                 'email' => $user->email,
                 'avatar' => $user->avatar,
                 'email_verified_at' => $user->email_verified_at,
-                'subscriptions' => json_decode($user->subscription->subscriptions)
-
-
-                // 'subscriptions' => optional($user->subscription->first(), function ($sub) {
-                //     return is_string($sub->subscriptions)
-                //         ? json_decode($sub->subscriptions, true)
-                //         : $sub->subscriptions;
-                // }),
+                'subscriptions' => json_decode($user->subscription?->subscriptions) ?? null,
             ]);
         }
 
