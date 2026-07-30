@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Notifications\VerifyUserEmail;
+use Throwable;
+use Illuminate\Support\Facades\Log;
 
 class EmailVerificationController extends Controller
 {
@@ -25,7 +27,15 @@ class EmailVerificationController extends Controller
 
         $query = 'verification_email' . '=' . $user->email . '&token=' . $token;
 
-        $user->notify(new VerifyUserEmail($query));
+        try {
+            $user->notify(new VerifyUserEmail($query));
+        } catch (Throwable $e) {
+            Log::error('Could not send welcome email.', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'error' => $e->getMessage(),
+            ]);
+        };
 
         return $this->ResSuccess(['message' => 'Verification code sent.']);
     }
