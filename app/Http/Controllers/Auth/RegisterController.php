@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\UserSubscription;
 use App\Models\Plan;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -27,8 +28,15 @@ class RegisterController extends Controller
 
         $user->assignRole('student');
 
-        $user->notify(new \App\Notifications\WelcomeUser());
-
+        try {
+            $user->notify(new \App\Notifications\WelcomeUser());
+        } catch (\Throwable $e) {
+            Log::error('Could not send welcome email.', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'error' => $e->getMessage(),
+            ]);
+        }
         $trialPlans = Plan::where('name', 'trial')->get()->keyBy('product_code');
 
         $subscriptions = [];
