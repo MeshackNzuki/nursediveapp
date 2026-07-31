@@ -15,22 +15,45 @@ use App\Http\Controllers\Controller;
 
 class PasswordResetController extends Controller
 {
+    private function resetTokenTable(): string
+    {
+        $broker = config('auth.defaults.passwords', 'users');
+
+        return config("auth.passwords.{$broker}.table", 'password_reset_tokens');
+    }
+
+    private function resetTokenExpiresInMinutes(): int
+    {
+        $broker = config('auth.defaults.passwords', 'users');
+
+        return (int) config("auth.passwords.{$broker}.expire", 60);
+    }
+
+    private function resetTokenThrottleInSeconds(): int
+    {
+        $broker = config('auth.defaults.passwords', 'users');
+
+        return (int) config("auth.passwords.{$broker}.throttle", 60);
+    }
+
     // Step 1: Request reset
     public function requestReset(Request $request)
     {
         $request->validate(['email' => 'required|email|exists:users,email']);
 
-        $existing = DB::table('password_resets')
+        $resetTokenTable = $this->resetTokenTable();
+
+        $existing = DB::table($resetTokenTable)
             ->where('email', $request->email)
             ->first();
 
-        if ($existing && $existing->created_at && now()->diffInSeconds($existing->created_at) < 60) {
+        if ($existing && $existing->created_at && now()->diffInSeconds($existing->created_at) < $this->resetTokenThrottleInSeconds()) {
             // Reuse the existing token
             $token = $existing->token;
         } else {
             // Generate a new token
-            $token = Str::random(5); // use longer token for better security
-            DB::table('password_resets')->updateOrInsert(
+            $token = Str::random(64);
+            DB::table($resetTokenTable)->updateOrInsert(
                 ['email' => $request->email],
                 [
                     'token' => $token,
@@ -41,7 +64,10 @@ class PasswordResetController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        $query = 'reset_email' . '=' . $user->email . '&token=' . $token;
+        $query = http_build_query([
+            'reset_email' => $user->email,
+            'token' => $token,
+        ]);
 
         $user->notify(new CustomResetPassword($query));
 
@@ -59,7 +85,7 @@ class PasswordResetController extends Controller
             'token' => 'required|string',
         ]);
 
-        $record = DB::table('password_resets')
+        $record = DB::table($this->resetTokenTable())
             ->where('email', $request->email)
             ->first();
 
@@ -73,7 +99,7 @@ class PasswordResetController extends Controller
         }
 
         // Check if token expired (60 minutes)
-        if (now()->diffInMinutes($record->created_at) > 60) {
+        if (Carbon::parse($record->created_at)->addMinutes($this->resetTokenExpiresInMinutes())->isPast()) {
             return $this->ResError('Token expired', 400);
         }
 
@@ -92,7 +118,7 @@ class PasswordResetController extends Controller
             'password' => 'required|confirmed|min:8',
         ]);
 
-        $record = DB::table('password_resets')
+        $record = DB::table($this->resetTokenTable())
             ->where('email', $request->email)
             ->where('token', $request->token)
             ->first();
@@ -101,7 +127,7 @@ class PasswordResetController extends Controller
             return response()->json(['message' => 'Invalid token'], 400);
         }
 
-        if (Carbon::parse($record->created_at)->addMinutes(60)->isPast()) {
+        if (Carbon::parse($record->created_at)->addMinutes($this->resetTokenExpiresInMinutes())->isPast()) {
             return response()->json(['message' => 'Token expired'], 400);
         }
 
@@ -111,7 +137,7 @@ class PasswordResetController extends Controller
         Auth::login($user);
 
         // Delete reset record
-        DB::table('password_resets')->where('email', $request->email)->delete();
+        DB::table($this->resetTokenTable())->where('email', $request->email)->delete();
 
 
         // Issue token
