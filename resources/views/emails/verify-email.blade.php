@@ -1,73 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('emails.layout')
 
-<head>
-    <meta charset="UTF-8">
-    <title>Verify Your Email - Nursedive</title>
-</head>
+@section('title', 'Verify Your Email - Nursedive')
 
-<body style="margin:0; padding:0; font-family: Arial, sans-serif; background:#eff6ff; color:#333;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#eff6ff; padding:40px 0;">
+@section('preheader')
+Verify your email address to finish setting up your Nursedive account.
+@endsection
+
+@section('heading')
+Verify Your Email
+@endsection
+
+@section('content')
+    @php($firstName = strtok(trim($user->name ?? ''), ' ') ?: 'there')
+
+    <p style="margin:0 0 18px;">Hello <strong>{{ $firstName }}</strong>,</p>
+
+    <p style="margin:0 0 18px;">
+        Thanks for joining <strong>Nursedive</strong>. Please verify your email address to finish setting up your
+        account and keep it secure.
+    </p>
+
+    @include('emails.partials.button', ['href' => $url, 'label' => 'Verify Email'])
+
+    <p style="margin:0 0 18px;">
+        This link expires in <strong>60 minutes</strong>. After verifying, sign out and back in on any other devices to
+        refresh your session.
+    </p>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+        style="margin:24px 0 0; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px;">
         <tr>
-            <td align="center">
-                <table width="600" cellpadding="0" cellspacing="0"
-                    style="background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
-
-                    <!-- Header -->
-                    <tr>
-                        <td align="center" style="background:#172554; padding:20px;">
-                            <img src="https://app.nursedive.com/assets/favicon.png" alt="Nursedive Logo" width="60"
-                                height="60" style="display:block; margin-bottom:15px;">
-                            <h1 style="margin:0; font-size:26px; color:#ffffff; font-weight:bold;">
-                                Verify Your Email
-                            </h1>
-                        </td>
-                    </tr>
-
-                    <!-- Body -->
-                    <tr>
-                        <td style="padding:30px; font-size:16px; line-height:1.6; color:#444;">
-                            <p>Hello <strong>{{ explode(' ', trim($user->name))[0] }}</strong>,</p>
-
-                            <p>Thanks for joining <strong>Nursedive</strong>! To complete your registration, please
-                                verify your email address.</p>
-
-                            <p style="text-align:center; margin:40px 0;">
-                                <a href="{!! $url !!}"
-                                    style="background:#172554; color:#ffffff; text-decoration:none;
-                                          padding:14px 28px; border-radius:25px; font-size:16px; font-weight:bold;">
-                                    Verify Email
-                                </a>
-                            </p>
-                            <p>If the button above doesn’t work, you can copy and paste this link into your browser:</p>
-                            <p style="word-break:break-all; color:#172554;">
-                                {!! $url !!}
-                            </p>
-                            <p>This link will expire in 60 minutes.</p>
-                            <p>If you verify from different device, make sure to log out and log in again on the other
-                                devices to refresh your session.</p>
-                            <p style="margin-top:30px;">
-                                Warm regards,<br>
-                                <strong>The Nursedive Team</strong>
-                            </p>
-                        </td>
-                    </tr>
-
-                    <!-- Footer -->
-                    <tr>
-                        <td align="center" style="background:#f1f5f9; padding:20px; font-size:12px; color:#777;">
-                            <p style="margin:0;">© {{ date('Y') }} Nursedive. All rights reserved.</p>
-                            <p style="margin:0;">
-                                <a href="https://www.nursedive.com/" style="color:#172554; text-decoration:none;">Visit
-                                    Nursedive</a>
-                            </p>
-                        </td>
-                    </tr>
-
-                </table>
+            <td style="padding:16px;">
+                <p style="margin:0 0 8px; color:#64748b; font-size:14px; line-height:1.5;">
+                    If the button does not work, copy and paste this link into your browser:
+                </p>
+                <p style="margin:0; word-break:break-all; font-size:14px; line-height:1.5;">
+                    <a href="{{ $url }}" style="color:#172554; text-decoration:underline;">{{ $url }}</a>
+                </p>
             </td>
         </tr>
     </table>
-</body>
 
-</html>
+    <p style="margin:28px 0 0;">
+        Warm regards,<br>
+        <strong>The Nursedive Team</strong>
+    </p>
+@endsection

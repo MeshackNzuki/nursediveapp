@@ -35,7 +35,7 @@ class FirstEngagement extends Notification // implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Honest Question — How’s Nursedive Treating You?')
+            ->subject('How Is Nursedive Treating You?')
             ->view('emails.firstEngangement', [
                 'user' => $notifiable,
             ]);

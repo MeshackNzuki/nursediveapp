@@ -1,81 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('emails.layout')
 
-<head>
-    <meta charset="UTF-8">
-    <title>Your Free Trial is Ending Soon — Nursedive</title>
-</head>
+@section('title')
+Your {{ $product }} Free Trial Is Ending Soon - Nursedive
+@endsection
 
-<body style="margin:0; padding:0; font-family: Arial, sans-serif; background:#eff6ff; color:#333;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#eff6ff; padding:40px 0;">
-        <tr>
-            <td align="center">
-                <table width="600" cellpadding="0" cellspacing="0"
-                    style="background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+@section('preheader')
+Your {{ $product }} free trial is ending soon. Upgrade to keep full access to your Nursedive tools.
+@endsection
 
-                    <!-- Header -->
-                    <tr>
-                        <td align="center" style="background:#172554; padding:20px;">
-                            <img src="https://app.nursedive.com/assets/favicon.png" alt="Nursedive Logo" width="60"
-                                height="60" style="display:block; margin-bottom:15px;">
-                            <h1 style="margin:0; font-size:26px; color:#ffffff; font-weight:bold;">
-                                Your {{ $product }} Free Trial is Ending Soon ⏰
-                            </h1>
-                        </td>
-                    </tr>
+@section('heading')
+Your {{ $product }} Trial Is Ending Soon
+@endsection
 
-                    <!-- Body -->
-                    <tr>
-                        <td style="padding:30px; text-align:left; font-size:16px; line-height:1.6; color:#444;">
-                            <p>Dear <strong>{{ explode(' ', trim($user->name))[0] }}</strong>,</p>
+@section('content')
+    @php($firstName = strtok(trim($user->name ?? ''), ' ') ?: 'there')
 
-                            <p>We hope you’ve enjoyed exploring <strong>Nursedive</strong> and discovered how our
-                                platform
-                                can help you prepare with confidence for your nursing exams.</p>
+    <p style="margin:0 0 18px;">Hello <strong>{{ $firstName }}</strong>,</p>
 
-                            <p><strong>Your {{ $product }} free trial is coming to an end soon.</strong> To keep
-                                your access to
-                                practice
-                                exams, tutor reviews, and detailed reports, make sure to upgrade your account today.</p>
+    <p style="margin:0 0 18px;">
+        We hope you have enjoyed exploring <strong>Nursedive</strong> and seeing how the platform can support your exam
+        preparation.
+    </p>
 
-                            <p style="text-align:center; margin:40px 0;">
-                                <a href="https://app.nursedive.com/subscription"
-                                    style="background:#172554; color:#ffffff; text-decoration:none; 
-                                          padding:14px 28px; border-radius:25px; font-size:16px; font-weight:bold;">
-                                    Upgrade Now
-                                </a>
-                            </p>
+    <p style="margin:0 0 18px;">
+        Your <strong>{{ $product }} free trial</strong> is ending soon. Upgrade before it ends to keep access to practice
+        exams, tutor reviews, detailed reports, and your progress history.
+    </p>
 
-                            <p>Don’t lose your progress — upgrading ensures you’ll continue enjoying full access to
-                                Nursedive resources</p>
+    @include('emails.partials.button', ['href' => 'https://app.nursedive.com/subscription', 'label' => 'Upgrade Now'])
 
+    <p style="margin:0 0 18px;">
+        Upgrading keeps your study progress in place and helps you continue preparing with confidence.
+    </p>
 
-                            <p>Keep building your confidence and take the next step toward your nursing career with
-                                <strong>Nursedive Premium</strong>.
-                            </p>
-
-                            <p style="margin-top:30px;">
-                                Stay focused — success is closer than you think!
-                                <br><strong>The Nursedive Team</strong>
-                            </p>
-                        </td>
-                    </tr>
-
-                    <!-- Footer -->
-                    <tr>
-                        <td align="center" style="background:#f1f5f9; padding:20px; font-size:12px; color:#777;">
-                            <p style="margin:0;">© {{ date('Y') }} Nursedive. All rights reserved.</p>
-                            <p style="margin:0;">
-                                <a href="https://www.nursedive.com/" style="color:#172554; text-decoration:none;">Visit
-                                    Nursedive</a>
-                            </p>
-                        </td>
-                    </tr>
-
-                </table>
-            </td>
-        </tr>
-    </table>
-</body>
-
-</html>
+    <p style="margin:28px 0 0;">
+        Stay focused. Success is closer than you think.<br>
+        <strong>The Nursedive Team</strong>
+    </p>
+@endsection

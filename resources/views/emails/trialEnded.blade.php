@@ -1,62 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('emails.layout')
 
-<head>
-    <meta charset="UTF-8">
-    <title>Your Nursedive Trial Has Ended</title>
-</head>
+@section('title')
+Your {{ $product }} Trial Has Ended - Nursedive
+@endsection
 
-<body style="margin:0; padding:0; font-family: Arial, sans-serif; background:#eff6ff; color:#333;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#eff6ff; padding:40px 0;">
-        <tr>
-            <td align="center">
-                <table width="600" cellpadding="0" cellspacing="0"
-                    style="background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+@section('preheader')
+Your {{ $product }} trial has ended, but you can upgrade any time to keep full access.
+@endsection
 
-                    <tr>
-                        <td align="center" style="background:#172554; padding:20px;">
-                            <img src="https://app.nursedive.com/assets/favicon.png" width="60" height="60"
-                                alt="Nursedive Logo" style="display:block; margin-bottom:15px;">
-                            <h1 style="margin:0; font-size:24px; color:#ffffff; font-weight:bold;">
-                                Your Trial Has Ended
-                            </h1>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:30px; font-size:16px; line-height:1.6; color:#444;">
-                            <p>Dear <strong>{{ explode(' ', trim($user->name))[0] }}</strong>,</p>
+@section('heading')
+Your Trial Has Ended
+@endsection
 
-                            <p>Your <strong>Nursedive {{ $product }}</strong> trial has ended on
-                                <strong>{{ $expired_date }}</strong>. However, you can still continue your journey with
-                                Nursedive basic or upgrading to a premium plan.
-                            </p>
-                            </p>
+@section('content')
+    @php($firstName = strtok(trim($user->name ?? ''), ' ') ?: 'there')
 
-                            <p>Upgrade to a premium plan at any time to continue tracking your progress without losing
-                                your history.</p>
+    <p style="margin:0 0 18px;">Hello <strong>{{ $firstName }}</strong>,</p>
 
-                            <p style="text-align:center; margin:30px 0;">
-                                <a href="https://app.nursedive.com/subscription"
-                                    style="background:#172554; color:#fff; text-decoration:none; 
-                                    padding:12px 26px; border-radius:25px; font-size:15px; font-weight:bold;">
-                                    Upgrade Plan
-                                </a>
-                            </p>
+    <p style="margin:0 0 18px;">
+        Your <strong>Nursedive {{ $product }}</strong> trial ended on <strong>{{ $expired_date }}</strong>.
+    </p>
 
-                            <p><strong>The Nursedive Team</strong></p>
-                        </td>
-                    </tr>
+    <p style="margin:0 0 18px;">
+        You can continue with Nursedive Basic, or upgrade to a premium plan at any time to keep full access to your practice tools,
+        reports, and progress history.
+    </p>
 
-                    <tr>
-                        <td align="center" style="background:#f1f5f9; padding:15px; font-size:12px; color:#777;">
-                            © {{ date('Y') }} Nursedive. All rights reserved.
-                        </td>
-                    </tr>
+    @include('emails.partials.button', ['href' => 'https://app.nursedive.com/subscription', 'label' => 'Upgrade Plan'])
 
-                </table>
-            </td>
-        </tr>
-    </table>
-</body>
-
-</html>
+    <p style="margin:28px 0 0;">
+        We are here whenever you are ready to keep going.<br>
+        <strong>The Nursedive Team</strong>
+    </p>
+@endsection
