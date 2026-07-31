@@ -347,13 +347,20 @@ const startStream = async (messageOverride = null, options = {}) => {
     eventSource = new AbortController();
 
     try {
+        const headers = {
+            "Content-Type": "application/json",
+            Accept: "text/event-stream",
+        };
+
+        const token = authStore.user?.token;
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+
         const response = await fetch(endpoint, {
             method: "POST",
             credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "text/event-stream",
-            },
+            headers,
             body: JSON.stringify(requestBody),
             signal: eventSource.signal,
         });
