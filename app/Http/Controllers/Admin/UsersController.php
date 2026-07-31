@@ -17,9 +17,10 @@ class UsersController extends Controller
     {
 
 
-        $users = User::with(['roles', 'permissions',])
-            ->withMax(['tokens as last_login'], 'last_used_at')
-            ->get();
+        $query = User::with(['roles', 'permissions']);
+        $query->select('users.*')->selectRaw('users.last_seen_at as last_login');
+
+        $users = $query->get();
 
         return $this->ResSuccess([
             'users' => $users,

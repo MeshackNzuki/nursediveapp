@@ -16,6 +16,16 @@ use Carbon\Carbon;
 
 class AdminController extends Controller
 {
+    private function activeUsersSince(Carbon $since): int
+    {
+        return User::where('last_seen_at', '>=', $since)->count();
+    }
+
+    private function withLastLogin($query)
+    {
+        return $query->select('users.*')->selectRaw('users.last_seen_at as last_login');
+    }
+
     public function dashData()
     {
         $now = now();
@@ -73,25 +83,10 @@ class AdminController extends Controller
             ->distinct('user_id')
             ->count('user_id');
 
-        // Active users (based on Sanctum token usage)
-        $active24h = \Laravel\Sanctum\PersonalAccessToken::whereRaw(
-            'COALESCE(last_used_at, created_at) >= ?',
-            [$now->copy()->subHours(24)]
-        )->where('tokenable_type', User::class)->distinct('tokenable_id')
-            ->count('tokenable_id');
-
-        $active12h = \Laravel\Sanctum\PersonalAccessToken::whereRaw(
-            'COALESCE(last_used_at, created_at) >= ?',
-            [$now->copy()->subHours(12)]
-        )->where('tokenable_type', User::class)->distinct('tokenable_id')
-            ->count('tokenable_id');
-
-
-        $active6h = \Laravel\Sanctum\PersonalAccessToken::whereRaw(
-            'COALESCE(last_used_at, created_at) >= ?',
-            [$now->copy()->subHours(6)]
-        )->where('tokenable_type', User::class)->distinct('tokenable_id')
-            ->count('tokenable_id');
+        // Active users based on real authenticated request activity.
+        $active24h = $this->activeUsersSince($now->copy()->subHours(24));
+        $active12h = $this->activeUsersSince($now->copy()->subHours(12));
+        $active6h = $this->activeUsersSince($now->copy()->subHours(6));
 
 
         // Unique users who have taken exams
@@ -317,8 +312,7 @@ class AdminController extends Controller
 
     public function usersPerProductOrAll(Request $request)
     {
-        $query = User::with(['roles', 'permissions', 'subscription'])
-            ->withMax(['tokens as last_login'], 'last_used_at');
+        $query = $this->withLastLogin(User::with(['roles', 'permissions', 'subscription']));
 
         $ids = collect();
 
