@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -107,6 +108,8 @@ class PasswordResetController extends Controller
         $user = User::where('email', $request->email)->first();
         $user->update(['password' => Hash::make($request->password)]);
 
+        Auth::login($user);
+
         // Delete reset record
         DB::table('password_resets')->where('email', $request->email)->delete();
 
@@ -122,22 +125,7 @@ class PasswordResetController extends Controller
             'email' => $user->email,
             'avatar' => $user->avatar,
             'email_verified_at' => $user->email_verified_at,
-            'subscriptions' => $user->subscriptions()
-                ->with('plan')
-                ->get()
-                ->map(function ($sub) {
-                    return [
-                        'product_code' => $sub->product_code,
-                        'status'       => $sub->status,
-                        'expiry_date'  => optional($sub->expiry_date)->toDateString(),
-                        'is_active'    => $sub->isActive(),
-                        'plan'         => [
-                            'id'    => $sub->plan?->id,
-                            'name'  => $sub->plan?->name,
-                            'price' => $sub->plan?->price,
-                        ],
-                    ];
-                }),
+            'subscriptions' => $user->subscription?->subscriptions,
         ]);
     }
 }

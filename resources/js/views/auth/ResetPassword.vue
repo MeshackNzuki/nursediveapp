@@ -144,8 +144,8 @@ const setMessage = (text, type = "info") => {
 };
 
 const validatePasswords = () => {
-    if (password.value.length < 4) {
-        setMessage("Password must be at least 4 characters long.", "error");
+    if (password.value.length < 8) {
+        setMessage("Password must be at least 8 characters long.", "error");
         return false;
     }
     if (password.value !== password_confirmation.value) {
@@ -205,16 +205,22 @@ const changePassword = async () => {
 
     isBusy.value = true;
     try {
-        const res = await axios.post("/password-reset/confirm", {
+        const res = await axios.post("/password/reset", {
             email: email.value,
             password: password.value,
             password_confirmation: password_confirmation.value,
             token: Usertoken.value,
         });
 
+        const userData = res?.data?.data;
+        if (!userData?.token) {
+            setMessage("Password reset succeeded, but no login token was returned.", "error");
+            return;
+        }
+
         setMessage("Password reset successful. Redirecting...", "success");
         setTimeout(() => {
-            login(res.data.data);
+            login(userData);
             router.push("/");
         }, 1000);
     } catch (error) {
