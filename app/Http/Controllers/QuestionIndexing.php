@@ -11,14 +11,37 @@ use Illuminate\Support\Str;
 
 class QuestionIndexing extends Controller
 {
+    private const RELATED_QUESTIONS_LIMIT = 3;
+
+    private const NURSING_RELATED_QUESTION_COLUMNS = [
+        'id',
+        'sub_topic_id',
+        'question',
+        'question_slug',
+    ];
+
+    private const TEAS_QUESTION_COLUMNS = [
+        'id',
+        'topic_id',
+        'question',
+        'question_slug',
+    ];
+
+    private const TEAS_RELATED_QUESTION_COLUMNS = [
+        'id',
+        'topic_id',
+        'question',
+        'question_slug',
+    ];
+
     /**
      * Return nursing questions by slug.
      */
     public function indexNursingQuestions(Request $request)
     {
-        $slug = $request->input('slug');
+        $slug = trim((string) $request->input('slug', ''));
 
-        if (!$slug) {
+        if ($slug === '') {
             return $this->ResError([
                 'error' => 'Slug is required.'
             ], 400);
@@ -36,19 +59,22 @@ class QuestionIndexing extends Controller
 
         // NEXT questions first (deterministic)
         $relatedQuestions = NursingQuestion::where('sub_topic_id', $question->sub_topic_id)
+            ->select(self::NURSING_RELATED_QUESTION_COLUMNS)
             ->where('id', '>', $question->id)
             ->orderBy('id', 'asc')
-            ->take(3)
+            ->limit(self::RELATED_QUESTIONS_LIMIT)
             ->get();
 
         // Top up with previous if needed
-        if ($relatedQuestions->count() < 3) {
-            $remaining = 3 - $relatedQuestions->count();
+        $remaining = self::RELATED_QUESTIONS_LIMIT - $relatedQuestions->count();
+
+        if ($remaining > 0) {
 
             $previousQuestions = NursingQuestion::where('sub_topic_id', $question->sub_topic_id)
+                ->select(self::NURSING_RELATED_QUESTION_COLUMNS)
                 ->where('id', '<', $question->id)
                 ->orderBy('id', 'desc')
-                ->take($remaining)
+                ->limit($remaining)
                 ->get();
 
             $relatedQuestions = $relatedQuestions->merge($previousQuestions);
@@ -65,15 +91,19 @@ class QuestionIndexing extends Controller
      */
     public function indexTeasQuestions(Request $request)
     {
-        $slug = $request->input('slug');
+        $slug = trim((string) $request->input('slug', ''));
 
-        if (!$slug) {
+        if ($slug === '') {
             return  $this->ResError([
                 'error' => 'Slug is required.'
             ], 400);
         }
 
-        $question = TeasQuestion::with('topic', 'answer')
+        $question = TeasQuestion::select(self::TEAS_QUESTION_COLUMNS)
+            ->with([
+                'topic:id,name',
+                'answer:id,question_id,choices,correct_choice,explanation',
+            ])
             ->where('question_slug', $slug)
             ->first();
 
@@ -84,18 +114,21 @@ class QuestionIndexing extends Controller
         }
 
         $relatedQuestions = TeasQuestion::where('topic_id', $question->topic_id)
+            ->select(self::TEAS_RELATED_QUESTION_COLUMNS)
             ->where('id', '>', $question->id)
             ->orderBy('id', 'asc')
-            ->take(3)
+            ->limit(self::RELATED_QUESTIONS_LIMIT)
             ->get();
 
-        if ($relatedQuestions->count() < 3) {
-            $remaining = 3 - $relatedQuestions->count();
+        $remaining = self::RELATED_QUESTIONS_LIMIT - $relatedQuestions->count();
+
+        if ($remaining > 0) {
 
             $previousQuestions = TeasQuestion::where('topic_id', $question->topic_id)
+                ->select(self::TEAS_RELATED_QUESTION_COLUMNS)
                 ->where('id', '<', $question->id)
                 ->orderBy('id', 'desc')
-                ->take($remaining)
+                ->limit($remaining)
                 ->get();
 
             $relatedQuestions = $relatedQuestions->merge($previousQuestions);
@@ -103,7 +136,7 @@ class QuestionIndexing extends Controller
 
         return $this->ResSuccess([
             'question' => $question,
-            'related_questions' => $relatedQuestions
+            'related_questions' => $relatedQuestions->values()
         ]);
     }
 

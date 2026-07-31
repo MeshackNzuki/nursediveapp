@@ -71,8 +71,6 @@ class PasswordResetController extends Controller
 
         $user->notify(new CustomResetPassword($query));
 
-
-
         return $this->ResSuccess([
             'message' => 'We have emailed your password reset code!',
         ]);
@@ -107,7 +105,6 @@ class PasswordResetController extends Controller
             'message' => 'success',
         ]);
     }
-
 
     // Step 3: Reset password
     public function reset(Request $request)
