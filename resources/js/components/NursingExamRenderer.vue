@@ -15,10 +15,10 @@
                 }} <span class="hidden lg:block">of</span>
                 <span class="lg:hidden">/</span>
                 {{ examStore.questions.length }}</span>
-            <button v-if="examStore.testMode != 'exam'" type="button" aria-label="Discuss with AI"
+            <button v-if="examStore.testMode != 'exam'" type="button" aria-label="Ask AI"
                 @click="ChatOpenned = !ChatOpenned"
                 class="cursor-pointer whitespace-nowrap font-semibold hover:underline">
-                Discuss with AI
+                Ask AI
             </button>
             <!-- Right side: Controls -->
             <div class="flex items-center gap-4">
@@ -117,7 +117,7 @@
                         <div v-if="examStore.answers[examStore.currentQuestion.id]" class="flex items-center gap-1">
                             <i class="pi pi-user-edit text-teal-500"></i>
                             <span>Your Answer was {{ examStore.answers[examStore.currentQuestion.id]
-                            }}</span>
+                                }}</span>
                         </div>
                     </div>
                 </div>

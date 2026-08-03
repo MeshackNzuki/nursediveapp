@@ -17,10 +17,10 @@
                     <span class="lg:hidden">/</span>
                     {{ catStore.maxQuestions }}
                 </span>
-                <button v-if="catStore.testMode != 'exam'" type="button" aria-label="Discuss with AI"
+                <button v-if="catStore.testMode != 'exam'" type="button" aria-label="Ask AI"
                     @click="ChatOpenned = !ChatOpenned"
                     class="cursor-pointer whitespace-nowrap font-semibold hover:underline">
-                    Discuss with AI
+                    Ask AI
                 </button>
 
                 <!-- Right side: Controls -->
@@ -69,7 +69,7 @@
                     <div class="flex items-center gap-1">
                         <i class="pi pi-sliders-v text-white"></i>
                         <span class="text-sm font-semibold">Difficulty: {{ Math.round(catStore.currentDifficulty)
-                        }}/100</span>
+                            }}/100</span>
                     </div>
                 </div>
             </div>
@@ -178,7 +178,7 @@
                     class="px-4 py-2 cursor-pointer rounded flex justify-center items-center gap-1 font-semibold">
                     <span v-if="!catStore.shouldStopExam">Next</span>
                     <span v-else>{{ catStore.questionsAsked >= catStore.maxQuestions ? 'Complete' : 'Stop & Submit'
-                    }}</span>
+                        }}</span>
                     <i class="pi pi-arrow-right"></i>
                 </button>
             </div>

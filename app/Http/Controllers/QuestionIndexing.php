@@ -367,7 +367,6 @@ class QuestionIndexing extends Controller
             try {
                 $total = $query->count();
                 $chunks = ceil($total / $chunkSize);
-
                 for ($i = 0; $i < $chunks; $i++) {
                     $start = $i * $chunkSize;
                     $questions = $query->skip($start)->take($chunkSize)->get();
