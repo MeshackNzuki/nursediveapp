@@ -737,7 +737,7 @@ onMounted(() => {
                     <div>
                         <h2
                             class="mt-1 text-xl font-semibold tracking-tight text-slate-950 md:text-2xl dark:text-slate-100">
-                            Choose Your Path
+                            Select Product {{ primaryProduct ? `(Auto Selected :- ${primaryProduct.name} )` : "" }}
                         </h2>
                     </div>
                     <p class="text-sm text-slate-500 dark:text-slate-400">

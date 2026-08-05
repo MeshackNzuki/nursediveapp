@@ -182,10 +182,12 @@
         Choose tutor mode for guided explanations or exam mode for timed simulation.
       </p>
 
-      <div class="flex justify-end gap-3">
+      <div class="flex flex-wrap justify-end gap-3">
         <CommonButton button-text="Tutor Mode" classes="bg-teal-500 text-white" :action="() => goToExam('tutor')" />
         <CommonButton button-text="Exam Mode" classes="bg-gradient-to-r from-sky-600 to-cyan-500 text-white"
           :action="() => goToExam('exam')" />
+        <CommonButton button-text="Review Mode" classes="bg-gradient-to-r from-sky-600 to-cyan-500 text-white"
+          :action="() => goToExam('review', true)" />
       </div>
     </div>
   </dialog>
@@ -239,9 +241,15 @@ function openModal(exam: { id: number; name: string }) {
   modalRef.value?.showModal()
 }
 
-function goToExam(mode: 'tutor' | 'exam' | 'review') {
+function goToExam(mode: 'tutor' | 'exam' | 'review', examreview = false) {
   if (selectedExam.value) {
-    router.push(`/nursing/exam/${selectedExam.value.id}?mode=${mode}`)
+    router.push({
+      path: `/nursing/exam/${selectedExam.value.id}`,
+      query: {
+        mode,
+        ...(examreview ? { examreview: 'true' } : {}),
+      },
+    })
     modalRef.value?.close()
   }
 }

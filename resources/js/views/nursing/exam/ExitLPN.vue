@@ -9,15 +9,19 @@
         <div class="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
           <div>
             <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">ATI PN Exit Exams</h2>
-            <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Exit-level ATI PN sets with resume, review, and retake flow.</p>
+            <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Exit-level ATI PN sets with resume, review, and
+              retake flow.</p>
             <div class="mt-3 flex flex-wrap gap-2">
-              <span class="rounded-2xl border border-sky-200 bg-white/85 px-3 py-1.5 text-xs font-semibold text-sky-700 dark:border-sky-700 dark:bg-slate-900/70 dark:text-sky-200">
+              <span
+                class="rounded-2xl border border-sky-200 bg-white/85 px-3 py-1.5 text-xs font-semibold text-sky-700 dark:border-sky-700 dark:bg-slate-900/70 dark:text-sky-200">
                 {{ filteredAti.length }} exams
               </span>
-              <span class="rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-200">
+              <span
+                class="rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-200">
                 {{ tabCompletedCount(filteredAti) }} completed
               </span>
-              <span class="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-950/60 dark:text-amber-200">
+              <span
+                class="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-950/60 dark:text-amber-200">
                 Avg score: {{ tabAverageScore(filteredAti) }}%
               </span>
             </div>
@@ -35,7 +39,9 @@
       <transition-group v-else name="fade" tag="div" class="grid grid-cols-1 sm:grid-cols-2 gap-4" appear>
         <article v-for="(exam, index) in filteredAti" :key="exam.id"
           class="group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]">
-          <div :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]"></div>
+          <div
+            :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]">
+          </div>
           <div class="relative flex h-full flex-col">
             <div class="flex items-start justify-between gap-3">
               <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">{{ normalizeText(exam.name) }}</h3>
@@ -72,11 +78,9 @@
                   classes="border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none"
                   :action="() => resumeExam(getAttemptId(exam))" />
               </template>
-              <Small button-text="Open Exams"
-                :icon="examScore(exam) ? 'pi pi-refresh' : ''"
-                :classes="examScore(exam)
-                  ? 'border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none'
-                  : 'border border-cyan-500 bg-white text-slate-900 hover:bg-cyan-500 hover:text-white shadow-none'"
+              <Small button-text="Open Exams" :icon="examScore(exam) ? 'pi pi-refresh' : ''" :classes="examScore(exam)
+                ? 'border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none'
+                : 'border border-cyan-500 bg-white text-slate-900 hover:bg-cyan-500 hover:text-white shadow-none'"
                 :action="() => openModal(exam)" />
             </div>
           </div>
@@ -93,15 +97,19 @@
         <div class="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
           <div>
             <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">HESI PN Exit Exams</h2>
-            <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Exit-level HESI PN sets with resume, review, and retake flow.</p>
+            <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Exit-level HESI PN sets with resume, review, and
+              retake flow.</p>
             <div class="mt-3 flex flex-wrap gap-2">
-              <span class="rounded-2xl border border-sky-200 bg-white/85 px-3 py-1.5 text-xs font-semibold text-sky-700 dark:border-sky-700 dark:bg-slate-900/70 dark:text-sky-200">
+              <span
+                class="rounded-2xl border border-sky-200 bg-white/85 px-3 py-1.5 text-xs font-semibold text-sky-700 dark:border-sky-700 dark:bg-slate-900/70 dark:text-sky-200">
                 {{ filteredHesi.length }} exams
               </span>
-              <span class="rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-200">
+              <span
+                class="rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-200">
                 {{ tabCompletedCount(filteredHesi) }} completed
               </span>
-              <span class="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-950/60 dark:text-amber-200">
+              <span
+                class="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-950/60 dark:text-amber-200">
                 Avg score: {{ tabAverageScore(filteredHesi) }}%
               </span>
             </div>
@@ -119,7 +127,9 @@
       <transition-group v-else name="fade" tag="div" class="grid grid-cols-1 sm:grid-cols-2 gap-4" appear>
         <article v-for="(exam, index) in filteredHesi" :key="exam.id"
           class="group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]">
-          <div :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]"></div>
+          <div
+            :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]">
+          </div>
           <div class="relative flex h-full flex-col">
             <div class="flex items-start justify-between gap-3">
               <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">{{ normalizeText(exam.name) }}</h3>
@@ -156,11 +166,9 @@
                   classes="border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none"
                   :action="() => resumeExam(getAttemptId(exam))" />
               </template>
-              <Small button-text="Open Exams"
-                :icon="examScore(exam) ? 'pi pi-refresh' : ''"
-                :classes="examScore(exam)
-                  ? 'border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none'
-                  : 'border border-cyan-500 bg-white text-slate-900 hover:bg-cyan-500 hover:text-white shadow-none'"
+              <Small button-text="Open Exams" :icon="examScore(exam) ? 'pi pi-refresh' : ''" :classes="examScore(exam)
+                ? 'border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none'
+                : 'border border-cyan-500 bg-white text-slate-900 hover:bg-cyan-500 hover:text-white shadow-none'"
                 :action="() => openModal(exam)" />
             </div>
           </div>
@@ -182,10 +190,12 @@
         Choose tutor mode for guided explanations or exam mode for timed simulation.
       </p>
 
-      <div class="flex justify-end gap-3">
+      <div class="flex flex-wrap justify-end gap-3">
         <CommonButton button-text="Tutor Mode" classes="bg-teal-500 text-white" :action="() => goToExam('tutor')" />
         <CommonButton button-text="Exam Mode" classes="bg-gradient-to-r from-sky-600 to-cyan-500 text-white"
           :action="() => goToExam('exam')" />
+        <CommonButton button-text="Review Mode" classes="bg-gradient-to-r from-sky-600 to-cyan-500 text-white"
+          :action="() => goToExam('review', true)" />
       </div>
     </div>
   </dialog>
@@ -241,9 +251,15 @@ const openModal = (exam: { id: number; name: string }) => {
   modalRef.value?.showModal()
 }
 
-const goToExam = (mode: 'review' | 'tutor' | 'exam') => {
+const goToExam = (mode: 'review' | 'tutor' | 'exam', examreview: boolean = false) => {
   if (!selectedExam.value) return
-  router.push(`/nursing/exam/${selectedExam.value.id}?mode=${mode}`)
+  router.push({
+    path: `/nursing/exam/${selectedExam.value.id}`,
+    query: {
+      mode,
+      ...(examreview ? { examreview: 'true' } : {}),
+    },
+  })
   modalRef.value?.close()
 }
 

@@ -119,27 +119,6 @@
                     </div>
                 </div>
 
-                <div v-if="!isAdminArea" class="mt-5">
-                    <p v-if="isSidebarOpen"
-                        class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
-                        Utilities
-                    </p>
-                    <div class="space-y-1.5">
-                        <router-link v-for="item in welcomeMenu" :key="item.route" :to="item.route" custom
-                            v-slot="{ href, navigate, isActive, isExactActive }">
-                            <a :href="href" :class="navItemClass(isActive || isExactActive, item)"
-                                :title="isSidebarOpen ? undefined : item.label" @click="navigate">
-                                <span :class="sidebarIconClass(isActive || isExactActive, item)">
-                                    <i :class="item.icon"></i>
-                                </span>
-                                <span v-if="isSidebarOpen" class="min-w-0 flex-1 truncate">
-                                    {{ item.label }}
-                                </span>
-                            </a>
-                        </router-link>
-                    </div>
-                </div>
-
                 <div v-if="!isAdminArea" :class="switcherClass">
                     <p v-if="isSidebarOpen"
                         class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
@@ -158,6 +137,27 @@
                                     <span class="block truncate text-xs text-cyan-100/60">{{ area.label }}</span>
                                 </span>
                                 <i v-if="isSidebarOpen" class="pi pi-arrow-right text-xs text-cyan-100/50"></i>
+                            </a>
+                        </router-link>
+                    </div>
+                </div>
+
+                <div v-if="!isAdminArea" class="mt-5">
+                    <p v-if="isSidebarOpen"
+                        class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
+                        Utilities
+                    </p>
+                    <div class="space-y-1.5">
+                        <router-link v-for="item in welcomeMenu" :key="item.route" :to="item.route" custom
+                            v-slot="{ href, navigate, isActive, isExactActive }">
+                            <a :href="href" :class="navItemClass(isActive || isExactActive, item)"
+                                :title="isSidebarOpen ? undefined : item.label" @click="navigate">
+                                <span :class="sidebarIconClass(isActive || isExactActive, item)">
+                                    <i :class="item.icon"></i>
+                                </span>
+                                <span v-if="isSidebarOpen" class="min-w-0 flex-1 truncate">
+                                    {{ item.label }}
+                                </span>
                             </a>
                         </router-link>
                     </div>

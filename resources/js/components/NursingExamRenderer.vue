@@ -630,30 +630,47 @@ async function finishExam() {
 
 async function loadExam() {
     const examId = route.params.id || route.path.split('/').pop()
+    const queryValue = (value: unknown) => Array.isArray(value) ? value[0] : value;
 
-    const mode = (route.query.mode as string) || 'exam';
+    const mode = String(queryValue(route.query.mode) || 'exam').trim() as 'exam' | 'review' | 'tutor';
+    const isRawExamReview = String(queryValue(route.query.examreview) || '').trim() === 'true';
 
-    examStore.setMode(mode as | 'exam' | 'review' | 'tutor');
+    examStore.setMode(mode);
 
     if (mode === 'review') {
-        const { data } = await axios.get(`/nursing/exam-attempts/${examId}`, { showLoader: false })
+        if (isRawExamReview) {
+            const { data } = await axios.get(`/nursing/exam/${examId}`, { showLoader: false })
+            const examData = data.data;
 
-        const attempt = data.data
+            examStore.setExamData({
+                exam: {
+                    id: examData.id,
+                    title: examData.name,
+                    description: examData.description
+                },
+                questions: examData.questions,
+                notes: parseRecordPayload(examData.notes),
+                is_exam_full_length: !is_authenticated ? examStore.hasReachedUnathenticatedThreshold() : examData.full_length,
+            })
+        } else {
+            const { data } = await axios.get(`/nursing/exam-attempts/${examId}`, { showLoader: false })
 
-        examStore.loadAttempt({
-            exam: {
-                id: attempt.sub_topic.id,
-                title: attempt.sub_topic.name,
-                description: attempt.sub_topic.description
-            },
-            questions: attempt.questions,
-            answers: parseRecordPayload(attempt.answers),
-            results: parseRecordPayload(attempt.results),
-            notes: parseRecordPayload(attempt.notes),
-            is_exam_full_length: attempt.full_length,
-            mode: mode
-        })
+            const attempt = data.data
 
+            examStore.loadAttempt({
+                exam: {
+                    id: attempt.sub_topic.id,
+                    title: attempt.sub_topic.name,
+                    description: attempt.sub_topic.description
+                },
+                questions: attempt.questions,
+                answers: parseRecordPayload(attempt.answers),
+                results: parseRecordPayload(attempt.results),
+                notes: parseRecordPayload(attempt.notes),
+                is_exam_full_length: attempt.full_length,
+                mode: mode
+            })
+        }
     } else {
         const resume = (route.query.resume as any) || null;
         if (resume) {
