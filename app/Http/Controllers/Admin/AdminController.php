@@ -21,9 +21,9 @@ class AdminController extends Controller
         return User::where('last_seen_at', '>=', $since)->count();
     }
 
-    private function withLastLogin($query)
+    private function withLastActive($query)
     {
-        return $query->select('users.*')->selectRaw('users.last_seen_at as last_login');
+        return $query->select('users.*')->selectRaw('users.last_seen_at as last_active');
     }
 
     public function dashData()
@@ -312,7 +312,7 @@ class AdminController extends Controller
 
     public function usersPerProductOrAll(Request $request)
     {
-        $query = $this->withLastLogin(User::with(['roles', 'permissions', 'subscription']));
+        $query = $this->withLastActive(User::with(['roles', 'permissions', 'subscription']));
 
         $ids = collect();
 

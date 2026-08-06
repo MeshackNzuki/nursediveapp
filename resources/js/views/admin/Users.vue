@@ -16,7 +16,7 @@
             'NAME',
             'EMAIL',
             'JOIN DATE',
-            'LAST LOGIN',
+            'LAST ACTIVE',
             'SUBSCRIBED',
             'ROLE',
         ]" title="User Management" search_placeholder="Search User" :rows="userData?.length" v-model:query="query">
@@ -35,7 +35,7 @@
                             }}</div>
                     </td>
                     <td class="p-2 whitespace-nowrap">
-                        <div>{{ timeAgo(user.last_login ? user.last_login : "-") }}</div>
+                        <div>{{ timeAgo(user.last_active ? user.last_active : "-") }}</div>
                     </td>
                     <td class="p-2 whitespace-nowrap">
                         <div

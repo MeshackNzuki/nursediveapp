@@ -18,7 +18,7 @@ class UsersController extends Controller
 
 
         $query = User::with(['roles', 'permissions']);
-        $query->select('users.*')->selectRaw('users.last_seen_at as last_login');
+        $query->select('users.*')->selectRaw('users.last_seen_at as last_active');
 
         $users = $query->get();
 
