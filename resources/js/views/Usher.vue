@@ -503,13 +503,11 @@ onMounted(() => {
     updateVisitStreak();
 });
 </script>
-
 <template>
     <div
-        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-slate-100 p-4 md:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh] dark:bg-slate-950">
+        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 md:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh] dark:bg-slate-950">
         <div class="mx-auto max-w-7xl space-y-6">
-            <section v-if="isAuthenticated"
-                class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white p-5  md:p-6 dark:border-slate-800 dark:bg-slate-900">
+            <section v-if="isAuthenticated" class="overflow-hidden  p-5  md:p-6 ">
                 <div class="grid gap-6 lg:grid-cols-[1fr_340px]">
                     <div>
                         <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
@@ -525,7 +523,7 @@ onMounted(() => {
                             <div class="min-w-0 flex-1">
                                 <h1
                                     class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl dark:text-slate-100">
-                                    <span class="">Happy Studies,<span class="italic font-light ml-1">{{
+                                    <span class="">Welcome Back,<span class="italic font-light ml-1">{{
                                         firstName }}
                                         </span> </span>
                                 </h1>
@@ -534,7 +532,6 @@ onMounted(() => {
                                 </p>
                             </div>
                         </div>
-
                         <div
                             class="mt-5 rounded-lg border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/50">
                             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -650,13 +647,12 @@ onMounted(() => {
                     </aside>
                 </div>
             </section>
-            <section v-else
-                class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white p-5  md:p-6 dark:border-slate-800 dark:bg-slate-900">
+            <section v-else class="overflow-hidden  p-5  md:p-6 ">
                 <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
                     <div>
                         <h1
                             class="mt-3 max-w-3xl text-2xl font-bold tracking-tight text-slate-950 md:text-3xl xl:text-4xl dark:text-slate-100">
-                            Practice smarter for <span class="text-amber-500">ATI TEAS, nursing school exams, <span
+                            Practice smarter for <span class="text-teal-500">ATI TEAS, nursing school exams, <span
                                     class="text-slate-950 dark:text-white">and
                                     the</span>
                                 NCLEX</span> with Nursedive

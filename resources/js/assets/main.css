@@ -18,6 +18,10 @@
     background-color: rgb(3 65 108 / var(--tw-bg-opacity));
 }
 
+.bg-white-500 {
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
 .text-bright-sun-500
 {
     --tw-text-opacity: 1;
