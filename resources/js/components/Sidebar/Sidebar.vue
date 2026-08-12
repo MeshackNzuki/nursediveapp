@@ -1,9 +1,5 @@
 <template>
     <nav v-if="!login" ref="sidebar_id" :class="sidebarShellClass" aria-label="Primary navigation">
-        <div
-            class="pointer-events-none absolute inset-0 bg-gradient-to-br from-sky-400/10 via-transparent to-teal-400/10">
-        </div>
-
         <div class="relative z-10 flex h-full min-h-0 flex-col">
             <router-link to="/" :class="brandClass" :title="isSidebarOpen ? undefined : 'Nursedive'">
                 <span
@@ -14,8 +10,8 @@
                     <span class="block text-xs font-bold uppercase tracking-widest text-white">
                         Nursedive
                     </span>
-                    <span class="block text-sm font-semibold leading-5 text-white">
-                        Nursing Prep
+                    <span class="block text-xs text-bright-sun-500">
+                        Plan, Study, Excel
                     </span>
                 </span>
             </router-link>
@@ -39,8 +35,8 @@
             </router-link>
             <div class="sidebar-scroll mt-4 min-h-0 flex-1 overflow-y-auto px-3 pb-4">
                 <p v-if="isSidebarOpen"
-                    class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
-                    {{ menuSectionTitle }}
+                    class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-wides text-bright-sun-500">
+                    <i class="pi pi-briefcase "></i> {{ menuSectionTitle }}
                 </p>
 
                 <button v-if="showBackButton" type="button" :class="navItemClass(false)" title="Go back"
@@ -121,7 +117,7 @@
 
                 <div v-if="!isAdminArea" :class="switcherClass">
                     <p v-if="isSidebarOpen"
-                        class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
+                        class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-100/70">
                         Switch Prep Area
                     </p>
                     <div :class="isSidebarOpen ? 'space-y-2' : 'space-y-1.5'">
@@ -130,11 +126,12 @@
                             <a :href="href" :class="switchItemClass(isActive || isExactActive)"
                                 :title="isSidebarOpen ? undefined : area.label" @click="navigate">
                                 <span :class="switchIconClass">
-                                    <i :class="area.icon"></i>
+                                    <i :class="area.icon + ' text-[#75DDFF]'"></i>
                                 </span>
                                 <span v-if="isSidebarOpen" class="min-w-0 flex-1">
-                                    <span class="block truncate text-sm font-bold">{{ area.short }}</span>
-                                    <span class="block truncate text-xs text-cyan-100/60">{{ area.label }}</span>
+                                    <span class="block truncate text-sm font-bold text-white">{{ area.short }}</span>
+                                    <span class="block truncate text-xs text-bright-sun-500 font-semibold">{{ area.label
+                                        }}</span>
                                 </span>
                                 <i v-if="isSidebarOpen" class="pi pi-arrow-right text-xs text-cyan-100/50"></i>
                             </a>
@@ -166,20 +163,19 @@
 
             <div class="border-t border-cyan-200/10 px-3 py-3">
                 <router-link v-if="isSidebarOpen && !isAdminArea" to="/referral"
-                    class="flex items-center gap-3 rounded-2xl border border-amber-300/20 bg-gradient-to-br from-amber-300/60 to-sky-600/10 p-3 transition hover:-translate-y-px hover:border-amber-300/40 hover:from-amber-300/25 hover:to-sky-500/20">
+                    class="flex items-center gap-3 rounded-2xl border border-amber-300/20 bg-gradient-to-br from-sky-900/90 to-sky-600/10 p-3 transition hover:-translate-y-px hover:border-amber-300/40 hover:from-amber-300/25 hover:to-sky-500/20">
                     <span :class="promoIconClass">
-                        <i class="pi pi-bolt"></i>
+                        <i class="pi pi-bolt text-bright-sun-500 "></i>
                     </span>
                     <span class="min-w-0">
-                        <span class="block text-xs font-extrabold uppercase tracking-wide text-amber-200">
+                        <span class="block text-xs font-extrabold uppercase tracking-wide text-bright-sun-500">
                             Get 14 days free
                         </span>
-                        <span class="block truncate text-xs text-cyan-100/70">
+                        <span class="block truncate text-xs text-white/90 font-bold italic">
                             Refer a friend to earn
                         </span>
                     </span>
                 </router-link>
-
                 <div class="mt-2 space-y-1.5">
                     <router-link to="/settings" custom v-slot="{ href, navigate, isActive, isExactActive }">
                         <a :href="href" :class="navItemClass(isActive || isExactActive, { icon: 'pi pi-cog' })"
@@ -515,7 +511,7 @@ const showBackButton = computed(() =>
 );
 
 const sidebarShellClass = computed(() => [
-    "fixed bottom-2 left-2 top-2 z-10 flex flex-col overflow-hidden rounded-3xl border border-cyan-300/20 bg-gradient-to-b from-sky-950 via-cyan-950 to-slate-950 text-slate-100 shadow-2xl shadow-slate-950/40 transition-all duration-300 ease-out",
+    "fixed bottom-2 left-2 top-2 z-10 flex flex-col overflow-hidden rounded-3xl bg-[rgb(11_40_69)] text-slate-100 shadow-2xl shadow-slate-950/40 transition-all duration-300 ease-out",
     mainStore.isMobile
         ? mainStore.sidebarOpen
             ? "w-52 translate-x-0 opacity-100"
@@ -526,7 +522,7 @@ const sidebarShellClass = computed(() => [
 ]);
 
 const brandClass = computed(() => [
-    "mx-3 mt-3 flex min-h-14 items-center gap-3 rounded-2xl border border-sky-300/20 bg-white/5 text-white transition hover:border-sky-300/30 hover:bg-white/10",
+    "mx-3 mt-3 flex min-h-14 items-center gap-3 rounded-2xl   text-white  ",
     isSidebarOpen.value ? "justify-start px-3" : "justify-center px-2",
 ]);
 
@@ -536,7 +532,7 @@ const profileClass = computed(() => [
 ]);
 
 const profileAvatarClass =
-    "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-teal-500 text-sm font-extrabold text-white shadow-lg shadow-cyan-950/20";
+    "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-800 text-sm font-extrabold text-bright-sun-500 shadow-lg shadow-cyan-950/20";
 
 const sidebarIconBaseClass =
     "inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-sky-300/20 bg-sky-950/70 text-sm text-cyan-300 transition";

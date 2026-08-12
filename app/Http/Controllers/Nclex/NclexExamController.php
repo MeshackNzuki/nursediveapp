@@ -265,21 +265,17 @@ class NclexExamController extends Controller
 
         return $this->ResSuccess($response);
     }
-
-
-
-
     public function previous_attempts(Request $request)
     {
-        $attempts = ExamAttempt::with('topic')
+        $attempts = ExamAttempt::with('subTopic')
             ->where('user_id', auth()->id())
             ->get();
         return $this->ResSuccess(
             $attempts->map(function ($attempt) {
                 return [
                     'id' => $attempt->id,
-                    'sub_topic_id' => $attempt->topic_id,
-                    'sub_topic_name' => $attempt->topic->name,
+                    'sub_topic_id' => $attempt->sub_topic_id,
+                    'sub_topic_name' => $attempt->subTopic->name,
                     'score' => $attempt->score,
                     'mode' => $attempt->mode,
                     'completed_at' => $attempt->completed_at,

@@ -371,7 +371,7 @@ onBeforeUnmount(() => {
     ]">
         <div class="loader"></div>
     </div>
-    <div :class="[dark ? 'bg-sky-950' : 'bg-sky-950/95']">
+    <div :class="[dark ? 'bg-sky-950' : 'bg-sky-800']">
         <div :class="[
             `min-h-screen select-none relative antialiased overflow-hidden ${(themeStore as any).fonts[themeStore.currentFont].font}`,
             authPages || testMode
@@ -379,7 +379,7 @@ onBeforeUnmount(() => {
                 : mainStore.isMobile
                     ? (mainStore.sidebarOpen ? 'ms-52' : 'ms-0')
                     : (mainStore.sidebarOpen ? 'ms-64' : 'ms-24'),
-            testMode || authPages ? '' : 'p-2',
+            testMode || authPages ? '' : 'ps-5 ',
         ]">
             <Toast />
             <ConfirmDialog />
@@ -467,7 +467,7 @@ onBeforeUnmount(() => {
 
             <TopBar v-if="!authPages && !testMode" />
             <router-view v-slot="{ Component }">
-                <div :class="'min-h-screen w-full text-gray-700 overflow-hidden' +
+                <div :class="'min-h-screen w-full text-gray-800 overflow-scroll' +
                     (!authPages && !testMode ? ' mt-10' : '')
                     ">
                     <transition name="page">

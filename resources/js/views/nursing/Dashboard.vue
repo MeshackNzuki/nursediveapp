@@ -60,67 +60,111 @@
               </dialog>
             </div>
           </div>
-          <div class="w-full flex flex-col justify-center items-center">
-            <h5 class="text-lg font-semibold text-start w-full">
-              Search for Exams/Topics
-            </h5>
-            <!-- wrapper for positioning -->
-            <div class="relative w-full max-w-md mt-2">
-
-              <input type="text" placeholder="Search for exams, questions, topics..." v-model="universal_search"
-                class="input border-orange-500 input-bordered w-full dark:bg-gray-200 dark:text-gray-500 bg-gray-50 rounded-full" />
-
-              <!-- dropdown -->
-              <div v-if="universal_search.length >= 3"
-                class="absolute left-0 right-0 top-full z-40 bg-white dark:bg-sky-900 rounded-2xl mt-2 p-4 shadow-lg">
-                <h6 class="font-semibold mb-2">Search Results:</h6>
-                <ul class="max-h-48 overflow-y-auto">
-                  <div class="text-gray-400 mb-1">Topics</div>
-                  <li v-for="subject in filteredSubjects" :key="subject.id"
-                    class="border-b border-gray-200 dark:border-gray-700">
-                    <div class="flex justify-between items-center gap-1">
-                      <span @click="$router.push(`/nursing/test-bank-loader/${subject.slug}`)"
-                        class="bg-teal-200 px-2 rounded-full text-xs m-0.5 cursor-pointer hover:bg-teal-300 hover:shadow">{{
-                          subject.name }}</span>
+          <div class="w-full flex flex-col md:flex-row justify-between items-stretch gap-4">
+            <!-- Stat Cards Column -->
+            <div class="w-full  flex flex-col justify-center items-center">
+              <h5 class="text-lg font-semibold text-start w-full">Exam Categories</h5>
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full bg-white dark:bg-sky-900 p-4 rounded-3xl shadow-xs">
+                <RouterLink v-for="link in nursingQuickLinks" :key="link.route" :to="link.route"
+                  class="rounded-2xl border border-slate-200 bg-slate-50/80 dark:bg-sky-950/40 dark:border-sky-800 p-4 hover:shadow-md hover:-translate-y-[1px] transition">
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <h4 class="font-bold text-slate-900 dark:text-white">{{ link.title }}</h4>
+                      <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">{{ link.description }}</p>
                     </div>
-                  </li>
-                </ul>
-                <ul class="max-h-48 overflow-y-auto">
-                  <div class="text-gray-400 mb-1">Exams</div>
-                  <li v-for="exam in examTopicsSearchResult" :key="exam.id"
-                    class="border-b border-gray-200 dark:border-gray-700">
-                    <div class="flex justify-between items-center gap-1">
-                      <span @click="() => openModal(exam)"
-                        class="bg-teal-200 px-2 rounded-full text-xs m-0.5 cursor-pointer hover:bg-teal-300 hover:shadow">{{
-                          exam.name }}</span>
-                    </div>
-                  </li>
-                </ul>
+                    <i :class="`${link.icon} ${link.color}`"></i>
+                  </div>
+                  <p class="text-xs font-semibold text-slate-500 dark:text-slate-300 mt-3">{{ link.count }}</p>
+                </RouterLink>
               </div>
-              <dialog ref="modalRef" id="examModal" class="modal">
-                <div class="modal-box bg-gray-50 dark:bg-sky-950 text-gray-900 dark:text-white">
-                  <div class="modal-action mt-4">
-                    <form method="dialog">
-                      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                    </form>
-                  </div>
-                  <h3 class="text-lg mb-4">
-                    Start <span class="italic font-bold">{{ selectedExam?.name }}</span> in:
-                  </h3>
-                  <div class="flex justify-end gap-4">
-                    <div class="flex flex-wrap justify-end gap-4">
-                      <CommonButton button-text="Tutor Mode"
-                        classes="bg-teal-500  rounded-lg text-white hover:bg-teal-600"
-                        :action="() => goToExam('tutor')" />
-                      <CommonButton button-text="Exam Mode" classes=" rounded-lg" :action="() => goToExam('exam')" />
-                      <CommonButton button-text="Review Mode" classes=" rounded-lg" :action="() => goToExam('review', true)" />
-                    </div>
-                  </div>
-                </div>
-              </dialog>
             </div>
           </div>
-
+        </div>
+        <!-- <div class="border-l border w-0 hidden md:block mt-24 border-dashed h-96"></div> -->
+        <!-- Stats Section -->
+        <div
+          class="flex flex-col justify-center items-center gap-4 rounded-2xl bg-gradient-to-b from-indigo-50 to-transparent dark:from-sky-900 p-6">
+          <div class="mb-6">
+            <Probability :pass-mark="75" product="nursing" />
+          </div>
+          <div class="flex w-full justify-center items-center gap-4 flex-row px-8">
+            <div class="w-1/2 flex flex-col justify-center items-center">
+              <div class="text-center font-semibold">
+                Your Avg. Score
+              </div>
+              <div class="radial-progress shadow-lg opacity-90 bg-white text-sky-600 mt-4"
+                :style="{ '--value': dashdata?.average_score }" role="progressbar">{{ dashdata?.average_score }}%</div>
+            </div>
+            <div class="w-1/2">
+              <div class="text-center font-semibold">
+                Subscription Info
+              </div>
+              <DaysLeft product_code="nursing" class="w-full" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-full flex flex-col justify-center items-center">
+        <h5 class="text-lg font-semibold text-start w-full">
+          Search for Exams/Topics
+        </h5>
+        <!-- wrapper for positioning -->
+        <div class="relative w-full max-w-md mt-2">
+          <input type="text" placeholder="Search for exams, questions, topics..." v-model="universal_search"
+            class="input border-orange-500 input-bordered w-full dark:bg-gray-200 dark:text-gray-500 bg-gray-50 rounded-full" />
+          <!-- dropdown -->
+          <div v-if="universal_search.length >= 3"
+            class="absolute left-0 right-0 top-full z-40 bg-white dark:bg-sky-900 rounded-2xl mt-2 p-4 shadow-lg">
+            <h6 class="font-semibold mb-2">Search Results:</h6>
+            <ul class="max-h-48 overflow-y-auto">
+              <div class="text-gray-400 mb-1">Topics</div>
+              <li v-for="subject in filteredSubjects" :key="subject.id"
+                class="border-b border-gray-200 dark:border-gray-700">
+                <div class="flex justify-between items-center gap-1">
+                  <span @click="$router.push(`/nursing/test-bank-loader/${subject.slug}`)"
+                    class="bg-teal-200 px-2 rounded-full text-xs m-0.5 cursor-pointer hover:bg-teal-300 hover:shadow">{{
+                      subject.name }}</span>
+                </div>
+              </li>
+            </ul>
+            <ul class="max-h-48 overflow-y-auto">
+              <div class="text-gray-400 mb-1">Exams</div>
+              <li v-for="exam in examTopicsSearchResult" :key="exam.id"
+                class="border-b border-gray-200 dark:border-gray-700">
+                <div class="flex justify-between items-center gap-1">
+                  <span @click="() => openModal(exam)"
+                    class="bg-teal-200 px-2 rounded-full text-xs m-0.5 cursor-pointer hover:bg-teal-300 hover:shadow">{{
+                      exam.name }}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <dialog ref="modalRef" id="examModal" class="modal">
+            <div class="modal-box bg-gray-50 dark:bg-sky-950 text-gray-900 dark:text-white">
+              <div class="modal-action mt-4">
+                <form method="dialog">
+                  <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                </form>
+              </div>
+              <h3 class="text-lg mb-4">
+                Start <span class="italic font-bold">{{ selectedExam?.name }}</span> in:
+              </h3>
+              <div class="flex justify-end gap-4">
+                <div class="flex flex-wrap justify-end gap-4">
+                  <CommonButton button-text="Tutor Mode" classes="bg-teal-500  rounded-lg text-white hover:bg-teal-600"
+                    :action="() => goToExam('tutor')" />
+                  <CommonButton button-text="Exam Mode" classes=" rounded-lg" :action="() => goToExam('exam')" />
+                  <CommonButton button-text="Review Mode" classes=" rounded-lg"
+                    :action="() => goToExam('review', true)" />
+                </div>
+              </div>
+            </div>
+          </dialog>
+        </div>
+      </div>
+      <div>
+        <div>
           <h5 class="text-lg font-semibold text-start w-full">Today's pick</h5>
           <div class="w-full max-w-md bg-indigo-50 dark:bg-sky-900  rounded-3xl p-3 my-2 grid grid-cols-12 gap-4">
             <div class=" col-span-4 text-sm  text-start flex flex-col justify-between">
@@ -195,56 +239,12 @@
             </div>
           </div>
         </div>
-        <!-- <div class="border-l border w-0 hidden md:block mt-24 border-dashed h-96"></div> -->
-        <!-- Stats Section -->
-        <div
-          class="flex flex-col justify-center items-center gap-4 rounded-2xl bg-gradient-to-b from-indigo-50 to-transparent dark:from-sky-900 p-6">
-          <div class="mb-6">
-            <Probability :pass-mark="75" product="nursing" />
-          </div>
-          <div class="flex w-full justify-center items-center gap-4 flex-row px-8">
-            <div class="w-1/2 flex flex-col justify-center items-center">
-              <div class="text-center font-semibold">
-                Your Avg. Score
-              </div>
-              <div class="radial-progress shadow-lg opacity-90 bg-white text-sky-600 mt-4"
-                :style="{ '--value': dashdata?.average_score }" role="progressbar">{{ dashdata?.average_score }}%</div>
-            </div>
-            <div class="w-1/2">
-              <div class="text-center font-semibold">
-                Subscription Info
-              </div>
-              <DaysLeft product_code="nursing" class="w-full" />
-            </div>
-          </div>
+        <!-- Chart Column -->
+        <div class="w-full md:w-1/2 flex justify-center items-center">
+          <PracticeProgressPeersChart />
         </div>
       </div>
-      <div class="flex mt-4">
-        <div class="w-full flex flex-col md:flex-row justify-between items-stretch gap-4">
-          <!-- Stat Cards Column -->
-          <div class="w-full md:w-1/2 flex flex-col justify-center items-center">
-            <h5 class="text-lg font-semibold text-start w-full">Exam Categories</h5>
-            <div
-              class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full bg-white dark:bg-sky-900 p-4 rounded-3xl shadow-xs">
-              <RouterLink v-for="link in nursingQuickLinks" :key="link.route" :to="link.route"
-                class="rounded-2xl border border-slate-200 bg-slate-50/80 dark:bg-sky-950/40 dark:border-sky-800 p-4 hover:shadow-md hover:-translate-y-[1px] transition">
-                <div class="flex items-start justify-between gap-2">
-                  <div>
-                    <h4 class="font-bold text-slate-900 dark:text-white">{{ link.title }}</h4>
-                    <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">{{ link.description }}</p>
-                  </div>
-                  <i :class="`${link.icon} ${link.color}`"></i>
-                </div>
-                <p class="text-xs font-semibold text-slate-500 dark:text-slate-300 mt-3">{{ link.count }}</p>
-              </RouterLink>
-            </div>
-          </div>
-          <!-- Chart Column -->
-          <div class="w-full md:w-1/2 flex justify-center items-center">
-            <PracticeProgressPeersChart />
-          </div>
-        </div>
-      </div>
+
       <div class="mt-6">
         <StudySchedulePanel product-code="nursing" :initial-exam-date="nursing_exam_date"
           progress-route="/nursing/performance-analysis" study-route="/nursing/study-chapters?chapter_id=7"

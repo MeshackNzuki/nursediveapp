@@ -12,6 +12,18 @@
 /* ✅ Custom variant (if needed) */
 @custom-variant dark (&:where(.dark, .dark *));
 
+.bg-sky-800
+{
+    --tw-bg-opacity: 1;
+    background-color: rgb(3 65 108 / var(--tw-bg-opacity));
+}
+
+.text-bright-sun-500
+{
+    --tw-text-opacity: 1;
+    color: rgb(255 215 49 / var(--tw-text-opacity));
+}
+
 @layer components {
   .analysis-shell {
     @apply relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-slate-100 p-4 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh] dark:bg-slate-950;
