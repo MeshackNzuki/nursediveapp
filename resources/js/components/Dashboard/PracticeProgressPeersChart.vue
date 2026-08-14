@@ -27,6 +27,15 @@ ChartJS.register(
     Filler,
 );
 
+const props = withDefaults(
+    defineProps<{
+        productLabel?: string;
+    }>(),
+    {
+        productLabel: "Nursing",
+    },
+);
+
 const labels = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"];
 
 const createGradient = (
@@ -118,19 +127,21 @@ const options: ChartOptions<"line"> = {
 </script>
 
 <template>
-    <div class="w-full rounded-2xl   bg-white/80 dark:bg-sky-900 g p-2">
+    <section
+        class="flex h-full w-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900">
         <div class="flex flex-wrap items-start justify-between gap-2">
             <div>
                 <h3 class="text-base md:text-lg font-semibold text-slate-900 dark:text-white">Practice Progress for
                     Peers</h3>
                 <p class="text-xs md:text-sm text-slate-600 dark:text-slate-300">
-                    Weekly benchmark trends from active learners using Nursing practice sets.
+                    Weekly benchmark trends from active learners using {{ props.productLabel }} practice sets.
                 </p>
             </div>
             <span class="text-[11px] px-2 py-1 rounded-full bg-sky-100 text-sky-700 font-semibold">Benchmark View</span>
         </div>
-        <div class=" bg-white p-2 border-b border-s border-r rounded-sm border-gray-300">
+        <div
+            class="mt-4 h-72 min-h-72 rounded-xl border border-slate-200 bg-white p-3 dark:border-sky-800 dark:bg-sky-950/60">
             <Line :data="chartData" :options="options" />
         </div>
-    </div>
+    </section>
 </template>

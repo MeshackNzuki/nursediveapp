@@ -242,6 +242,7 @@ class TeasExamController extends Controller
                     'id' => $attempt->id,
                     'sub_topic_id' => $attempt->topic_id,
                     'sub_topic_name' => $attempt->topic->name,
+                    'category_id' => $attempt->topic->category_id,
                     'score' => $attempt->score,
                     'mode' => $attempt->mode,
                     'completed_at' => $attempt->completed_at,

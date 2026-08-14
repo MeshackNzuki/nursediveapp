@@ -162,6 +162,52 @@
             </div>
 
             <div class="border-t border-cyan-200/10 px-3 py-3">
+                <div v-if="!isAdminArea" class="mb-2">
+                    <div v-if="isSidebarOpen"
+                        class="rounded-2xl border border-cyan-300/20 bg-sky-950/60 p-3 shadow-lg shadow-sky-950/20">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="flex min-w-0 items-center gap-3">
+                                <span :class="promoIconClass">
+                                    <i class="pi pi-wallet text-bright-sun-500"></i>
+                                </span>
+                                <span class="min-w-0">
+                                    <span class="block text-xs font-extrabold uppercase tracking-wide text-bright-sun-500">
+                                        Subscription
+                                    </span>
+                                    <span class="block truncate text-sm font-bold text-white">
+                                        {{ subscriptionSummary.title }}
+                                    </span>
+                                </span>
+                            </div>
+                            <span class="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-black uppercase"
+                                :class="subscriptionSummary.badgeClass">
+                                {{ subscriptionSummary.statusLabel }}
+                            </span>
+                        </div>
+
+                        <p class="mt-3 text-xs font-semibold text-cyan-50/90">
+                            {{ subscriptionSummary.detail }}
+                        </p>
+
+                        <div class="mt-3 grid grid-cols-2 gap-2">
+                            <router-link to="/account"
+                                class="inline-flex items-center justify-center rounded-xl border border-cyan-200/20 px-2 py-2 text-xs font-bold text-white transition hover:bg-white/10">
+                                Account
+                            </router-link>
+                            <router-link :to="subscriptionSummary.pricingRoute"
+                                class="inline-flex items-center justify-center rounded-xl bg-[#FFD731] px-2 py-2 text-xs font-black text-sky-950 transition hover:bg-[#ffe16a]">
+                                {{ subscriptionSummary.cta }}
+                            </router-link>
+                        </div>
+                    </div>
+                    <router-link v-else to="/account" :title="`${subscriptionSummary.title} subscription`"
+                        :class="navItemClass(false, { icon: 'pi pi-wallet' })">
+                        <span :class="sidebarIconClass(false, { featured: true })">
+                            <i class="pi pi-wallet"></i>
+                        </span>
+                    </router-link>
+                </div>
+
                 <router-link v-if="isSidebarOpen && !isAdminArea" to="/referral"
                     class="flex items-center gap-3 rounded-2xl border border-amber-300/20 bg-gradient-to-br from-sky-900/90 to-sky-600/10 p-3 transition hover:-translate-y-px hover:border-amber-300/40 hover:from-amber-300/25 hover:to-sky-500/20">
                     <span :class="promoIconClass">
@@ -208,7 +254,8 @@ import { useAuthStore } from "../../stores/authStore";
 import { useMainStore } from "../../stores";
 import router from "../../router";
 
-const { user, logout } = useAuthStore();
+const authStore = useAuthStore();
+const { user, logout } = authStore;
 const mainStore = useMainStore();
 const route = useRoute();
 const sidebar_id = ref(null);
@@ -465,6 +512,71 @@ const isAreaPath = (prefix) => route.path === prefix || route.path.startsWith(`$
 const currentProductArea = computed(() =>
     productAreas.find((area) => isAreaPath(area.prefix)) || null,
 );
+
+const subscriptionSummary = computed(() => {
+    const area = currentProductArea.value;
+
+    if (!area) {
+        return {
+            title: "All Plans",
+            statusLabel: "Account",
+            detail: "Review billing and subscription status in your account.",
+            cta: "Plans",
+            pricingRoute: "/subscription",
+            badgeClass: "bg-sky-100 text-sky-800",
+        };
+    }
+
+    const productCode = area.prefix.replace("/", "");
+    const subscriptions = authStore.user?.subscriptions?.[productCode];
+    const hasPlans = Array.isArray(subscriptions) && subscriptions.length > 0;
+    const days = authStore.daysLeft(productCode);
+    const isTrial = authStore.isTrial(productCode);
+    const isActive = authStore.active(productCode);
+    const wasTrial = authStore.wasTrial(productCode);
+
+    if (isTrial && days > 0) {
+        return {
+            title: area.short,
+            statusLabel: "Trial",
+            detail: `${days} day${days === 1 ? "" : "s"} left in your trial.`,
+            cta: "Upgrade",
+            pricingRoute: authStore.pricingRoute(productCode),
+            badgeClass: "bg-amber-100 text-amber-800",
+        };
+    }
+
+    if (isActive) {
+        return {
+            title: area.short,
+            statusLabel: "Active",
+            detail: `${days} day${days === 1 ? "" : "s"} left on your plan.`,
+            cta: "Extend",
+            pricingRoute: authStore.pricingRoute(productCode),
+            badgeClass: "bg-emerald-100 text-emerald-800",
+        };
+    }
+
+    if (hasPlans || wasTrial) {
+        return {
+            title: area.short,
+            statusLabel: "Expired",
+            detail: "Renew to keep full access to practice and analytics.",
+            cta: "Renew",
+            pricingRoute: authStore.pricingRoute(productCode),
+            badgeClass: "bg-rose-100 text-rose-800",
+        };
+    }
+
+    return {
+        title: area.short,
+        statusLabel: "No Plan",
+        detail: "Subscribe to unlock full product access.",
+        cta: "Subscribe",
+        pricingRoute: authStore.pricingRoute(productCode),
+        badgeClass: "bg-slate-100 text-slate-700",
+    };
+});
 
 const userName = computed(() => user?.name || "Student");
 

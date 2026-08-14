@@ -1,79 +1,312 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
+import axios from "axios";
 import { useAuthStore } from "../../stores/authStore";
 import { useTeasExamStore } from "../../stores/teasExamStore";
-import StatCard from "../../components/Stats/Primary.vue";
-import DaysLeft from "../../components/DaysLeft.vue";
+import Probability from "../../components/Probability.vue";
+import ExamIcon from "../../components/ExamIcon.vue";
+import PracticeProgressPeersChart from "../../components/Dashboard/PracticeProgressPeersChart.vue";
 import StudySchedulePanel from "../../components/Dashboard/StudySchedulePanel.vue";
 import StreakCard from "../../components/Dashboard/StreakCard.vue";
 
 interface TeasModule {
     id: number;
     title: string;
+    shortTitle: string;
     description: string;
     icon: string;
-    count: string;
+    total: number;
     color: string;
+    barClass: string;
 }
+
+interface TeasAttempt {
+    id?: number | string | null;
+    attempt_id?: number | string | null;
+    sub_topic_id?: number | string | null;
+    sub_topic_name?: string | null;
+    category_id?: number | string | null;
+    score?: number | string | null;
+    mode?: string | null;
+    completed?: boolean | number | string | null;
+    completed_at?: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+    suspend_index?: number | string | null;
+}
+
+const TEAS_REVIEW_SCORE = 70;
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
 
 const teasStore = useTeasExamStore();
 const { teas_exam_date, dashdata } = storeToRefs(teasStore);
+const teasAttempts = ref<TeasAttempt[]>([]);
 
 const teasModules: TeasModule[] = [
     {
         id: 2,
         title: "TEAS Math",
+        shortTitle: "Math",
         description: "Arithmetic, algebra, and data interpretation drills.",
         icon: "pi pi-calculator",
-        count: "67 sets",
+        total: 67,
         color: "text-sky-600",
+        barClass: "bg-gradient-to-r from-sky-500 to-cyan-400",
     },
     {
         id: 8,
         title: "TEAS Language",
+        shortTitle: "Language",
         description: "Grammar, punctuation, and language usage mastery.",
         icon: "pi pi-language",
-        count: "77 sets",
+        total: 77,
         color: "text-indigo-600",
+        barClass: "bg-gradient-to-r from-indigo-500 to-sky-400",
     },
     {
         id: 4,
         title: "TEAS Science",
+        shortTitle: "Science",
         description: "Biology, chemistry, and scientific reasoning prep.",
         icon: "pi pi-sliders-h",
-        count: "80 sets",
+        total: 80,
         color: "text-emerald-600",
+        barClass: "bg-gradient-to-r from-emerald-500 to-teal-400",
     },
     {
         id: 6,
         title: "TEAS Reading",
+        shortTitle: "Reading",
         description: "Comprehension, inference, and text analysis training.",
         icon: "pi pi-book",
-        count: "49 sets",
+        total: 49,
         color: "text-orange-600",
+        barClass: "bg-gradient-to-r from-orange-500 to-amber-400",
     },
 ];
 
-const benchmarkStats = [
-    { label: "Highest", value: "99.5%", ring: 90, color: "text-emerald-500" },
-    { label: "Most Common", value: "80%", ring: 72, color: "text-lime-500" },
-    { label: "Below Avg", value: "40%", ring: 40, color: "text-orange-500" },
+const quickActions = [
+    { label: "Math", route: "/teas/test-bank-loader/2", icon: "pi pi-calculator" },
+    { label: "Science", route: "/teas/test-bank-loader/4", icon: "pi pi-sliders-h" },
+    { label: "Language", route: "/teas/test-bank-loader/8", icon: "pi pi-language" },
+    { label: "Reading", route: "/teas/test-bank-loader/6", icon: "pi pi-book" },
+    { label: "Performance", route: "/teas/performance-analysis", icon: "pi pi-chart-line" },
 ];
+
+const toNumber = (value: unknown) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+};
 
 const firstName = computed(() => user.value?.name?.split(" ")[0] || "Student");
 
 const averageScore = computed(() => {
-    const score = Number(dashdata.value?.average_score ?? 0);
+    const rawScore = dashdata.value?.average_score;
+    if (rawScore === null || rawScore === undefined || rawScore === "") {
+        return "...";
+    }
+
+    const score = Number(rawScore);
     if (!Number.isFinite(score)) return "...";
-    return `${Math.max(0, Math.min(100, Math.round(score)))} %`;
+
+    return `${Math.max(0, Math.min(100, Math.round(score)))}%`;
 });
 
-onMounted(() => {
+const attemptedByCategory = (categoryId: number) => {
+    const attempted = new Set<number>();
+
+    teasAttempts.value.forEach((attempt) => {
+        const attemptCategoryId = toNumber(attempt.category_id);
+        const examId = toNumber(attempt.sub_topic_id);
+
+        if (attemptCategoryId === categoryId && examId > 0) {
+            attempted.add(examId);
+        }
+    });
+
+    return attempted.size;
+};
+
+const teasModulesWithProgress = computed(() =>
+    teasModules.map((module) => {
+        const attempted = Math.min(module.total, attemptedByCategory(module.id));
+        const percent = module.total > 0 ? Math.round((attempted / module.total) * 100) : 0;
+
+        return {
+            ...module,
+            route: `/teas/test-bank-loader/${module.id}`,
+            attempted,
+            percent,
+        };
+    }),
+);
+
+const teasAttemptedTotal = computed(() =>
+    new Set(teasAttempts.value.map((attempt) => toNumber(attempt.sub_topic_id)).filter((id) => id > 0)).size,
+);
+
+const summaryStats = computed(() => [
+    {
+        label: "Attempts",
+        value: dashdata.value?.teas_attempts ?? teasAttempts.value.length,
+        detail: "All time practice",
+        icon: "pi pi-pencil",
+        color: "text-sky-600",
+    },
+    {
+        label: "Avg. Score",
+        value: averageScore.value,
+        detail: "Recent attempts",
+        icon: "pi pi-percentage",
+        color: "text-emerald-600",
+    },
+    {
+        label: "Areas",
+        value: teasModules.length,
+        detail: "Math, Science, Language, Reading",
+        icon: "pi pi-th-large",
+        color: "text-orange-600",
+    },
+]);
+
+const attemptTimestamp = (attempt: TeasAttempt) => {
+    const raw = attempt.completed_at || attempt.updated_at || attempt.created_at;
+    if (!raw) return 0;
+
+    const timestamp = new Date(raw).getTime();
+    return Number.isFinite(timestamp) ? timestamp : 0;
+};
+
+const isCompletedAttempt = (attempt: TeasAttempt) =>
+    attempt.completed === true || attempt.completed === 1 || attempt.completed === "1";
+
+const sortedAttempts = computed(() =>
+    [...teasAttempts.value].sort((a, b) => attemptTimestamp(b) - attemptTimestamp(a)),
+);
+
+const latestAttempt = computed(() => sortedAttempts.value[0] || null);
+
+const latestCompletedAttempt = computed(() =>
+    sortedAttempts.value.find((attempt) => isCompletedAttempt(attempt)) || null,
+);
+
+const pausedAttempt = computed(() =>
+    sortedAttempts.value.find((attempt) => !isCompletedAttempt(attempt) && toNumber(attempt.id || attempt.attempt_id) > 0) || null,
+);
+
+const latestAttemptScore = computed(() => {
+    const score = toNumber(latestAttempt.value?.score);
+    return Math.max(0, Math.min(100, Math.round(score)));
+});
+
+const latestAttemptStatus = computed(() => {
+    if (!latestAttempt.value) return "Ready";
+    return isCompletedAttempt(latestAttempt.value) ? "Completed" : "Paused";
+});
+
+const latestAttemptBadgeClass = computed(() => {
+    if (!latestAttempt.value) return "bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-200";
+    if (isCompletedAttempt(latestAttempt.value)) {
+        return "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-200";
+    }
+
+    return "bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-200";
+});
+
+const latestAttemptDateText = computed(() => {
+    const timestamp = latestAttempt.value ? attemptTimestamp(latestAttempt.value) : 0;
+    if (!timestamp) return "No date recorded";
+
+    return new Date(timestamp).toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    });
+});
+
+const nextPracticeMove = computed(() => {
+    if (pausedAttempt.value) {
+        const attemptId = pausedAttempt.value.attempt_id || pausedAttempt.value.id;
+
+        return {
+            title: `Resume ${pausedAttempt.value.sub_topic_name || "your paused TEAS set"}`,
+            detail: "Pick up where you stopped and keep the attempt history clean.",
+            primaryLabel: "Resume Set",
+            primaryRoute: `/teas/exam/${attemptId}?resume=true`,
+            icon: "pi pi-play",
+        };
+    }
+
+    if (latestCompletedAttempt.value) {
+        const score = Math.round(toNumber(latestCompletedAttempt.value.score));
+        const attemptId = latestCompletedAttempt.value.attempt_id || latestCompletedAttempt.value.id;
+        const needsReview = score < TEAS_REVIEW_SCORE;
+
+        return {
+            title: needsReview ? "Review your TEAS misses" : "Keep your TEAS rhythm",
+            detail: needsReview
+                ? `Your last completed score was ${score}%. Review the rationale, then retake a focused set.`
+                : `Your last completed score was ${score}%. Stack another timed set while the rhythm is warm.`,
+            primaryLabel: needsReview ? "Review Attempt" : "Take Another Set",
+            primaryRoute: needsReview && attemptId
+                ? `/teas/exam/${attemptId}?mode=review`
+                : "/teas/test-bank-loader/2",
+            icon: needsReview ? "pi pi-eye" : "pi pi-arrow-right",
+        };
+    }
+
+    return {
+        title: "Start your first tracked TEAS attempt",
+        detail: "Begin with Math, Science, Language, or Reading to unlock score trends and smarter recommendations.",
+        primaryLabel: "Start Math",
+        primaryRoute: "/teas/test-bank-loader/2",
+        icon: "pi pi-play",
+    };
+});
+
+const scoreToneClass = (score: number) => {
+    if (score >= TEAS_REVIEW_SCORE) return "text-emerald-600 dark:text-emerald-300";
+    if (score >= 50) return "text-amber-600 dark:text-amber-300";
+    return "text-rose-600 dark:text-rose-300";
+};
+
+const scoreBarClass = (score: number) => {
+    if (score >= TEAS_REVIEW_SCORE) return "bg-emerald-500";
+    if (score >= 50) return "bg-amber-500";
+    return "bg-rose-500";
+};
+
+const focusCards = computed(() =>
+    [...teasModulesWithProgress.value]
+        .sort((a, b) => a.percent - b.percent)
+        .slice(0, 2)
+        .map((module, index) => ({
+            key: `teas-focus-${module.id}`,
+            title: module.title,
+            icon: module.icon,
+            color: module.color,
+            route: module.route,
+            targetScore: index === 0 ? 70 : 75,
+            targetCopy: index === 0 ? "At least 70%" : "At least 75%",
+            goal: `${Math.max(10, Math.round(module.total * 0.15))} questions`,
+            duration: index === 0 ? "30 min" : "40 min",
+            helper: module.percent > 0 ? `${module.percent}% complete. Keep building.` : "Start here to build momentum.",
+            community: index === 0 ? "12k joined" : "9k joined",
+        })),
+);
+
+onMounted(async () => {
     teasStore.getEssentials();
+
+    try {
+        const attemptsResponse = await axios.get("/teas/previous-attempts", { showLoader: false });
+        teasAttempts.value = Array.isArray(attemptsResponse.data?.data) ? attemptsResponse.data.data : [];
+    } catch {
+        teasAttempts.value = [];
+    }
 });
 
 const handleExamDateUpdated = (date: string) => {
@@ -83,115 +316,311 @@ const handleExamDateUpdated = (date: string) => {
 
 <template>
     <div
-        class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-gray-50 dark:bg-sky-950 text-gray-700 dark:text-gray-50">
-        <div class="absolute inset-0 pointer-events-none -z-10">
-            <div
-                class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-cyan-200 via-sky-200 to-emerald-200 opacity-35 blur-[120px] rounded-full">
-            </div>
-            <div
-                class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-200 via-sky-200 to-indigo-200 opacity-30 blur-[100px] rounded-full">
-            </div>
-        </div>
+        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-gray-50 p-4 text-gray-700 dark:bg-sky-950 dark:text-gray-50 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+        <div class="mx-auto max-w-screen-2xl space-y-6">
+            <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
+                <article class="rounded-2xl p-5 xl:col-span-8">
+                    <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                        <div class="min-w-0">
+                            <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+                                ATI TEAS Dashboard
+                            </p>
+                            <h1 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+                                Welcome back, {{ firstName }}
+                            </h1>
+                            <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+                                Build confidence with focused TEAS drills, check readiness, and keep your study plan
+                                moving.
+                            </p>
+                        </div>
 
-        <div class="max-w-screen-2xl mx-auto space-y-6">
-            <section class="rounded-3xl border border-slate-200 bg-white/95 dark:bg-sky-900/70 p-5 md:p-6">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-                    <div class="lg:col-span-8">
-                        <h5 class="text-2xl font-semibold"> ATI TEAS <span class="font-light">(99% Guaranteed
-                                <span class="text-accent">pass</span>)</span>
-                        </h5>
-                        <p class="text-sm text-slate-600 dark:text-slate-200 mt-2 max-w-2xl">
-                            Welcome back, {{ firstName }}. Build confidence with focused TEAS drills, benchmark your
-                            performance, and stay on track with your study schedule.
-                        </p>
-
-                        <div class="mt-4 max-w-md">
+                        <div class="w-full lg:max-w-sm">
                             <StreakCard product-code="teas" />
                         </div>
                     </div>
 
-                    <div class="lg:col-span-4 flex flex-col items-center gap-3">
-                        <DaysLeft product_code="teas" />
-                        <router-link to="/teas/guide-topics"
-                            class="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold bg-sky-500/95 text-white hover:bg-sky-700 transition">
-                            Open Study Guides
-                        </router-link>
-                        <router-link to="/teas/performance-analysis"
-                            class="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold border border-slate-300 text-slate-700 dark:text-slate-100 hover:bg-slate-100/70 dark:hover:bg-sky-800 transition">
-                            Review Performance
-                        </router-link>
-                    </div>
-                </div>
-            </section>
-
-            <section class="flex flex-wrap justify-around py-2 w-full gap-4">
-                <StatCard label="All Exams" quantity="100+" icon="pi pi-file" up="up" description="Updated quarterly" />
-                <StatCard label="My Attempts" :quantity="dashdata?.teas_attempts" icon="pi pi-pencil"
-                    description="All time" link="/teas/previous-attempts" />
-                <StatCard label="New Exams" description="Every 2 weeks" quantity="4" icon="pi pi-sparkles" />
-                <StatCard label="My Avg. Score" icon="pi pi-percentage" description="Recent attempts"
-                    :quantity="averageScore" link="/teas/performance-analysis" />
-            </section>
-
-            <section class="grid grid-cols-1 xl:grid-cols-12 gap-5">
-                <article
-                    class="xl:col-span-7 rounded-3xl border border-slate-200 bg-white dark:bg-sky-900 p-5 shadow-sm">
-                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-                        <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">TEAS Practice Areas</h3>
-                        <span class="text-xs rounded-full px-3 py-1 bg-sky-100 text-sky-700 font-semibold">Exam-aligned
-                            question bank</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <router-link v-for="module in teasModules" :key="module.id"
-                            :to="`/teas/test-bank-loader/${module.id}`"
-                            class="rounded-2xl border border-slate-200 bg-slate-50/80 dark:bg-sky-950/40 dark:border-sky-800 p-4 hover:shadow-md hover:-translate-y-[1px] transition">
-                            <div class="flex items-start justify-between gap-2">
-                                <div>
-                                    <h4 class="font-bold text-slate-900 dark:text-white">{{ module.title }}</h4>
-                                    <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">{{ module.description }}
-                                    </p>
-                                </div>
-                                <i :class="`${module.icon} ${module.color}`"></i>
+                    <article class="mt-5 rounded-2xl border bg-light-blue-500 p-4 dark:border-sky-800 dark:bg-sky-900">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <h2 class="text-lg font-semibold text-slate-950 dark:text-white">Find Practice</h2>
+                                <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
+                                    Jump into a TEAS section or review your performance from the same surface.
+                                </p>
                             </div>
-                            <p class="text-xs font-semibold text-slate-500 dark:text-slate-300 mt-3">{{ module.count }}
-                            </p>
-                        </router-link>
+                            <span
+                                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-200">
+                                <i class="pi pi-search"></i>
+                            </span>
+                        </div>
+
+                        <div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                            <RouterLink v-for="module in teasModulesWithProgress" :key="module.id" :to="module.route"
+                                class="flex items-center gap-2 rounded-xl border border-sky-100 bg-white px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-sky-50 dark:border-sky-800 dark:bg-sky-950/60 dark:text-slate-100 dark:hover:bg-sky-900">
+                                <i :class="[module.icon, module.color]"></i>
+                                {{ module.shortTitle }}
+                            </RouterLink>
+                        </div>
+                    </article>
+
+                    <div class="mt-5 flex flex-wrap gap-2">
+                        <RouterLink v-for="action in quickActions" :key="action.route" :to="action.route"
+                            class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-bold text-sky-800 transition hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-950/70 dark:text-sky-100 dark:hover:bg-sky-900">
+                            <i :class="action.icon"></i>
+                            {{ action.label }}
+                        </RouterLink>
+                        <RouterLink to="/teas/guide-topics"
+                            class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-2 text-xs font-bold text-orange-700 transition hover:bg-orange-100 dark:border-orange-800 dark:bg-orange-950/40 dark:text-orange-200">
+                            <i class="pi pi-map"></i>
+                            Study Guides
+                        </RouterLink>
                     </div>
                 </article>
 
-                <article
-                    class="xl:col-span-5 rounded-3xl border border-slate-200 bg-white dark:bg-sky-900 p-5 shadow-sm">
-                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">Peer Benchmark Snapshot</h3>
-                    <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">
-                        Students practicing consistently with these banks report stronger real-exam confidence.
-                    </p>
-
-                    <div class="flex flex-wrap gap-6 mt-5 justify-center text-center">
-                        <div v-for="item in benchmarkStats" :key="item.label" class="flex flex-col items-center">
-                            <div class="radial-progress shadow-lg opacity-90 bg-white" :class="item.color"
-                                :style="{ '--value': item.ring }" role="progressbar">
-                                {{ item.value }}
-                            </div>
-                            <span class="mt-2 text-xs font-medium">{{ item.label }}</span>
+                <aside class="hidden xl:col-span-4 xl:block">
+                    <div class="relative flex min-h-28 items-center gap-4 rounded-2xl border-b bg-sky-800 p-4 shadow-custom">
+                        <div
+                            class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-white/95 text-sky-700 shadow-custom ring-1 ring-sky-100 dark:bg-slate-950 dark:text-sky-200 dark:ring-slate-800">
+                            <ExamIcon :size="86" />
+                        </div>
+                        <div class="min-w-0">
+                            <span
+                                class="inline-flex items-center rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-bright-sun-500 ring-1 ring-white/20">
+                                {{ teasAttemptedTotal }} attempted
+                            </span>
+                            <p class="mt-2 text-lg font-extrabold leading-tight text-white">
+                                {{ teasAttemptedTotal }} exams attempted so far
+                            </p>
+                            <RouterLink to="/teas/performance-analysis"
+                                class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-bold text-sky-700 transition hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
+                                View Details
+                            </RouterLink>
                         </div>
                     </div>
 
-                    <div
-                        class="mt-6 rounded-2xl bg-slate-50 dark:bg-sky-950/50 border border-slate-200 dark:border-sky-800 p-4">
-                        <p class="text-sm text-slate-700 dark:text-slate-200">
-                            Smart strategy: complete one timed test, review rationales immediately, then retake targeted
-                            weak areas within 24 hours.
-                        </p>
+                    <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                        <div v-for="stat in summaryStats" :key="stat.label"
+                            class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-sky-800 dark:bg-sky-950/60">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                                    {{ stat.label }}
+                                </span>
+                                <i :class="[stat.icon, stat.color, 'text-sm']"></i>
+                            </div>
+                            <p class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">{{ stat.value }}</p>
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">{{ stat.detail }}</p>
+                        </div>
                     </div>
-                </article>
+                </aside>
             </section>
 
-            <section class="mt-2">
-                <StudySchedulePanel product-code="teas" :initial-exam-date="teas_exam_date"
-                    progress-route="/teas/performance-analysis" study-route="/teas/guide-topics"
-                    title="TEAS Study Schedule" @updated="handleExamDateUpdated" />
+            <section class="grid grid-cols-1 gap-5 xl:grid-cols-12">
+                <article
+                    class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900 xl:col-span-7">
+                    <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+                        <div>
+                            <h2 class="text-lg font-extrabold text-slate-950 dark:text-white">TEAS Practice Areas</h2>
+                            <p class="text-xs text-slate-500 dark:text-slate-300">
+                                See attempted exams across each TEAS section.
+                            </p>
+                        </div>
+                        <span
+                            class="rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-semibold text-sky-700 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
+                            {{ teasAttemptedTotal }} attempted
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                        <RouterLink v-for="module in teasModulesWithProgress" :key="module.id" :to="module.route"
+                            class="group flex h-full flex-col rounded-xl border border-sky-100 bg-white p-4 shadow-custom transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50 dark:border-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-950">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex min-w-0 items-start gap-3">
+                                    <span
+                                        class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-lg ring-1 ring-sky-100 dark:bg-sky-900/70 dark:ring-sky-800"
+                                        :class="module.color">
+                                        <i :class="module.icon"></i>
+                                    </span>
+                                    <div class="min-w-0">
+                                        <h3 class="font-bold leading-tight text-slate-950 dark:text-white">
+                                            {{ module.title }}
+                                        </h3>
+                                        <p class="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">
+                                            {{ module.description }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <span
+                                    class="shrink-0 rounded-full border border-sky-100 bg-light-blue-500 px-2.5 py-1 text-[11px] font-bold text-sky-800 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-100">
+                                    {{ module.total }} sets
+                                </span>
+                            </div>
+
+                            <div class="mt-auto pt-5">
+                                <div class="mb-2 flex items-center justify-between text-xs">
+                                    <span class="font-semibold text-slate-500 dark:text-slate-300">Exam attempted</span>
+                                    <span class="font-extrabold text-slate-950 dark:text-white">
+                                        {{ module.attempted }} / {{ module.total }}
+                                    </span>
+                                </div>
+                                <div
+                                    class="h-2.5 overflow-hidden rounded-full bg-light-blue-500 ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-slate-700">
+                                    <div class="h-full rounded-full transition-all duration-500" :class="module.barClass"
+                                        :style="{ width: `${module.percent}%` }"></div>
+                                </div>
+                                <div class="mt-3 flex items-center justify-between gap-2">
+                                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">
+                                        {{ module.percent }}% complete
+                                    </span>
+                                    <span
+                                        class="inline-flex items-center gap-1 text-xs font-bold text-sky-700 transition group-hover:translate-x-0.5 dark:text-sky-200">
+                                        Open <i class="pi pi-arrow-right text-[10px]"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </RouterLink>
+                    </div>
+
+                    <section class="mt-4">
+                        <div
+                            class="grid gap-3 rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60 lg:grid-cols-[1.2fr_0.8fr]">
+                            <div class="min-w-0">
+                                <p class="text-xs font-bold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-200">
+                                    Personal Next Step
+                                </p>
+                                <h3 class="mt-1 text-base font-extrabold text-slate-950 dark:text-white">
+                                    {{ nextPracticeMove.title }}
+                                </h3>
+                                <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                                    {{ nextPracticeMove.detail }}
+                                </p>
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    <RouterLink :to="nextPracticeMove.primaryRoute"
+                                        class="inline-flex items-center gap-2 rounded-full bg-sky-500 px-4 py-2 text-xs font-bold text-white transition hover:bg-sky-600">
+                                        <i :class="nextPracticeMove.icon"></i>
+                                        {{ nextPracticeMove.primaryLabel }}
+                                    </RouterLink>
+                                    <RouterLink to="/teas/performance-analysis"
+                                        class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900">
+                                        <i class="pi pi-chart-line"></i>
+                                        Analyze
+                                    </RouterLink>
+                                    <RouterLink to="/teas/previous-attempts"
+                                        class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900">
+                                        <i class="pi pi-history"></i>
+                                        History
+                                    </RouterLink>
+                                </div>
+                            </div>
+
+                            <div class="rounded-xl bg-light-blue-500 p-3 dark:bg-sky-900/70">
+                                <div class="flex items-center justify-between gap-3">
+                                    <span class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                                        Last attempt
+                                    </span>
+                                    <span class="rounded-full px-2.5 py-1 text-[11px] font-bold" :class="latestAttemptBadgeClass">
+                                        {{ latestAttemptStatus }}
+                                    </span>
+                                </div>
+                                <template v-if="latestAttempt">
+                                    <p class="mt-3 truncate text-sm font-bold text-slate-950 dark:text-white">
+                                        {{ latestAttempt.sub_topic_name || "TEAS practice set" }}
+                                    </p>
+                                    <div class="mt-3 flex items-end justify-between gap-3">
+                                        <div>
+                                            <p class="text-2xl font-extrabold" :class="scoreToneClass(latestAttemptScore)">
+                                                {{ latestAttemptScore }}%
+                                            </p>
+                                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">
+                                                {{ latestAttemptDateText }}
+                                            </p>
+                                        </div>
+                                        <div
+                                            class="h-2 w-24 overflow-hidden rounded-full bg-white ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-sky-800">
+                                            <div class="h-full rounded-full" :class="scoreBarClass(latestAttemptScore)"
+                                                :style="{ width: `${latestAttemptScore}%` }"></div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <p class="mt-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
+                                        No attempts yet.
+                                    </p>
+                                    <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-300">
+                                        Start any TEAS section and this panel will turn into a progress shortcut.
+                                    </p>
+                                </template>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+
+                <div class="min-w-0 xl:col-span-5">
+                    <Probability :pass-mark="75" product="teas" />
+                </div>
             </section>
+
+            <section class="grid grid-cols-1 gap-5 xl:grid-cols-12">
+                <article
+                    class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900 xl:col-span-5">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <h2 class="text-lg font-semibold text-slate-950 dark:text-white">Today's Focus</h2>
+                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
+                                Two targeted starts based on your TEAS section progress.
+                            </p>
+                        </div>
+                        <span
+                            class="rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
+                            Smart Sets
+                        </span>
+                    </div>
+
+                    <div class="mt-4 space-y-3">
+                        <article v-for="card in focusCards" :key="card.key"
+                            class="grid grid-cols-12 gap-4 rounded-xl border border-slate-200 bg-light-blue-500 p-3 dark:border-sky-800 dark:bg-sky-950/60">
+                            <div class="col-span-4 flex flex-col items-center justify-between text-center text-sm">
+                                <div class="radial-progress bg-white shadow-sm" :class="card.color"
+                                    :style="{ '--value': card.targetScore }" role="progressbar">
+                                    <i :class="card.icon"></i>
+                                </div>
+                                <span class="mt-3 text-xs font-semibold text-slate-500 dark:text-slate-300">
+                                    {{ card.targetCopy }}
+                                </span>
+                            </div>
+
+                            <div class="col-span-8 min-w-0 text-sm">
+                                <h3 class="truncate font-semibold text-slate-950 dark:text-white">{{ card.title }}</h3>
+                                <div
+                                    class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600 dark:text-slate-300">
+                                    <span><i class="pi pi-arrow-up mr-1 text-teal-500"></i>{{ card.goal }}</span>
+                                    <span><i class="pi pi-clock mr-1"></i>{{ card.duration }}</span>
+                                </div>
+                                <p
+                                    class="mt-3 rounded-full bg-teal-500/15 px-3 py-1 text-center text-xs font-semibold text-teal-700 dark:text-teal-200">
+                                    {{ card.helper }}
+                                </p>
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    <span
+                                        class="rounded-full border border-dashed border-teal-500 px-3 py-1 text-xs font-semibold text-slate-700 dark:text-slate-200">
+                                        {{ card.community }}
+                                    </span>
+                                    <RouterLink :to="card.route"
+                                        class="rounded-full bg-sky-500 px-4 py-1 text-xs font-semibold text-white transition hover:bg-sky-600">
+                                        Start
+                                    </RouterLink>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </article>
+
+                <div class="min-w-0 xl:col-span-7">
+                    <PracticeProgressPeersChart product-label="TEAS" />
+                </div>
+            </section>
+
+            <StudySchedulePanel product-code="teas" :initial-exam-date="teas_exam_date"
+                progress-route="/teas/performance-analysis" study-route="/teas/guide-topics"
+                title="TEAS Study Schedule" @updated="handleExamDateUpdated" />
         </div>
     </div>
 </template>

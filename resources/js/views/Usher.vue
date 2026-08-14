@@ -7,6 +7,7 @@ import { useAuthStore } from "../stores/authStore";
 import { useMainStore } from "../stores";
 import CommonButton from "../components/Buttons/CommonButton.vue";
 import EmailVerification from "../components/EmailVerification.vue";
+import ExamIcon from "../components/ExamIcon.vue";
 import Socials from "../components/Socials.vue";
 import { secondsToHms } from "../utils/secondsToHms";
 
@@ -420,13 +421,7 @@ const summaryStats = computed(() => [
         icon: "pi pi-check-circle",
         tone: "text-emerald-600 dark:text-emerald-300",
     },
-    {
-        label: "Trials",
-        value: trialCount.value,
-        detail: "Temporary access",
-        icon: "pi pi-clock",
-        tone: "text-amber-600 dark:text-amber-300",
-    },
+
     {
         label: "Need Upgrade",
         value: needsUpgradeCount.value,
@@ -517,7 +512,7 @@ onMounted(() => {
                                     alt="User Avatar" />
                             </div>
                             <div v-else
-                                class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sky-600 to-cyan-500 text-lg font-bold text-white ring-2 ring-sky-200 dark:ring-sky-900">
+                                class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-sky-800 text-lg font-bold text-white ring-2 ring-sky-200 dark:ring-sky-900">
                                 {{ initials }}
                             </div>
                             <div class="min-w-0 flex-1">
@@ -533,7 +528,7 @@ onMounted(() => {
                             </div>
                         </div>
                         <div
-                            class="mt-5 rounded-lg border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/50">
+                            class="mt-5 rounded-lg border border-slate-200 bg-light-blue-500 p-4 dark:!border-slate-800 dark:!bg-slate-950/50">
                             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                                 <div class="min-w-0 flex-1">
                                     <div class="flex flex-wrap items-center gap-2">
@@ -600,7 +595,7 @@ onMounted(() => {
                                 </div>
                                 <div v-if="latestAttempt && !latestAttemptLoading"
                                     class="flex shrink-0 items-center justify-between gap-4 md:flex-col md:items-center md:justify-center">
-                                    <div class="radial-progress bg-gray-200/80 text-sm font-bold shadow-sm dark:bg-slate-900"
+                                    <div class="radial-progress bg-gray-200/80 text-sm font-bold shadow-custom dark:bg-slate-900"
                                         :class="scoreToneClass(latestAttemptScore)" :style="latestAttemptRingStyle"
                                         role="progressbar" :aria-valuenow="latestAttemptScore">
                                         {{ latestAttemptScore }}%
@@ -617,7 +612,6 @@ onMounted(() => {
                     </div>
                     <aside class="flex flex-col gap-4 border-slate-200 lg:border-l lg:pl-6 dark:border-slate-800">
                         <EmailVerification v-if="!user?.email_verified" class="max-w-none" />
-
                         <div>
                             <p
                                 class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
@@ -665,13 +659,13 @@ onMounted(() => {
 
                         <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                             <button type="button"
-                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-sky-500/95 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-sky-500/95 px-5 py-2.5 text-sm font-semibold text-white shadow-custom transition hover:-translate-y-0.5 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
                                 @click="router.push('/register')">
                                 <i class="pi pi-user-plus text-xs"></i>
                                 <span>Create Free Account</span>
                             </button>
                             <button type="button"
-                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-custom transition hover:-translate-y-0.5 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
                                 @click="router.push('/login')">
                                 <i class="pi pi-sign-in text-xs"></i>
                                 <span>Sign In</span>
@@ -699,25 +693,47 @@ onMounted(() => {
                             </router-link>
                         </div>
                     </div>
-
                     <aside
-                        class="hidden lg:block border-slate-200 pt-5 lg:border-l lg:pl-6 lg:pt-0 dark:border-slate-800">
-                        <p class="text-xs font-semibold italic text-slate-950 dark:text-slate-400">
-                            What are you studying today?
-                        </p>
-                        <div class="mt-4 divide-y divide-slate-200 dark:divide-slate-800">
+                        class="relative hidden overflow-hidden rounded-3xl border border-sky-100 bg-light-blue-500 p-5 shadow-custom lg:block dark:!border-slate-800 dark:!bg-slate-900">
+                        <div
+                            class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-br from-sky-800 via-sky-700 to-cyan-700">
+                        </div>
+
+                        <div
+                            class="relative flex min-h-28 items-center gap-4 border-b border-white/25 pb-5 dark:border-slate-800">
+                            <div
+                                class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-white/95 shadow-custom ring-1 ring-sky-100 dark:!bg-slate-950 dark:ring-slate-800">
+                                <ExamIcon size="78" class="drop-shadow-sm" />
+                            </div>
+                            <div class="min-w-0">
+                                <span
+                                    class="inline-flex items-center rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-bright-sun-500 ring-1 ring-white/20">
+                                    Select your path
+                                </span>
+                                <p class="mt-2 text-lg font-extrabold leading-tight text-white">
+                                    What are you studying today?
+                                </p>
+                            </div>
+                        </div>
+                        <div class="relative mt-4 divide-y divide-sky-100/80 dark:divide-slate-800">
                             <div v-for="product in products" :key="`guest-${product.code}`"
-                                class="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0">
+                                class="group/study flex items-center justify-between gap-4 py-3.5 first:pt-0 last:pb-0">
                                 <div class="min-w-0">
-                                    <p class="font-semibold text-slate-950 dark:text-slate-100">
-                                        {{ product.name }}
-                                    </p>
-                                    <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-sky-700 shadow-sm ring-1 ring-sky-100 dark:bg-slate-950 dark:text-sky-300 dark:ring-slate-800">
+                                            <i class="pi pi-book text-xs"></i>
+                                        </span>
+                                        <p class="font-semibold text-sky-900 dark:text-slate-100">
+                                            {{ product.name }}
+                                        </p>
+                                    </div>
+                                    <p class="mt-1.5 pl-9 text-xs leading-5 text-slate-500 dark:text-slate-400">
                                         {{ product.subtitle }}
                                     </p>
                                 </div>
                                 <button type="button"
-                                    class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-sky-700 transition hover:border-sky-200 hover:bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-sky-300 dark:hover:border-sky-700 dark:hover:bg-slate-800"
+                                    class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-sky-100 bg-white text-sky-700 transition group-hover/study:-translate-y-0.5 group-hover/study:border-sky-200 group-hover/study:bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-950 dark:text-sky-300 dark:group-hover/study:border-sky-700 dark:group-hover/study:bg-slate-800"
                                     :aria-label="`View ${product.name} plans`"
                                     @click="router.push(product.pricingRoute)">
                                     <i class="pi pi-arrow-right text-xs"></i>
@@ -727,7 +743,6 @@ onMounted(() => {
                     </aside>
                 </div>
             </section>
-
             <section class="space-y-4">
                 <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
                     <div>
@@ -740,10 +755,9 @@ onMounted(() => {
                         Choose a track and continue from where you left off.
                     </p>
                 </div>
-
                 <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
                     <article v-for="product in products" :key="product.code"
-                        class="group relative flex min-h-full flex-col overflow-hidden rounded-lg border p-5 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-26px_rgba(15,23,42,0.45)] md:p-6"
+                        class="group relative flex min-h-full flex-col overflow-hidden rounded-lg border p-5 shadow-custom transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_-26px_rgba(15,23,42,0.45)] md:p-6"
                         :class="product.cardClass">
                         <div class="absolute right-0 top-0 rounded-bl-lg border-b border-l px-3 py-1 text-xs font-medium italic"
                             :class="product.ribbonClass">
@@ -756,12 +770,12 @@ onMounted(() => {
                                 :class="product.bundleClass">
                                 <span class="inline-flex shrink-0 items-center gap-1">
                                     <span
-                                        class="inline-flex h-5 w-5 items-center justify-center rounded bg-white/75 text-[10px] text-blue-600 shadow-sm dark:bg-white/15 dark:text-blue-100">
+                                        class="inline-flex h-5 w-5 items-center justify-center rounded bg-white/75 text-[10px] text-blue-600 shadow-custom dark:bg-white/15 dark:text-blue-100">
                                         <i class="pi pi-book"></i>
                                     </span>
                                     <span class="text-[10px] font-bold text-slate-400 dark:text-slate-300">+</span>
                                     <span
-                                        class="inline-flex h-5 w-5 items-center justify-center rounded bg-white/75 text-[10px] text-sky-600 shadow-sm dark:bg-white/15 dark:text-sky-100">
+                                        class="inline-flex h-5 w-5 items-center justify-center rounded bg-white/75 text-[10px] text-sky-600 shadow-custom dark:bg-white/15 dark:text-sky-100">
                                         <i class="pi pi-play"></i>
                                     </span>
                                 </span>
@@ -799,7 +813,7 @@ onMounted(() => {
                             </div>
 
                             <div
-                                class="mt-4 flex items-start gap-3 rounded-lg bg-white/90 p-4 shadow-sm ring-1 ring-white/70 dark:bg-slate-950/60 dark:ring-slate-800">
+                                class="mt-4 flex items-start gap-3 rounded-lg bg-light-blue-500 p-4 shadow-custom ring-1 ring-white/70 dark:!bg-slate-950/60 dark:ring-slate-800">
                                 <span
                                     class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-base dark:border-slate-700 dark:bg-slate-900">
                                     <i :class="accessIconClass(product.code)"></i>
@@ -819,13 +833,13 @@ onMounted(() => {
 
                             <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]">
                                 <button type="button"
-                                    class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-sky-500/95 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-sky-500/95/95 focus:outline-none focus:ring-2 focus:ring-sky-300 dark:bg-sky-500/95 dark:hover:bg-sky-500"
+                                    class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-sky-500/95 px-5 py-2.5 text-sm font-semibold text-white shadow-custom transition hover:-translate-y-0.5 hover:bg-sky-500/95/95 focus:outline-none focus:ring-2 focus:ring-sky-300 dark:bg-sky-500/95 dark:hover:bg-sky-500"
                                     @click="router.push(productPrimaryRoute(product))">
                                     <span>{{ productPrimaryLabel(product.code) }}</span>
                                     <i class="pi pi-arrow-right text-xs"></i>
                                 </button>
                                 <button type="button"
-                                    class="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/80 bg-white/90 px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-700 dark:hover:bg-slate-800 dark:hover:text-sky-200"
+                                    class="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/80 bg-white/90 px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-custom transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-700 dark:hover:bg-slate-800 dark:hover:text-sky-200"
                                     @click="router.push(product.pricingRoute)">
                                     <i class="pi pi-credit-card text-xs"></i>
                                     <span>Pricing</span>
@@ -836,8 +850,7 @@ onMounted(() => {
                 </div>
             </section>
 
-            <section
-                class="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6 dark:border-slate-800 dark:bg-slate-900">
+            <section class=" md:p-6 ">
                 <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-300">
@@ -852,7 +865,7 @@ onMounted(() => {
 
                 <dl class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                     <div v-for="stat in summaryStats" :key="stat.label"
-                        class="rounded-lg border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-950/50">
+                        class="rounded-lg border p-3 bg-light-blue-500 dark:border-slate-800 dark:bg-slate-950/50">
                         <dt
                             class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                             <span v-if="stat.blob"
@@ -876,34 +889,37 @@ onMounted(() => {
             </section>
 
             <section class="grid grid-cols-1 gap-5 xl:grid-cols-3">
-                <div
-                    class="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6 xl:col-span-2 dark:border-slate-800 dark:bg-slate-900">
+                <div class="rounded-[1.75rem]  md:p-6 xl:col-span-2 dark:border-slate-800 dark:bg-slate-900">
                     <h3 class="text-lg font-semibold text-slate-950 dark:text-slate-100">Why NurseDive</h3>
                     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                         Designed for consistent practice, measurable progress, and readiness decisions.
                     </p>
                     <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        <div class="border-l-2 border-sky-500 pl-3">
+                        <div
+                            class="border-l-2 border-sky-500 bg-gradient-to-r from-amber-500/30 via-amber-100  to-transparent pl-3 ">
                             <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Realistic Question
                                 Quality</p>
                             <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
                                 Questions aligned with real exam style and difficulty.
                             </p>
                         </div>
-                        <div class="border-l-2 border-emerald-500 pl-3">
+                        <div
+                            class="border-l-2 border-emerald-500 bg-gradient-to-r from-amber-500/30 via-amber-100  to-transparent pl-3">
                             <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Weak-Area Focus</p>
                             <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
                                 Target gaps and improve with feedback loops.
                             </p>
                         </div>
-                        <div class="border-l-2 border-amber-500 pl-3">
+                        <div
+                            class="border-l-2 border-amber-500 bg-gradient-to-r from-amber-500/30 via-amber-100  to-transparent pl-3">
                             <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Comprehensive Analytics
                             </p>
                             <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
                                 Track momentum, confidence, and readiness over time.
                             </p>
                         </div>
-                        <div class="border-l-2 border-rose-500 pl-3">
+                        <div
+                            class="border-l-2 border-rose-500 bg-gradient-to-r from-amber-500/30 via-amber-100  to-transparent pl-3">
                             <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">High Pass-Rate Strategy
                             </p>
                             <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
@@ -912,16 +928,13 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
-
-                <div
-                    class="flex flex-col justify-between gap-4 rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6 dark:border-slate-800 dark:bg-slate-900">
+                <div class="flex flex-col justify-between gap-4  md:p-6">
                     <div>
                         <h3 class="text-lg font-semibold text-slate-950 dark:text-slate-100">Need Help?</h3>
                         <p class="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">
                             We value your feedback and are here to support your preparation journey.
                         </p>
                     </div>
-
                     <div class="space-y-2.5">
                         <CommonButton buttonText="Contact Support" icon="pi pi-envelope me-1" :action="goToSupport"
                             classes="w-full bg-sky-500/95 py-2.5 text-white shadow-none hover:bg-sky-700" />
@@ -931,9 +944,7 @@ onMounted(() => {
                     </div>
                 </div>
             </section>
-
-            <section
-                class="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6 dark:border-slate-800 dark:bg-slate-900">
+            <section class="md:p-6 dark:border-slate-800 dark:bg-slate-900">
                 <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                     <h3 class="text-lg font-semibold text-slate-950 dark:text-slate-100">Share and Connect</h3>
                     <p class="text-sm text-slate-500 dark:text-slate-400">

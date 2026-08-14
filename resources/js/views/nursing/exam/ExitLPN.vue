@@ -66,7 +66,6 @@
                 No attempt yet. Start this set to generate your first score.
               </div>
             </div>
-
             <div class="mt-4 flex flex-wrap items-center gap-2">
               <template v-if="completed(exam)">
                 <Small button-text="Review"

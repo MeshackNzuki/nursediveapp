@@ -50,7 +50,7 @@
 
         <div class="mt-5 grid gap-3 lg:grid-cols-3">
             <article v-for="phase in schedulePhases" :key="phase.name"
-                class="rounded-xl border border-slate-200 bg-slate-50/80 p-3 dark:border-sky-800 dark:bg-sky-950/70">
+                class="rounded-xl border border-slate-200 bg-light-blue-500 p-3 dark:!border-sky-800 dark:!bg-sky-950/70">
                 <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-300">{{ phase.rangeLabel }}</p>
                 <h4 class="mt-1 font-semibold text-slate-800 dark:text-slate-100">{{ phase.name }}</h4>
                 <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">{{ phase.focus }}</p>

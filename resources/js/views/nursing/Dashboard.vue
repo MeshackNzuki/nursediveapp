@@ -1,330 +1,579 @@
 <template>
   <div
-    class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh]  2xl:min-h-[94vh] overflow-y-scroll p-6 bg-gray-50 dark:bg-sky-950 text-gray-700 dark:text-gray-50">
-    <div class="absolute inset-0  pointer-events-none -z-10">
-      <!-- Purple to Sky to Green Gradient Cloud -->
-      <div
-        class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-purple-100 via-sky-200 to-teal-100 opacity-30 blur-[120px] rounded-full">
-      </div>
-      <div
-        class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-100 via-sky-200 to-purple-100 opacity-30 blur-[100px] rounded-full">
-      </div>
-    </div>
-    <div class="max-w-screen-2xl m-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6  mx-auto">
-        <div class="flex justify-between flex-col items-center text-black dark:text-gray-50 ">
-          <div class="mb-4  w-full text-start ">
-            <h5 class="text-2xl font-semibold">Hello, <span class="font-light text-base">
-                {{ user?.name.split(' ')[0] }}</span>
-            </h5>
-            <small class="font-light text-xs">Glad you are here!🤗<br />
-              Steady, focused practice leads to mastery. Continue building your nursing knowledge with confidence.
-            </small>
-            <div class="mt-3 max-w-md">
+    class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-gray-50 p-4 text-gray-700 dark:bg-sky-950 dark:text-gray-50 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+    <div class="mx-auto max-w-screen-2xl space-y-6">
+      <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
+        <article class="rounded-2xl  p-5  xl:col-span-8">
+          <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+            <div class="min-w-0">
+              <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+                Nursing Dashboard
+              </p>
+              <h1 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+                Welcome back, {{ firstName }}
+              </h1>
+              <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+                Keep your exam prep centered: open the right bank, check readiness, and follow a weekly study rhythm.
+              </p>
+            </div>
+
+            <div class="w-full lg:max-w-sm">
               <StreakCard product-code="nursing" />
             </div>
-            <div class="flex flex-wrap justify-center items-center gap-0.5 w-full">
-              <router-link to="/nursing/rn-t-exams" class="mt-2 ml-2">
-                <span class="p-1 text-xs text-white badge badge-info rounded-full">#RN Exams</span> </router-link>
-              <router-link to="/nursing/lpn-t-exams" class="mt-2 ml-2">
-                <small class="p-1 text-xs text-white badge badge-success rounded-full">#LPN Exams</small> </router-link>
-              <router-link to="/nursing/exit-rn-exams" class="mt-2 ml-2">
-                <small class="p-1 text-xs text-white badge badge-warning rounded-full">#Exit RN </small> </router-link>
-              <router-link to="/nursing/exit-pn-exams" class="mt-2 ml-2">
-                <small class="p-1 text-xs text-white badge badge-accent rounded-full">#Exit LPN</small> </router-link>
-              <span onclick="my_modal_9.showModal()" class="mt-2 ml-2"><span
-                  class="p-1 text-xs text-white badge bg-orange-500 border-0 cursor-pointer rounded-full">Study
-                  Lessons</span>
-              </span>
-              <dialog id="my_modal_9" class="modal">
-                <div class="modal-box bg-gray-50 dark:bg-sky-950 text-gray-900 dark:text-white">
-                  <form method="dialog">
-                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                  </form>
-                  <h3 class="text-lg font-bold mx-2 custom-underline-red">Nursing Study Areas</h3>
-                  <div class="max-w-md mx-auto bg-blue-50/50 rounded-xl  border border-gray-100">
-                    <ul class="divide-y divide-accent">
-                      <li v-for="(chapter, index) in chapters" :key="index">
-                        <router-link :to="chapter.route" :class="[
-                          'flex items-center px-4 py-3 text-sm transition font-medium rounded-lg hover:shadow-lg',
-                          chapter.route.includes('null')
-                            ? 'text-gray-400 cursor-not-allowed pointer-events-none'
-                            : 'text-gray-700 hover:bg-gray-50 hover:text-sky-600'
-                        ]" active-class="bg-indigo-50 text-indigo-700 font-medium">
-                          {{ chapter.label }}
-                        </router-link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </dialog>
-            </div>
           </div>
-          <div class="w-full flex flex-col md:flex-row justify-between items-stretch gap-4">
-            <!-- Stat Cards Column -->
-            <div class="w-full  flex flex-col justify-center items-center">
-              <h5 class="text-lg font-semibold text-start w-full">Exam Categories</h5>
-              <div
-                class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full bg-white dark:bg-sky-900 p-4 rounded-3xl shadow-xs">
-                <RouterLink v-for="link in nursingQuickLinks" :key="link.route" :to="link.route"
-                  class="rounded-2xl border border-slate-200 bg-slate-50/80 dark:bg-sky-950/40 dark:border-sky-800 p-4 hover:shadow-md hover:-translate-y-[1px] transition">
-                  <div class="flex items-start justify-between gap-2">
-                    <div>
-                      <h4 class="font-bold text-slate-900 dark:text-white">{{ link.title }}</h4>
-                      <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">{{ link.description }}</p>
+          <article class="rounded-2xl border bg-light-blue-500 p-2 dark:border-sky-800 dark:bg-sky-900">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h2 class="text-lg font-semibold text-slate-950 dark:text-white">Find Practice</h2>
+                <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
+                  Search topics or exam sets without leaving the dashboard.
+                </p>
+              </div>
+              <span
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-200">
+                <i class="pi pi-search"></i>
+              </span>
+            </div>
+
+            <div class="relative mt-4">
+              <input v-model="universal_search" type="text" placeholder="Search exams or topics..."
+                class="input input-bordered w-full rounded-full border-sky-200 bg-slate-50 text-sm dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100" />
+
+              <div v-if="showSearchResults"
+                class="absolute left-0 right-0 top-full z-40 mt-2 max-h-[28rem] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-4 shadow-lg dark:border-sky-800 dark:bg-sky-950">
+                <div v-if="filteredSubjects.length || examTopicsSearchResult.length" class="space-y-4">
+                  <div v-if="filteredSubjects.length">
+                    <p class="mb-2 text-xs font-bold uppercase tracking-wide text-slate-400">Topics</p>
+                    <div class="space-y-2">
+                      <button v-for="subject in filteredSubjects" :key="subject.id" type="button"
+                        class="flex w-full items-center justify-between gap-3 rounded-xl bg-sky-50 px-3 py-2 text-left text-sm font-semibold text-slate-700 transition hover:bg-sky-100 dark:bg-sky-900/70 dark:text-slate-100 dark:hover:bg-sky-800"
+                        @click="goToSubject(subject)">
+                        <span>{{ subject.name }}</span>
+                        <i class="pi pi-arrow-right text-xs text-sky-600 dark:text-sky-200"></i>
+                      </button>
                     </div>
-                    <i :class="`${link.icon} ${link.color}`"></i>
                   </div>
-                  <p class="text-xs font-semibold text-slate-500 dark:text-slate-300 mt-3">{{ link.count }}</p>
-                </RouterLink>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- <div class="border-l border w-0 hidden md:block mt-24 border-dashed h-96"></div> -->
-        <!-- Stats Section -->
-        <div
-          class="flex flex-col justify-center items-center gap-4 rounded-2xl bg-gradient-to-b from-indigo-50 to-transparent dark:from-sky-900 p-6">
-          <div class="mb-6">
-            <Probability :pass-mark="75" product="nursing" />
-          </div>
-          <div class="flex w-full justify-center items-center gap-4 flex-row px-8">
-            <div class="w-1/2 flex flex-col justify-center items-center">
-              <div class="text-center font-semibold">
-                Your Avg. Score
-              </div>
-              <div class="radial-progress shadow-lg opacity-90 bg-white text-sky-600 mt-4"
-                :style="{ '--value': dashdata?.average_score }" role="progressbar">{{ dashdata?.average_score }}%</div>
-            </div>
-            <div class="w-1/2">
-              <div class="text-center font-semibold">
-                Subscription Info
-              </div>
-              <DaysLeft product_code="nursing" class="w-full" />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="w-full flex flex-col justify-center items-center">
-        <h5 class="text-lg font-semibold text-start w-full">
-          Search for Exams/Topics
-        </h5>
-        <!-- wrapper for positioning -->
-        <div class="relative w-full max-w-md mt-2">
-          <input type="text" placeholder="Search for exams, questions, topics..." v-model="universal_search"
-            class="input border-orange-500 input-bordered w-full dark:bg-gray-200 dark:text-gray-500 bg-gray-50 rounded-full" />
-          <!-- dropdown -->
-          <div v-if="universal_search.length >= 3"
-            class="absolute left-0 right-0 top-full z-40 bg-white dark:bg-sky-900 rounded-2xl mt-2 p-4 shadow-lg">
-            <h6 class="font-semibold mb-2">Search Results:</h6>
-            <ul class="max-h-48 overflow-y-auto">
-              <div class="text-gray-400 mb-1">Topics</div>
-              <li v-for="subject in filteredSubjects" :key="subject.id"
-                class="border-b border-gray-200 dark:border-gray-700">
-                <div class="flex justify-between items-center gap-1">
-                  <span @click="$router.push(`/nursing/test-bank-loader/${subject.slug}`)"
-                    class="bg-teal-200 px-2 rounded-full text-xs m-0.5 cursor-pointer hover:bg-teal-300 hover:shadow">{{
-                      subject.name }}</span>
-                </div>
-              </li>
-            </ul>
-            <ul class="max-h-48 overflow-y-auto">
-              <div class="text-gray-400 mb-1">Exams</div>
-              <li v-for="exam in examTopicsSearchResult" :key="exam.id"
-                class="border-b border-gray-200 dark:border-gray-700">
-                <div class="flex justify-between items-center gap-1">
-                  <span @click="() => openModal(exam)"
-                    class="bg-teal-200 px-2 rounded-full text-xs m-0.5 cursor-pointer hover:bg-teal-300 hover:shadow">{{
-                      exam.name }}</span>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <dialog ref="modalRef" id="examModal" class="modal">
-            <div class="modal-box bg-gray-50 dark:bg-sky-950 text-gray-900 dark:text-white">
-              <div class="modal-action mt-4">
-                <form method="dialog">
-                  <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                </form>
-              </div>
-              <h3 class="text-lg mb-4">
-                Start <span class="italic font-bold">{{ selectedExam?.name }}</span> in:
-              </h3>
-              <div class="flex justify-end gap-4">
-                <div class="flex flex-wrap justify-end gap-4">
-                  <CommonButton button-text="Tutor Mode" classes="bg-teal-500  rounded-lg text-white hover:bg-teal-600"
-                    :action="() => goToExam('tutor')" />
-                  <CommonButton button-text="Exam Mode" classes=" rounded-lg" :action="() => goToExam('exam')" />
-                  <CommonButton button-text="Review Mode" classes=" rounded-lg"
-                    :action="() => goToExam('review', true)" />
-                </div>
-              </div>
-            </div>
-          </dialog>
-        </div>
-      </div>
-      <div>
-        <div>
-          <h5 class="text-lg font-semibold text-start w-full">Today's pick</h5>
-          <div class="w-full max-w-md bg-indigo-50 dark:bg-sky-900  rounded-3xl p-3 my-2 grid grid-cols-12 gap-4">
-            <div class=" col-span-4 text-sm  text-start flex flex-col justify-between">
-              <div class="radial-progress shadow-lg opacity-90 bg-white text-sky-600" style="--value: 40"
-                role="progressbar">
-                {{ RandSubject1 ? RandSubject1.emoji : '...' }}
-              </div>
-              <span class=" mt-4">Alteast 60%</span>
-            </div>
-            <div class=" col-span-8 text-sm  text-start flex flex-col justify-between ">
-              <h6>{{ RandSubject1 ? RandSubject1.name : 'Analysing...' }}</h6>
 
-              <div class="flex items-center justify-between gap-2  ">
-                <div class="  flex flex-col justify-between">
-                  <span class=""><i class="pi pi-arrow-up text-teal-500 mr-2"></i>10
-                    Exams</span>
+                  <div v-if="examTopicsSearchResult.length">
+                    <p class="mb-2 text-xs font-bold uppercase tracking-wide text-slate-400">Exams</p>
+                    <div class="space-y-2">
+                      <button v-for="exam in examTopicsSearchResult" :key="exam.id" type="button"
+                        class="flex w-full items-center justify-between gap-3 rounded-xl bg-emerald-50 px-3 py-2 text-left text-sm font-semibold text-slate-700 transition hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-slate-100 dark:hover:bg-emerald-900/60"
+                        @click="openModal(exam)">
+                        <span>{{ exam.name }}</span>
+                        <i class="pi pi-play text-xs text-emerald-600 dark:text-emerald-200"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div class="flex flex-col justify-between">
-                  <span><i class="pi pi-clock  mr-2"></i>&asymp;{{ [40, 50, 60, 70][Math.floor(Math.random() * 4)] }}
-                    mins</span>
-                </div>
+                <p v-else class="text-sm text-slate-500 dark:text-slate-300">
+                  No matches yet. Try a broader keyword.
+                </p>
               </div>
-              <span>
-                <small>
-                  <p class=" mt-2 p-1 rounded-3xl bg-teal-500/20 text-center">
-                    Aleast 65%
-                    Accept challenge!</p>
-                </small>
-              </span>
-              <span class=" mt-4 flex gap-2">
-                <CommonButton buttonText="12k+ Joined"
-                  classes="bg-transparent border border-dashed border-teal-500 text-gray-900  lg:min-w-24 hover:text-white dark:text-slate-200" />
-                <CommonButton classes="lg:min-w-24" buttonText="Start"
-                  :action="() => RandSubject1 ? $router.push(`/nursing/test-bank-loader/${RandSubject1?.slug}`) : null" />
-              </span>
             </div>
-          </div>
-          <div class="w-full max-w-md bg-indigo-50 dark:bg-sky-900 rounded-3xl p-3 my-2 grid grid-cols-12 gap-4">
-            <div class=" col-span-4 text-sm  text-start flex flex-col justify-between">
-              <div class="radial-progress shadow-lg opacity-90 bg-white text-emerald-500" style="--value: 70"
-                role="progressbar">
-                {{ RandSubject1 ? RandSubject2.emoji : '...' }}
-              </div>
-              <span class="mt-4">Atleast 65%</span>
-            </div>
-            <div class=" col-span-8 text-sm  text-start flex flex-col justify-between ">
-              <h6>{{ RandSubject2 ? RandSubject2.name : 'Analysing...' }}</h6>
+          </article>
 
-              <div class="flex items-center justify-between gap-2  ">
-                <div class="  flex flex-col justify-between">
-                  <span class=""><i class="pi pi-arrow-up text-teal-500 mr-2"></i>10
-                    Exams</span>
-                </div>
-                <div class="flex flex-col justify-between">
-                  <span><i class="pi pi-clock  mr-2"></i>&asymp;{{ [40, 50, 60, 70][Math.floor(Math.random() * 4)] }}
-                    mins</span>
-                </div>
-              </div>
-              <span>
-                <small>
-                  <p class="mt-2 p-1 rounded-3xl bg-teal-500/20 text-center">
-                    Atleast 65%
-                    Accept challenge!</p>
-                </small>
+
+          <div class="mt-5 flex flex-wrap gap-2">
+            <RouterLink v-for="action in quickActions" :key="action.route" :to="action.route"
+              class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-bold text-sky-800 transition hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-950/70 dark:text-sky-100 dark:hover:bg-sky-900">
+              <i :class="action.icon"></i>
+              {{ action.label }}
+            </RouterLink>
+            <button type="button"
+              class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-2 text-xs font-bold text-orange-700 transition hover:bg-orange-100 dark:border-orange-800 dark:bg-orange-950/40 dark:text-orange-200"
+              @click="openStudyModal">
+              <i class="pi pi-bookmark"></i>
+              Study Lessons
+            </button>
+          </div>
+        </article>
+
+        <aside class="hidden xl:col-span-4 xl:block">
+
+          <div class="relative flex min-h-28 items-center gap-4 border-b bg-sky-800 rounded-2xl p-4 shadow-custom">
+            <div
+              class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-white/95 shadow-custom ring-1 ring-sky-100 dark:!bg-slate-950 dark:ring-slate-800">
+              <ExamIcon size="78" class="drop-shadow-sm" />
+            </div>
+            <div class="min-w-0">
+              <span
+                class="inline-flex items-center rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-bright-sun-500 ring-1 ring-white/20">
+                {{ nursingAttemptedTotal }} attempted
               </span>
-              <span class=" mt-4 flex gap-2">
-                <CommonButton buttonText="19k+ Joined"
-                  classes="bg-transparent border border-dashed border-teal-500 text-gray-900 lg:min-w-24 hover:text-white dark:text-slate-200" />
-                <CommonButton classes="lg:min-w-24" buttonText="Start"
-                  :action="() => RandSubject2 ? $router.push(`/nursing/test-bank-loader/${RandSubject2?.slug}`) : null" />
-              </span>
+              <p class="mt-2 text-lg font-extrabold leading-tight text-white">
+                {{ nursingAttemptedTotal }} exams attempted so far
+              </p>
+              <router-link to="/nursing/performance-analysis"
+                class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-bold text-sky-700 transition hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
+                View Details
+              </router-link>
             </div>
           </div>
+          <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div v-for="stat in summaryStats" :key="stat.label"
+              class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-sky-800 dark:bg-sky-950/60">
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                  {{ stat.label }}
+                </span>
+                <i :class="[stat.icon, stat.color, 'text-sm']"></i>
+              </div>
+              <p class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">{{ stat.value }}</p>
+              <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">{{ stat.detail }}</p>
+            </div>
+          </div>
+
+        </aside>
+      </section>
+
+      <section class="grid grid-cols-1 gap-5 xl:grid-cols-12">
+        <article
+          class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5  dark:border-sky-800 dark:bg-sky-900 xl:col-span-7">
+          <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 class="text-lg font-extrabold text-slate-950 dark:text-white">Exam Bank Categories</h2>
+              <p class="text-xs text-slate-500 dark:text-slate-300">Track attempted exams against each bank.</p>
+            </div>
+            <span
+              class="rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-semibold text-sky-700 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
+              {{ nursingAttemptedTotal }} attempted
+            </span>
+          </div>
+          <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <RouterLink v-for="link in nursingQuickLinksWithProgress" :key="link.route" :to="link.route"
+              class="group flex h-full flex-col rounded-xl border border-sky-100 bg-white p-4 shadow-custom transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50 dark:border-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-950">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex min-w-0 items-start gap-3">
+                  <span
+                    class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-lg ring-1 ring-sky-100 dark:bg-sky-900/70 dark:ring-sky-800"
+                    :class="link.color">
+                    <i :class="link.icon"></i>
+                  </span>
+                  <div class="min-w-0">
+                    <h3 class="font-bold leading-tight text-slate-950 dark:text-white">{{ link.title }}</h3>
+                    <p class="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">{{ link.description }}</p>
+                  </div>
+                </div>
+                <span
+                  class="shrink-0 rounded-full border border-sky-100 bg-light-blue-500 px-2.5 py-1 text-[11px] font-bold text-sky-800 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-100">
+                  {{ link.total }} sets
+                </span>
+              </div>
+
+              <div class="mt-auto pt-5">
+                <div class="mb-2 flex items-center justify-between text-xs">
+                  <span class="font-semibold text-slate-500 dark:text-slate-300">Exam attempted</span>
+                  <span class="font-extrabold text-slate-950 dark:text-white">
+                    {{ link.attempted }} / {{ link.total }}
+                  </span>
+                </div>
+                <div
+                  class="h-2.5 overflow-hidden rounded-full bg-light-blue-500 ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-slate-700">
+                  <div class="h-full rounded-full transition-all duration-500" :class="link.barClass"
+                    :style="{ width: `${link.percent}%` }"></div>
+                </div>
+                <div class="mt-3 flex items-center justify-between gap-2">
+                  <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">
+                    {{ link.percent }}% complete
+                  </span>
+                  <span
+                    class="inline-flex items-center gap-1 text-xs font-bold text-sky-700 transition group-hover:translate-x-0.5 dark:text-sky-200">
+                    Open <i class="pi pi-arrow-right text-[10px]"></i>
+                  </span>
+                </div>
+              </div>
+            </RouterLink>
+          </div>
+          <section class="mt-4">
+            <div
+              class="grid gap-3 rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60 lg:grid-cols-[1.2fr_0.8fr]">
+              <div class="min-w-0">
+                <p class="text-xs font-bold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-200">
+                  Personal Next Step
+                </p>
+                <h3 class="mt-1 text-base font-extrabold text-slate-950 dark:text-white">
+                  {{ nextPracticeMove.title }}
+                </h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  {{ nextPracticeMove.detail }}
+                </p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <RouterLink :to="nextPracticeMove.primaryRoute"
+                    class="inline-flex items-center gap-2 rounded-full bg-sky-500 px-4 py-2 text-xs font-bold text-white transition hover:bg-sky-600">
+                    <i :class="nextPracticeMove.icon"></i>
+                    {{ nextPracticeMove.primaryLabel }}
+                  </RouterLink>
+                  <RouterLink to="/nursing/performance-analysis"
+                    class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900">
+                    <i class="pi pi-chart-line"></i>
+                    Analyze
+                  </RouterLink>
+                  <RouterLink to="/nursing/previous-attempts"
+                    class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900">
+                    <i class="pi pi-history"></i>
+                    History
+                  </RouterLink>
+                </div>
+              </div>
+
+              <div class="rounded-xl bg-light-blue-500 p-3 dark:bg-sky-900/70">
+                <div class="flex items-center justify-between gap-3">
+                  <span class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                    Last attempt
+                  </span>
+                  <span class="rounded-full px-2.5 py-1 text-[11px] font-bold" :class="latestAttemptBadgeClass">
+                    {{ latestAttemptStatus }}
+                  </span>
+                </div>
+                <template v-if="latestAttempt">
+                  <p class="mt-3 truncate text-sm font-bold text-slate-950 dark:text-white">
+                    {{ latestAttempt.sub_topic_name || "Nursing practice set" }}
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-3">
+                    <div>
+                      <p class="text-2xl font-extrabold" :class="scoreToneClass(latestAttemptScore)">
+                        {{ latestAttemptScore }}%
+                      </p>
+                      <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">
+                        {{ latestAttemptDateText }}
+                      </p>
+                    </div>
+                    <div
+                      class="h-2 w-24 overflow-hidden rounded-full bg-white ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-sky-800">
+                      <div class="h-full rounded-full" :class="scoreBarClass(latestAttemptScore)"
+                        :style="{ width: `${latestAttemptScore}%` }"></div>
+                    </div>
+                  </div>
+                </template>
+                <template v-else>
+                  <p class="mt-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
+                    No attempts yet.
+                  </p>
+                  <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-300">
+                    Start any exam bank and this panel will turn into a progress shortcut.
+                  </p>
+                </template>
+              </div>
+            </div>
+          </section>
+        </article>
+
+        <div class="min-w-0 xl:col-span-5">
+          <Probability :pass-mark="75" product="nursing" />
         </div>
-        <!-- Chart Column -->
-        <div class="w-full md:w-1/2 flex justify-center items-center">
+      </section>
+
+      <section class="grid grid-cols-1 gap-5 xl:grid-cols-12">
+        <article
+          class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900 xl:col-span-5">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h2 class="text-lg font-semibold text-slate-950 dark:text-white">Today's Focus</h2>
+              <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
+                Two focused starts for a productive practice session.
+              </p>
+            </div>
+            <span
+              class="rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
+              Random Sets
+            </span>
+          </div>
+
+          <div class="mt-4 space-y-3">
+            <article v-for="card in todayFocusCards" :key="card.key"
+              class="grid grid-cols-12 gap-4 rounded-xl border border-slate-200 bg-light-blue-500 p-3 dark:border-sky-800 dark:bg-sky-950/60">
+              <div class="col-span-4 flex flex-col items-center justify-between text-center text-sm">
+                <div class="radial-progress bg-white shadow-sm" :class="card.color"
+                  :style="{ '--value': card.targetScore }" role="progressbar">
+                  {{ card.badge }}
+                </div>
+                <span class="mt-3 text-xs font-semibold text-slate-500 dark:text-slate-300">
+                  {{ card.targetCopy }}
+                </span>
+              </div>
+
+              <div class="col-span-8 min-w-0 text-sm">
+                <h3 class="truncate font-semibold text-slate-950 dark:text-white">{{ card.title }}</h3>
+                <div
+                  class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600 dark:text-slate-300">
+                  <span><i class="pi pi-arrow-up mr-1 text-teal-500"></i>{{ card.goal }}</span>
+                  <span><i class="pi pi-clock mr-1"></i>{{ card.duration }}</span>
+                </div>
+                <p
+                  class="mt-3 rounded-full bg-teal-500/15 px-3 py-1 text-center text-xs font-semibold text-teal-700 dark:text-teal-200">
+                  {{ card.helper }}
+                </p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <span
+                    class="rounded-full border border-dashed border-teal-500 px-3 py-1 text-xs font-semibold text-slate-700 dark:text-slate-200">
+                    {{ card.community }}
+                  </span>
+                  <RouterLink v-if="card.route" :to="card.route"
+                    class="rounded-full bg-sky-500 px-4 py-1 text-xs font-semibold text-white transition hover:bg-sky-600">
+                    Start
+                  </RouterLink>
+                  <span v-else
+                    class="rounded-full bg-slate-200 px-4 py-1 text-xs font-semibold text-slate-500 dark:bg-sky-800 dark:text-slate-300">
+                    Loading
+                  </span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </article>
+
+        <div class="min-w-0 xl:col-span-7">
           <PracticeProgressPeersChart />
         </div>
-      </div>
+      </section>
 
-      <div class="mt-6">
-        <StudySchedulePanel product-code="nursing" :initial-exam-date="nursing_exam_date"
-          progress-route="/nursing/performance-analysis" study-route="/nursing/study-chapters?chapter_id=7"
-          title="Nursing Study Schedule" @updated="handleExamDateUpdated" />
-      </div>
+      <StudySchedulePanel product-code="nursing" :initial-exam-date="nursing_exam_date"
+        progress-route="/nursing/performance-analysis" study-route="/nursing/study-chapters?chapter_id=7"
+        title="Nursing Study Schedule" @updated="handleExamDateUpdated" />
     </div>
+
+    <dialog ref="studyModalRef" class="modal">
+      <div class="modal-box bg-white text-gray-900 dark:bg-sky-950 dark:text-white">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">x</button>
+        </form>
+        <h3 class="text-lg font-bold custom-underline-red">Nursing Study Areas</h3>
+        <div class="mt-5 grid gap-2">
+          <RouterLink v-for="(chapter, index) in chapters" :key="index" :to="chapter.route" :class="[
+            'flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition',
+            chapter.route.includes('null')
+              ? 'pointer-events-none cursor-not-allowed bg-slate-100 text-gray-400 dark:bg-sky-900/40'
+              : 'bg-light-blue-500 text-gray-700 hover:bg-sky-100 hover:text-sky-700 dark:bg-sky-900/60 dark:text-slate-100 dark:hover:bg-sky-800',
+          ]" active-class="bg-indigo-50 text-indigo-700 font-medium" @click="closeStudyModal">
+            <span>{{ chapter.label }}</span>
+            <i class="pi pi-arrow-right text-xs"></i>
+          </RouterLink>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog ref="modalRef" id="examModal" class="modal">
+      <div class="modal-box bg-white text-gray-900 dark:bg-sky-950 dark:text-white">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">x</button>
+        </form>
+        <h3 class="mb-4 pr-8 text-lg">
+          Start <span class="font-bold italic">{{ selectedExam?.name }}</span> in:
+        </h3>
+        <div class="flex flex-wrap justify-end gap-3">
+          <button type="button"
+            class="rounded-lg bg-teal-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-600"
+            @click="goToExam('tutor')">
+            Tutor Mode
+          </button>
+          <button type="button"
+            class="rounded-lg bg-sky-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-600"
+            @click="goToExam('exam')">
+            Exam Mode
+          </button>
+          <button type="button"
+            class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900"
+            @click="goToExam('review', true)">
+            Review Mode
+          </button>
+        </div>
+      </div>
+    </dialog>
   </div>
 </template>
-<script setup lang="ts">
-import PracticeProgressPeersChart from "../../components/Dashboard/PracticeProgressPeersChart.vue";
-import CommonButton from "../../components/Buttons/CommonButton.vue";
 
-import { useAuthStore } from "../../stores/authStore";
-import { computed, onMounted, ref, watch, nextTick } from "vue";
+<script setup lang="ts">
+import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { storeToRefs } from "pinia";
 import axios from "axios";
+import PracticeProgressPeersChart from "../../components/Dashboard/PracticeProgressPeersChart.vue";
+import { useAuthStore } from "../../stores/authStore";
 import { useNursingExamStore } from "../../stores/nursingExamStore";
-import DaysLeft from "../../components/DaysLeft.vue";
 import Probability from "../../components/Probability.vue";
 import router from "../../router";
-import { storeToRefs } from "pinia";
 import StudySchedulePanel from "../../components/Dashboard/StudySchedulePanel.vue";
 import StreakCard from "../../components/Dashboard/StreakCard.vue";
+import ExamIcon from "../../components/ExamIcon.vue";
 
+type NursingProgressGroup = "rn" | "lpn" | "rnExit" | "lpnExit";
+
+type NursingAttempt = {
+  id?: number | string | null;
+  attempt_id?: number | string | null;
+  sub_topic_id?: number | string | null;
+  sub_topic_name?: string | null;
+  question_subject_id?: number | string | null;
+  score?: number | string | null;
+  mode?: string | null;
+  completed?: boolean | number | string | null;
+  completed_at?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  suspend_index?: number | string | null;
+};
+
+type NursingSubject = {
+  id?: number | string;
+  name: string;
+  slug?: string;
+  emoji?: string;
+  examsCount?: number | string | null;
+};
+
+type ExamSearchResult = {
+  id: number | string;
+  name: string;
+};
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
 
 const nursingStore = useNursingExamStore();
-const { nursing_exam_date, dashdata } = storeToRefs(nursingStore);
+const {
+  nursing_exam_date,
+  dashdata,
+  ati_examsubjects_rn_exams_testbank,
+  hesi_examsubjects_rn_exams_testbank,
+  regular_examsubjects_rn_exams_testbank,
+  certification_examsubjects_rn_exams_testbank,
+  ati_examsubjects_pn_exams_testbank,
+  hesi_examsubjects_pn_exams_testbank,
+  regular_examsubjects_pn_exams_testbank,
+  ati_examTopics_rn_exit_exams,
+  hesi_examTopics_rn_exit_exams,
+  ati_examTopics_pn_exit_exams,
+  hesi_examTopics_pn_exit_exams,
+} = storeToRefs(nursingStore);
 
-const RandSubject1 = ref()
-
-const RandSubject2 = ref()
-
-const subjects = ref([]);
-
-const universal_search = ref('');
-
-const examTopicsSearchResult = ref([]);
-
+const RandSubject1 = ref<NursingSubject | null>(null);
+const RandSubject2 = ref<NursingSubject | null>(null);
+const subjects = ref<NursingSubject[]>([]);
+const nursingAttempts = ref<NursingAttempt[]>([]);
+const universal_search = ref("");
+const examTopicsSearchResult = ref<ExamSearchResult[]>([]);
 const modalRef = ref<HTMLDialogElement | null>(null);
+const studyModalRef = ref<HTMLDialogElement | null>(null);
+const selectedExam = ref<ExamSearchResult | null>(null);
 
-const selectedExam = ref<{ id: number; name: string } | null>(null);
+const firstName = computed(() => user.value?.name?.split(" ")[0] || "Student");
+
+const averageScore = computed(() => {
+  const rawScore = dashdata.value?.average_score;
+  if (rawScore === null || rawScore === undefined || rawScore === "") {
+    return "...";
+  }
+
+  const score = Number(rawScore);
+  if (!Number.isFinite(score)) return "...";
+
+  return `${Math.max(0, Math.min(100, Math.round(score)))}%`;
+});
+
+const summaryStats = computed(() => [
+  {
+    label: "Attempts",
+    value: dashdata.value?.nursing_attempts ?? nursingAttempts.value.length,
+    detail: "All time practice",
+    icon: "pi pi-pencil",
+    color: "text-sky-600",
+  },
+  {
+    label: "Avg. Score",
+    value: averageScore.value,
+    detail: "Recent attempts",
+    icon: "pi pi-percentage",
+    color: "text-emerald-600",
+  },
+  {
+    label: "Banks",
+    value: nursingQuickLinks.length,
+    detail: "RN, LPN, and exit prep",
+    icon: "pi pi-th-large",
+    color: "text-orange-600",
+  },
+]);
+
+const quickActions = [
+  { label: "RN Exams", route: "/nursing/rn-t-exams", icon: "pi pi-book" },
+  { label: "LPN Exams", route: "/nursing/lpn-t-exams", icon: "pi pi-file" },
+  { label: "Exit RN", route: "/nursing/exit-rn-exams", icon: "pi pi-graduation-cap" },
+  { label: "Exit LPN", route: "/nursing/exit-pn-exams", icon: "pi pi-graduation-cap" },
+  { label: "Performance", route: "/nursing/performance-analysis", icon: "pi pi-chart-line" },
+];
+
+const searchTerm = computed(() => universal_search.value.trim().toLowerCase());
+
+const showSearchResults = computed(() => searchTerm.value.length >= 3);
 
 const filteredSubjects = computed(() => {
-  if (universal_search.value.length < 3) {
+  if (!showSearchResults.value) {
     return [];
   }
 
-  return subjects.value.filter(subject =>
-    subject.name.toLowerCase().includes(universal_search.value.toLowerCase())
+  return subjects.value.filter((subject) =>
+    subject.name.toLowerCase().includes(searchTerm.value),
   );
 });
 
+const openModal = async (exam: ExamSearchResult) => {
+  selectedExam.value = exam;
+  universal_search.value = "";
+  examTopicsSearchResult.value = [];
+  await nextTick();
+  modalRef.value?.showModal();
+};
 
-const openModal = async (exam: { id: number; name: string }) => {
-  selectedExam.value = exam
-  await nextTick()
-  modalRef.value?.showModal()
-}
+const openStudyModal = () => {
+  studyModalRef.value?.showModal();
+};
 
-const goToExam = (mode: 'review' | 'tutor' | 'exam', examreview = false) => {
+const closeStudyModal = () => {
+  studyModalRef.value?.close();
+};
+
+const goToSubject = (subject: NursingSubject) => {
+  if (!subject.slug) return;
+
+  universal_search.value = "";
+  examTopicsSearchResult.value = [];
+  router.push(`/nursing/test-bank-loader/${subject.slug}`);
+};
+
+const goToExam = (mode: "review" | "tutor" | "exam", examreview = false) => {
   if (selectedExam.value) {
     router.push({
       path: `/nursing/exam/${selectedExam.value.id}`,
       query: {
         mode,
-        ...(examreview ? { examreview: 'true' } : {}),
+        ...(examreview ? { examreview: "true" } : {}),
       },
-    })
-    modalRef.value?.close()
+    });
+    modalRef.value?.close();
   }
-}
+};
 
 onMounted(async () => {
-  const response = await axios.get('/nursing/subjects');
-  subjects.value = response.data.data;
-  RandSubject1.value = response.data.data[Math.floor(Math.random() * response.data.data.length)]
-  RandSubject2.value = response.data.data[Math.floor(Math.random() * response.data.data.length)]
   nursingStore.getEssentials();
+
+  try {
+    const response = await axios.get("/nursing/subjects");
+    const subjectData = Array.isArray(response.data?.data) ? response.data.data : [];
+    const shuffledSubjects = [...subjectData].sort(() => Math.random() - 0.5);
+
+    subjects.value = subjectData;
+    RandSubject1.value = shuffledSubjects[0] || null;
+    RandSubject2.value = shuffledSubjects[1] || shuffledSubjects[0] || null;
+  } catch {
+    subjects.value = [];
+  }
+
+  try {
+    const attemptsResponse = await axios.get("/nursing/previous-attempts", { showLoader: false });
+    nursingAttempts.value = attemptsResponse.data.data || [];
+  } catch {
+    nursingAttempts.value = [];
+  }
 });
 
 const handleExamDateUpdated = (date: string) => {
@@ -350,44 +599,299 @@ const nursingQuickLinks = [
     description: "Core RN drills with tutor and exam modes.",
     route: "/nursing/rn-t-exams",
     icon: "pi pi-book",
-    count: "67 sets",
+    fallbackTotal: 67,
+    group: "rn" as NursingProgressGroup,
     color: "text-sky-600",
+    barClass: "bg-gradient-to-r from-sky-500 to-cyan-400",
   },
   {
     title: "LPN Test Bank",
     description: "Foundational LPN-focused question banks.",
     route: "/nursing/lpn-t-exams",
     icon: "pi pi-file",
-    count: "7 sets",
+    fallbackTotal: 7,
+    group: "lpn" as NursingProgressGroup,
     color: "text-indigo-600",
+    barClass: "bg-gradient-to-r from-indigo-500 to-sky-400",
   },
   {
     title: "RN EXIT Exams",
     description: "Final-readiness RN exam practice sets.",
     route: "/nursing/exit-rn-exams",
     icon: "pi pi-graduation-cap",
-    count: "567 sets",
+    fallbackTotal: 567,
+    group: "rnExit" as NursingProgressGroup,
     color: "text-emerald-600",
+    barClass: "bg-gradient-to-r from-emerald-500 to-teal-400",
   },
   {
     title: "LPN EXIT Exams",
     description: "LPN graduation-focused exit exam prep.",
     route: "/nursing/exit-pn-exams",
     icon: "pi pi-graduation-cap",
-    count: "7 sets",
+    fallbackTotal: 7,
+    group: "lpnExit" as NursingProgressGroup,
     color: "text-orange-600",
+    barClass: "bg-gradient-to-r from-orange-500 to-amber-400",
   },
 ];
 
-watch(universal_search, (newVal) => {
-  if (newVal.length >= 1) {
-    axios.get(`/nursing/search/subtopics?query=${newVal}`, { showLoader: false }).then(response => {
-      examTopicsSearchResult.value = response.data.data;
-      // You can handle the search results here, e.g., display them in the UI
-    }).catch(error => {
-      console.error('Error fetching search results:', error);
-    });
-  }
+const focusCardPresets = [
+  {
+    targetScore: 60,
+    color: "text-sky-600",
+    targetCopy: "At least 60%",
+    duration: "40 min",
+    helper: "Warm up with one focused set.",
+    community: "12k joined",
+  },
+  {
+    targetScore: 70,
+    color: "text-emerald-500",
+    targetCopy: "At least 65%",
+    duration: "50 min",
+    helper: "Accept a mixed review challenge.",
+    community: "19k joined",
+  },
+];
+
+const todayFocusCards = computed(() =>
+  [RandSubject1.value, RandSubject2.value].map((subject, index) => {
+    const preset = focusCardPresets[index];
+    const examCount = toNumber(subject?.examsCount) || 10;
+
+    return {
+      key: `focus-${index}-${subject?.slug || "loading"}`,
+      title: subject?.name || "Analysing subject...",
+      badge: subject?.emoji || `${preset.targetScore}%`,
+      route: subject?.slug ? `/nursing/test-bank-loader/${subject.slug}` : "",
+      goal: `${examCount} exams`,
+      ...preset,
+    };
+  }),
+);
+
+const attemptTimestamp = (attempt: NursingAttempt) => {
+  const raw = attempt.completed_at || attempt.updated_at || attempt.created_at;
+  if (!raw) return 0;
+
+  const timestamp = new Date(raw).getTime();
+  return Number.isFinite(timestamp) ? timestamp : 0;
+};
+
+const isCompletedAttempt = (attempt: NursingAttempt) =>
+  attempt.completed === true || attempt.completed === 1 || attempt.completed === "1";
+
+const sortedAttempts = computed(() =>
+  [...nursingAttempts.value].sort((a, b) => attemptTimestamp(b) - attemptTimestamp(a)),
+);
+
+const latestAttempt = computed(() => sortedAttempts.value[0] || null);
+
+const latestCompletedAttempt = computed(() =>
+  sortedAttempts.value.find((attempt) => isCompletedAttempt(attempt)) || null,
+);
+
+const pausedAttempt = computed(() =>
+  sortedAttempts.value.find((attempt) => !isCompletedAttempt(attempt) && toNumber(attempt.id || attempt.attempt_id) > 0) || null,
+);
+
+const latestAttemptScore = computed(() => {
+  const score = toNumber(latestAttempt.value?.score);
+  return Math.max(0, Math.min(100, Math.round(score)));
 });
 
+const latestAttemptStatus = computed(() => {
+  if (!latestAttempt.value) return "Ready";
+  return isCompletedAttempt(latestAttempt.value) ? "Completed" : "Paused";
+});
+
+const latestAttemptBadgeClass = computed(() => {
+  if (!latestAttempt.value) return "bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-200";
+  if (isCompletedAttempt(latestAttempt.value)) {
+    return "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-200";
+  }
+
+  return "bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-200";
+});
+
+const latestAttemptDateText = computed(() => {
+  const timestamp = latestAttempt.value ? attemptTimestamp(latestAttempt.value) : 0;
+  if (!timestamp) return "No date recorded";
+
+  return new Date(timestamp).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+});
+
+const nextPracticeMove = computed(() => {
+  if (pausedAttempt.value) {
+    const attemptId = pausedAttempt.value.attempt_id || pausedAttempt.value.id;
+
+    return {
+      title: `Resume ${pausedAttempt.value.sub_topic_name || "your paused exam"}`,
+      detail: "Pick up exactly where you stopped and keep the attempt history clean.",
+      primaryLabel: "Resume Exam",
+      primaryRoute: `/nursing/exam/${attemptId}?resume=true`,
+      icon: "pi pi-play",
+    };
+  }
+
+  if (latestCompletedAttempt.value) {
+    const score = Math.round(toNumber(latestCompletedAttempt.value.score));
+    const attemptId = latestCompletedAttempt.value.attempt_id || latestCompletedAttempt.value.id;
+    const needsReview = score < 75;
+
+    return {
+      title: needsReview ? "Review your last misses" : "Keep the streak moving",
+      detail: needsReview
+        ? `Your last completed score was ${score}%. Review the rationale, then retake a focused set.`
+        : `Your last completed score was ${score}%. Good time to stack another timed set.`,
+      primaryLabel: needsReview ? "Review Attempt" : "Take Another Set",
+      primaryRoute: needsReview && attemptId
+        ? `/nursing/exam/${attemptId}?mode=review`
+        : "/nursing/rn-t-exams",
+      icon: needsReview ? "pi pi-eye" : "pi pi-arrow-right",
+    };
+  }
+
+  return {
+    title: "Start your first tracked attempt",
+    detail: "Begin with RN or LPN practice to unlock score trends, readiness, and smarter recommendations.",
+    primaryLabel: "Start RN Bank",
+    primaryRoute: "/nursing/rn-t-exams",
+    icon: "pi pi-play",
+  };
+});
+
+const scoreToneClass = (score: number) => {
+  if (score >= 75) return "text-emerald-600 dark:text-emerald-300";
+  if (score >= 55) return "text-amber-600 dark:text-amber-300";
+  return "text-rose-600 dark:text-rose-300";
+};
+
+const scoreBarClass = (score: number) => {
+  if (score >= 75) return "bg-emerald-500";
+  if (score >= 55) return "bg-amber-500";
+  return "bg-rose-500";
+};
+
+const toNumber = (value: unknown) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const asList = <T = any>(value: T[] | null | undefined) => Array.isArray(value) ? value : [];
+
+const sumExamCounts = (items: any[]) =>
+  items.reduce((sum, item) => sum + toNumber(item?.examsCount), 0);
+
+const uniqueIds = (items: any[], key = "id") =>
+  new Set(items.map((item) => toNumber(item?.[key])).filter((id) => id > 0));
+
+const countAttemptsByQuestionSubject = (subjectIds: Set<number>) => {
+  const attempted = new Set<number>();
+
+  nursingAttempts.value.forEach((attempt) => {
+    const subjectId = toNumber(attempt.question_subject_id);
+    const examId = toNumber(attempt.sub_topic_id);
+
+    if (subjectIds.has(subjectId) && examId > 0) {
+      attempted.add(examId);
+    }
+  });
+
+  return attempted.size;
+};
+
+const countAttemptsByExam = (examIds: Set<number>) => {
+  const attempted = new Set<number>();
+
+  nursingAttempts.value.forEach((attempt) => {
+    const examId = toNumber(attempt.sub_topic_id);
+
+    if (examIds.has(examId)) {
+      attempted.add(examId);
+    }
+  });
+
+  return attempted.size;
+};
+
+const rnSubjects = computed(() => [
+  ...asList(ati_examsubjects_rn_exams_testbank.value),
+  ...asList(hesi_examsubjects_rn_exams_testbank.value),
+  ...asList(regular_examsubjects_rn_exams_testbank.value),
+  ...asList(certification_examsubjects_rn_exams_testbank.value),
+]);
+
+const lpnSubjects = computed(() => [
+  ...asList(ati_examsubjects_pn_exams_testbank.value),
+  ...asList(hesi_examsubjects_pn_exams_testbank.value),
+  ...asList(regular_examsubjects_pn_exams_testbank.value),
+]);
+
+const rnExitExams = computed(() => [
+  ...asList(ati_examTopics_rn_exit_exams.value),
+  ...asList(hesi_examTopics_rn_exit_exams.value),
+]);
+
+const lpnExitExams = computed(() => [
+  ...asList(ati_examTopics_pn_exit_exams.value),
+  ...asList(hesi_examTopics_pn_exit_exams.value),
+]);
+
+const nursingGroupTotals = computed<Record<NursingProgressGroup, number>>(() => ({
+  rn: sumExamCounts(rnSubjects.value),
+  lpn: sumExamCounts(lpnSubjects.value),
+  rnExit: rnExitExams.value.length,
+  lpnExit: lpnExitExams.value.length,
+}));
+
+const nursingGroupAttempts = computed<Record<NursingProgressGroup, number>>(() => ({
+  rn: countAttemptsByQuestionSubject(uniqueIds(rnSubjects.value)),
+  lpn: countAttemptsByQuestionSubject(uniqueIds(lpnSubjects.value)),
+  rnExit: countAttemptsByExam(uniqueIds(rnExitExams.value)),
+  lpnExit: countAttemptsByExam(uniqueIds(lpnExitExams.value)),
+}));
+
+const nursingQuickLinksWithProgress = computed(() =>
+  nursingQuickLinks.map((link) => {
+    const total = nursingGroupTotals.value[link.group] || link.fallbackTotal;
+    const attempted = Math.min(total, nursingGroupAttempts.value[link.group] || 0);
+    const percent = total > 0 ? Math.round((attempted / total) * 100) : 0;
+
+    return {
+      ...link,
+      total,
+      attempted,
+      percent,
+    };
+  }),
+);
+
+const nursingAttemptedTotal = computed(() =>
+  new Set(nursingAttempts.value.map((attempt) => toNumber(attempt.sub_topic_id)).filter((id) => id > 0)).size,
+);
+
+watch(universal_search, (newVal) => {
+  const query = newVal.trim();
+
+  if (query.length < 3) {
+    examTopicsSearchResult.value = [];
+    return;
+  }
+
+  axios
+    .get(`/nursing/search/subtopics?query=${encodeURIComponent(query)}`, { showLoader: false })
+    .then((response) => {
+      examTopicsSearchResult.value = Array.isArray(response.data?.data) ? response.data.data : [];
+    })
+    .catch((error) => {
+      console.error("Error fetching search results:", error);
+      examTopicsSearchResult.value = [];
+    });
+});
 </script>
