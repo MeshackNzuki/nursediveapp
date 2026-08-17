@@ -1,26 +1,32 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+@theme {
+  --color-white-500: #ffffff;
+}
+
 @source inline("bg-{rose-500,teal-500}");
 
 /* ✅ Tailwind 4-compatible safelist using @source inline() */
 @source inline("from-{sky-400,lime-400,cyan-600,emerald-400}");
 @source inline("to-{sky-600,lime-600,cyan-800,emerald-600}");
 @source inline("font-{mono,serif,elegant,classic,sans,exo,custom,outfit}");
-@source inline("bg-{rose-500,teal-500,sky-500}");
+@source inline("bg-{rose-500,teal-500,sky-500,white-500,light-blue-500}");
 
 /* ✅ Custom variant (if needed) */
 @custom-variant dark (&:where(.dark, .dark *));
+
+@utility bg-light-blue-500 {
+  --tw-bg-opacity: 1;
+  --tw-border-opacity: 1;
+  background-color: rgb(239 250 255 / var(--tw-bg-opacity));
+  border-color: rgb(220 246 255 / var(--tw-border-opacity));
+}
 
 .bg-sky-800
 {
     --tw-bg-opacity: 1;
     background-color: rgb(3 65 108 / var(--tw-bg-opacity));
-}
-
-.bg-white-500 {
-    --tw-bg-opacity: 1;
-    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
 .text-bright-sun-500
@@ -34,14 +40,6 @@
     --tw-shadow-colored: 0px 5px 15px 0px var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
-
-.bg-light-blue-500 {
-    --tw-bg-opacity: 1;
-    --tw-border-opacity: 1;
-    background-color: rgb(239 250 255 / var(--tw-bg-opacity));
-    border-color: rgb(220 246 255 / var(--tw-border-opacity));
-}
-
 
 @layer components {
   .analysis-shell {

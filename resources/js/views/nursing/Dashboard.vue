@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-gray-50 p-4 text-gray-700 dark:bg-sky-950 dark:text-gray-50 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+    class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-gray-700 dark:bg-slate-900 dark:text-gray-50 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
     <div class="mx-auto max-w-screen-2xl space-y-6">
       <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
         <article class="rounded-2xl  p-5  xl:col-span-8">
@@ -284,7 +284,7 @@
             <article v-for="card in todayFocusCards" :key="card.key"
               class="grid grid-cols-12 gap-4 rounded-xl border border-slate-200 bg-light-blue-500 p-3 dark:border-sky-800 dark:bg-sky-950/60">
               <div class="col-span-4 flex flex-col items-center justify-between text-center text-sm">
-                <div class="radial-progress bg-white shadow-sm" :class="card.color"
+                <div class="radial-progress bg-white shadow-sm dark:bg-sky-900/70" :class="card.color"
                   :style="{ '--value': card.targetScore }" role="progressbar">
                   {{ card.badge }}
                 </div>
@@ -476,21 +476,21 @@ const summaryStats = computed(() => [
     value: dashdata.value?.nursing_attempts ?? nursingAttempts.value.length,
     detail: "All time practice",
     icon: "pi pi-pencil",
-    color: "text-sky-600",
+    color: "text-sky-600 dark:text-sky-300",
   },
   {
     label: "Avg. Score",
     value: averageScore.value,
     detail: "Recent attempts",
     icon: "pi pi-percentage",
-    color: "text-emerald-600",
+    color: "text-emerald-600 dark:text-emerald-300",
   },
   {
     label: "Banks",
     value: nursingQuickLinks.length,
     detail: "RN, LPN, and exit prep",
     icon: "pi pi-th-large",
-    color: "text-orange-600",
+    color: "text-orange-600 dark:text-orange-300",
   },
 ]);
 
@@ -557,7 +557,7 @@ onMounted(async () => {
   nursingStore.getEssentials();
 
   try {
-    const response = await axios.get("/nursing/subjects");
+    const response = await axios.get("/nursing/subjects", { showLoader: false });
     const subjectData = Array.isArray(response.data?.data) ? response.data.data : [];
     const shuffledSubjects = [...subjectData].sort(() => Math.random() - 0.5);
 
@@ -601,7 +601,7 @@ const nursingQuickLinks = [
     icon: "pi pi-book",
     fallbackTotal: 67,
     group: "rn" as NursingProgressGroup,
-    color: "text-sky-600",
+    color: "text-sky-600 dark:text-sky-300",
     barClass: "bg-gradient-to-r from-sky-500 to-cyan-400",
   },
   {
@@ -611,7 +611,7 @@ const nursingQuickLinks = [
     icon: "pi pi-file",
     fallbackTotal: 7,
     group: "lpn" as NursingProgressGroup,
-    color: "text-indigo-600",
+    color: "text-indigo-600 dark:text-indigo-300",
     barClass: "bg-gradient-to-r from-indigo-500 to-sky-400",
   },
   {
@@ -621,7 +621,7 @@ const nursingQuickLinks = [
     icon: "pi pi-graduation-cap",
     fallbackTotal: 567,
     group: "rnExit" as NursingProgressGroup,
-    color: "text-emerald-600",
+    color: "text-emerald-600 dark:text-emerald-300",
     barClass: "bg-gradient-to-r from-emerald-500 to-teal-400",
   },
   {
@@ -631,7 +631,7 @@ const nursingQuickLinks = [
     icon: "pi pi-graduation-cap",
     fallbackTotal: 7,
     group: "lpnExit" as NursingProgressGroup,
-    color: "text-orange-600",
+    color: "text-orange-600 dark:text-orange-300",
     barClass: "bg-gradient-to-r from-orange-500 to-amber-400",
   },
 ];
@@ -639,7 +639,7 @@ const nursingQuickLinks = [
 const focusCardPresets = [
   {
     targetScore: 60,
-    color: "text-sky-600",
+    color: "text-sky-600 dark:text-sky-300",
     targetCopy: "At least 60%",
     duration: "40 min",
     helper: "Warm up with one focused set.",
@@ -647,7 +647,7 @@ const focusCardPresets = [
   },
   {
     targetScore: 70,
-    color: "text-emerald-500",
+    color: "text-emerald-500 dark:text-emerald-300",
     targetCopy: "At least 65%",
     duration: "50 min",
     helper: "Accept a mixed review challenge.",

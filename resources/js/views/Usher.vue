@@ -107,9 +107,9 @@ const statusLabel = (code) => {
 
 const statusClass = (code) => {
     const status = planStatus(code);
-    if (status === "active") return "bg-emerald-100 text-emerald-700 border-emerald-300";
-    if (status === "trial") return "bg-amber-100 text-amber-700 border-amber-300";
-    return "bg-rose-100 text-rose-700 border-rose-300";
+    if (status === "active") return "border-emerald-300 bg-emerald-100 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-200";
+    if (status === "trial") return "border-amber-300 bg-amber-100 text-amber-700 dark:border-amber-800 dark:bg-amber-950/70 dark:text-amber-200";
+    return "border-rose-300 bg-rose-100 text-rose-700 dark:border-rose-800 dark:bg-rose-950/70 dark:text-rose-200";
 };
 
 const productPlans = (code) => {
@@ -500,7 +500,7 @@ onMounted(() => {
 </script>
 <template>
     <div
-        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 md:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh] dark:bg-slate-950">
+        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-slate-700 md:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh] dark:bg-slate-900 dark:text-slate-100">
         <div class="mx-auto max-w-7xl space-y-6">
             <section v-if="isAuthenticated" class="overflow-hidden  p-5  md:p-6 ">
                 <div class="grid gap-6 lg:grid-cols-[1fr_340px]">
@@ -610,21 +610,28 @@ onMounted(() => {
                             </div>
                         </div>
                     </div>
-                    <aside class="flex flex-col gap-4 border-slate-200 lg:border-l lg:pl-6 dark:border-slate-800">
-                        <EmailVerification v-if="!user?.email_verified" class="max-w-none" />
-                        <div>
-                            <p
-                                class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
-                                Focus Today
-                            </p>
-                            <p class="mt-2 text-sm font-semibold leading-6 text-slate-900 dark:text-slate-100">
-                                {{ focusTip }}
-                            </p>
-                            <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
-                                Last activity: {{ lastActivityText }}
-                            </p>
+                    <aside
+                        class="relative hidden overflow-hidden rounded-3xl border border-sky-100 bg-light-blue-500 p-5 shadow-custom lg:block dark:!border-slate-800 dark:!bg-slate-900">
+                        <div
+                            class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-br from-sky-800 via-sky-700 to-cyan-700">
                         </div>
-
+                        <EmailVerification v-if="!user?.email_verified" class="max-w-none" />
+                        <div
+                            class="relative flex min-h-28 items-center gap-4 border-b border-white/25 pb-5 dark:border-slate-800">
+                            <div
+                                class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-white/95 shadow-custom ring-1 ring-sky-100 dark:!bg-slate-950 dark:ring-slate-800">
+                                <ExamIcon size="78" class="drop-shadow-sm" />
+                            </div>
+                            <div class="min-w-0">
+                                <span
+                                    class="inline-flex items-center rounded-3xl bg-white/10 px-2.5 py-1 text-[11px] font-semibold  text-bright-sun-500 ring-1 ring-white/20">
+                                    {{ focusTip }}
+                                </span>
+                                <p class="mt-2 text-xs leading-tight text-white">
+                                    Last activity: {{ lastActivityText }}
+                                </p>
+                            </div>
+                        </div>
                         <div class="flex flex-col gap-2">
                             <CommonButton :buttonText="primaryActionLabel" icon2="pi pi-arrow-right"
                                 :action="() => router.push(primaryActionRoute)"
@@ -683,11 +690,11 @@ onMounted(() => {
                                 py-0.5">
                                 TEAS 7
                             </router-link>
-                            <router-link to="/teas" class="rounded-full px-2 bg-sky-500 text-white
+                            <router-link to="/nursing" class="rounded-full px-2 bg-sky-500 text-white
                                 py-0.5">
                                 Nursing School
                             </router-link>
-                            <router-link to="/teas" class="rounded-full px-2 bg-sky-500 text-white
+                            <router-link to="/nclex" class="rounded-full px-2 bg-sky-500 text-white
                                 py-0.5">
                                 NCLEX RN/PN
                             </router-link>
@@ -732,10 +739,11 @@ onMounted(() => {
                                         {{ product.subtitle }}
                                     </p>
                                 </div>
+                                {{ product.name }}
                                 <button type="button"
                                     class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-sky-100 bg-white text-sky-700 transition group-hover/study:-translate-y-0.5 group-hover/study:border-sky-200 group-hover/study:bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-950 dark:text-sky-300 dark:group-hover/study:border-sky-700 dark:group-hover/study:bg-slate-800"
                                     :aria-label="`View ${product.name} plans`"
-                                    @click="router.push(product.pricingRoute)">
+                                    @click="router.push(`/${product.dashboardRoute}`)">
                                     <i class="pi pi-arrow-right text-xs"></i>
                                 </button>
                             </div>
@@ -896,7 +904,7 @@ onMounted(() => {
                     </p>
                     <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                         <div
-                            class="border-l-2 border-sky-500 bg-gradient-to-r from-amber-500/30 via-amber-100  to-transparent pl-3 ">
+                            class="rounded-r-lg border-l-2 border-sky-500 bg-gradient-to-r from-sky-500/10 via-sky-50 to-transparent p-3 pl-4 dark:from-sky-500/20 dark:via-slate-900/80 dark:to-transparent">
                             <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Realistic Question
                                 Quality</p>
                             <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
@@ -904,14 +912,14 @@ onMounted(() => {
                             </p>
                         </div>
                         <div
-                            class="border-l-2 border-emerald-500 bg-gradient-to-r from-amber-500/30 via-amber-100  to-transparent pl-3">
+                            class="rounded-r-lg border-l-2 border-emerald-500 bg-gradient-to-r from-emerald-500/10 via-emerald-50 to-transparent p-3 pl-4 dark:from-emerald-500/20 dark:via-slate-900/80 dark:to-transparent">
                             <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Weak-Area Focus</p>
                             <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
                                 Target gaps and improve with feedback loops.
                             </p>
                         </div>
                         <div
-                            class="border-l-2 border-amber-500 bg-gradient-to-r from-amber-500/30 via-amber-100  to-transparent pl-3">
+                            class="rounded-r-lg border-l-2 border-amber-500 bg-gradient-to-r from-amber-500/10 via-amber-50 to-transparent p-3 pl-4 dark:from-amber-500/20 dark:via-slate-900/80 dark:to-transparent">
                             <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">Comprehensive Analytics
                             </p>
                             <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
@@ -919,7 +927,7 @@ onMounted(() => {
                             </p>
                         </div>
                         <div
-                            class="border-l-2 border-rose-500 bg-gradient-to-r from-amber-500/30 via-amber-100  to-transparent pl-3">
+                            class="rounded-r-lg border-l-2 border-rose-500 bg-gradient-to-r from-rose-500/10 via-rose-50 to-transparent p-3 pl-4 dark:from-rose-500/20 dark:via-slate-900/80 dark:to-transparent">
                             <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">High Pass-Rate Strategy
                             </p>
                             <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">

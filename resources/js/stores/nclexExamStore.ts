@@ -290,16 +290,18 @@ export const useNclexExamStore = defineStore("useNclexExamStore", {
             this.timeTaken = 0;
         },
         async getEssentials() {
-            axios.get("nclex/dashdata").then((response) => {
+            axios.get("nclex/dashdata", { showLoader: false }).then((response) => {
                 this.dashdata = response.data.data;
             });
-            axios.get("/exam-dates?product_code=nclex").then((response) => {
-                if (response.data.data?.date) {
-                    this.nclex_exam_date = new Date(response.data.data.date)
-                        .toISOString()
-                        .split("T")[0];
-                }
-            });
+            axios
+                .get("/exam-dates?product_code=nclex", { showLoader: false })
+                .then((response) => {
+                    if (response.data.data?.date) {
+                        this.nclex_exam_date = new Date(response.data.data.date)
+                            .toISOString()
+                            .split("T")[0];
+                    }
+                });
         },
     },
 });

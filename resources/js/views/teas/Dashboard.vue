@@ -53,7 +53,7 @@ const teasModules: TeasModule[] = [
         description: "Arithmetic, algebra, and data interpretation drills.",
         icon: "pi pi-calculator",
         total: 67,
-        color: "text-sky-600",
+        color: "text-sky-600 dark:text-sky-300",
         barClass: "bg-gradient-to-r from-sky-500 to-cyan-400",
     },
     {
@@ -63,7 +63,7 @@ const teasModules: TeasModule[] = [
         description: "Grammar, punctuation, and language usage mastery.",
         icon: "pi pi-language",
         total: 77,
-        color: "text-indigo-600",
+        color: "text-indigo-600 dark:text-indigo-300",
         barClass: "bg-gradient-to-r from-indigo-500 to-sky-400",
     },
     {
@@ -73,7 +73,7 @@ const teasModules: TeasModule[] = [
         description: "Biology, chemistry, and scientific reasoning prep.",
         icon: "pi pi-sliders-h",
         total: 80,
-        color: "text-emerald-600",
+        color: "text-emerald-600 dark:text-emerald-300",
         barClass: "bg-gradient-to-r from-emerald-500 to-teal-400",
     },
     {
@@ -83,7 +83,7 @@ const teasModules: TeasModule[] = [
         description: "Comprehension, inference, and text analysis training.",
         icon: "pi pi-book",
         total: 49,
-        color: "text-orange-600",
+        color: "text-orange-600 dark:text-orange-300",
         barClass: "bg-gradient-to-r from-orange-500 to-amber-400",
     },
 ];
@@ -154,21 +154,21 @@ const summaryStats = computed(() => [
         value: dashdata.value?.teas_attempts ?? teasAttempts.value.length,
         detail: "All time practice",
         icon: "pi pi-pencil",
-        color: "text-sky-600",
+        color: "text-sky-600 dark:text-sky-300",
     },
     {
         label: "Avg. Score",
         value: averageScore.value,
         detail: "Recent attempts",
         icon: "pi pi-percentage",
-        color: "text-emerald-600",
+        color: "text-emerald-600 dark:text-emerald-300",
     },
     {
         label: "Areas",
         value: teasModules.length,
         detail: "Math, Science, Language, Reading",
         icon: "pi pi-th-large",
-        color: "text-orange-600",
+        color: "text-orange-600 dark:text-orange-300",
     },
 ]);
 
@@ -316,7 +316,7 @@ const handleExamDateUpdated = (date: string) => {
 
 <template>
     <div
-        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-gray-50 p-4 text-gray-700 dark:bg-sky-950 dark:text-gray-50 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-gray-700 dark:bg-slate-900 dark:text-gray-50 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
         <div class="mx-auto max-w-screen-2xl space-y-6">
             <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
                 <article class="rounded-2xl p-5 xl:col-span-8">
@@ -578,7 +578,7 @@ const handleExamDateUpdated = (date: string) => {
                         <article v-for="card in focusCards" :key="card.key"
                             class="grid grid-cols-12 gap-4 rounded-xl border border-slate-200 bg-light-blue-500 p-3 dark:border-sky-800 dark:bg-sky-950/60">
                             <div class="col-span-4 flex flex-col items-center justify-between text-center text-sm">
-                                <div class="radial-progress bg-white shadow-sm" :class="card.color"
+                                <div class="radial-progress bg-white shadow-sm dark:bg-sky-900/70" :class="card.color"
                                     :style="{ '--value': card.targetScore }" role="progressbar">
                                     <i :class="card.icon"></i>
                                 </div>

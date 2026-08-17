@@ -467,7 +467,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
         },
         async getEssentials() {
             axios
-                .get("nursing/exam-subjects/ati-1691653441")
+                .get("nursing/exam-subjects/ati-1691653441", {
+                    showLoader: false,
+                })
                 .then((response) => {
                     this.ati_examsubjects_rn_exams_testbank =
                         response.data?.data.exams;
@@ -476,7 +478,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
                     console.error("Error fetching RN exam subjects:", error);
                 });
             axios
-                .get("nursing/exam-subjects/hesi-1691653451")
+                .get("nursing/exam-subjects/hesi-1691653451", {
+                    showLoader: false,
+                })
                 .then((response) => {
                     this.hesi_examsubjects_rn_exams_testbank =
                         response.data?.data.exams;
@@ -485,7 +489,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
                     console.error("Error fetching RN exam subjects:", error);
                 });
             axios
-                .get("nursing/exam-subjects/regular-1721650690")
+                .get("nursing/exam-subjects/regular-1721650690", {
+                    showLoader: false,
+                })
                 .then((response) => {
                     this.regular_examsubjects_rn_exams_testbank =
                         response.data?.data.exams;
@@ -495,7 +501,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
                 });
 
             axios
-                .get("nursing/exam-subjects/certification-1721650690")
+                .get("nursing/exam-subjects/certification-1721650690", {
+                    showLoader: false,
+                })
                 .then((response) => {
                     this.certification_examsubjects_rn_exams_testbank =
                         response.data?.data.exams;
@@ -506,7 +514,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
             //-----
 
             axios
-                .get("nursing/exam-subjects/ati-1691653469")
+                .get("nursing/exam-subjects/ati-1691653469", {
+                    showLoader: false,
+                })
                 .then((response) => {
                     this.ati_examsubjects_pn_exams_testbank =
                         response.data?.data.exams;
@@ -515,7 +525,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
                     console.error("Error fetching PN exam subjects:", error);
                 });
             axios
-                .get("nursing/exam-subjects/hesi-1691653482")
+                .get("nursing/exam-subjects/hesi-1691653482", {
+                    showLoader: false,
+                })
                 .then((response) => {
                     this.hesi_examsubjects_pn_exams_testbank =
                         response.data?.data.exams;
@@ -525,7 +537,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
                 });
 
             axios
-                .get("nursing/exam-subjects/regular-1737464378")
+                .get("nursing/exam-subjects/regular-1737464378", {
+                    showLoader: false,
+                })
                 .then((response) => {
                     this.regular_examsubjects_pn_exams_testbank =
                         response.data?.data.exams;
@@ -535,7 +549,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
                 });
             //-----
             axios
-                .get("nursing/exam-subtopics-per-subject/ati-1699951389")
+                .get("nursing/exam-subtopics-per-subject/ati-1699951389", {
+                    showLoader: false,
+                })
                 .then((response) => {
                     this.ati_examTopics_rn_exit_exams =
                         response.data?.data.subtopics;
@@ -547,7 +563,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
                     );
                 });
             axios
-                .get("nursing/exam-subtopics-per-subject/hesi-1699951565")
+                .get("nursing/exam-subtopics-per-subject/hesi-1699951565", {
+                    showLoader: false,
+                })
                 .then((response) => {
                     this.hesi_examTopics_rn_exit_exams =
                         response.data?.data.subtopics;
@@ -561,7 +579,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
 
             //---
             axios
-                .get("nursing/exam-subtopics-per-subject/ati-1699951576")
+                .get("nursing/exam-subtopics-per-subject/ati-1699951576", {
+                    showLoader: false,
+                })
                 .then((response) => {
                     this.ati_examTopics_pn_exit_exams =
                         response.data?.data.subtopics;
@@ -573,7 +593,9 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
                     );
                 });
             axios
-                .get("nursing/exam-subtopics-per-subject/hesi-1699951409")
+                .get("nursing/exam-subtopics-per-subject/hesi-1699951409", {
+                    showLoader: false,
+                })
                 .then((response) => {
                     this.hesi_examTopics_pn_exit_exams =
                         response.data?.data.subtopics;
@@ -584,14 +606,16 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
                         error,
                     );
                 });
-            axios.get("/exam-dates?product_code=nursing").then((response) => {
-                if (response.data.data?.date) {
-                    this.nursing_exam_date = new Date(response.data.data.date)
-                        .toISOString()
-                        .split("T")[0];
-                }
-            });
-            axios.get("nursing/dashdata").then((response) => {
+            axios
+                .get("/exam-dates?product_code=nursing", { showLoader: false })
+                .then((response) => {
+                    if (response.data.data?.date) {
+                        this.nursing_exam_date = new Date(response.data.data.date)
+                            .toISOString()
+                            .split("T")[0];
+                    }
+                });
+            axios.get("nursing/dashdata", { showLoader: false }).then((response) => {
                 this.dashdata = response.data.data;
             });
         },

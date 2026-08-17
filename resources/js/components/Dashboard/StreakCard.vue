@@ -106,7 +106,7 @@ onMounted(() => {
 <template>
     <div class="rounded-2xl border border-orange-200 bg-orange-50/80 dark:bg-sky-900/50 dark:border-orange-300/30 p-3">
         <div class="flex items-center gap-3">
-            <div class="relative h-12 w-12 rounded-xl overflow-hidden border border-orange-200 bg-white">
+            <div class="relative h-12 w-12 rounded-xl overflow-hidden border border-orange-200 bg-white dark:border-orange-300/30 dark:bg-sky-950">
                 <span class="absolute inset-0 flex items-center justify-center text-lg z-0">🔥</span>
                 <div class="tenor-gif-embed relative z-10 h-full w-full" data-postid="23339431" data-share-method="host"
                     data-aspect-ratio="1" data-width="100%"></div>

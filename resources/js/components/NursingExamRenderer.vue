@@ -202,10 +202,14 @@
         <!-- Paywall Modal -->
         <div v-if="examStore.show_paywall" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm
          flex items-center justify-center z-50 text-gray-700">
-            <div class="bg-white rounded-2xl p-8 w-full max-w-lg
+            <div class="relative bg-white rounded-2xl p-8 w-full max-w-lg
            shadow-xl text-center">
+                <button type="button" aria-label="Close paywall" @click="examStore.show_paywall = false"
+                    class="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-400">
+                    <i class="pi pi-times"></i>
+                </button>
                 <!-- Header -->
-                <h3 class="font-semibold text-2xl mb-2">
+                <h3 class="font-semibold text-2xl mb-2 px-8">
                     Hello {{ user?.name.split(' ')[0] }},
                 </h3>
                 <p class="text-gray-600 mb-6">

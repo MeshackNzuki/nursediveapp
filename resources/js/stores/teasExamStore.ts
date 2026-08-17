@@ -269,16 +269,18 @@ export const useTeasExamStore = defineStore("useTeasExamStore", {
             this.timeTaken = 0;
         },
         async getEssentials() {
-            axios.get("teas/dashdata").then((response) => {
+            axios.get("teas/dashdata", { showLoader: false }).then((response) => {
                 this.dashdata = response.data.data;
             });
-            axios.get("/exam-dates?product_code=teas").then((response) => {
-                if (response.data.data?.date) {
-                    this.teas_exam_date = new Date(response.data.data.date)
-                        .toISOString()
-                        .split("T")[0];
-                }
-            });
+            axios
+                .get("/exam-dates?product_code=teas", { showLoader: false })
+                .then((response) => {
+                    if (response.data.data?.date) {
+                        this.teas_exam_date = new Date(response.data.data.date)
+                            .toISOString()
+                            .split("T")[0];
+                    }
+                });
         },
     },
 });
