@@ -288,13 +288,13 @@ const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
 const scoreToneClass = (score) => {
     if (score >= 75) return "text-emerald-600 dark:text-emerald-300";
     if (score >= 55) return "text-amber-600 dark:text-amber-300";
-    return "text-rose-600 dark:text-rose-300";
+    return "text-rose-700 dark:text-red-300";
 };
 
 const scoreFillClass = (score) => {
     if (score >= 75) return "bg-emerald-500";
     if (score >= 55) return "bg-amber-500";
-    return "bg-rose-500/80 dark:bg-rose-500/50";
+    return "bg-rose-500 dark:bg-red-400";
 };
 
 const scoreSummary = (score) => {
@@ -595,7 +595,7 @@ onMounted(() => {
                                 </div>
                                 <div v-if="latestAttempt && !latestAttemptLoading"
                                     class="flex shrink-0 items-center justify-between gap-4 md:flex-col md:items-center md:justify-center">
-                                    <div class="radial-progress bg-gray-200/80 text-sm font-bold shadow-custom dark:bg-slate-900"
+                                    <div class="radial-progress bg-gray-200/80 text-sm font-bold shadow-custom ring-1 ring-transparent dark:bg-slate-800 dark:ring-slate-700"
                                         :class="scoreToneClass(latestAttemptScore)" :style="latestAttemptRingStyle"
                                         role="progressbar" :aria-valuenow="latestAttemptScore">
                                         {{ latestAttemptScore }}%
