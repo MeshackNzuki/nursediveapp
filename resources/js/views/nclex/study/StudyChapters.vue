@@ -1,118 +1,172 @@
 <template>
   <div
-    class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-white">
-    <!-- Background Gradient -->
-    <div class="absolute inset-0 pointer-events-none -z-10">
-      <div
-        class="absolute -top-20 -left-40 h-[300px] w-[300px] lg:h-[600px] lg:w-[600px] bg-gradient-to-r from-purple-300 via-sky-300 to-teal-200 opacity-30 blur-[120px] rounded-full" />
-      <div
-        class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-300 via-sky-300 to-purple-200 opacity-30 blur-[100px] rounded-full" />
-    </div>
+    class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-slate-800 dark:bg-slate-900 dark:text-slate-100 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+    <div class="mx-auto max-w-screen-2xl space-y-6">
+      <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
+        <article class="rounded-2xl p-5 xl:col-span-8">
+          <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+            NCLEX Review
+          </p>
+          <h1 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+            {{ chapterName || "NCLEX Review Topics" }}
+          </h1>
+          <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+            Use topic prompts to choose your next focused practice session while dedicated NCLEX lessons are being
+            prepared.
+          </p>
 
-    <!-- Title -->
-    <h1 class="p-3 text-lg lg:text-2xl font-bold text-gray-800 mb-6">
-      {{ chapter_name }} Chapters
-    </h1>
+          <div class="mt-5 flex flex-wrap gap-2">
+            <RouterLink to="/nclex/linear"
+              class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-bold text-sky-700 transition hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-950/40 dark:text-sky-200">
+              <i class="pi pi-book"></i>
+              Linear Practice
+            </RouterLink>
+            <RouterLink to="/nclex/readiness"
+              class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200">
+              <i class="pi pi-bullseye"></i>
+              Readiness
+            </RouterLink>
+            <RouterLink to="/nclex/performance-analysis"
+              class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-2 text-xs font-bold text-orange-700 transition hover:bg-orange-100 dark:border-orange-800 dark:bg-orange-950/40 dark:text-orange-200">
+              <i class="pi pi-chart-line"></i>
+              Analysis
+            </RouterLink>
+          </div>
+        </article>
 
-    <!-- DaisyUI Modal -->
-    <dialog id="lockModal" class="modal" :open="showLock">
-      <div class="modal-box text-center">
-        <i class="pi pi-lock text-rose-500 text-3xl mb-3"></i>
-        <h3 class="font-bold text-lg mb-2">Locked Content</h3>
-        <p class="text-gray-600 mb-4">
-          Please subscribe to access Study Lessons.
-        </p>
-        <div class="modal-action flex justify-center gap-2">
-          <button class="btn btn-primary text-white" @click="goToNclexPricing">
-            View NCLEX Plans
-          </button>
-          <form method="dialog">
-            <button class="btn btn-error text-white" @click="showLock = false">
-              Close
-            </button>
-          </form>
+        <aside class="xl:col-span-4">
+          <div class="flex h-full items-center justify-between gap-4 rounded-2xl border-b bg-sky-800 p-5 shadow-custom">
+            <div>
+              <span
+                class="inline-flex items-center rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-bright-sun-500 ring-1 ring-white/20">
+                Review path
+              </span>
+              <p class="mt-3 text-lg font-extrabold leading-tight text-white">
+                {{ topicCount }} topic {{ topicCount === 1 ? "prompt" : "prompts" }} ready
+              </p>
+            </div>
+            <span class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/95 text-sky-700">
+              <i class="pi pi-map text-xl"></i>
+            </span>
+          </div>
+        </aside>
+      </section>
+
+      <section
+        class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900">
+        <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-950 dark:text-white">Topic Prompts</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-300">
+              Pick a topic prompt, then start a related practice set.
+            </p>
+          </div>
+          <span
+            class="rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-semibold text-sky-700 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
+            {{ topicCount }} topics
+          </span>
         </div>
-      </div>
-    </dialog>
 
-    <!-- Subchapters -->
-    <div v-if="subChapters.length === 0" class="text-center text-gray-500 mt-20">
-      No sub-chapters available for this chapter. (Content coming soon)
-    </div>
+        <div v-if="isLoading"
+          class="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-slate-300">
+          Loading review topics...
+        </div>
 
-    <div v-else class="space-y-3 flex flex-wrap w-full" :class="{ 'blur-xs': !active() }">
-      <span v-for="sub in subChapters" :key="sub.id"
-        class="flex justify-between w-full md:w-72 items-center border-b pb-2 cursor-pointer"
-        @click="handleClick(sub.id)">
-        <span class="text-gray-700">{{ sub.name }}</span>
-        <CommonButton v-if="active()" :action="() => $router.push(`/nursing/sub-chapter/${sub.id}`)" button-text="Open"
-          icon2="pi pi-arrow-right" />
-      </span>
+        <div v-else-if="subChapters.length === 0"
+          class="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center dark:border-sky-800 dark:bg-sky-950/60">
+          <h3 class="font-semibold text-slate-950 dark:text-white">NCLEX lessons are being prepared.</h3>
+          <p class="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-300">
+            For now, use linear practice, readiness checks, and CAT reports to guide your review.
+          </p>
+          <div class="mt-5 flex flex-wrap justify-center gap-2">
+            <RouterLink to="/nclex/linear"
+              class="inline-flex items-center gap-2 rounded-full bg-sky-500 px-4 py-2 text-xs font-bold text-white transition hover:bg-sky-600">
+              <i class="pi pi-play"></i>
+              Start Linear
+            </RouterLink>
+            <RouterLink to="/nclex/readiness"
+              class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900">
+              <i class="pi pi-bullseye"></i>
+              Check Readiness
+            </RouterLink>
+          </div>
+        </div>
+
+        <div v-else class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <article v-for="(sub, index) in subChapters" :key="sub.id"
+            class="group flex h-full flex-col rounded-xl border border-sky-100 bg-white p-4 shadow-custom transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50 dark:border-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-950">
+            <div class="flex items-start justify-between gap-3">
+              <span
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sm font-bold text-sky-700 ring-1 ring-sky-100 dark:bg-sky-900/70 dark:text-sky-200 dark:ring-sky-800">
+                {{ index + 1 }}
+              </span>
+              <span
+                class="rounded-full border border-slate-200 bg-light-blue-500 px-2.5 py-1 text-[11px] font-bold text-slate-500 dark:border-sky-800 dark:bg-sky-900 dark:text-slate-300">
+                Review
+              </span>
+            </div>
+
+            <h3 class="mt-4 font-bold leading-tight text-slate-950 dark:text-white">{{ sub.name }}</h3>
+            <p class="mt-2 text-xs leading-5 text-slate-600 dark:text-slate-300">
+              Use this prompt to choose a focused NCLEX practice set and review rationales afterward.
+            </p>
+
+            <button type="button" @click="openPractice"
+              class="mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-sky-500 px-4 py-2 text-xs font-bold text-white transition hover:bg-sky-600">
+              Practice
+              <i class="pi pi-arrow-right text-[10px]"></i>
+            </button>
+          </article>
+        </div>
+      </section>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import axios from "axios";
-import CommonButton from "../../../components/Buttons/CommonButton.vue";
-import { useAuthStore } from "../../../stores/authStore";
 
 const route = useRoute();
 const router = useRouter();
-const chapter_id = ref(route.query.chapter_id); // make reactive
-const { user, pricingRoute } = useAuthStore();
-
-const chapter_name = ref("");
+const chapterId = ref(route.query.chapter_id);
+const chapterName = ref("NCLEX Review Topics");
 const subChapters = ref([] as any[]);
-const showLock = ref(false);
+const isLoading = ref(false);
+
+const reviewPrompts = [
+  { id: "safe-effective-care", name: "Safe and Effective Care" },
+  { id: "health-promotion", name: "Health Promotion and Maintenance" },
+  { id: "psychosocial-integrity", name: "Psychosocial Integrity" },
+  { id: "physiological-integrity", name: "Physiological Integrity" },
+  { id: "pharmacology", name: "Pharmacological and Parenteral Therapies" },
+  { id: "reduction-risk", name: "Reduction of Risk Potential" },
+];
+
+const topicCount = computed(() => subChapters.value.length);
 
 const fetchSubChapters = async () => {
-  if (!chapter_id.value) return;
-  try {
-    const response = await axios.get(`/nursing/chapters/${chapter_id.value}`);
-    chapter_name.value = response.data.data.chapter_name;
-    subChapters.value = response.data.data.topics;
-  } catch (error) {
-    console.error("Failed to fetch sub-chapters:", error);
-  }
+  isLoading.value = true;
+  window.setTimeout(() => {
+    chapterName.value = chapterId.value ? "NCLEX Review Topics" : "NCLEX Review Topics";
+    subChapters.value = reviewPrompts;
+    isLoading.value = false;
+  }, 0);
 };
 
-// Fetch when mounted
 onMounted(fetchSubChapters);
 
-// 🔑 Watch for chapter_id changes
 watch(
   () => route.query.chapter_id,
   (newId, oldId) => {
     if (newId && newId !== oldId) {
-      chapter_id.value = newId;
+      chapterId.value = newId;
       fetchSubChapters();
     }
-  }
+  },
 );
 
-function active(): boolean {
-  const subs = user.subscriptions;
-  if (!subs || !subs["nursing"]) return false;
-  return subs["nursing"].some(
-    (p: any) =>
-      p.name === "premium" ||
-      p.name === "standard" ||
-      p.name === "premium_plus"
-  );
-}
-
-function handleClick(id: number) {
-  if (!active()) {
-    showLock.value = true; // Show DaisyUI modal
-    return;
-  }
-  window.location.href = `/nursing/sub-chapter/${id}`;
-}
-
-function goToNclexPricing() {
-  showLock.value = false;
-  router.push(pricingRoute("nclex"));
+function openPractice() {
+  router.push("/nclex/linear");
 }
 </script>

@@ -1,152 +1,186 @@
 <template>
     <div
-        class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-slate-50 dark:bg-sky-950 text-slate-800 dark:text-slate-100">
-        <div class="absolute inset-0 pointer-events-none -z-10">
-            <div
-                class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-cyan-300 via-sky-300 to-emerald-200 opacity-30 blur-[120px] rounded-full">
-            </div>
-            <div
-                class="absolute top-32 right-10 h-[420px] w-[420px] bg-gradient-to-r from-emerald-300 via-cyan-300 to-indigo-200 opacity-30 blur-[100px] rounded-full">
-            </div>
-        </div>
+        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-slate-800 dark:bg-slate-900 dark:text-slate-100 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+        <div class="mx-auto max-w-screen-2xl space-y-6">
+            <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
+                <article class="rounded-2xl p-5 xl:col-span-8">
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+                        NCLEX Linear
+                    </p>
+                    <h1 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+                        Linear Assessment Tests
+                    </h1>
+                    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+                        Fixed-length assessments with steady difficulty to build recall, timing, and rationale review
+                        discipline.
+                    </p>
 
-        <div class="max-w-screen-2xl mx-auto">
-            <section
-                class="relative overflow-hidden rounded-[30px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 lg:p-7 shadow-[0_24px_72px_-36px_rgba(14,116,144,0.55)] dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950 dark:shadow-[0_24px_72px_-36px_rgba(2,132,199,0.65)]">
-                <div
-                    class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_15%_18%,rgba(56,189,248,0.22),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.16),transparent_42%)] dark:bg-[radial-gradient(circle_at_15%_18%,rgba(34,211,238,0.22),transparent_50%),radial-gradient(circle_at_85%_0%,rgba(52,211,153,0.14),transparent_42%)]">
-                </div>
+                    <div class="mt-5 flex flex-wrap gap-2">
+                        <RouterLink to="/nclex"
+                            class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900">
+                            <i class="pi pi-gauge"></i>
+                            Dashboard
+                        </RouterLink>
+                        <RouterLink to="/nclex/readiness"
+                            class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200">
+                            <i class="pi pi-bullseye"></i>
+                            Readiness
+                        </RouterLink>
+                        <RouterLink to="/nclex/cat"
+                            class="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-2 text-xs font-bold text-indigo-700 transition hover:bg-indigo-100 dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-200">
+                            <i class="pi pi-desktop"></i>
+                            CAT
+                        </RouterLink>
+                    </div>
+                </article>
 
-                <div class="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
-                    <div>
-                        <p
-                            class="inline-flex items-center rounded-full border border-sky-200 bg-white/85 px-4 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-700 dark:border-sky-700 dark:bg-slate-900/70 dark:text-sky-300">
-                            NCLEX Linear
-                        </p>
-                        <h2 class="mt-3 text-2xl font-black text-slate-900 dark:text-white">
-                            Linear Assessment Tests
-                        </h2>
-                        <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                            Fixed-length assessments with steady difficulty to build rhythm, speed, and confidence.
-                        </p>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span
-                                class="rounded-2xl border border-sky-200 bg-white/85 px-3 py-1.5 text-xs font-semibold text-sky-700 dark:border-sky-700 dark:bg-slate-900/70 dark:text-sky-200">
-                                {{ exams.length }} exam sets
-                            </span>
-                            <span
-                                class="rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-200">
-                                {{ attemptedCount }} attempted
-                            </span>
-                            <span
-                                class="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700 dark:border-amber-700 dark:bg-amber-950/60 dark:text-amber-200">
-                                Avg score: {{ averageScore }}%
-                            </span>
+                <aside class="xl:col-span-4">
+                    <div
+                        class="grid h-full grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-light-blue-500 p-4 dark:border-sky-800 dark:bg-sky-900 sm:grid-cols-3 xl:grid-cols-1">
+                        <div class="rounded-xl border border-sky-100 bg-white p-3 dark:border-sky-800 dark:bg-sky-950/60">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                                    Exam sets
+                                </span>
+                                <i class="pi pi-book text-sky-600 dark:text-sky-300"></i>
+                            </div>
+                            <p class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">{{ exams.length }}</p>
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">Available linear sets</p>
+                        </div>
+                        <div class="rounded-xl border border-sky-100 bg-white p-3 dark:border-sky-800 dark:bg-sky-950/60">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                                    Attempted
+                                </span>
+                                <i class="pi pi-pencil text-emerald-600 dark:text-emerald-300"></i>
+                            </div>
+                            <p class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">{{ attemptedCount }}</p>
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">With saved scores</p>
+                        </div>
+                        <div class="rounded-xl border border-sky-100 bg-white p-3 dark:border-sky-800 dark:bg-sky-950/60">
+                            <div class="flex items-center justify-between gap-3">
+                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                                    Avg. score
+                                </span>
+                                <i class="pi pi-percentage text-orange-600 dark:text-orange-300"></i>
+                            </div>
+                            <p class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">{{ averageScore }}%</p>
+                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">Across attempted sets</p>
                         </div>
                     </div>
-
-                    <input v-model="searchTerm" type="search"
-                        :placeholder="`Search in ${subject || 'Linear assessments'}...`"
-                        class="h-10 px-4 w-full lg:w-80 border border-cyan-300 rounded-full bg-white/90 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 dark:bg-slate-900/80 dark:border-cyan-700" />
-                </div>
+                </aside>
             </section>
 
-            <div class="mt-7">
+            <section
+                class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900">
+                <div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-950 dark:text-white">
+                            {{ subject || "Linear assessments" }}
+                        </h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-300">
+                            Choose a set, run tutor mode for explanations, or retake in exam mode.
+                        </p>
+                    </div>
+                    <input v-model="searchTerm" type="search" :placeholder="`Search ${subject || 'linear sets'}...`"
+                        class="h-10 w-full rounded-full border border-sky-200 bg-white px-4 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-300 dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100 lg:w-80" />
+                </div>
+
                 <div v-if="filteredExams.length === 0 && searchTerm === ''"
-                    class="rounded-3xl border border-dashed border-slate-300 bg-white/80 p-10 text-center text-slate-500 shadow-sm dark:border-sky-800 dark:bg-slate-900/70 dark:text-slate-300">
+                    class="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-slate-300">
                     Loading exams...
                 </div>
                 <div v-else-if="filteredExams.length === 0"
-                    class="rounded-3xl border border-dashed border-slate-300 bg-white/80 p-10 text-center text-slate-500 shadow-sm dark:border-sky-800 dark:bg-slate-900/70 dark:text-slate-300">
+                    class="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-slate-300">
                     No exams found for that search.
                 </div>
 
-                <transition-group v-else name="fade" tag="div"
-                    class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" appear>
-                    <article v-for="(exam, index) in filteredExams" :key="exam.id" :class="[
-                        'group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 dark:border-sky-800/70 dark:bg-slate-900/70',
+                <transition-group v-else name="fade" tag="div" class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3"
+                    appear>
+                    <article v-for="exam in filteredExams" :key="exam.id" :class="[
+                        'group flex h-full flex-col rounded-xl border border-sky-100 bg-white p-4 shadow-custom transition duration-300 dark:border-sky-800 dark:bg-sky-950/50',
                         isExamLocked(exam)
-                            ? 'opacity-85'
-                            : 'hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)]'
+                            ? 'opacity-80'
+                            : 'hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50 dark:hover:bg-sky-950'
                     ]">
-                        <div
-                            :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]">
-                        </div>
-                        <div class="relative flex h-full flex-col">
-                            <div class="flex items-start justify-between gap-3">
-                                <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="min-w-0">
+                                <h3 class="font-bold leading-tight text-slate-950 dark:text-white">
                                     {{ normalizeText(exam.name) }}
                                 </h3>
-                                <div class="flex items-center gap-2">
-                                    <span
-                                        class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-xs font-semibold text-white">
-                                        {{ examQuestionCount(exam) }}
-                                    </span>
-                                    <span v-if="isExamLocked(exam)"
-                                        class="inline-flex h-8 min-w-8 px-2 items-center justify-center rounded-full bg-rose-500 text-xs font-semibold text-white"
-                                        title="Locked exam">
-                                        <i class="pi pi-lock"></i>
-                                    </span>
-                                </div>
+                                <p class="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">
+                                    {{ examScore(exam) ? "Retake or review your saved performance." : "Start this set to create a score baseline." }}
+                                </p>
                             </div>
+                            <div class="flex shrink-0 items-center gap-2">
+                                <span
+                                    class="inline-flex h-9 min-w-9 items-center justify-center rounded-xl bg-sky-50 px-2 text-xs font-bold text-sky-700 ring-1 ring-sky-100 dark:bg-sky-900/70 dark:text-sky-200 dark:ring-sky-800">
+                                    {{ examQuestionCount(exam) }}
+                                </span>
+                                <span v-if="isExamLocked(exam)"
+                                    class="inline-flex h-9 min-w-9 items-center justify-center rounded-xl bg-rose-100 px-2 text-xs font-bold text-rose-700 dark:bg-rose-950/50 dark:text-rose-200"
+                                    title="Locked exam">
+                                    <i class="pi pi-lock"></i>
+                                </span>
+                            </div>
+                        </div>
 
-                            <div class="mt-4">
-                                <div v-if="examScore(exam)"
-                                    class="rounded-2xl px-3 py-2 bg-slate-100 dark:bg-slate-800">
-                                    <div class="flex items-center gap-2">
-                                        <div class="flex-1 bg-gray-300/70 rounded-full h-1.5 overflow-hidden">
-                                            <div class="h-1.5" :style="dynamicProgressStyle(examScore(exam))"></div>
-                                        </div>
-                                        <span class="text-xs font-semibold">{{ examScore(exam) }}%</span>
+                        <div class="mt-auto pt-5">
+                            <div v-if="examScore(exam)"
+                                class="rounded-xl border border-slate-200 bg-light-blue-500 px-3 py-2 dark:border-sky-800 dark:bg-sky-900/70">
+                                <div class="flex items-center gap-2">
+                                    <div class="h-2 flex-1 overflow-hidden rounded-full bg-white ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-sky-800">
+                                        <div class="h-2 rounded-full" :style="dynamicProgressStyle(examScore(exam))"></div>
                                     </div>
-                                    <p class="mt-1 text-xs font-semibold" :class="gradeColor(examScore(exam))">
-                                        {{ gradeComment(examScore(exam)) }}
-                                    </p>
+                                    <span class="text-xs font-extrabold text-slate-950 dark:text-white">{{ examScore(exam) }}%</span>
                                 </div>
-                                <div v-else
-                                    class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-3 py-2 text-xs text-slate-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
-                                    No attempt yet. Start this set to generate your first score.
-                                </div>
+                                <p class="mt-2 text-xs font-semibold" :class="gradeColor(examScore(exam))">
+                                    {{ gradeComment(examScore(exam)) }}
+                                </p>
+                            </div>
+                            <div v-else
+                                class="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-3 py-2 text-xs text-slate-500 dark:border-sky-800 dark:bg-sky-900/60 dark:text-slate-300">
+                                No attempt yet.
                             </div>
 
                             <div class="mt-4 flex items-center justify-between gap-2">
                                 <Small
                                     :button-text="isExamLocked(exam) ? 'Locked' : examScore(exam) ? 'Retake Exam' : 'Take Exam'"
-                                    :icon="isExamLocked(exam) ? 'pi pi-lock' : examScore(exam) ? 'pi pi-refresh' : ''"
+                                    :icon="isExamLocked(exam) ? 'pi pi-lock' : examScore(exam) ? 'pi pi-refresh' : 'pi pi-play'"
                                     :classes="isExamLocked(exam)
                                         ? 'border-0 bg-rose-500 text-white hover:bg-rose-500 cursor-not-allowed shadow-none'
                                         : examScore(exam)
-                                            ? 'border-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:bg-orange-500 shadow-none'
-                                            : 'border border-cyan-500 bg-white text-slate-900 hover:bg-cyan-500 hover:text-white shadow-none'"
+                                            ? 'border-0 bg-amber-500 text-white hover:bg-amber-600 shadow-none'
+                                            : 'border-0 bg-sky-500 text-white hover:bg-sky-600 shadow-none'"
                                     :action="() => openModal(exam)" />
                                 <span
                                     class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
-                                    {{ isExamLocked(exam) ? 'Locked set' : examScore(exam) ? 'Attempted' : 'New set' }}
+                                    {{ isExamLocked(exam) ? 'Locked' : examScore(exam) ? 'Attempted' : 'New' }}
                                 </span>
                             </div>
                         </div>
                     </article>
                 </transition-group>
-            </div>
+            </section>
         </div>
 
         <dialog ref="modalRef" id="examModal" class="modal">
-            <div class="modal-box bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+            <div class="modal-box bg-white text-slate-900 dark:bg-sky-950 dark:text-slate-100">
                 <form method="dialog">
                     <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">x</button>
                 </form>
-                <h3 class="text-lg font-semibold mb-2">Start {{ selectedExam?.name }} in:</h3>
-                <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">
-                    Choose tutor mode for guided rationales or exam mode for timed simulation.
+                <h3 class="mb-2 pr-8 text-lg font-semibold">Start {{ selectedExam?.name }} in:</h3>
+                <p class="mb-4 text-sm text-slate-600 dark:text-slate-300">
+                    Use tutor mode when you want rationales as you work, or exam mode for a timed simulation.
                 </p>
                 <p v-if="selectedExam && isExamLocked(selectedExam)"
-                    class="mb-3 rounded-xl bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700">
+                    class="mb-3 rounded-xl bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700 dark:bg-rose-950/40 dark:text-rose-200">
                     This exam is locked.
                 </p>
-                <div class="flex justify-end gap-3">
-                    <CommonButton button-text="Tutor Mode" classes="bg-teal-500 text-white"
+                <div class="flex flex-wrap justify-end gap-3">
+                    <CommonButton button-text="Tutor Mode" classes="bg-teal-500 text-white shadow-none"
                         :action="() => goToExam('tutor')" :disabled="!!(selectedExam && isExamLocked(selectedExam))" />
-                    <CommonButton button-text="Exam Mode" classes="bg-gradient-to-r from-sky-600 to-cyan-500 text-white"
+                    <CommonButton button-text="Exam Mode" classes="bg-sky-500 text-white shadow-none"
                         :action="() => goToExam('exam')" :disabled="!!(selectedExam && isExamLocked(selectedExam))" />
                 </div>
             </div>
@@ -173,16 +207,6 @@ const authStore = useAuthStore()
 const attempts = ref<any[]>([])
 const selectedExam = ref<{ id: number; name: string; trial_mode?: number | boolean } | null>(null)
 const hasPremiumAccess = computed(() => authStore.isActive('nclex'))
-
-const accentGlowClass = (index: number) => {
-    const glows = [
-        'bg-gradient-to-br from-sky-200/40 via-transparent to-transparent dark:from-sky-500/20',
-        'bg-gradient-to-br from-emerald-200/35 via-transparent to-transparent dark:from-emerald-500/20',
-        'bg-gradient-to-br from-indigo-200/35 via-transparent to-transparent dark:from-indigo-500/20',
-    ]
-
-    return glows[index % glows.length]
-}
 
 onMounted(async () => {
     try {

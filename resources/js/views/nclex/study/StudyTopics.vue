@@ -1,141 +1,136 @@
 <template>
     <div
-        class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-slate-50 dark:bg-sky-950 text-slate-800 dark:text-slate-100">
-        <!-- Background Gradient -->
-        <div class="absolute inset-0 pointer-events-none -z-10">
-            <div
-                class="absolute -top-20 -left-40 h-[300px] w-[300px] lg:h-[600px] lg:w-[600px] bg-gradient-to-r from-sky-300 via-cyan-300 to-emerald-200 opacity-30 blur-[120px] rounded-full" />
-            <div
-                class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-300 via-sky-300 to-indigo-200 opacity-30 blur-[100px] rounded-full" />
-        </div>
-
-        <div class="max-w-screen-2xl mx-auto">
-            <section
-                class="relative overflow-hidden rounded-[30px] border border-sky-100/90 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-6 lg:p-8 shadow-[0_20px_60px_-30px_rgba(14,116,144,0.45)] dark:border-sky-800/80 dark:from-sky-900 dark:via-slate-900 dark:to-sky-950 dark:shadow-[0_24px_72px_-36px_rgba(2,132,199,0.6)]">
-                <div
-                    class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_20%_20%,rgba(56,189,248,0.22),transparent_52%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.2),transparent_42%)] dark:bg-[radial-gradient(circle_at_20%_20%,rgba(56,189,248,0.28),transparent_52%),radial-gradient(circle_at_85%_0%,rgba(45,212,191,0.22),transparent_42%)]">
-                </div>
-                <div class="relative">
-                    <p
-                        class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white/80 px-4 py-1 text-[11px] font-semibold tracking-[0.18em] text-sky-700 uppercase dark:border-sky-700 dark:bg-slate-900/70 dark:text-sky-300">
-                        NCLEX Study Topics
+        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-slate-800 dark:bg-slate-900 dark:text-slate-100 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+        <div class="mx-auto max-w-screen-2xl space-y-6">
+            <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
+                <article class="rounded-2xl p-5 xl:col-span-8">
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+                        NCLEX Review
                     </p>
-                    <h1 class="mt-4 text-3xl lg:text-4xl font-black text-slate-900 dark:text-white">
-                        {{ chapterName }} Mastery Path
+                    <h1 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+                        {{ chapterName || "Review Topic Path" }}
                     </h1>
-                    <p class="mt-3 max-w-3xl text-sm lg:text-base text-slate-600 dark:text-slate-300">
-                        Build momentum with focused topic sprints. Choose a topic below and move through your chapter
-                        with a premium guided flow.
+                    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+                        Topic-level lesson content is being prepared. Use these prompts to move into focused NCLEX
+                        practice and report review.
                     </p>
 
-                    <div class="mt-6 flex flex-wrap gap-3">
-                        <div
-                            class="rounded-2xl border border-sky-200/80 bg-white/80 px-4 py-2 text-sm font-semibold text-sky-700 dark:border-sky-700/70 dark:bg-slate-900/70 dark:text-sky-200">
-                            {{ topicCount }} topics ready
-                        </div>
-                        <div
-                            class="rounded-2xl border border-emerald-200/80 bg-emerald-50/80 px-4 py-2 text-sm font-semibold text-emerald-700 dark:border-emerald-700/70 dark:bg-emerald-950/50 dark:text-emerald-200">
-                            Smart sequence enabled
-                        </div>
-                        <div
-                            class="rounded-2xl border border-indigo-200/80 bg-indigo-50/80 px-4 py-2 text-sm font-semibold text-indigo-700 dark:border-indigo-700/70 dark:bg-indigo-950/50 dark:text-indigo-200">
-                            Spotlight: {{ spotlightTopic }}
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Empty State -->
-            <div v-if="subChapters.length === 0"
-                class="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white/70 p-10 text-center text-slate-500 shadow-sm dark:border-sky-800 dark:bg-sky-900/40 dark:text-slate-300">
-                No sub-chapters available for this topic.
-            </div>
-
-            <!-- Sub Chapters List -->
-            <div v-else class="mt-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                <article v-for="(sub, index) in subChapters" :key="sub.id"
-                    class="group relative overflow-hidden rounded-3xl border border-white/70 bg-white/85 p-5 shadow-[0_16px_40px_-28px_rgba(15,23,42,0.55)] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_-30px_rgba(14,116,144,0.65)] dark:border-sky-800/80 dark:bg-slate-900/70 dark:hover:shadow-[0_24px_60px_-36px_rgba(2,132,199,0.8)]">
-                    <div :class="[
-                        'absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100',
-                        accentGlowClass(index)
-                    ]"></div>
-                    <div class="relative">
-                        <div class="flex items-start justify-between gap-3">
-                            <span :class="[
-                                'inline-flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold',
-                                accentBadgeClass(index)
-                            ]">
-                                {{ index + 1 }}
-                            </span>
-                            <span
-                                class="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-slate-500 dark:border-slate-700 dark:bg-slate-800/90 dark:text-slate-300">
-                                Study Topic
-                            </span>
-                        </div>
-
-                        <h3 class="mt-4 text-lg font-bold text-slate-900 dark:text-slate-100">
-                            {{ sub.name }}
-                        </h3>
-                        <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                            Focused rationale review, high-yield concepts, and targeted practice.
-                        </p>
-
-                        <div class="mt-5">
-                            <CommonButton :action="() => $router.push(`/nursing/sub-chapter/${sub.id}`)"
-                                button-text="Open Topic" icon2="pi pi-arrow-right"
-                                classes="w-full bg-gradient-to-r from-sky-600 to-cyan-500 text-white hover:from-sky-500 hover:to-cyan-400 border-0 dark:from-sky-500 dark:to-teal-400 dark:text-slate-950 dark:hover:from-sky-400 dark:hover:to-teal-300" />
-                        </div>
+                    <div class="mt-5 flex flex-wrap gap-2">
+                        <RouterLink to="/nclex/linear"
+                            class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-bold text-sky-700 transition hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-950/40 dark:text-sky-200">
+                            <i class="pi pi-book"></i>
+                            Linear Practice
+                        </RouterLink>
+                        <RouterLink to="/nclex/readiness"
+                            class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200">
+                            <i class="pi pi-bullseye"></i>
+                            Readiness
+                        </RouterLink>
                     </div>
                 </article>
-            </div>
+
+                <aside class="xl:col-span-4">
+                    <div class="flex h-full items-center justify-between gap-4 rounded-2xl border-b bg-sky-800 p-5 shadow-custom">
+                        <div>
+                            <span
+                                class="inline-flex items-center rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-bright-sun-500 ring-1 ring-white/20">
+                                Topic prompts
+                            </span>
+                            <p class="mt-3 text-lg font-extrabold leading-tight text-white">
+                                {{ topicCount }} topic {{ topicCount === 1 ? "prompt" : "prompts" }} ready
+                            </p>
+                        </div>
+                        <span class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/95 text-sky-700">
+                            <i class="pi pi-list text-xl"></i>
+                        </span>
+                    </div>
+                </aside>
+            </section>
+
+            <section
+                class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900">
+                <div v-if="isLoading"
+                    class="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-slate-300">
+                    Loading review topics...
+                </div>
+
+                <div v-else-if="subChapters.length === 0"
+                    class="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center dark:border-sky-800 dark:bg-sky-950/60">
+                    <h2 class="font-semibold text-slate-950 dark:text-white">Topic lessons are coming soon.</h2>
+                    <p class="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-300">
+                        Start with linear practice or readiness checks, then use performance analysis to decide what to
+                        revisit.
+                    </p>
+                    <div class="mt-5 flex flex-wrap justify-center gap-2">
+                        <RouterLink to="/nclex/linear"
+                            class="inline-flex items-center gap-2 rounded-full bg-sky-500 px-4 py-2 text-xs font-bold text-white transition hover:bg-sky-600">
+                            <i class="pi pi-play"></i>
+                            Start Linear
+                        </RouterLink>
+                        <RouterLink to="/nclex/performance-analysis"
+                            class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900">
+                            <i class="pi pi-chart-line"></i>
+                            View Analysis
+                        </RouterLink>
+                    </div>
+                </div>
+
+                <div v-else class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+                    <article v-for="(sub, index) in subChapters" :key="sub.id"
+                        class="group flex h-full flex-col rounded-xl border border-sky-100 bg-white p-4 shadow-custom transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50 dark:border-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-950">
+                        <span
+                            class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sm font-bold text-sky-700 ring-1 ring-sky-100 dark:bg-sky-900/70 dark:text-sky-200 dark:ring-sky-800">
+                            {{ index + 1 }}
+                        </span>
+                        <h3 class="mt-4 font-bold leading-tight text-slate-950 dark:text-white">{{ sub.name }}</h3>
+                        <p class="mt-2 text-xs leading-5 text-slate-600 dark:text-slate-300">
+                            Use this prompt to choose a focused NCLEX set and review rationales afterward.
+                        </p>
+                        <button type="button" @click="openPractice"
+                            class="mt-5 inline-flex w-fit items-center gap-2 rounded-full bg-sky-500 px-4 py-2 text-xs font-bold text-white transition hover:bg-sky-600">
+                            Practice
+                            <i class="pi pi-arrow-right text-[10px]"></i>
+                        </button>
+                    </article>
+                </div>
+            </section>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import axios from "axios";
-import CommonButton from "../../../components/Buttons/CommonButton.vue";
+import { computed, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
-const topicId = route.params.id; // get main topic ID from URL
-
-const chapterName = ref("");
+const router = useRouter();
+const topicId = route.params.id;
+const chapterName = ref("Review Topic Path");
 const subChapters = ref([] as any[]);
+const isLoading = ref(false);
+
+const reviewPrompts = [
+    { id: "management-care", name: "Management of Care" },
+    { id: "safety-infection-control", name: "Safety and Infection Control" },
+    { id: "basic-care-comfort", name: "Basic Care and Comfort" },
+    { id: "pharmacology", name: "Pharmacological Therapies" },
+    { id: "physiological-adaptation", name: "Physiological Adaptation" },
+];
 
 const topicCount = computed(() => subChapters.value.length);
-const spotlightTopic = computed(() => subChapters.value[0]?.name ?? "Your first topic");
-
-const accentGlowClass = (index: number) => {
-    const glows = [
-        "bg-gradient-to-br from-sky-200/45 via-transparent to-transparent dark:from-sky-500/25",
-        "bg-gradient-to-br from-emerald-200/40 via-transparent to-transparent dark:from-emerald-500/25",
-        "bg-gradient-to-br from-indigo-200/40 via-transparent to-transparent dark:from-indigo-500/25",
-    ];
-
-    return glows[index % glows.length];
-};
-
-const accentBadgeClass = (index: number) => {
-    const badges = [
-        "bg-sky-100 text-sky-700 dark:bg-sky-900/70 dark:text-sky-200",
-        "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/70 dark:text-emerald-200",
-        "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/70 dark:text-indigo-200",
-    ];
-
-    return badges[index % badges.length];
-};
 
 const fetchSubChapters = async () => {
-    try {
-        const response = await axios.get(`/nursing/topics/${topicId}/sub-chapters`);
-        chapterName.value = response.data.topic_name;
-        subChapters.value = response.data.sub_chapters;
-    } catch (error) {
-        console.error("Failed to fetch sub-chapters:", error);
-    }
+    isLoading.value = true;
+    window.setTimeout(() => {
+        chapterName.value = topicId ? "Review Topic Path" : "Review Topic Path";
+        subChapters.value = reviewPrompts;
+        isLoading.value = false;
+    }, 0);
 };
 
 onMounted(fetchSubChapters);
+
+function openPractice() {
+    router.push("/nclex/linear");
+}
 </script>

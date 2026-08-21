@@ -1,25 +1,18 @@
 <template>
     <div class="w-full px-3 mx-auto">
-        <section
-            class="relative overflow-hidden rounded-[26px] border border-cyan-100 bg-gradient-to-br from-white via-cyan-50 to-emerald-50 p-5 shadow-[0_22px_50px_-32px_rgba(14,116,144,0.5)] dark:border-cyan-800 dark:from-slate-900 dark:via-sky-900 dark:to-emerald-950">
-            <div
-                class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_10%,rgba(56,189,248,0.2),transparent_48%),radial-gradient(circle_at_85%_0%,rgba(16,185,129,0.15),transparent_45%)]">
-            </div>
-            <div class="relative">
-                <p
-                    class="inline-flex items-center rounded-full border border-cyan-200 bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-700 dark:border-cyan-700 dark:bg-slate-900/70 dark:text-cyan-200">
-                    NCLEX Builder
-                </p>
-                <h2 class="mt-3 text-2xl font-black text-slate-900 dark:text-white">Create Custom Test</h2>
-                <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                    Build a focused session by mode, topic areas, and target question count.
-                </p>
-            </div>
+        <section class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5 dark:border-sky-800 dark:bg-sky-900">
+            <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+                NCLEX Builder
+            </p>
+            <h2 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">Create Custom Test</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                Build a focused session by mode, topic areas, and target question count.
+            </p>
         </section>
 
         <form @submit.prevent="submitForm" class="mt-4 space-y-4 w-full">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <section class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-slate-900/70">
+                <section class="rounded-xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-sky-950/60">
                     <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Mode</h3>
                     <div class="mt-3 grid grid-cols-2 gap-2">
                         <label class="cursor-pointer">
@@ -47,7 +40,7 @@
                     </div>
                 </section>
 
-                <section class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-slate-900/70">
+                <section class="rounded-xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-sky-950/60">
                     <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Number of Questions</h3>
                     <div class="mt-3 flex items-center gap-3">
                         <input type="number" v-model.number="form.numQuestions" :min="MIN_QUESTIONS" :max="MAX_QUESTIONS"
@@ -71,7 +64,7 @@
                 </section>
             </div>
 
-            <section class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-slate-900/70">
+            <section class="rounded-xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-sky-950/60">
                 <div class="flex items-center justify-between">
                     <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Client Need Areas</h3>
                     <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">{{ form.clientNeeds.length }} selected</span>
@@ -91,7 +84,7 @@
                 </div>
             </section>
 
-            <section class="rounded-2xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-slate-900/70">
+            <section class="rounded-xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-sky-950/60">
                 <div class="flex items-center justify-between">
                     <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Subjects</h3>
                     <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">{{ form.subjects.length }} selected</span>
@@ -112,7 +105,7 @@
             </section>
 
             <section
-                class="rounded-2xl border border-dashed border-cyan-300/70 bg-cyan-50/60 p-4 dark:border-cyan-700 dark:bg-cyan-950/20">
+                class="rounded-xl border border-dashed border-sky-300 bg-sky-50 p-4 dark:border-sky-800 dark:bg-sky-950/40">
                 <div class="flex flex-wrap items-center justify-between gap-3 text-sm">
                     <div>
                         <p class="font-semibold text-slate-700 dark:text-slate-200">Session summary</p>
@@ -133,7 +126,7 @@
                 <p class="text-xs text-slate-500 dark:text-slate-300">
                     Pick at least one client need area or subject to continue.
                 </p>
-                <CommonButton button-text="Create Test" :disabled="!canSubmit" />
+                <CommonButton button-text="Create Test" classes="bg-sky-500 text-white shadow-none hover:bg-sky-600" :disabled="!canSubmit" />
             </div>
         </form>
     </div>

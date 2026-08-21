@@ -1,244 +1,243 @@
 <template>
     <div
-        class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh]  2xl:min-h-[94vh] overflow-y-scroll p-6 bg-gray-50">
-        <!-- Background Gradient Clouds -->
-        <div class="absolute inset-0 pointer-events-none -z-10">
-            <div
-                class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-purple-300 via-sky-300 to-teal-200 opacity-30 blur-[120px] rounded-full">
-            </div>
-            <div
-                class="absolute top-32 right-10 h-[400px] w-[400px] bg-gradient-to-r from-emerald-300 via-sky-300 to-purple-200 opacity-30 blur-[100px] rounded-full">
-            </div>
-        </div>
+        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-slate-800 dark:bg-slate-900 dark:text-slate-100 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+        <div class="mx-auto max-w-screen-2xl space-y-6">
+            <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
+                <article class="rounded-2xl p-5 xl:col-span-8">
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+                        NCLEX CAT Simulator
+                    </p>
+                    <h1 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+                        Computerized Adaptive Testing
+                    </h1>
+                    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+                        Use adaptive runs to test clinical judgment under shifting difficulty and review the report
+                        before your next practice decision.
+                    </p>
 
-        <!-- Page Header -->
-        <h3 class="font-bold text-2xl text-gray-800 mb-6">
-            Computerized Adaptive Testing (CAT)
-        </h3>
+                    <div class="mt-5 flex flex-wrap gap-3">
+                        <CommonButton button-text="Start a CAT" icon="pi pi-play"
+                            classes="bg-sky-500 text-white shadow-none hover:bg-sky-600"
+                            :action="openStartModal" :disabled="hasCatPremiumAccess && !canStartCat" />
 
-        <section
-            class="relative overflow-hidden rounded-[32px] border border-sky-100 bg-gradient-to-br from-sky-50 via-indigo-50 to-cyan-50 p-8 text-slate-900 mb-4 dark:border-white/10 dark:from-slate-900 dark:via-indigo-900 dark:to-slate-950 dark:text-white">
-            <div
-                class="absolute inset-0 bg-gradient-to-br from-emerald-200/50 via-sky-200/50 to-indigo-200/30 opacity-60 blur-3xl dark:from-emerald-500/40 dark:via-blue-500/20 dark:to-slate-900/40 dark:opacity-70">
-            </div>
-            <div class="relative grid gap-8 lg:grid-cols-[1.4fr,0.9fr]">
-                <div>
-                    <div class="flex flex-row justify-between">
-                        <div>
-                            <div class="flex items-start justify-between gap-4">
-                                <div>
-                                    <p class="text-xs uppercase tracking-[0.4em] text-indigo-600 dark:text-indigo-200">
-                                        Adaptive CAT</p>
-                                    <h1 class="mt-2 text-4xl font-bold text-slate-900 dark:text-white">Overview</h1>
-                                </div>
-                            </div>
-                            <p class="mt-4 text-sm text-slate-600 dark:text-white/70">{{ latestAttemptSummary }}</p>
-                            <div class="mt-6 flex flex-wrap gap-3">
-                                <CommonButton button-text="Start a CAT" icon="pi pi-play"
-                                    classes="bg-gradient-to-r from-yellow-400 to-orange-400 text-slate-900 hover:bg-white/90"
-                                    :action="openStartModal" :disabled="hasCatPremiumAccess && !canStartCat" />
+                        <CommonButton button-text="Latest Report" icon="pi pi-chart-bar"
+                            classes="border border-slate-200 bg-white text-slate-700 shadow-none hover:bg-slate-100 dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100 dark:hover:bg-sky-900"
+                            :action="goToLatestReport" :disabled="!hasAttempts" />
 
-                                <CommonButton button-text="View Latest Report" icon="pi pi-chart-bar-square pi-square"
-                                    classes="border border-slate-300 hover:bg-white/80 dark:border-white/40 dark:text-white dark:hover:bg-white/10"
-                                    :action="goToLatestReport" :disabled="!hasAttempts" />
-                            </div>
-                            <p class="mt-3 text-xs text-slate-600 dark:text-white/70">
-                                {{ monthlyAttemptSummary }}
-                            </p>
-                            <p v-if="!hasCatPremiumAccess" class="mt-2 text-xs font-semibold text-amber-700 dark:text-amber-300">
-                                CAT is premium. Starting a CAT will redirect you to pricing.
-                            </p>
-                        </div>
-                        <div v-if="recentAttempt"
-                            :class="`bg-gray-200 radial-progress h-32 w-32 mt-6 ${Math.round(averageScore) >= catStore.passThreshold ? 'text-emerald-600' : 'text-rose-400'}`"
-                            style="--value:100;">{{ Math.round(averageScore) >= catStore.passThreshold ? 'PASS' :
-                                'FAIL' }}
-                        </div>
-                        <div v-else :class="`bg-gray-200 radial-progress h-32 w-32 mt-6 text-orange-400`"
-                            style="--value:100;">No Test
-                        </div>
+                        <RouterLink to="/nclex/performance-analysis"
+                            class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-1 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-100 dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100 dark:hover:bg-sky-900">
+                            <i class="pi pi-wave-pulse"></i>
+                            Analysis
+                        </RouterLink>
                     </div>
 
-                    <div class="mt-6 grid gap-3 sm:grid-cols-3">
-                        <div
-                            class="rounded-2xl border border-slate-200 bg-white/70 p-4 text-sm text-slate-800 shadow-md shadow-sky-100/40 dark:border-white/20 dark:bg-white/5 dark:text-white dark:shadow-xl dark:shadow-slate-900/50">
-                            <div class="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-white/60">Pass rate
-                            </div>
-                            <div class="mt-2 text-2xl font-bold">{{ passRate }}%</div>
-                            <div class="text-xs text-slate-500 dark:text-white/60">across all attempts</div>
-                        </div>
-                        <div
-                            class="rounded-2xl border border-slate-200 bg-white/70 p-4 text-sm text-slate-800 shadow-md shadow-sky-100/40 dark:border-white/20 dark:bg-white/5 dark:text-white dark:shadow-xl dark:shadow-slate-900/50">
-                            <div class="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-white/60">Attempts
-                            </div>
-                            <div class="mt-2 text-2xl font-bold">{{ attemptCount }}</div>
-                            <div class="text-xs text-slate-500 dark:text-white/60">logged runs</div>
-                        </div>
-                        <div
-                            class="rounded-2xl border border-slate-200 bg-white/70 p-4 text-sm text-slate-800 shadow-md shadow-sky-100/40 dark:border-white/20 dark:bg-white/5 dark:text-white dark:shadow-xl dark:shadow-slate-900/50">
-                            <div class="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-white/60">Avg. score
-                            </div>
-                            <div class="mt-2 text-2xl font-bold">{{ Math.round(averageScore) }}%</div>
-                            <div class="text-xs text-slate-500 dark:text-white/60">per session</div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="relative rounded-[28px] border border-slate-200 bg-white/70 p-6 text-slate-800 shadow-xl shadow-sky-100/50 dark:border-white/20 dark:bg-white/5 dark:text-white dark:shadow-2xl dark:shadow-slate-900/60">
-                    <p class="text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-white/60">Precision by design
+                    <p class="mt-4 text-xs font-semibold" :class="hasCatPremiumAccess ? 'text-slate-500 dark:text-slate-300' : 'text-amber-700 dark:text-amber-300'">
+                        {{ monthlyAttemptSummary }}
                     </p>
-                    <h3 class="mt-3 text-2xl font-bold text-slate-900 dark:text-white">Adaptive intelligence</h3>
-                    <p class="mt-2 text-sm text-slate-600 dark:text-white/80">
-                        Every question adapts to your performance so you only spend effort where your knowledge needs
-                        reinforcement.
-                    </p>
-                    <ul class="mt-6 space-y-4 text-sm text-slate-600 dark:text-white/80">
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">1</span>
+                </article>
+
+                <aside class="xl:col-span-4">
+                    <div class="flex h-full flex-col justify-between rounded-2xl border-b bg-sky-800 p-5 shadow-custom">
+                        <div class="flex items-start justify-between gap-4">
                             <div>
-                                <p class="font-semibold text-slate-900 dark:text-white">Section precision</p>
-                                <p class="text-xs text-slate-500 dark:text-white/70">Track how each domain contributes
-                                    to the final score.
+                                <span
+                                    class="inline-flex items-center rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-bright-sun-500 ring-1 ring-white/20">
+                                    Adaptive snapshot
+                                </span>
+                                <p class="mt-3 text-lg font-extrabold leading-tight text-white">
+                                    {{ latestAttemptSummary }}
                                 </p>
                             </div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/20 text-sky-700 dark:text-sky-300">2</span>
-                            <div>
-                                <p class="font-semibold text-slate-900 dark:text-white">Dynamic pacing</p>
-                                <p class="text-xs text-slate-500 dark:text-white/70">Difficulty shifts keep you
-                                    challenged without
-                                    overwhelming you.</p>
+                            <div class="radial-progress shrink-0 bg-white/95 text-sm font-extrabold shadow-custom"
+                                :class="latestStatusClass" :style="{ '--value': 100 }" role="progressbar">
+                                {{ latestStatusLabel }}
                             </div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="flex h-8 w-8 items-center justify-center rounded-full bg-purple-500/20 text-purple-700 dark:text-purple-300">3</span>
-                            <div>
-                                <p class="font-semibold text-slate-900 dark:text-white">Action-ready</p>
-                                <p class="text-xs text-slate-500 dark:text-white/70">Reports highlight what to drill
-                                    next.</p>
+                        </div>
+                        <div class="mt-5 grid grid-cols-3 gap-2">
+                            <div class="rounded-xl bg-white/10 p-3 text-white ring-1 ring-white/15">
+                                <p class="text-[10px] font-bold uppercase tracking-wide text-sky-100">Pass rate</p>
+                                <p class="mt-1 text-xl font-extrabold">{{ passRate }}%</p>
                             </div>
-                        </li>
-                    </ul>
-                    <div
-                        class="mt-6 rounded-2xl border border-slate-200 bg-white/80 p-4 text-xs text-slate-600 dark:border-white/10 dark:bg-white/10 dark:text-white/70">
-                        <p class="font-semibold text-slate-700 dark:text-white/80">Last session snapshot</p>
-                        <p> {{ hasAttempts ? `${Math.round(recentAttempt?.score || 0)}% score` :
-                            'Awaiting your first run' }}
-                        </p>
-                        <p>{{ hasAttempts ? formatDate(recentAttempt?.completed_at) : 'Run a CAT to create a report' }}
-                        </p>
+                            <div class="rounded-xl bg-white/10 p-3 text-white ring-1 ring-white/15">
+                                <p class="text-[10px] font-bold uppercase tracking-wide text-sky-100">Attempts</p>
+                                <p class="mt-1 text-xl font-extrabold">{{ attemptCount }}</p>
+                            </div>
+                            <div class="rounded-xl bg-white/10 p-3 text-white ring-1 ring-white/15">
+                                <p class="text-[10px] font-bold uppercase tracking-wide text-sky-100">Avg.</p>
+                                <p class="mt-1 text-xl font-extrabold">{{ Math.round(averageScore) }}%</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </section>
+                </aside>
+            </section>
 
-        <!-- Why Adaptive Testing Section -->
-        <div class="bg-white/80 rounded-2xl p-8 mb-8 border border-gray-100 ">
-            <h4 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <i class="pi pi-lightbulb text-yellow-500"></i>
-                Why Choose Adaptive Testing?
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex gap-4">
-                    <span
-                        class="flex h-8 w-8 items-center justify-center rounded-full bg-green-500/20 text-green-700 dark:text-green-300">
-                        &#10004</span>
-
-                    <div>
-                        <h5 class="font-semibold text-gray-800 mb-1">Efficient Assessment</h5>
-                        <p class="text-sm text-gray-600">
-                            CAT adjusts question difficulty based on your responses, giving you an accurate score with
-                            fewer questions
-                        </p>
+            <section class="grid grid-cols-1 gap-5 xl:grid-cols-12">
+                <article
+                    class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900 xl:col-span-7">
+                    <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+                        <div>
+                            <h2 class="text-lg font-extrabold text-slate-950 dark:text-white">Adaptive Workflow</h2>
+                            <p class="text-xs text-slate-500 dark:text-slate-300">
+                                A CAT run should lead directly into review and targeted remediation.
+                            </p>
+                        </div>
+                        <span
+                            class="rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-semibold text-sky-700 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
+                            {{ remainingAttemptsThisMonth }} left this month
+                        </span>
                     </div>
-                </div>
-                <div class="flex gap-4">
 
-                    <span
-                        class="flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/20 text-sky-700 dark:text-sky-300">&#10004</span>
-                    <div>
-                        <h5 class="font-semibold text-gray-800 mb-1">Real NCLEX Experience</h5>
-                        <p class="text-sm text-gray-600">
-                            Mimics the actual NCLEX-RN exam format with dynamic difficulty progression
-                        </p>
-                    </div>
-                </div>
-                <div class="flex gap-4">
-                    <span
-                        class="flex h-8 w-8 items-center justify-center rounded-full bg-teal-500/20 text-teal-700 dark:text-sky-300">&#10004</span>
-                    <div>
-                        <h5 class="font-semibold text-gray-800 mb-1">Personalized Learning</h5>
-                        <p class="text-sm text-gray-600">
-                            Tests are tailored to your skill level, focusing on areas needing improvement
-                        </p>
-                    </div>
-                </div>
-                <div class="flex gap-4">
-                    <span
-                        class="flex h-8 w-8 items-center justify-center rounded-full bg-purple-500/20 text-purple-700 dark:text-purple-300">&#10004</span>
-
-                    <div>
-                        <h5 class="font-semibold text-gray-800 mb-1">Comprehensive Feedback</h5>
-                        <p class="text-sm text-gray-600">
-                            Detailed performance analysis shows your strengths and areas for improvement by subject
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recent Attempts Section -->
-        <div v-if="attempts.length > 0" class="bg-white/80 rounded-2xl p-8 border border-gray-100">
-            <h4 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <i class="pi pi-history text-blue-500"></i>
-                Recent Attempts
-            </h4>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead>
-                        <tr class="border-b border-gray-200">
-                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Date</th>
-                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Questions</th>
-                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Score</th>
-                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
-                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="attempt in attempts.slice(0, 5)" :key="attempt.id"
-                            class="border-b border-gray-100 hover:bg-gray-50">
-                            <td class="py-3 px-4">{{ formatDate(attempt.completed_at) }}</td>
-                            <td class="py-3 px-4">{{ attempt.suspend_index || '0' }}/150</td>
-                            <td class="py-3 px-4">
-                                -
-                            </td>
-                            <td class="py-3 px-4">
-                                <span :class="[
-                                    'px-3 py-1 rounded-full text-xs font-semibold',
-                                    attempt.score >= 65
-                                        ? 'bg-green-100 text-green-700'
-                                        : 'bg-rose-100  text-rose-700'
-                                ]">
-                                    {{ attempt.score >= 65 ? 'Passed' : 'Failed' }}
+                    <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                        <article v-for="card in workflowCards" :key="card.title"
+                            class="rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/50">
+                            <div class="flex items-start gap-3">
+                                <span
+                                    class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-lg ring-1 ring-sky-100 dark:bg-sky-900/70 dark:ring-sky-800"
+                                    :class="card.color">
+                                    <i :class="card.icon"></i>
                                 </span>
-                            </td>
-                            <td class="py-3 px-4">
-                                <button @click="viewReport(attempt.id)"
-                                    class="text-teal-600 hover:text-teal-800 font-semibold">
-                                    View Report
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                                <div>
+                                    <h3 class="font-bold leading-tight text-slate-950 dark:text-white">{{ card.title }}</h3>
+                                    <p class="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">{{ card.copy }}</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </article>
+
+                <article
+                    class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900 xl:col-span-5">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <h2 class="text-lg font-semibold text-slate-950 dark:text-white">Last Session Snapshot</h2>
+                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
+                                The newest adaptive result becomes your report shortcut.
+                            </p>
+                        </div>
+                        <span class="rounded-full px-3 py-1 text-xs font-bold" :class="latestStatusPillClass">
+                            {{ latestStatusLabel }}
+                        </span>
+                    </div>
+
+                    <div class="mt-5 rounded-xl bg-light-blue-500 p-4 dark:bg-sky-950/60">
+                        <div class="flex items-end justify-between gap-4">
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                                    Score
+                                </p>
+                                <p class="mt-1 text-3xl font-extrabold" :class="latestScoreClass">
+                                    {{ hasAttempts ? `${latestScoreRounded}%` : "--" }}
+                                </p>
+                            </div>
+                            <div class="min-w-0 text-right">
+                                <p class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                                    Completed
+                                </p>
+                                <p class="mt-1 text-sm font-semibold text-slate-950 dark:text-white">
+                                    {{ hasAttempts ? formatDate(recentAttempt?.completed_at || recentAttempt?.created_at) : "No run yet" }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-4 h-2 overflow-hidden rounded-full bg-white ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-sky-800">
+                            <div class="h-full rounded-full" :class="latestScoreBarClass"
+                                :style="{ width: `${hasAttempts ? latestScoreRounded : 0}%` }"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <button type="button" @click="openStartModal"
+                            class="inline-flex items-center gap-2 rounded-full bg-sky-500 px-4 py-2 text-xs font-bold text-white transition hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-50"
+                            :disabled="hasCatPremiumAccess && !canStartCat">
+                            <i class="pi pi-play"></i>
+                            Start CAT
+                        </button>
+                        <button type="button" @click="goToLatestReport"
+                            class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900"
+                            :disabled="!hasAttempts">
+                            <i class="pi pi-chart-bar"></i>
+                            Report
+                        </button>
+                    </div>
+                </article>
+            </section>
+
+            <section
+                class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900">
+                <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+                    <div>
+                        <h2 class="text-lg font-semibold text-slate-950 dark:text-white">Recent CAT Attempts</h2>
+                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
+                            Review adaptive runs and compare outcomes over time.
+                        </p>
+                    </div>
+                    <span
+                        class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-bold text-sky-700 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
+                        {{ attemptCount }} logged
+                    </span>
+                </div>
+
+                <div v-if="attempts.length > 0" class="overflow-x-auto rounded-xl border border-slate-200 dark:border-sky-800">
+                    <table class="w-full min-w-[680px] text-left text-sm">
+                        <thead class="bg-slate-700 text-white dark:bg-slate-800">
+                            <tr>
+                                <th class="px-4 py-3 font-semibold">Date</th>
+                                <th class="px-4 py-3 font-semibold">Questions</th>
+                                <th class="px-4 py-3 font-semibold">Score</th>
+                                <th class="px-4 py-3 font-semibold">Status</th>
+                                <th class="px-4 py-3 font-semibold">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-sky-800">
+                            <tr v-for="attempt in attempts.slice(0, 5)" :key="attempt.id"
+                                class="bg-white transition hover:bg-sky-50 dark:bg-sky-950/40 dark:hover:bg-sky-950">
+                                <td class="px-4 py-3 font-medium text-slate-700 dark:text-slate-200">
+                                    {{ formatDate(attempt.completed_at || attempt.created_at) }}
+                                </td>
+                                <td class="px-4 py-3 text-slate-600 dark:text-slate-300">
+                                    {{ attempt.suspend_index || "0" }}/150
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center gap-2">
+                                        <div class="h-2 w-24 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                                            <div class="h-full rounded-full"
+                                                :class="attempt.score >= passThreshold ? 'bg-emerald-500' : 'bg-rose-500'"
+                                                :style="{ width: `${Math.max(0, Math.min(100, Math.round(attempt.score || 0)))}%` }">
+                                            </div>
+                                        </div>
+                                        <span class="font-bold text-slate-950 dark:text-white">{{ Math.round(attempt.score || 0) }}%</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span :class="[
+                                        'rounded-full px-3 py-1 text-xs font-semibold',
+                                        attempt.score >= passThreshold
+                                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-200'
+                                            : 'bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-200'
+                                    ]">
+                                        {{ attempt.score >= passThreshold ? 'Passed' : 'Needs review' }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <button @click="viewReport(attempt.id)"
+                                        class="inline-flex items-center gap-2 rounded-full bg-sky-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-sky-600">
+                                        <i class="pi pi-chart-bar"></i>
+                                        View Report
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div v-else
+                    class="rounded-xl border border-dashed border-slate-300 bg-light-blue-500 p-10 text-center text-slate-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-slate-300">
+                    No CAT attempts yet.
+                </div>
+            </section>
         </div>
+
         <dialog id="my_modal_3" class="modal">
-            <div class="modal-box bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+            <div class="modal-box bg-white text-slate-900 dark:bg-sky-950 dark:text-slate-100">
                 <form method="dialog">
                     <button
                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-slate-500 dark:text-slate-300">
@@ -246,41 +245,26 @@
                     </button>
                 </form>
 
-                <h3 class="text-lg font-bold mb-2">NCLEX CAT Exam Instructions</h3>
+                <h3 class="mb-2 pr-8 text-lg font-bold">NCLEX CAT Exam Instructions</h3>
+                <p class="text-sm leading-6 text-slate-600 dark:text-slate-300">
+                    Answer each question carefully. The adaptive engine adjusts difficulty as you move, and you cannot
+                    return to previous questions during the run.
+                </p>
 
-                <div class="space-y-3 text-sm leading-relaxed">
-                    <p>
-                        You are about to begin a <strong>Computerized Adaptive Test (CAT)</strong>.
-                        The difficulty of each question will adjust based on your previous answers.
-                    </p>
-
-                    <ul class="list-disc pl-5 space-y-1">
-                        <li>Answer each question carefully - you cannot return to previous questions.</li>
-                        <li>The exam adapts to your ability level in real time.</li>
-                        <li>Do not guess patterns - focus on clinical reasoning.</li>
-                        <li>Read all options before selecting your answer.</li>
-                        <li>Prioritize patient safety, ABCs, and nursing judgment.</li>
-                    </ul>
-
-                    <div class="mt-3">
-                        <p class="font-semibold">Tips for Success:</p>
-                        <ul class="list-disc pl-5 space-y-1">
-                            <li>Eliminate clearly incorrect options first.</li>
-                            <li>Look for keywords: <em>priority, first, best, immediate</em>.</li>
-                            <li>Apply frameworks like ABCs, Maslow, and Safety.</li>
-                            <li>Stay calm - difficulty increasing usually means you're performing well.</li>
-                        </ul>
-                    </div>
-                    <div class="mt-3 p-3 rounded-lg bg-slate-100 dark:bg-slate-800">
-                        <p class="text-xs">
-                            {{ modalLimitSummary }}
-                        </p>
+                <div class="mt-4 grid gap-2 text-sm text-slate-600 dark:text-slate-300">
+                    <div v-for="tip in modalTips" :key="tip" class="flex items-start gap-2 rounded-xl bg-light-blue-500 p-3 dark:bg-sky-900/70">
+                        <i class="pi pi-check mt-1 text-emerald-500"></i>
+                        <span>{{ tip }}</span>
                     </div>
                 </div>
 
-                <div class="mt-5">
+                <div class="mt-4 rounded-xl bg-slate-100 p-3 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                    {{ modalLimitSummary }}
+                </div>
+
+                <div class="mt-5 flex justify-end">
                     <CommonButton button-text="Start CAT Now" icon="pi pi-play"
-                        classes="text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-white/90"
+                        classes="bg-sky-500 text-white shadow-none hover:bg-sky-600"
                         :action="startExam" :disabled="!canStartCat" />
                 </div>
             </div>
@@ -296,8 +280,6 @@ import CommonButton from '../../../components/Buttons/CommonButton.vue'
 import { useCatExamStore } from '../../../stores/catExamStore'
 import { useAuthStore } from '../../../stores/authStore'
 
-
-
 const catStore = useCatExamStore()
 const authStore = useAuthStore()
 
@@ -305,6 +287,40 @@ const router = useRouter()
 const attempts = ref<any[]>([])
 const monthlyLimit = 3
 const hasCatPremiumAccess = computed(() => authStore.active('nclex') && !authStore.isTrial('nclex'))
+const passThreshold = computed(() => Number((catStore as any).passThreshold ?? 65))
+
+const workflowCards = [
+    {
+        title: 'Adaptive difficulty',
+        copy: 'Question difficulty responds to your performance so each run becomes a sharper readiness signal.',
+        icon: 'pi pi-sliders-v',
+        color: 'text-sky-600 dark:text-sky-300',
+    },
+    {
+        title: 'Clinical judgment',
+        copy: 'Mixed items keep the focus on safety, prioritization, and nursing decisions under pressure.',
+        icon: 'pi pi-heart',
+        color: 'text-emerald-600 dark:text-emerald-300',
+    },
+    {
+        title: 'Report review',
+        copy: 'Adaptive reports surface subject trends and score movement so the next practice step is obvious.',
+        icon: 'pi pi-chart-bar',
+        color: 'text-indigo-600 dark:text-indigo-300',
+    },
+    {
+        title: 'Monthly pacing',
+        copy: 'Three CAT attempts per month encourages deliberate review between high-stakes simulations.',
+        icon: 'pi pi-calendar',
+        color: 'text-orange-600 dark:text-orange-300',
+    },
+]
+
+const modalTips = [
+    'Read every option before selecting your answer.',
+    'Prioritize patient safety, ABCs, and nursing judgment.',
+    'Use tutor review after the report to target weak areas.',
+]
 
 onMounted(async () => {
     if (!hasCatPremiumAccess.value) {
@@ -321,7 +337,7 @@ onMounted(async () => {
 
 const passRate = computed(() => {
     if (attempts.value.length === 0) return 0
-    const passed = attempts.value.filter((a) => a.score >= 65).length
+    const passed = attempts.value.filter((a) => a.score >= passThreshold.value).length
     return Math.round((passed / attempts.value.length) * 100)
 })
 
@@ -335,6 +351,7 @@ const averageScore = computed(() => {
 
 const hasAttempts = computed(() => attemptCount.value > 0)
 const recentAttempt = computed(() => attempts.value[0] ?? null)
+const latestScoreRounded = computed(() => Math.round(Number(recentAttempt.value?.score || 0)))
 const attemptsThisMonth = computed(() =>
     attempts.value.filter((attempt) =>
         isCurrentMonth(attempt.completed_at ?? attempt.created_at)
@@ -358,30 +375,65 @@ const monthlyAttemptSummary = computed(() => {
 })
 const modalLimitSummary = computed(() => {
     if (canStartCat.value) {
-        return `You can only take the CAT exam ${monthlyLimit} times per month. ${remainingAttemptsThisMonth.value} remaining this month.`
+        return `You can take the CAT exam ${monthlyLimit} times per month. ${remainingAttemptsThisMonth.value} remaining this month.`
     }
 
-    return `You can only take the CAT exam ${monthlyLimit} times per month. You have reached the monthly limit.`
+    return `You can take the CAT exam ${monthlyLimit} times per month. You have reached the monthly limit.`
 })
 
 const latestAttemptSummary = computed(() => {
     if (!recentAttempt.value) {
-        return 'No CAT attempts yet. Start an adaptive exam to unlock the full report.'
+        return 'No CAT attempts yet. Start an adaptive run to unlock your first report.'
     }
 
-    const score = Math.round(recentAttempt.value.score || 0)
-    return `Last attempt on ${formatDate(recentAttempt.value.completed_at)} - ${score}% achieved`
+    return `Last attempt on ${formatDate(recentAttempt.value.completed_at || recentAttempt.value.created_at)} with ${latestScoreRounded.value}% achieved.`
 })
 
-function formatDate(date: string) {
-    return new Date(date).toLocaleDateString('en-US', {
+const latestStatusLabel = computed(() => {
+    if (!hasAttempts.value) return 'No Test'
+    return latestScoreRounded.value >= passThreshold.value ? 'PASS' : 'REVIEW'
+})
+
+const latestStatusClass = computed(() => {
+    if (!hasAttempts.value) return 'text-orange-500'
+    return latestScoreRounded.value >= passThreshold.value ? 'text-emerald-600' : 'text-rose-500'
+})
+
+const latestStatusPillClass = computed(() => {
+    if (!hasAttempts.value) return 'bg-orange-100 text-orange-700 dark:bg-orange-950/50 dark:text-orange-200'
+    return latestScoreRounded.value >= passThreshold.value
+        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-200'
+        : 'bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-200'
+})
+
+const latestScoreClass = computed(() => {
+    if (!hasAttempts.value) return 'text-slate-400 dark:text-slate-500'
+    return latestScoreRounded.value >= passThreshold.value
+        ? 'text-emerald-600 dark:text-emerald-300'
+        : 'text-rose-600 dark:text-rose-300'
+})
+
+const latestScoreBarClass = computed(() => {
+    if (!hasAttempts.value) return 'bg-slate-300'
+    return latestScoreRounded.value >= passThreshold.value ? 'bg-emerald-500' : 'bg-rose-500'
+})
+
+function formatDate(date?: string | null) {
+    if (!date) return 'No date recorded'
+
+    const parsed = new Date(date)
+    if (Number.isNaN(parsed.getTime())) return 'No date recorded'
+
+    return parsed.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
         year: 'numeric'
     })
 }
 
-function isCurrentMonth(date: string) {
+function isCurrentMonth(date?: string | null) {
+    if (!date) return false
+
     const parsed = new Date(date)
     if (Number.isNaN(parsed.getTime())) return false
 
@@ -429,4 +481,3 @@ function goToLatestReport() {
     viewReport(recentAttempt.value.id)
 }
 </script>
-
