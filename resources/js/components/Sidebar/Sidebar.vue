@@ -10,12 +10,11 @@
                     <span class="block text-xs font-bold uppercase tracking-widest text-white">
                         Nursedive
                     </span>
-                    <span class="block text-xs text-bright-sun-500">
+                    <span class="block text-xs text-sky-300">
                         Plan, Study, Excel
                     </span>
                 </span>
             </router-link>
-
             <router-link to="/account" :class="profileClass" :title="isSidebarOpen ? undefined : 'Account'">
                 <span v-if="user?.avatar" :class="[profileAvatarClass, 'overflow-hidden']">
                     <img :src="'/storage/' + user.avatar" class="h-full w-full object-cover" alt="User avatar" />
@@ -171,7 +170,8 @@
                                     <i class="pi pi-wallet text-bright-sun-500"></i>
                                 </span>
                                 <span class="min-w-0">
-                                    <span class="block text-xs font-extrabold uppercase tracking-wide text-bright-sun-500">
+                                    <span
+                                        class="block text-xs font-extrabold uppercase tracking-wide text-bright-sun-500">
                                         Subscription
                                     </span>
                                     <span class="block truncate text-sm font-bold text-white">
@@ -179,12 +179,11 @@
                                     </span>
                                 </span>
                             </div>
-                            <span class="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-black uppercase"
+                            <!-- <span class="shrink-0 rounded-full px-2 py-0.5 text-[8px] font-light"
                                 :class="subscriptionSummary.badgeClass">
                                 {{ subscriptionSummary.statusLabel }}
-                            </span>
+                            </span> -->
                         </div>
-
                         <p class="mt-3 text-xs font-semibold text-cyan-50/90">
                             {{ subscriptionSummary.detail }}
                         </p>
@@ -207,7 +206,6 @@
                         </span>
                     </router-link>
                 </div>
-
                 <router-link v-if="isSidebarOpen && !isAdminArea" to="/referral"
                     class="flex items-center gap-3 rounded-2xl border border-amber-300/20 bg-gradient-to-br from-sky-900/90 to-sky-600/10 p-3 transition hover:-translate-y-px hover:border-amber-300/40 hover:from-amber-300/25 hover:to-sky-500/20">
                     <span :class="promoIconClass">

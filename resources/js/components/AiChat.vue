@@ -2,7 +2,7 @@
     <section v-if="props.chatOpened"
         class="fixed left-3 right-3 bottom-3 z-50 mx-auto flex h-[min(78vh,680px)] w-auto max-w-xl flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/20 dark:border-sky-800 dark:bg-slate-950 dark:shadow-black/30 sm:left-auto sm:right-6 sm:bottom-6 sm:w-[520px]"
         role="dialog" aria-label="Nursedive AI Assistant" :aria-busy="isStreaming">
-        <header class="border-b border-white/10 bg-slate-950 px-4 py-3 text-white">
+        <header class="border-b bg-sky-800 px-4 py-3 text-white">
             <div class="flex items-start justify-between gap-3">
                 <div class="flex min-w-0 items-center gap-3">
                     <a href="/"
@@ -12,8 +12,7 @@
                             alt="Nursedive" />
                     </a>
                     <div class="min-w-0">
-                        <h2 class="truncate text-base font-semibold leading-5">Nursing AI Assistant</h2>
-                        <p class="mt-0.5 text-xs text-slate-300">Nursedive AI</p>
+                        <h2 class="truncate text-base font-semibold leading-5">Nursedive AI Assistant</h2>
                     </div>
                 </div>
 
@@ -28,12 +27,15 @@
                 <label v-if="!isStreaming"
                     class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-slate-100 ring-1 ring-white/15"
                     for="customSwitch1">
-                    <span>Deeper Reasoning</span>
+                    <span>Deep Think</span>
                     <input id="customSwitch1" v-model="deepReasoning" type="checkbox" class="peer sr-only" />
                     <span
                         class="relative h-5 w-9 rounded-full bg-white/25 transition-colors after:absolute after:left-0.5 after:top-0.5 after:h-4 after:w-4 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:bg-teal-400 peer-checked:after:translate-x-4"
                         aria-hidden="true"></span>
                 </label>
+                <p class="text-xs text-slate-200">
+                    AI can make mistakes. Please verify important information.
+                </p>
 
                 <span v-if="isThinking"
                     class="inline-flex items-center gap-2 rounded-full bg-teal-400/15 px-3 py-1.5 text-xs font-semibold text-teal-100 ring-1 ring-teal-300/30">
@@ -50,7 +52,7 @@
         </header>
 
         <div ref="chatContainer" class="flex-1 space-y-4 overflow-y-auto bg-slate-50 p-4 dark:bg-slate-900/95 sm:p-5">
-            <div v-if="questionHtml" class="flex justify-start">
+            <!-- <div v-if="questionHtml" class="flex justify-start">
                 <div
                     class="max-w-[92%] rounded-2xl rounded-tl-sm border border-amber-200 bg-amber-50 px-4 py-3 shadow-sm dark:border-amber-400/20 dark:bg-amber-400/10">
                     <div
@@ -60,7 +62,7 @@
                     <div class="whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-800 dark:text-slate-100 [&_strong]:font-semibold"
                         v-html="questionHtml"></div>
                 </div>
-            </div>
+            </div> -->
 
             <div v-for="message in messages" :key="message.id" class="flex w-full"
                 :class="message.role === 'user' ? 'justify-end' : 'justify-start'">
@@ -68,11 +70,11 @@
                     :class="message.role === 'user'
                         ? 'rounded-2xl rounded-tr-sm bg-teal-600 text-white ring-teal-500/40'
                         : 'rounded-2xl rounded-tl-sm bg-white text-slate-800 ring-slate-200 dark:bg-slate-800 dark:text-slate-100 dark:ring-slate-700'">
-                    <div class="mb-1 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide"
+                    <div class="mb-1 flex items-center gap-2 text-[11px] font-semibold  tracking-wide"
                         :class="message.role === 'user' ? 'text-teal-50' : 'text-slate-500 dark:text-slate-300'">
                         <span class="h-1.5 w-1.5 rounded-full"
                             :class="message.role === 'user' ? 'bg-white/80' : 'bg-teal-500'"></span>
-                        {{ message.role === "user" ? "You" : "AI Tutor" }}
+                        {{ message.role === "user" ? "You" : "Nursedive AI" }}
                     </div>
                     <div class="whitespace-pre-wrap break-words text-sm leading-relaxed [&_strong]:font-semibold"
                         v-html="formatChatText(message.content)"></div>
