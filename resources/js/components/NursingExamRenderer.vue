@@ -210,22 +210,47 @@
                 </button>
                 <!-- Header -->
                 <h3 class="font-semibold text-2xl mb-2 px-8">
-                    Hello {{ user?.name.split(' ')[0] }},
+                    Hello {{ firstName }},
                 </h3>
                 <p class="text-gray-600 mb-6">
                     Thank you for exploring <span class="font-semibold text-gray-900">Nursedive</span>.
+                    <span class="block">We hope the practice preview is giving you a clear study signal.</span>
+                    <span class="hidden">
                     We hope you’re finding it valuable so far.
+                    </span>
                 </p>
 
                 <!-- Info box -->
                 <div class="bg-blue-50/60 rounded-xl p-5 text-left mb-6">
                     <p class="mb-4 text-gray-700">
+                        You have reached the end of this Nursing preview. Upgrade to continue your full-length
+                        assessment and keep access to the tools that make each attempt easier to learn from:
+                    </p>
+                    <p class="mb-4 text-gray-700 hidden">
                         You’ve reached the limit of the <span class="font-semibold">trial tier</span>.
                         Upgrade your plan to continue your full-length assessment and unlock all
                         premium features, including:
                     </p>
                     <!-- Feature checklist -->
                     <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="pi pi-check text-emerald-500 text-lg"></i>
+                            <span>Unlimited exam attempts and question access</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="pi pi-check text-emerald-500 text-lg"></i>
+                            <span>Detailed performance reports and analytics</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="pi pi-check text-emerald-500 text-lg"></i>
+                            <span>Full tutor mode with explanations and rationales</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="pi pi-check text-emerald-500 text-lg"></i>
+                            <span>Access to all current and future question banks</span>
+                        </li>
+                    </ul>
+                    <ul class="space-y-3 hidden">
                         <li class="flex items-start gap-3">
                             <span class="text-emerald-500 text-lg">✔</span>
                             <span>Unlimited exam attempts and question access</span>
@@ -245,14 +270,14 @@
                     </ul>
                 </div>
                 <!-- CTA -->
-                <button @click="$router.push(pricingRoute('nursing'))" class="w-full py-4 rounded-full font-semibold text-white text-lg
+                <button @click="upgradeToNursing" class="w-full py-4 rounded-full font-semibold text-white text-lg
                     bg-gradient-to-r from-orange-500 to-yellow-400
                     hover:opacity-90 transition cursor-pointer shadow-md">
-                    Upgrade Subscription
+                    Unlock Full Nursing Access
                 </button>
                 <!-- Subtle footer -->
                 <p class="mt-4 text-sm text-gray-500">
-                    Upgrade anytime. No interruption to your progress.
+                    One payment. No auto-billing. No interruption to your progress.
                 </p>
             </div>
         </div>
@@ -263,7 +288,7 @@
 
 <script setup lang="ts">
 import { onMounted, computed, ref, onBeforeUnmount, watch, provide } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { useNursingExamStore } from '../stores/nursingExamStore'
 import QuestionRenderer from './QuestionRenderer.vue'
@@ -276,6 +301,7 @@ import CommonButton from './Buttons/CommonButton.vue'
 import { useAuthStore } from '../stores/authStore'
 import ExamFeedbackModal from './ExamFeedbackModal.vue'
 import AiChat from './AiChat.vue'
+import { trackPaywallEvent } from '../utils/paywallEvents'
 
 
 const isDark = useDark({ disableTransition: false });
@@ -284,8 +310,10 @@ const progress = ref('Preparing Test...')
 
 const { zoomIn, zoomOut } = useMainStore();
 const store = useMainStore();
-const { user, pricingRoute, active, is_authenticated } = useAuthStore();
+const authStore = useAuthStore();
+const { active, is_authenticated } = authStore;
 const route = useRoute()
+const router = useRouter()
 const examStore = useNursingExamStore() as any
 const confirm = useConfirm()
 const difficulty = ref('')
@@ -294,6 +322,34 @@ const provided_payload = ref(false);
 const ChatOpenned = ref(false);
 const pendingNoteValues = new Map<number, string>();
 const noteSaveTimers = new Map<number, ReturnType<typeof setTimeout>>();
+const firstName = computed(() => authStore.user?.name?.split(' ')[0] || 'there')
+
+function upgradeToNursing() {
+    trackPaywallEvent('pricing_clicked', {
+        product: 'nursing',
+        placement: 'nursing_preview_modal',
+        exam_id: examStore.exam?.id,
+        question_index: examStore.currentIndex,
+    })
+
+    router.push({
+        path: authStore.pricingRoute('nursing'),
+        query: { redirect: route.fullPath },
+    })
+}
+
+watch(() => examStore.show_paywall, (shown) => {
+    if (!shown) return
+
+    trackPaywallEvent('paywall_shown', {
+        product: 'nursing',
+        placement: 'nursing_exam_renderer',
+        reason: 'preview_limit',
+        exam_id: examStore.exam?.id,
+        questions_previewed: examStore.no_of_qns_before_paywall,
+        question_index: examStore.currentIndex,
+    })
+})
 
 
 const showModal = async (modalId: any) => {

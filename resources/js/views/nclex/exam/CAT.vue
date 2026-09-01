@@ -363,7 +363,7 @@ const remainingAttemptsThisMonth = computed(() =>
 const canStartCat = computed(() => remainingAttemptsThisMonth.value > 0)
 const monthlyAttemptSummary = computed(() => {
     if (!hasCatPremiumAccess.value) {
-        return 'CAT is available for premium NCLEX plans.'
+        return 'CAT is available for active paid NCLEX plans.'
     }
 
     if (canStartCat.value) {

@@ -69,12 +69,8 @@ Route::post('/paypal/webhook', [PaypalWebhookController::class, 'handle']);
 
 //subscriptions and plans
 
-Route::apiResource('plans', PlanController::class);
-
-Route::post('subscribe', [SubscriptionController::class, 'subscribe']);
-
-Route::post('cancel-subscription/{id}', [SubscriptionController::class, 'cancel']);
-Route::post('renew-subscription/{id}', [SubscriptionController::class, 'renew']);
+Route::get('plans', [PlanController::class, 'index']);
+Route::get('plans/{plan}', [PlanController::class, 'show']);
 
 //for indexed qns
 
@@ -108,6 +104,15 @@ Route::group(['prefix' => 'teas', 'middleware' => 'optional.auth'], function () 
 //start Protected routes
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('plans', [PlanController::class, 'store']);
+    Route::put('plans/{plan}', [PlanController::class, 'update']);
+    Route::patch('plans/{plan}', [PlanController::class, 'update']);
+    Route::delete('plans/{plan}', [PlanController::class, 'destroy']);
+
+    Route::post('subscribe', [SubscriptionController::class, 'subscribe']);
+    Route::post('cancel-subscription/{id}', [SubscriptionController::class, 'cancel']);
+    Route::post('renew-subscription/{id}', [SubscriptionController::class, 'renew']);
+
     //create payments 
     Route::prefix('payments')->group(function () {
         Route::post('/create-payment-intent', [StripeController::class, 'createPaymentIntent']);

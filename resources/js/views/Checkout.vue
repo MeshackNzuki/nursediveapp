@@ -50,6 +50,7 @@ import { useAuthStore } from "../stores/authStore.js"
 import { useRoute } from "vue-router"
 import paypalIcon from '../assets/images/paypal-icon.svg'
 import router from "../router"
+import { trackPaywallEvent } from "../utils/paywallEvents"
 
 const stripeKey = "pk_live_51QrMHdGoaQAS8lwkRA9eBoYkAzAv5h9RxwX3R7837iYEHXglHmRFFOxQ5AiuNKGRRRxZuSXTJQYzuFayFNrzA4GV00eWr6EowA"
 const stripeLoaded = ref(false)
@@ -76,6 +77,22 @@ const elementsOptions = ref({
 const paymentElementOptions = ref({})
 const elementsComponent = ref()
 
+const redirectTarget = () => {
+  return typeof route.query.redirect === "string" ? route.query.redirect : ""
+}
+
+const orderCompleteUrl = () => {
+  const url = new URL("/order-complete", window.location.origin)
+  url.searchParams.set("payment_id", paymentId.value)
+
+  const redirect = redirectTarget()
+  if (redirect) {
+    url.searchParams.set("redirect", redirect)
+  }
+
+  return url.toString()
+}
+
 onMounted(async () => {
 
   if (!is_authenticated) {
@@ -98,6 +115,12 @@ onMounted(async () => {
     paymentId.value = res.data.data.paymentId;
     mainStore.payment_event = true;
     mainStore.payment_id = paymentId.value;
+    trackPaywallEvent("checkout_started", {
+      provider: "stripe",
+      payment_id: paymentId.value,
+      plan_id: plan_id,
+      amount: amount.value,
+    })
 
   })
 })
@@ -112,6 +135,11 @@ async function handleSubmit() {
   const { error: submitError } = await elements.submit()
   if (submitError) {
     console.error(submitError.message)
+    trackPaywallEvent("payment_abandoned", {
+      provider: "stripe",
+      payment_id: paymentId.value,
+      reason: submitError.message,
+    })
     return
   }
 
@@ -120,16 +148,34 @@ async function handleSubmit() {
     elements,
     clientSecret: clientSecret.value,
     confirmParams: {
-      return_url: `https://app.nursedive.com/order-complete?payment_id=${paymentId.value}`,
+      return_url: orderCompleteUrl(),
     },
   })
   if (error) {
     console.error(error.message)
+    trackPaywallEvent("payment_abandoned", {
+      provider: "stripe",
+      payment_id: paymentId.value,
+      reason: error.message,
+    })
   }
 }
 
 const redirectToPaypal = () => {
-  router.push(`/paypal-checkout?amount=${amount.value}&id=${route.query.id}`)
+  trackPaywallEvent("checkout_started", {
+    provider: "paypal",
+    plan_id: route.query.id,
+    amount: amount.value,
+  })
+
+  router.push({
+    path: "/paypal-checkout",
+    query: {
+      amount: amount.value,
+      id: route.query.id,
+      ...(redirectTarget() ? { redirect: redirectTarget() } : {}),
+    },
+  })
 }
 
 </script>

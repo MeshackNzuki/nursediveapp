@@ -26,7 +26,7 @@ Your Subscription Has Expired
         Renew now to restore full access and continue tracking your study progress.
     </p>
 
-    @include('emails.partials.button', ['href' => 'https://app.nursedive.com/subscription', 'label' => 'Renew Subscription'])
+    @include('emails.partials.button', ['href' => $actionUrl ?? 'https://app.nursedive.com/subscription', 'label' => 'Renew Subscription'])
 
     <p style="margin:28px 0 0;">
         We are ready when you are.<br>

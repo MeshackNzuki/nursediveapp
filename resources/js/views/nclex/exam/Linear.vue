@@ -109,7 +109,7 @@
                                     {{ normalizeText(exam.name) }}
                                 </h3>
                                 <p class="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">
-                                    {{ examScore(exam) ? "Retake or review your saved performance." : "Start this set to create a score baseline." }}
+                                    {{ isExamLocked(exam) ? "Unlock this set for full NCLEX practice, rationales, and saved scoring." : examScore(exam) ? "Retake or review your saved performance." : "Start this set to create a score baseline." }}
                                 </p>
                             </div>
                             <div class="flex shrink-0 items-center gap-2">
@@ -145,17 +145,17 @@
 
                             <div class="mt-4 flex items-center justify-between gap-2">
                                 <Small
-                                    :button-text="isExamLocked(exam) ? 'Locked' : examScore(exam) ? 'Retake Exam' : 'Take Exam'"
-                                    :icon="isExamLocked(exam) ? 'pi pi-lock' : examScore(exam) ? 'pi pi-refresh' : 'pi pi-play'"
+                                    :button-text="isExamLocked(exam) ? 'Unlock Set' : examScore(exam) ? 'Retake Exam' : 'Take Exam'"
+                                    :icon="isExamLocked(exam) ? 'pi pi-lock-open' : examScore(exam) ? 'pi pi-refresh' : 'pi pi-play'"
                                     :classes="isExamLocked(exam)
-                                        ? 'border-0 bg-rose-500 text-white hover:bg-rose-500 cursor-not-allowed shadow-none'
+                                        ? 'border-0 bg-blue-600 text-white hover:bg-blue-700 shadow-none'
                                         : examScore(exam)
                                             ? 'border-0 bg-amber-500 text-white hover:bg-amber-600 shadow-none'
                                             : 'border-0 bg-sky-500 text-white hover:bg-sky-600 shadow-none'"
                                     :action="() => openModal(exam)" />
                                 <span
                                     class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
-                                    {{ isExamLocked(exam) ? 'Locked' : examScore(exam) ? 'Attempted' : 'New' }}
+                                    {{ isExamLocked(exam) ? 'Upgrade' : examScore(exam) ? 'Attempted' : 'New' }}
                                 </span>
                             </div>
                         </div>
@@ -197,6 +197,7 @@ import { normalizeText } from '../../../utils/normalizeText'
 import { dynamicProgressStyle, gradeColor, gradeComment } from '../../../utils/grader'
 import CommonButton from '../../../components/Buttons/CommonButton.vue'
 import { useAuthStore } from '../../../stores/authStore'
+import { trackPaywallEvent } from '../../../utils/paywallEvents'
 
 const exams = ref<{ id: number; name: string; description?: string; question_count?: number; questions_count?: number; trial_mode?: number | boolean }[]>([])
 const searchTerm = ref('')
@@ -213,6 +214,7 @@ onMounted(async () => {
         const response = await axios.get('/nclex/mock')
         exams.value = response.data.data.subtopics || []
         subject.value = response.data.data.name || 'Linear assessments'
+        trackLockedPaywallShown()
     } catch (error) {
         console.error('Error fetching exams:', error)
     }
@@ -251,9 +253,39 @@ function isExamLocked(exam: { trial_mode?: number | boolean }) {
 }
 
 function openModal(exam: { id: number; name: string; trial_mode?: number | boolean }) {
-    if (isExamLocked(exam)) return
+    if (isExamLocked(exam)) {
+        goToUpgrade(exam)
+        return
+    }
     selectedExam.value = exam
     modalRef.value?.showModal()
+}
+
+function goToUpgrade(exam: { id: number; name: string }) {
+    trackPaywallEvent('pricing_clicked', {
+        product: 'nclex',
+        placement: 'linear_locked_card',
+        exam_id: exam.id,
+        exam_name: exam.name,
+    })
+
+    router.push({
+        path: authStore.pricingRoute('nclex'),
+        query: { redirect: `/nclex/exam/${exam.id}?mode=exam` },
+    })
+}
+
+function trackLockedPaywallShown() {
+    if (hasPremiumAccess.value) return
+
+    const lockedCount = exams.value.filter((exam) => isExamLocked(exam)).length
+    if (!lockedCount) return
+
+    trackPaywallEvent('paywall_shown', {
+        product: 'nclex',
+        placement: 'linear_locked_cards',
+        locked_count: lockedCount,
+    })
 }
 
 function goToExam(mode: 'tutor' | 'exam') {

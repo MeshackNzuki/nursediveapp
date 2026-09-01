@@ -26,7 +26,7 @@ Your Trial Has Ended
         reports, and progress history.
     </p>
 
-    @include('emails.partials.button', ['href' => 'https://app.nursedive.com/subscription', 'label' => 'Upgrade Plan'])
+    @include('emails.partials.button', ['href' => $actionUrl ?? 'https://app.nursedive.com/subscription', 'label' => 'Upgrade Plan'])
 
     <p style="margin:28px 0 0;">
         We are here whenever you are ready to keep going.<br>

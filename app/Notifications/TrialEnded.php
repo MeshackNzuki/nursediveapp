@@ -14,16 +14,18 @@ class TrialEnded extends Notification // implements ShouldQueue
     protected $user;
     protected $product;
     protected $expires;
+    protected $actionUrl;
 
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($user, $product, $expires)
+    public function __construct($user, $product, $expires, ?string $actionUrl = null)
     {
         $this->user = $user;
         $this->product = $product;
         $this->expires = $expires;
+        $this->actionUrl = $actionUrl;
     }
 
     /**
@@ -47,6 +49,7 @@ class TrialEnded extends Notification // implements ShouldQueue
                 'user' => $this->user,
                 'product' => ucfirst($this->product),
                 'expired_date' => $this->expires,
+                'actionUrl' => $this->actionUrl,
             ]);
     }
 
@@ -60,6 +63,7 @@ class TrialEnded extends Notification // implements ShouldQueue
         return [
             'product' => $this->product,
             'expired_date' => $this->expires,
+            'action_url' => $this->actionUrl,
         ];
     }
 }

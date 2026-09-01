@@ -1,11 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { trackPaywallEvent } from '../utils/paywallEvents'
 
 const paypalDiv = ref(null)
 const statusMessage = ref('')
 const route = useRoute()
+const router = useRouter()
 
 const PAYPAL_CLIENT_ID = "AVi9KDLo5yyswt5MW-tWRpSHTx2Zv5UJZ9-BofXGd6KBEH5PlKR7jGqMiIf3vll6MRt6UGUvjmiEMZuL"
 
@@ -47,22 +49,55 @@ onMounted(async () => {
                     }
                 )
 
-                if (response.data.status === 'completed') {
-                    statusMessage.value = 'Payment successful'
+                const captureStatus = response.data?.data?.status
+
+                if (['completed', 'already_processed'].includes(captureStatus)) {
+                    statusMessage.value = 'Payment successful. Unlocking access...'
+                    router.push({
+                        path: '/order-complete',
+                        query: {
+                            payment_id: paymentId,
+                            ...(typeof route.query.redirect === 'string' ? { redirect: route.query.redirect } : {}),
+                        },
+                    })
                 } else {
                     statusMessage.value = 'Payment failed'
+                    trackPaywallEvent('payment_abandoned', {
+                        provider: 'paypal',
+                        payment_id: paymentId,
+                        plan_id: route.query.id,
+                        reason: captureStatus || 'capture_failed',
+                    })
                 }
             } catch (e) {
                 statusMessage.value = 'Server error capturing payment'
+                trackPaywallEvent('payment_abandoned', {
+                    provider: 'paypal',
+                    payment_id: paymentId,
+                    plan_id: route.query.id,
+                    reason: 'server_error',
+                })
             }
         },
 
         onCancel: () => {
             statusMessage.value = 'Payment cancelled'
+            trackPaywallEvent('payment_abandoned', {
+                provider: 'paypal',
+                payment_id: paymentId,
+                plan_id: route.query.id,
+                reason: 'cancelled',
+            })
         },
 
         onError: () => {
             statusMessage.value = 'PayPal error occurred'
+            trackPaywallEvent('payment_abandoned', {
+                provider: 'paypal',
+                payment_id: paymentId,
+                plan_id: route.query.id,
+                reason: 'paypal_error',
+            })
         },
     }).render(paypalDiv.value)
 

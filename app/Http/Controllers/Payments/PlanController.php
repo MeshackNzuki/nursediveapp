@@ -8,6 +8,11 @@ use App\Http\Controllers\Controller;
 
 class PlanController extends Controller
 {
+    private function canManagePlans(Request $request): bool
+    {
+        return (bool) $request->user()?->hasAnyRole(['super-admin', 'admin']);
+    }
+
     public function index()
     {
         return $this->ResSuccess(Plan::all());
@@ -15,14 +20,18 @@ class PlanController extends Controller
 
     public function store(Request $request)
     {
+        if (!$this->canManagePlans($request)) {
+            return $this->ResError('Unauthorized', 403);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'product_codes' => 'required|array',
+            'product_code' => 'required|string|max:50',
             'duration_days' => 'required|integer|min:1',
         ]);
-        return Plan::create($validated);
+
+        return $this->ResSuccess(Plan::create($validated), 201);
     }
 
     public function show(Plan $plan)
@@ -33,11 +42,14 @@ class PlanController extends Controller
 
     public function update(Request $request, Plan $plan)
     {
+        if (!$this->canManagePlans($request)) {
+            return $this->ResError('Unauthorized', 403);
+        }
+
         $validated = $request->validate([
             'name' => 'sometimes|string|max:100',
-            'description' => 'nullable|string',
             'price' => 'sometimes|numeric|min:0',
-            'product_codes' => 'sometimes|array',
+            'product_code' => 'sometimes|string|max:50',
             'duration_days' => 'sometimes|integer|min:1',
         ]);
 
@@ -45,8 +57,12 @@ class PlanController extends Controller
         return $this->ResSuccess($plan);
     }
 
-    public function destroy(Plan $plan)
+    public function destroy(Request $request, Plan $plan)
     {
+        if (!$this->canManagePlans($request)) {
+            return $this->ResError('Unauthorized', 403);
+        }
+
         $plan->delete();
         return $this->ResSuccess('');
     }

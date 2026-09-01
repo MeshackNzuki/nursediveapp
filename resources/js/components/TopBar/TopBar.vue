@@ -6,7 +6,11 @@
         <div
             class="flex flex-row justify-between items-center mb-1 mt-1 rounded-lg py-1 h-10 px-2 mx-2 bg-transparent text-gray-50">
             <!-- Sidebar Toggle -->
-            <span @click="mainStore.toggleSidebar" class="cursor-pointer flex items-center justify-center">
+            <button v-if="showSidebarToggle" type="button"
+                class="cursor-pointer flex items-center justify-center rounded-full text-current outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+                :aria-label="mainStore.sidebarOpen ? 'Close sidebar' : 'Open sidebar'"
+                :aria-expanded="mainStore.sidebarOpen" aria-controls="app-sidebar" @pointerdown.stop
+                @click.stop="handleSidebarToggle">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" :class="[
                         mainStore.isMobile ? 'size-6' : 'size-10 p-2'
@@ -15,7 +19,7 @@
                         d="M3.75 6.75h16.5M3.75 12h16.5M12 17.25h8.25" />
                     <path v-else stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-            </span>
+            </button>
 
             <!-- Greeting -->
             <div
@@ -110,6 +114,16 @@ const toggleDark = useToggle(isDark);
 const user = computed(() => authStore.user);
 const isAuthenticated = computed(() => authStore.is_authenticated);
 const logout = () => authStore.logout();
+const showSidebarToggle = computed(() => !mainStore.isMobile || !mainStore.sidebarOpen);
+
+const handleSidebarToggle = () => {
+    if (!mainStore.isMobile && mainStore.sidebarOpen) {
+        mainStore.closeSidebar();
+        return;
+    }
+
+    mainStore.toggleSidebar();
+};
 
 const greetingText = computed(() => {
     const h = new Date().getHours();

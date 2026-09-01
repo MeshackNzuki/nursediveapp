@@ -15,14 +15,12 @@
                         <h2 class="truncate text-base font-semibold leading-5">Nursedive AI Assistant</h2>
                     </div>
                 </div>
-
                 <button type="button" @click="closeChat"
                     class="grid h-9 w-9 shrink-0 place-items-center rounded-full text-slate-300 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-teal-300"
                     aria-label="Close chat">
                     <i class="pi pi-times text-sm"></i>
                 </button>
             </div>
-
             <div class="mt-3 flex flex-wrap items-center justify-between gap-2">
                 <label v-if="!isStreaming"
                     class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-slate-100 ring-1 ring-white/15"

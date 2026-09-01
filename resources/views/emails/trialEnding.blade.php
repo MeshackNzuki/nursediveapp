@@ -27,7 +27,7 @@ Your {{ $product }} Trial Is Ending Soon
         exams, tutor reviews, detailed reports, and your progress history.
     </p>
 
-    @include('emails.partials.button', ['href' => 'https://app.nursedive.com/subscription', 'label' => 'Upgrade Now'])
+    @include('emails.partials.button', ['href' => $actionUrl ?? 'https://app.nursedive.com/subscription', 'label' => 'Upgrade Now'])
 
     <p style="margin:0 0 18px;">
         Upgrading keeps your study progress in place and helps you continue preparing with confidence.

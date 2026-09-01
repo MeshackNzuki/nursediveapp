@@ -7,23 +7,25 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class subscriptionExpired extends Notification // implements ShouldQueue
+class SubscriptionExpired extends Notification // implements ShouldQueue
 {
     // use Queueable;
 
     protected $user;
     protected $product;
     protected $expires;
+    protected $actionUrl;
 
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($user, $product, $expires)
+    public function __construct($user, $product, $expires, ?string $actionUrl = null)
     {
         $this->user = $user;
         $this->product = $product;
         $this->expires = $expires;
+        $this->actionUrl = $actionUrl;
     }
 
 
@@ -41,15 +43,15 @@ class subscriptionExpired extends Notification // implements ShouldQueue
      * Get the mail representation of the notification.
      */
     public function toMail(object $notifiable): MailMessage
-    { {
-            return (new MailMessage)
-                ->subject('Your Nursedive Subscription Has Expired')
-                ->view('emails.subscriptionExpired', [
-                    'user' => $this->user,
-                    'product' => ucfirst($this->product),
-                    'expired_date' => $this->expires,
-                ]);
-        }
+    {
+        return (new MailMessage)
+            ->subject('Your Nursedive Subscription Has Expired')
+            ->view('emails.subscriptionExpired', [
+                'user' => $this->user,
+                'product' => ucfirst($this->product),
+                'expired_date' => $this->expires,
+                'actionUrl' => $this->actionUrl,
+            ]);
     }
 
     /**
@@ -62,6 +64,7 @@ class subscriptionExpired extends Notification // implements ShouldQueue
         return [
             'product' => $this->product,
             'expired_date' => $this->expires,
+            'action_url' => $this->actionUrl,
         ];
     }
 }

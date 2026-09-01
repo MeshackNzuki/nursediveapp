@@ -22,11 +22,12 @@ class User extends Authenticatable
         'product_codes',
 
         // Notification flags
-        'expired_sent',
-        'expiring_sent',
+        'subscription_expired_sent',
+        'subscription_expiring_sent',
         'trial_ending_sent',
         'trial_ended_sent',
         'first_engagement_sent',
+        'subscription_notification_flags',
     ];
 
     protected $hidden = [
@@ -40,7 +41,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'last_seen_at' => 'datetime',
             'password' => 'hashed',
+            'subscription_notification_flags' => 'array',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasAnyRole(['super-admin', 'admin']);
     }
 
     public function payments()

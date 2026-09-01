@@ -71,7 +71,7 @@
 
       <div v-else class="mt-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 w-full">
         <article v-for="(sub, index) in subChapters" :key="sub.id"
-          class="group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)] cursor-pointer"
+          class="group relative overflow-hidden rounded-3xl border border-white/75 bg-white/90 p-5 shadow-custom backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.75)] cursor-pointer"
           @click="goToLesson(sub.id)">
           <div :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', accentGlowClass(index)]"></div>
           <div class="relative flex h-full flex-col">

@@ -1,5 +1,11 @@
 <template>
-    <nav v-if="!login" ref="sidebar_id" :class="sidebarShellClass" aria-label="Primary navigation">
+    <nav v-if="!login" id="app-sidebar" ref="sidebar_id" :class="sidebarShellClass" aria-label="Primary navigation">
+        <button v-if="isMobile && isSidebarOpen" type="button"
+            class="absolute right-2.5 top-2.5 z-20 inline-flex h-6 w-6 items-center justify-center rounded-full border border-cyan-200/20 bg-white/10 text-cyan-50 shadow-lg shadow-sky-950/20 transition hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+            aria-label="Close sidebar" @pointerdown.stop @click.stop="mainStore.closeSidebar()">
+            <i class="pi pi-times text-xs"></i>
+        </button>
+
         <div class="relative z-10 flex h-full min-h-0 flex-col">
             <router-link to="/" :class="brandClass" :title="isSidebarOpen ? undefined : 'Nursedive'">
                 <span
@@ -130,7 +136,7 @@
                                 <span v-if="isSidebarOpen" class="min-w-0 flex-1">
                                     <span class="block truncate text-sm font-bold text-white">{{ area.short }}</span>
                                     <span class="block truncate text-xs text-bright-sun-500 font-semibold">{{ area.label
-                                        }}</span>
+                                    }}</span>
                                 </span>
                                 <i v-if="isSidebarOpen" class="pi pi-arrow-right text-xs text-cyan-100/50"></i>
                             </a>
@@ -234,7 +240,7 @@
                     <button type="button" :class="logoutClass" :title="isSidebarOpen ? undefined : 'Log out'"
                         @click="logout()">
                         <span :class="sidebarIconClass(false, { danger: true })">
-                            <i class="pi pi-power-off"></i>
+                            <i class="pi pi-power-off text-rose-400"></i>
                         </span>
                         <span v-if="isSidebarOpen" class="truncate">Log out</span>
                     </button>

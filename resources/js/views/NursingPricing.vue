@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import CommonButton from '../components/Buttons/CommonButton.vue';
 import { useMainStore } from '../stores';
 import { useAuthStore } from '../stores/authStore';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Navigation from '../components/Navigation.vue';
+import { trackPaywallEvent } from '../utils/paywallEvents';
 
 const PRODUCT_CODE = 'nursing';
 const PRODUCT_TITLE = 'Nursing Test Bank Plans';
@@ -17,8 +18,10 @@ const PRODUCT_FEATURES = [
 ];
 
 const router = useRouter();
+const route = useRoute();
 const { plans } = useMainStore();
 const { active, isTrial, wasTrial } = useAuthStore();
+const comparisonSection = ref<HTMLElement | null>(null);
 
 const productPlans = computed(() => {
     const sourcePlans = Array.isArray(plans) ? plans : [];
@@ -50,7 +53,24 @@ const buildCheckoutUrl = (plan: any) => {
     const params = new URLSearchParams();
     params.append('amount', String(plan.price));
     params.append('id', String(plan.id));
+
+    if (typeof route.query.redirect === 'string') {
+        params.append('redirect', route.query.redirect);
+    }
+
+    trackPaywallEvent('checkout_started', {
+        product: PRODUCT_CODE,
+        plan_id: plan.id,
+        plan_name: plan.name,
+        amount: plan.price,
+        placement: 'nursing_pricing_card',
+    });
+
     router.push('/checkout?' + params.toString());
+};
+
+const scrollToComparison = () => {
+    comparisonSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
 const savingsAmount = (plan: any) => {
@@ -109,6 +129,11 @@ const isRecommended = (plan: any) => plan.id === recommendedPlanId.value;
             <p class="text-sm md:text-base text-slate-600 max-w-2xl mx-auto">
                 {{ PRODUCT_DESCRIPTION }}
             </p>
+            <div class="mt-4 flex flex-wrap justify-center gap-2 text-xs font-semibold text-slate-700">
+                <span class="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">One payment</span>
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1">No auto-billing</span>
+                <span class="rounded-full border border-slate-200 bg-white px-3 py-1">Instant Nursing access</span>
+            </div>
         </section>
 
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto pb-10 mt-12">
@@ -163,16 +188,16 @@ const isRecommended = (plan: any) => plan.id === recommendedPlanId.value;
                 </ul>
 
                 <div class="mt-6 space-y-2.5">
-                    <CommonButton buttonText="Quick Buy"
+                    <CommonButton buttonText="Compare Features"
                         classes="w-full bg-white text-slate-700 border border-slate-300 hover:bg-slate-100"
-                        :action="() => buildCheckoutUrl(plan)" />
+                        :action="scrollToComparison" />
                     <CommonButton :buttonText="primaryButtonText"
                         classes="w-full bg-emerald-600 text-white hover:bg-emerald-700"
                         :action="() => buildCheckoutUrl(plan)" />
                 </div>
 
                 <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-3 text-center">
-                    Secure checkout. Immediate Nursing access.
+                    Secure checkout. Immediate Nursing access. No auto-billing.
                 </p>
             </article>
 
@@ -182,12 +207,20 @@ const isRecommended = (plan: any) => plan.id === recommendedPlanId.value;
             </div>
         </section>
 
-        <section class="max-w-6xl mx-auto pb-16">
+        <section ref="comparisonSection" class="max-w-6xl mx-auto scroll-mt-6 pb-16">
             <div
-                class="rounded-3xl border border-slate-200 bg-white/90 p-5 md:p-6 text-center shadow-sm dark:bg-sky-950 dark:border-sky-800/70">
-                <p class="text-sm text-slate-600 dark:text-slate-300">
-                    Nursing students who practice consistently and review weak areas tend to retain more and perform
-                    better across exams.
+                class="rounded-3xl border border-slate-200 bg-white/90 p-5 md:p-6 shadow-sm dark:bg-sky-950 dark:border-sky-800/70">
+                <p class="text-xs font-bold uppercase tracking-wide text-emerald-700">Compare Features</p>
+                <h2 class="mt-1 text-lg font-extrabold text-slate-900 dark:text-white">Every Nursing plan unlocks the full practice toolkit.</h2>
+                <div class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-4">
+                    <div v-for="feature in PRODUCT_FEATURES" :key="feature"
+                        class="rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm font-semibold text-slate-700 dark:border-sky-800 dark:bg-sky-900/30 dark:text-slate-100">
+                        <i class="pi pi-check-circle mr-1 text-emerald-600"></i>{{ feature }}
+                    </div>
+                </div>
+                <p class="mt-4 text-sm text-slate-600 dark:text-slate-300">
+                    The difference between tiers is your access runway. Choose a short focused sprint, a balanced study
+                    window, or the longest runway for mastery and retakes.
                 </p>
             </div>
         </section>

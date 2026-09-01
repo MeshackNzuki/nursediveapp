@@ -45,7 +45,7 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mt-8">
         <RouterLink v-for="(subject, i) in subjects" :key="i" :to="`/teas/guide-chapters/${subject.id}`"
-          class="group relative overflow-hidden rounded-3xl border border-white/70 bg-white/90 p-5 shadow-[0_16px_42px_-30px_rgba(15,23,42,0.55)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.7)]">
+          class="group relative overflow-hidden rounded-3xl border border-white/70 bg-white/90 p-5 shadow-custom backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_26px_60px_-32px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/70 dark:hover:shadow-[0_26px_60px_-35px_rgba(6,182,212,0.7)]">
           <div
             :class="['absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100', subject.glow]">
           </div>
@@ -93,7 +93,7 @@
 
         <div class="relative mt-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <RouterLink v-for="exam in quickExams" :key="exam.id" :to="exam.route"
-            class="group rounded-2xl border border-white/80 bg-white/95 p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-28px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/80 dark:hover:shadow-[0_18px_40px_-28px_rgba(6,182,212,0.75)]">
+            class="group rounded-2xl border border-white/80 bg-white/95 p-4 shadow-custom transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-28px_rgba(14,116,144,0.65)] dark:border-sky-800/70 dark:bg-slate-900/80 dark:hover:shadow-[0_18px_40px_-28px_rgba(6,182,212,0.75)]">
             <div class="flex items-start justify-between gap-2">
               <span
                 :class="['inline-flex h-11 w-11 items-center justify-center rounded-2xl ring-1 ring-white/60', exam.iconBg]">

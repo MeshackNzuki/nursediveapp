@@ -264,6 +264,7 @@ import CommonButton from './Buttons/CommonButton.vue'
 import { useAuthStore } from '../stores/authStore'
 import ExamFeedbackModal from './ExamFeedbackModal.vue'
 import AiChat from './AiChat.vue'
+import { trackPaywallEvent } from '../utils/paywallEvents'
 
 
 const isDark = useDark({ disableTransition: false });
@@ -279,7 +280,7 @@ const confirm = useConfirm()
 const notes = ref('')
 const difficulty = ref('')
 const ChatOpenned = ref(false);
-const { user } = useAuthStore()
+const authStore = useAuthStore()
 
 
 const caseQuestionCounter = ref(0)
@@ -347,10 +348,16 @@ async function loadExam() {
         }
     } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 403) {
-            window.alert(error.response?.data?.error || 'This NCLEX exam is locked.')
-            route.path.includes('/nclex/exam/')
-                ? router.push('/nclex/linear')
-                : router.push('/nclex/')
+            trackPaywallEvent('paywall_shown', {
+                product: 'nclex',
+                placement: 'nclex_exam_direct_lock',
+                reason: 'locked_exam',
+                exam_id: route.params.id,
+            })
+            router.push({
+                path: authStore.pricingRoute('nclex'),
+                query: { redirect: route.fullPath },
+            })
             return
         }
 

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import CommonButton from '../components/Buttons/CommonButton.vue';
 import { useMainStore } from '../stores';
 import { useAuthStore } from '../stores/authStore';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Navigation from '../components/Navigation.vue';
+import { trackPaywallEvent } from '../utils/paywallEvents';
 
 type ProductCode = 'teas' | 'nursing' | 'nclex';
 
@@ -27,8 +28,10 @@ const productMeta: Record<ProductCode, { packageName: string; description: strin
 };
 
 const router = useRouter();
+const route = useRoute();
 const { plans } = useMainStore();
 const { active, isTrial, wasTrial } = useAuthStore();
+const comparisonSection = ref<HTMLElement | null>(null);
 
 const sortedPlans = computed(() =>
     (Array.isArray(plans) ? plans : []).slice().sort((a: any, b: any) => a.price - b.price)
@@ -56,7 +59,24 @@ const buildCheckoutUrl = (plan: any) => {
     const params = new URLSearchParams();
     params.append('amount', String(plan.price));
     params.append('id', String(plan.id));
+
+    if (typeof route.query.redirect === 'string') {
+        params.append('redirect', route.query.redirect);
+    }
+
+    trackPaywallEvent('checkout_started', {
+        product: plan.product_code,
+        plan_id: plan.id,
+        plan_name: plan.name,
+        amount: plan.price,
+        placement: 'subscription_card',
+    });
+
     router.push('/checkout?' + params.toString());
+};
+
+const scrollToComparison = () => {
+    comparisonSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
 const productPricingRoute = (productCode: string) => `/${productCode}-pricing`;
@@ -110,6 +130,11 @@ const primaryButtonText = (productCode: string) => {
                 Professionally structured plans for TEAS, Nursing School, and NCLEX. Start with a focused package and
                 upgrade anytime as your exam date gets closer.
             </p>
+            <div class="mt-4 flex flex-wrap justify-center gap-2 text-xs font-semibold text-slate-700">
+                <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1">One payment</span>
+                <span class="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">No auto-billing</span>
+                <span class="rounded-full border border-slate-200 bg-white px-3 py-1">Instant exam access</span>
+            </div>
         </section>
 
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto pb-10 mt-12">
@@ -162,9 +187,9 @@ const primaryButtonText = (productCode: string) => {
                 </ul>
 
                 <div class="mt-6 space-y-2.5">
-                    <CommonButton buttonText="Quick Buy"
+                    <CommonButton buttonText="Compare Features"
                         classes="w-full bg-white text-slate-700 border border-slate-300 hover:bg-slate-100"
-                        :action="() => buildCheckoutUrl(plan)" />
+                        :action="scrollToComparison" />
                     <CommonButton :buttonText="primaryButtonText(plan.product_code)"
                         classes="w-full bg-sky-500/95 text-white hover:bg-sky-700"
                         :action="() => buildCheckoutUrl(plan)" />
@@ -174,12 +199,12 @@ const primaryButtonText = (productCode: string) => {
                 </div>
 
                 <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-3 text-center">
-                    Secure checkout. Instant access after payment.
+                    Secure checkout. Instant access after payment. No auto-billing.
                 </p>
             </article>
         </section>
 
-        <section class="max-w-6xl mx-auto pb-16">
+        <section ref="comparisonSection" class="max-w-6xl mx-auto scroll-mt-6 pb-16">
             <div
                 class="rounded-3xl border border-slate-200 bg-white/90 p-5 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 shadow-sm dark:bg-sky-950 dark:border-sky-800/70">
                 <div class="rounded-2xl bg-slate-50 dark:bg-sky-900/30 p-4">

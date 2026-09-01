@@ -33,14 +33,23 @@ import { useRoute, useRouter } from "vue-router"
 import check from '../assets/gifs/check.gif'
 import Subscription from './Subscription.vue'
 import { useAuthStore } from '../stores/authStore'
+import { trackPaywallEvent } from '../utils/paywallEvents'
 
 
 const payment_status = ref('pending')
 const payment_id = ref()
 let interval = null
+let completionTracked = false
 const route = useRoute()
 const router = useRouter()
-const { user, updateUser } = useAuthStore()
+const authStore = useAuthStore()
+
+const redirectTarget = () => {
+  const redirect = route.query.redirect
+  if (typeof redirect !== 'string') return '/'
+  if (!redirect.startsWith('/') || redirect.startsWith('//')) return '/'
+  return redirect
+}
 
 
 const fetchStatus = async () => {
@@ -56,10 +65,20 @@ const fetchStatus = async () => {
     if (payment_status.value !== 'pending') {
       clearInterval(interval)
       if (payment_status.value == 'completed') {
-        updateUser({ ...user, subscriptions: data.data.subscriptions })
+        if (!completionTracked) {
+          trackPaywallEvent('payment_completed', {
+            payment_id: payment_id.value,
+            product: data.data.plan?.product_code,
+            plan_id: data.data.plan?.id,
+            plan_name: data.data.plan?.name,
+          })
+          completionTracked = true
+        }
+
+        authStore.updateUser({ ...authStore.user, subscriptions: data.data.subscriptions })
         setTimeout(() => {
-          router.push('/')
-        }, 6000)
+          router.push(redirectTarget())
+        }, 3500)
       }
     }
   } catch (e) {

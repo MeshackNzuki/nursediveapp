@@ -195,25 +195,27 @@
             class="fixed inset-0 bg-gray-900/20 bg-opacity-50 flex items-center justify-center z-50 text-gray-700">
             <div class="bg-gray-50 rounded-lg p-6 w-full max-w-sm text-center">
                 <h3 class="font-semibold text-lg dark">
-                    <span class="">Hello {{ user?.name.split(' ')[0] }},</span> <span class="font-normal text-md">thank
+                    <span class="">Hello {{ firstName }},</span> <span class="font-normal text-md">thank
                         you
                         for trying
                         Nursedive!</span>
                 </h3>
 
                 <p class="p-4 bg-blue-50/50  rounded-lg">
-                    You have completed {{ examStore.no_of_qns_before_paywall }} free questions under the free trial
-                    tier. To continue with the
-                    full-length
-                    assessment and
-                    unlock all features, please upgrade your plan.
+                    Your TEAS diagnostic preview is complete. You sampled {{
+                        examStore.no_of_qns_before_paywall
+                    }} exam-style questions; unlock the full-length assessment, rationales, analytics, and saved
+                    progress to keep your prep moving.
                 </p>
 
-                <button @click="() => $router.push(pricingRoute('teas'))" class="w-full mt-2 py-3 rounded-full font-semibold text-white 
+                <button @click="upgradeToTeas" class="w-full mt-2 py-3 rounded-full font-semibold text-white 
                bg-gradient-to-r from-orange-500 to-yellow-400 
                hover:opacity-90 transition ">
-                    Upgrade Subscription
+                    Unlock Full TEAS Access
                 </button>
+                <p class="mt-3 text-xs text-slate-500">
+                    One payment. No auto-billing. Your progress stays saved.
+                </p>
             </div>
         </div>
         <AiChat v-if="ChatOpenned && examStore.testMode != 'exam'" @close="ChatOpenned = false"
@@ -223,7 +225,7 @@
 
 <script setup lang="ts">
 import { onMounted, computed, ref, onBeforeUnmount, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { useTeasExamStore } from '../stores/teasExamStore'
 import QuestionRenderer from './QuestionRenderer.vue'
@@ -236,6 +238,7 @@ import CommonButton from './Buttons/CommonButton.vue'
 import { useAuthStore } from '../stores/authStore'
 import ExamFeedbackModal from './ExamFeedbackModal.vue'
 import AiChat from './AiChat.vue'
+import { trackPaywallEvent } from '../utils/paywallEvents'
 
 
 
@@ -249,13 +252,43 @@ const type = ref()
 const { zoomIn, zoomOut } = useMainStore();
 const store = useMainStore();
 const route = useRoute()
+const router = useRouter()
 const examStore = useTeasExamStore() as any
 const confirm = useConfirm()
 const notes = ref('')
 const difficulty = ref('')
 const ChatOpenned = ref(false);
 
-const { user, pricingRoute, is_authenticated } = useAuthStore()
+const authStore = useAuthStore()
+const { is_authenticated } = authStore
+const firstName = computed(() => authStore.user?.name?.split(' ')[0] || 'there')
+
+function upgradeToTeas() {
+    trackPaywallEvent('pricing_clicked', {
+        product: 'teas',
+        placement: 'teas_diagnostic_preview_modal',
+        exam_id: examStore.exam?.id,
+        question_index: examStore.currentIndex,
+    })
+
+    router.push({
+        path: authStore.pricingRoute('teas'),
+        query: { redirect: route.fullPath },
+    })
+}
+
+watch(() => examStore.show_paywall, (shown) => {
+    if (!shown) return
+
+    trackPaywallEvent('paywall_shown', {
+        product: 'teas',
+        placement: 'teas_exam_renderer',
+        reason: 'diagnostic_preview_limit',
+        exam_id: examStore.exam?.id,
+        questions_previewed: examStore.no_of_qns_before_paywall,
+        question_index: examStore.currentIndex,
+    })
+})
 
 const showQuestionNavigator = computed(() => {
     return examStore.questions.length > 0 && (examStore.testMode === 'exam' || !examStore.showNotes);

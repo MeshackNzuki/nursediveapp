@@ -6,16 +6,36 @@ use App\Models\User;
 use App\Models\Plan;
 use App\Models\UserSubscription;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 trait ManageSubscriptions
 {
     public function createOrUpdateSubscription(User $user, Plan $plan, string $productCode, ?int $paymentId = null)
     {
-        //reset notification flags  'expired_sent' => 0,  'expiring_sent' => 0,
-        $user->update([
-            'subscription_expired_sent' => 0,
-            'subscription_expiring_sent' => 0,
-        ]);
+        $notificationFlags = $user->subscription_notification_flags ?? [];
+        if (is_string($notificationFlags)) {
+            $notificationFlags = json_decode($notificationFlags, true) ?: [];
+        }
+
+        foreach (['subscription_expired', 'subscription_expiring', 'trial_ended', 'trial_ending'] as $event) {
+            unset($notificationFlags[$productCode][$event]);
+        }
+
+        $userUpdates = [];
+
+        if (Schema::hasColumn('users', 'subscription_notification_flags')) {
+            $userUpdates['subscription_notification_flags'] = $notificationFlags;
+        }
+
+        foreach (['subscription_expired_sent', 'subscription_expiring_sent', 'trial_ending_sent', 'trial_ended_sent'] as $column) {
+            if (Schema::hasColumn('users', $column)) {
+                $userUpdates[$column] = 0;
+            }
+        }
+
+        if ($userUpdates) {
+            $user->forceFill($userUpdates)->save();
+        }
 
         // Fetch or create the UserSubscription record
         $userSub = UserSubscription::firstOrCreate(

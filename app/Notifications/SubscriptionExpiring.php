@@ -7,23 +7,25 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class subscriptionExpiring extends Notification // implements ShouldQueue
+class SubscriptionExpiring extends Notification // implements ShouldQueue
 {
     // use Queueable;
 
     protected $user;
     protected $product;
     protected $expires;
+    protected $actionUrl;
 
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($user, $product, $expires)
+    public function __construct($user, $product, $expires, ?string $actionUrl = null)
     {
         $this->user = $user;
         $this->product = $product;
         $this->expires = $expires;
+        $this->actionUrl = $actionUrl;
     }
 
     /**
@@ -48,6 +50,7 @@ class subscriptionExpiring extends Notification // implements ShouldQueue
                 'user' => $this->user,
                 'product' => ucfirst($this->product),
                 'expired_date' => $this->expires,
+                'actionUrl' => $this->actionUrl,
             ]);
     }
 
@@ -61,6 +64,7 @@ class subscriptionExpiring extends Notification // implements ShouldQueue
         return [
             'product' => $this->product,
             'expired_date' => $this->expires,
+            'action_url' => $this->actionUrl,
         ];
     }
 }

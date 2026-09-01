@@ -27,7 +27,7 @@ Your Subscription Is Ending Soon
         progress.
     </p>
 
-    @include('emails.partials.button', ['href' => 'https://app.nursedive.com/subscription', 'label' => 'Renew Subscription'])
+    @include('emails.partials.button', ['href' => $actionUrl ?? 'https://app.nursedive.com/subscription', 'label' => 'Renew Subscription'])
 
     <p style="margin:28px 0 0;">
         Thanks for studying with Nursedive.<br>
