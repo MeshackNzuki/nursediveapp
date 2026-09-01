@@ -283,6 +283,56 @@ const primaryActionLabel = computed(() => {
     return `Open ${product.name}`;
 });
 
+const commandStats = computed(() => [
+    {
+        label: "Streak",
+        value: `${streakDays.value}d`,
+        detail: streakMessage.value,
+        icon: "pi pi-bolt",
+        class: "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200",
+    },
+    {
+        label: "Active",
+        value: activeCount.value,
+        detail: "Plans ready",
+        icon: "pi pi-check-circle",
+        class: "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200",
+    },
+    {
+        label: "Upgrade",
+        value: needsUpgradeCount.value,
+        detail: needsUpgradeCount.value ? "Needs action" : "All clear",
+        icon: needsUpgradeCount.value ? "pi pi-lock" : "pi pi-shield",
+        class: needsUpgradeCount.value
+            ? "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-200"
+            : "border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-200",
+    },
+]);
+
+const guestHeroStats = [
+    {
+        label: "Exam Tracks",
+        value: "3",
+        detail: "TEAS, Nursing, NCLEX",
+        icon: "pi pi-map",
+        class: "border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-200",
+    },
+    {
+        label: "Pass Guarantee",
+        value: "99% chance",
+        detail: "Our students pass on first try",
+        icon: "pi pi-book",
+        class: "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200",
+    },
+    {
+        label: "Pricing",
+        value: "student friendly",
+        detail: "Save big and get more",
+        icon: "pi pi-shield",
+        class: "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200",
+    },
+];
+
 const clampPercent = (value) => Math.max(0, Math.min(100, Number(value) || 0));
 
 const scoreToneClass = (score) => {
@@ -502,116 +552,161 @@ onMounted(() => {
     <div
         class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-slate-700 md:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh] dark:bg-slate-900 dark:text-slate-100">
         <div class="mx-auto max-w-7xl space-y-6">
-            <section v-if="isAuthenticated" class="overflow-hidden  p-5  md:p-6 ">
-                <div class="grid gap-6 lg:grid-cols-[1fr_340px]">
+            <section v-if="isAuthenticated" class="overflow-hidden px-0 pt-2 pb-4 sm:p-5 md:p-6">
+                <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-6">
                     <div>
-                        <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
-                            <div v-if="user?.avatar"
-                                class="h-16 w-16 shrink-0 overflow-hidden rounded-full border-2 border-white bg-white ring-2 ring-sky-200 dark:border-slate-900 dark:bg-slate-800 dark:ring-sky-900">
-                                <img :src="'/storage/' + user.avatar" class="h-full w-full object-cover"
-                                    alt="User Avatar" />
-                            </div>
-                            <div v-else
-                                class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-sky-800 text-lg font-bold text-white ring-2 ring-sky-200 dark:ring-sky-900">
-                                {{ initials }}
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <h1
-                                    class="mt-2 text-2xl font-semibold tracking-tight text-slate-950 md:text-3xl dark:text-slate-100">
-                                    <span class="">Welcome Back,<span class="italic font-light ml-1">{{
-                                        firstName }}
-                                        </span> </span>
-                                </h1>
-                                <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-500 dark:text-slate-400">
-                                    Pick from where you left off
-                                </p>
-                            </div>
-                        </div>
                         <div
-                            class="mt-5 rounded-lg border border-slate-200 bg-light-blue-500 p-4 dark:!border-slate-800 dark:!bg-slate-950/50">
-                            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                                <div class="min-w-0 flex-1">
-                                    <div class="flex flex-wrap items-center gap-2">
+                            class="relative overflow-hidden rounded-[28px]  p-4  sm:p-5 dark:border-slate-800 dark:from-slate-950 dark:via-sky-950 dark:to-cyan-950">
+
+                            <div
+                                class="pointer-events-none absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-cyan-200/35 to-transparent dark:from-cyan-500/10">
+                            </div>
+
+                            <div class="relative flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                                <div class="flex min-w-0 items-start gap-3 sm:gap-4">
+                                    <div v-if="user?.avatar"
+                                        class="h-14 w-14 shrink-0 overflow-hidden rounded-2xl border-2 border-white bg-white shadow-custom ring-2 ring-sky-200 sm:h-16 sm:w-16 dark:border-slate-900 dark:bg-slate-800 dark:ring-sky-900">
+                                        <img :src="'/storage/' + user.avatar" class="h-full w-full object-cover"
+                                            alt="User Avatar" />
+                                    </div>
+                                    <div v-else
+                                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sky-800 text-base font-black text-white shadow-custom ring-2 ring-sky-200 sm:h-16 sm:w-16 sm:text-lg dark:ring-sky-900">
+                                        {{ initials }}
+                                    </div>
+
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            <span
+                                                class="inline-flex max-w-full items-center gap-1.5 rounded-full border border-sky-200 bg-white/80 px-2.5 py-1 text-[11px] font-bold text-sky-700 shadow-sm dark:border-sky-700 dark:bg-slate-900/80 dark:text-sky-200">
+                                                <i class="pi pi-compass text-[10px]"></i>
+                                                <span class="truncate">{{ primaryProduct?.name || "Study Hub" }}</span>
+                                            </span>
+                                            <span
+                                                class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700 shadow-sm dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+                                                <i class="pi pi-bolt text-[10px]"></i>
+                                                {{ streakDays }}d streak
+                                            </span>
+                                        </div>
+
+                                        <h1
+                                            class="mt-3 max-w-3xl break-words text-2xl font-black leading-tight text-slate-950 sm:text-3xl xl:text-4xl dark:text-slate-100">
+                                            Ready when you are,
+                                            <span
+                                                class="bg-gradient-to-r from-sky-600 via-teal-500 to-emerald-500 bg-clip-text text-transparent dark:from-sky-300 dark:via-cyan-200 dark:to-emerald-200">
+                                                {{ firstName }}
+                                            </span>
+                                        </h1>
                                         <p
-                                            class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-600 dark:text-sky-300">
-                                            Latest Attempt -
-                                        </p>
-                                        <span v-if="lastProduct"
-                                            class="rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-600 ring-1 ring-slate-200 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-800">
-                                            {{ lastProduct.name }}
-                                        </span>
-                                    </div>
-                                    <div v-if="latestAttemptLoading" class="mt-3">
-                                        <div class="h-4 w-44 animate-pulse rounded bg-slate-200 dark:bg-slate-800">
-                                        </div>
-                                        <div
-                                            class="mt-3 h-2 w-full animate-pulse rounded-full bg-slate-200 dark:bg-slate-800">
-                                        </div>
-                                    </div>
-                                    <div v-else-if="latestAttempt" class="mt-3">
-                                        <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-                                            <div class="min-w-0">
-                                                <h3
-                                                    class="truncate text-base font-semibold text-slate-950 dark:text-slate-100">
-                                                    {{ latestAttempt.sub_topic_name }}
-                                                </h3>
-                                                <p
-                                                    class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
-                                                    <span>{{ latestAttemptDate }}</span>
-                                                    <span aria-hidden="true">&middot;</span>
-                                                    <span>{{ latestAttemptTime }}</span>
-                                                    <span aria-hidden="true">&middot;</span>
-                                                    <span>{{ latestAttemptStatusLabel }}</span>
-                                                </p>
-                                            </div>
-                                            <p class="text-sm font-semibold"
-                                                :class="scoreToneClass(latestAttemptScore)">
-                                                {{ scoreSummary(latestAttemptScore) }}
-                                            </p>
-                                        </div>
-                                        <div class="mt-4">
-                                            <div class="flex items-center justify-between text-xs font-semibold">
-                                                <span class="text-slate-500 dark:text-slate-400">Score progress</span>
-                                                <span :class="scoreToneClass(latestAttemptScore)">
-                                                    {{ latestAttemptScore }}%
-                                                </span>
-                                            </div>
-                                            <div
-                                                class="mt-2 h-2.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
-                                                <div class="h-full rounded-full transition-all duration-500"
-                                                    :class="scoreFillClass(latestAttemptScore)"
-                                                    :style="latestAttemptLinearStyle"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div v-else class="mt-3">
-                                        <h3 class="text-base font-semibold text-slate-950 dark:text-slate-100">
-                                            {{ latestAttemptError || "No recent attempt yet" }}
-                                        </h3>
-                                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                            Open a product and complete an attempt to light up this report.
+                                            class="mt-3 max-w-2xl text-sm font-medium leading-6 text-slate-600 dark:text-slate-300">
+                                            {{ focusTip }}
                                         </p>
                                     </div>
                                 </div>
-                                <div v-if="latestAttempt && !latestAttemptLoading"
-                                    class="flex shrink-0 items-center justify-between gap-4 md:flex-col md:items-center md:justify-center">
-                                    <div class="radial-progress bg-gray-200/80 text-sm font-bold shadow-custom ring-1 ring-transparent dark:bg-slate-800 dark:ring-slate-700"
-                                        :class="scoreToneClass(latestAttemptScore)" :style="latestAttemptRingStyle"
-                                        role="progressbar" :aria-valuenow="latestAttemptScore">
-                                        {{ latestAttemptScore }}%
-                                    </div>
-                                    <button v-if="latestAttemptReportRoute" type="button"
-                                        class="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-sky-500/95 px-4 py-2 text-xs font-semibold text-white transition hover:bg-slate-800 dark:bg-sky-500/95 dark:hover:bg-sky-500"
-                                        @click="router.push(latestAttemptReportRoute)">
-                                        <span>View Report</span>
-                                        <i class="pi pi-arrow-right text-[10px]"></i>
+
+                                <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:w-56 lg:grid-cols-1">
+                                    <button type="button"
+                                        class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-sky-500/95 px-4 py-2.5 text-sm font-bold text-white shadow-custom transition hover:-translate-y-0.5 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                                        @click="router.push(primaryActionRoute)">
+                                        <span class="truncate">{{ primaryActionLabel }}</span>
+                                        <i class="pi pi-arrow-right text-xs"></i>
+                                    </button>
+                                    <button type="button"
+                                        class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white/90 px-4 py-2.5 text-sm font-bold text-slate-700 shadow-custom transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-100 dark:hover:border-sky-700 dark:hover:bg-slate-800"
+                                        @click="router.push('/subscription')">
+                                        <i class="pi pi-credit-card text-xs"></i>
+                                        <span>Plans</span>
                                     </button>
                                 </div>
                             </div>
+
+                            <div
+                                class="relative mt-4 rounded-2xl border border-white/80 bg-white/85 p-3 shadow-sm ring-1 ring-white/60 sm:p-4 dark:border-slate-800 dark:bg-slate-950/60 dark:ring-slate-800">
+                                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            <p class="text-xs font-bold uppercase text-sky-600 dark:text-sky-300">
+                                                Latest Attempt
+                                            </p>
+                                            <span v-if="lastProduct"
+                                                class="rounded-full bg-sky-50 px-2.5 py-1 text-[11px] font-semibold text-slate-600 ring-1 ring-sky-100 dark:bg-slate-900 dark:text-slate-300 dark:ring-slate-800">
+                                                {{ lastProduct.name }}
+                                            </span>
+                                        </div>
+                                        <div v-if="latestAttemptLoading" class="mt-3">
+                                            <div class="h-4 w-44 animate-pulse rounded bg-slate-200 dark:bg-slate-800">
+                                            </div>
+                                            <div
+                                                class="mt-3 h-2 w-full animate-pulse rounded-full bg-slate-200 dark:bg-slate-800">
+                                            </div>
+                                        </div>
+                                        <div v-else-if="latestAttempt" class="mt-3">
+                                            <div
+                                                class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+                                                <div class="min-w-0">
+                                                    <h3
+                                                        class="break-words text-base font-bold text-slate-950 dark:text-slate-100">
+                                                        {{ latestAttempt.sub_topic_name }}
+                                                    </h3>
+                                                    <p
+                                                        class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+                                                        <span>{{ latestAttemptDate }}</span>
+                                                        <span aria-hidden="true">&middot;</span>
+                                                        <span>{{ latestAttemptTime }}</span>
+                                                        <span aria-hidden="true">&middot;</span>
+                                                        <span>{{ latestAttemptStatusLabel }}</span>
+                                                    </p>
+                                                </div>
+                                                <p class="text-sm font-semibold"
+                                                    :class="scoreToneClass(latestAttemptScore)">
+                                                    {{ scoreSummary(latestAttemptScore) }}
+                                                </p>
+                                            </div>
+                                            <div class="mt-4">
+                                                <div class="flex items-center justify-between text-xs font-semibold">
+                                                    <span class="text-slate-500 dark:text-slate-400">Score
+                                                        progress</span>
+                                                    <span :class="scoreToneClass(latestAttemptScore)">
+                                                        {{ latestAttemptScore }}%
+                                                    </span>
+                                                </div>
+                                                <div
+                                                    class="mt-2 h-2.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+                                                    <div class="h-full rounded-full transition-all duration-500"
+                                                        :class="scoreFillClass(latestAttemptScore)"
+                                                        :style="latestAttemptLinearStyle"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-else class="mt-3">
+                                            <h3 class="text-base font-bold text-slate-950 dark:text-slate-100">
+                                                {{ latestAttemptError || "No recent attempt yet" }}
+                                            </h3>
+                                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                                Open a product and complete an attempt to light up this report.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div v-if="latestAttempt && !latestAttemptLoading"
+                                        class="flex w-full shrink-0 flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between md:w-auto md:flex-col md:items-center md:justify-center">
+                                        <div class="radial-progress bg-gray-200/80 text-sm font-bold shadow-custom ring-1 ring-transparent dark:bg-slate-800 dark:ring-slate-700"
+                                            :class="scoreToneClass(latestAttemptScore)" :style="latestAttemptRingStyle"
+                                            role="progressbar" :aria-valuenow="latestAttemptScore">
+                                            {{ latestAttemptScore }}%
+                                        </div>
+                                        <button v-if="latestAttemptReportRoute" type="button"
+                                            class="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg bg-sky-500/95 px-4 py-2 text-xs font-semibold text-white transition hover:bg-slate-800 sm:w-auto dark:bg-sky-500/95 dark:hover:bg-sky-500"
+                                            @click="router.push(latestAttemptReportRoute)">
+                                            <span>View Report</span>
+                                            <i class="pi pi-arrow-right text-[10px]"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <EmailVerification v-if="!user?.email_verified" class="mt-5 lg:hidden" />
                     </div>
                     <aside
-                        class="relative hidden overflow-hidden rounded-3xl border border-sky-100 bg-light-blue-500 p-5 shadow-custom lg:block dark:!border-slate-800 dark:!bg-slate-900">
+                        class="relative hidden overflow-hidden rounded-3xl border border-sky-100 bg-light-blue-500 p-5  lg:block dark:!border-slate-800 dark:!bg-slate-900">
                         <div
                             class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-br from-sky-800 via-sky-700 to-cyan-700">
                         </div>
@@ -624,7 +719,7 @@ onMounted(() => {
                             </div>
                             <div class="min-w-0">
                                 <span
-                                    class="inline-flex items-center rounded-3xl bg-white/10 px-2.5 py-1 text-[11px] font-semibold  text-bright-sun-500 ring-1 ring-white/20">
+                                    class="inline-flex max-w-full items-center rounded-3xl bg-white/10 px-2.5 py-1 text-[11px] font-semibold leading-tight text-bright-sun-500 break-words ring-1 ring-white/20">
                                     {{ focusTip }}
                                 </span>
                                 <p class="mt-2 text-xs leading-tight text-white">
@@ -648,56 +743,100 @@ onMounted(() => {
                     </aside>
                 </div>
             </section>
-            <section v-else class="overflow-hidden  p-5  md:p-6 ">
+            <section v-else class="overflow-hidden px-0 pt-2 pb-4 sm:p-5 md:p-6">
                 <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
                     <div>
-                        <h1
-                            class="mt-3 max-w-3xl text-2xl font-bold tracking-tight text-slate-950 md:text-3xl xl:text-4xl dark:text-slate-100">
-                            Practice smarter for <span class="text-teal-500">ATI TEAS, nursing school exams, <span
-                                    class="text-slate-950 dark:text-white">and
-                                    the</span>
-                                NCLEX</span> with Nursedive
-                        </h1>
-
-                        <p class="mt-4 max-w-2xl text-sm leading-6 text-slate-600 md:text-base dark:text-slate-300">
-                            Build readiness with realistic questions, focused remediation, timed practice, and progress
-                            insights across every major nursing exam track.
-                        </p>
-
-                        <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                            <button type="button"
-                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-sky-500/95 px-5 py-2.5 text-sm font-semibold text-white shadow-custom transition hover:-translate-y-0.5 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-                                @click="router.push('/register')">
-                                <i class="pi pi-user-plus text-xs"></i>
-                                <span>Create Free Account</span>
-                            </button>
-                            <button type="button"
-                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-custom transition hover:-translate-y-0.5 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
-                                @click="router.push('/login')">
-                                <i class="pi pi-sign-in text-xs"></i>
-                                <span>Sign In</span>
-                            </button>
-                            <button type="button"
-                                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:border-sky-200 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:hover:border-sky-700 dark:hover:text-sky-200"
-                                @click="router.push('/subscription')">
-                                <i class="pi pi-credit-card text-xs"></i>
-                                <span>Explore Plans</span>
-                            </button>
-                        </div>
                         <div
-                            class="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-                            <router-link to="/teas" class="rounded-full px-2 bg-sky-500 text-white
-                                py-0.5">
-                                TEAS 7
-                            </router-link>
-                            <router-link to="/nursing" class="rounded-full px-2 bg-sky-500 text-white
-                                py-0.5">
-                                Nursing School
-                            </router-link>
-                            <router-link to="/nclex" class="rounded-full px-2 bg-sky-500 text-white
-                                py-0.5">
-                                NCLEX RN/PN
-                            </router-link>
+                            class="relative overflow-hidden rounded-[28px] p-4 sm:p-5 dark:border-slate-800 dark:from-slate-950 dark:via-sky-950 dark:to-cyan-950">
+                            <div
+                                class="pointer-events-none absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-cyan-200/35 to-transparent dark:from-cyan-500/10">
+                            </div>
+
+                            <div class="relative flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span
+                                            class="inline-flex max-w-full items-center gap-1.5 rounded-full border border-sky-200 bg-white/80 px-2.5 py-1 text-[11px] font-bold text-sky-700 shadow-sm dark:border-sky-700 dark:bg-slate-900/80 dark:text-sky-200">
+                                            <i class="pi pi-sparkles text-[10px]"></i>
+                                            <span>Start free</span>
+                                        </span>
+                                        <span
+                                            class="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700 shadow-sm dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+                                            <i class="pi pi-shield text-[10px]"></i>
+                                            No auto-billing
+                                        </span>
+                                    </div>
+
+                                    <h1
+                                        class="mt-3 max-w-3xl break-words text-2xl font-black leading-tight text-slate-950 sm:text-3xl xl:text-4xl dark:text-slate-100">
+                                        Practice smarter for
+                                        <span
+                                            class="bg-gradient-to-r from-sky-600 via-teal-500 to-emerald-500 bg-clip-text text-transparent dark:from-sky-300 dark:via-cyan-200 dark:to-emerald-200">
+                                            TEAS, nursing school, and NCLEX
+                                        </span>
+                                    </h1>
+
+                                    <p
+                                        class="mt-3 max-w-2xl text-sm font-medium leading-6 text-slate-600 md:text-base dark:text-slate-300">
+                                        Build readiness with realistic questions, focused remediation, timed practice,
+                                        and progress insights across every major nursing exam track.
+                                    </p>
+                                </div>
+
+                                <div class="grid grid-cols-1 gap-2 sm:grid-cols-3 lg:w-56 lg:grid-cols-1">
+                                    <button type="button"
+                                        class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-sky-500/95 px-4 py-2.5 text-sm font-bold text-white shadow-custom transition hover:-translate-y-0.5 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                                        @click="router.push('/register')">
+                                        <i class="pi pi-user-plus text-xs"></i>
+                                        <span class="text-center leading-tight">Create Free Account</span>
+                                    </button>
+                                    <button type="button"
+                                        class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white/90 px-4 py-2.5 text-sm font-bold text-slate-700 shadow-custom transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-white hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-100 dark:hover:border-sky-700 dark:hover:bg-slate-800"
+                                        @click="router.push('/login')">
+                                        <i class="pi pi-sign-in text-xs"></i>
+                                        <span>Sign In</span>
+                                    </button>
+                                    <button type="button"
+                                        class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50/90 px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:-translate-y-0.5 hover:border-sky-200 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-950/90 dark:text-slate-100 dark:hover:border-sky-700 dark:hover:text-sky-200"
+                                        @click="router.push('/subscription')">
+                                        <i class="pi pi-credit-card text-xs"></i>
+                                        <span>Plans</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="relative mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                                <div v-for="stat in guestHeroStats" :key="stat.label"
+                                    class="rounded-2xl border p-3 shadow-sm" :class="stat.class">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <p class="text-[11px] font-bold uppercase">{{ stat.label }}</p>
+                                        <i :class="[stat.icon, 'text-sm']"></i>
+                                    </div>
+                                    <p class="mt-2 text-xl font-black leading-none">{{ stat.value }}</p>
+                                    <p class="mt-1 text-xs font-semibold opacity-80">{{ stat.detail }}</p>
+                                </div>
+                            </div>
+
+                            <div
+                                class="relative mt-4 rounded-2xl border border-white/80 bg-white/85 p-3 shadow-sm ring-1 ring-white/60 sm:p-4 dark:border-slate-800 dark:bg-slate-950/60 dark:ring-slate-800">
+                                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                    <div>
+                                        <p class="text-xs font-bold uppercase text-sky-600 dark:text-sky-300">
+                                            Choose your starting point
+                                        </p>
+                                        <p class="mt-1 text-sm font-semibold text-slate-700 dark:text-slate-200">
+                                            Preview a track, then keep your progress when you create an account.
+                                        </p>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <router-link v-for="product in products" :key="`guest-chip-${product.code}`"
+                                            :to="product.dashboardRoute"
+                                            class="inline-flex min-h-8 items-center rounded-full bg-sky-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-sky-700">
+                                            {{ product.name }}
+                                        </router-link>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <aside
@@ -739,11 +878,9 @@ onMounted(() => {
                                         {{ product.subtitle }}
                                     </p>
                                 </div>
-                                {{ product.name }}
                                 <button type="button"
                                     class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-sky-100 bg-white text-sky-700 transition group-hover/study:-translate-y-0.5 group-hover/study:border-sky-200 group-hover/study:bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-950 dark:text-sky-300 dark:group-hover/study:border-sky-700 dark:group-hover/study:bg-slate-800"
-                                    :aria-label="`View ${product.name} plans`"
-                                    @click="router.push(`/${product.dashboardRoute}`)">
+                                    :aria-label="`Open ${product.name}`" @click="router.push(product.dashboardRoute)">
                                     <i class="pi pi-arrow-right text-xs"></i>
                                 </button>
                             </div>

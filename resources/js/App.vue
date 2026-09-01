@@ -379,7 +379,7 @@ onBeforeUnmount(() => {
                 : mainStore.isMobile
                     ? (mainStore.sidebarOpen ? 'ms-52' : 'ms-0')
                     : (mainStore.sidebarOpen ? 'ms-64' : 'ms-24'),
-            testMode || authPages ? '' : 'ps-5 ',
+            testMode || authPages || mainStore.isMobile !== false ? '' : 'ps-5 ',
         ]">
             <Toast />
             <ConfirmDialog />
