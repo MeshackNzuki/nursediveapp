@@ -315,21 +315,21 @@ const guestHeroStats = [
         value: "3",
         detail: "TEAS, Nursing, NCLEX",
         icon: "pi pi-map",
-        class: "border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-200",
+        class: "bg-light-blue-500 text-sky-700 dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-200",
     },
     {
         label: "Pass Guarantee",
         value: "99% chance",
         detail: "Our students pass on first try",
         icon: "pi pi-book",
-        class: "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200",
+        class: " bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200",
     },
     {
         label: "Pricing",
         value: "student friendly",
         detail: "Save big and get more",
         icon: "pi pi-shield",
-        class: "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200",
+        class: " bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200",
     },
 ];
 
@@ -777,7 +777,7 @@ onMounted(() => {
                                     </h1>
 
                                     <p
-                                        class="mt-3 max-w-2xl text-sm font-medium leading-6 text-slate-600 md:text-base dark:text-slate-300">
+                                        class="mt-3 max-w-2xl text-sm font-medium  text-slate-500 md:text-base dark:text-slate-300">
                                         Build readiness with realistic questions, focused remediation, timed practice,
                                         and progress insights across every major nursing exam track.
                                     </p>
@@ -804,10 +804,9 @@ onMounted(() => {
                                     </button>
                                 </div>
                             </div>
-
                             <div class="relative mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                                <div v-for="stat in guestHeroStats" :key="stat.label"
-                                    class="rounded-2xl border p-3 shadow-sm" :class="stat.class">
+                                <div v-for="stat in guestHeroStats" :key="stat.label" class="rounded-2xl  p-3 "
+                                    :class="stat.class">
                                     <div class="flex items-center justify-between gap-3">
                                         <p class="text-[11px] font-bold uppercase">{{ stat.label }}</p>
                                         <i :class="[stat.icon, 'text-sm']"></i>
@@ -818,13 +817,13 @@ onMounted(() => {
                             </div>
 
                             <div
-                                class="relative mt-4 rounded-2xl border border-white/80 bg-white/85 p-3 shadow-sm ring-1 ring-white/60 sm:p-4 dark:border-slate-800 dark:bg-slate-950/60 dark:ring-slate-800">
+                                class="relative mt-8 rounded-2xl border border-white/80 bg-white/85   ring-1 ring-white/60  dark:border-slate-800 dark:bg-slate-950/60 dark:ring-slate-800">
                                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                     <div>
-                                        <p class="text-xs font-bold uppercase text-sky-600 dark:text-sky-300">
+                                        <p class="text-md font-bold  text-sky-600 dark:text-sky-300">
                                             Choose your starting point
                                         </p>
-                                        <p class="mt-1 text-sm font-semibold text-slate-700 dark:text-slate-200">
+                                        <p class="mt-1 text-sm font-semibold text-slate6700 dark:text-slate-200">
                                             Preview a track, then keep your progress when you create an account.
                                         </p>
                                     </div>
@@ -840,7 +839,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <aside
-                        class="relative hidden overflow-hidden rounded-3xl border border-sky-100 bg-light-blue-500 p-5 shadow-custom lg:block dark:!border-slate-800 dark:!bg-slate-900">
+                        class="relative hidden overflow-hidden rounded-3xl border border-sky-100 bg-light-blue-500 p-5  lg:block dark:!border-slate-800 dark:!bg-slate-900">
                         <div
                             class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-br from-sky-800 via-sky-700 to-cyan-700">
                         </div>
@@ -874,7 +873,7 @@ onMounted(() => {
                                             {{ product.name }}
                                         </p>
                                     </div>
-                                    <p class="mt-1.5 pl-9 text-xs leading-5 text-slate-500 dark:text-slate-400">
+                                    <p class="mt-1.5 pl-9 text-sm leading-5 text-slate-500 dark:text-slate-400">
                                         {{ product.subtitle }}
                                     </p>
                                 </div>

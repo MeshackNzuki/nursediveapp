@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import CommonButton from '../components/Buttons/CommonButton.vue';
 import { useMainStore } from '../stores';
 import { useAuthStore } from '../stores/authStore';
@@ -13,12 +13,26 @@ const productMeta: Record<ProductCode, { packageName: string; description: strin
     teas: {
         packageName: 'TEAS 7 Questions',
         description: 'Targeted TEAS prep with high-yield practice and performance diagnostics.',
-        features: ['Unlimited Access', 'TEAS-specific quizzes', 'Performance reports', 'Comprehensive study guides'],
+        features: [
+            'Unlimited TEAS question bank',
+            'Timed practice tests',
+            'Detailed rationales',
+            'Subject performance tracking',
+        ],
     },
     nursing: {
         packageName: 'Nursing Test Bank',
         description: 'Course-aligned nursing practice to strengthen accuracy and confidence.',
-        features: ['All Nursing Domains', 'Weak-area analysis', 'Performance reports', 'Comprehensive study guides'],
+        features: [
+            'RN and LPN practice questions',
+            'Exit RN/LPN exam review sets',
+            'HESI Exit exam practice',
+            'Study Guides per topic',
+            'Detailed Explanations and rationales',
+            'AI study assistant for weak areas',
+            'Performance tracking and analytics',
+            '24/7 human support for questions and guidance',
+        ],
     },
     nclex: {
         packageName: 'NCLEX RN & PN',
@@ -31,7 +45,6 @@ const router = useRouter();
 const route = useRoute();
 const { plans } = useMainStore();
 const { active, isTrial, wasTrial } = useAuthStore();
-const comparisonSection = ref<HTMLElement | null>(null);
 
 const sortedPlans = computed(() =>
     (Array.isArray(plans) ? plans : []).slice().sort((a: any, b: any) => a.price - b.price)
@@ -73,10 +86,6 @@ const buildCheckoutUrl = (plan: any) => {
     });
 
     router.push('/checkout?' + params.toString());
-};
-
-const scrollToComparison = () => {
-    comparisonSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
 const productPricingRoute = (productCode: string) => `/${productCode}-pricing`;
@@ -187,9 +196,6 @@ const primaryButtonText = (productCode: string) => {
                 </ul>
 
                 <div class="mt-6 space-y-2.5">
-                    <CommonButton buttonText="Compare Features"
-                        classes="w-full bg-white text-slate-700 border border-slate-300 hover:bg-slate-100"
-                        :action="scrollToComparison" />
                     <CommonButton :buttonText="primaryButtonText(plan.product_code)"
                         classes="w-full bg-sky-500/95 text-white hover:bg-sky-700"
                         :action="() => buildCheckoutUrl(plan)" />
@@ -204,7 +210,7 @@ const primaryButtonText = (productCode: string) => {
             </article>
         </section>
 
-        <section ref="comparisonSection" class="max-w-6xl mx-auto scroll-mt-6 pb-16">
+        <section class="max-w-6xl mx-auto scroll-mt-6 pb-16">
             <div
                 class="rounded-3xl border border-slate-200 bg-white/90 p-5 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 shadow-sm dark:bg-sky-950 dark:border-sky-800/70">
                 <div class="rounded-2xl bg-slate-50 dark:bg-sky-900/30 p-4">

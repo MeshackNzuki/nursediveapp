@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import CommonButton from '../components/Buttons/CommonButton.vue';
 import { useMainStore } from '../stores';
 import { useAuthStore } from '../stores/authStore';
@@ -21,7 +21,6 @@ const router = useRouter();
 const route = useRoute();
 const { plans } = useMainStore();
 const { active, isTrial, wasTrial } = useAuthStore();
-const comparisonSection = ref<HTMLElement | null>(null);
 
 const productPlans = computed(() => {
     const sourcePlans = Array.isArray(plans) ? plans : [];
@@ -67,10 +66,6 @@ const buildCheckoutUrl = (plan: any) => {
     });
 
     router.push('/checkout?' + params.toString());
-};
-
-const scrollToComparison = () => {
-    comparisonSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
 const savingsAmount = (plan: any) => {
@@ -188,9 +183,6 @@ const isRecommended = (plan: any) => plan.id === recommendedPlanId.value;
                 </ul>
 
                 <div class="mt-6 space-y-2.5">
-                    <CommonButton buttonText="Compare Features"
-                        classes="w-full bg-white text-slate-700 border border-slate-300 hover:bg-slate-100"
-                        :action="scrollToComparison" />
                     <CommonButton :buttonText="primaryButtonText"
                         classes="w-full bg-blue-600 text-white hover:bg-blue-700"
                         :action="() => buildCheckoutUrl(plan)" />
@@ -207,7 +199,7 @@ const isRecommended = (plan: any) => plan.id === recommendedPlanId.value;
             </div>
         </section>
 
-        <section ref="comparisonSection" class="max-w-6xl mx-auto scroll-mt-6 pb-16">
+        <section class="max-w-6xl mx-auto scroll-mt-6 pb-16">
             <div
                 class="rounded-3xl border border-slate-200 bg-white/90 p-5 md:p-6 shadow-sm dark:bg-sky-950 dark:border-sky-800/70">
                 <p class="text-xs font-bold uppercase tracking-wide text-blue-700">Compare Features</p>

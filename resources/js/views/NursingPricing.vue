@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import CommonButton from '../components/Buttons/CommonButton.vue';
 import { useMainStore } from '../stores';
 import { useAuthStore } from '../stores/authStore';
@@ -11,17 +11,20 @@ const PRODUCT_CODE = 'nursing';
 const PRODUCT_TITLE = 'Nursing Test Bank Plans';
 const PRODUCT_DESCRIPTION = 'Select a plan that matches your nursing school timeline and keep your practice consistent.';
 const PRODUCT_FEATURES = [
-    'All Nursing Domains Covered',
-    'Diagnostic performance reports',
-    'Weak-area focus and review',
-    'Comprehensive Study Guides',
+    'RN and LPN practice questions',
+    'Exit RN/LPN exam review sets',
+    'HESI Exit exam practice',
+    'Study Guides per topic',
+    'Detailed Explanations and rationales',
+    'AI study assistant for weak areas',
+    'Performance tracking and analytics',
+    '24/7 human support for questions and guidance',
 ];
 
 const router = useRouter();
 const route = useRoute();
 const { plans } = useMainStore();
 const { active, isTrial, wasTrial } = useAuthStore();
-const comparisonSection = ref<HTMLElement | null>(null);
 
 const productPlans = computed(() => {
     const sourcePlans = Array.isArray(plans) ? plans : [];
@@ -67,10 +70,6 @@ const buildCheckoutUrl = (plan: any) => {
     });
 
     router.push('/checkout?' + params.toString());
-};
-
-const scrollToComparison = () => {
-    comparisonSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
 const savingsAmount = (plan: any) => {
@@ -188,9 +187,6 @@ const isRecommended = (plan: any) => plan.id === recommendedPlanId.value;
                 </ul>
 
                 <div class="mt-6 space-y-2.5">
-                    <CommonButton buttonText="Compare Features"
-                        classes="w-full bg-white text-slate-700 border border-slate-300 hover:bg-slate-100"
-                        :action="scrollToComparison" />
                     <CommonButton :buttonText="primaryButtonText"
                         classes="w-full bg-emerald-600 text-white hover:bg-emerald-700"
                         :action="() => buildCheckoutUrl(plan)" />
@@ -207,7 +203,7 @@ const isRecommended = (plan: any) => plan.id === recommendedPlanId.value;
             </div>
         </section>
 
-        <section ref="comparisonSection" class="max-w-6xl mx-auto scroll-mt-6 pb-16">
+        <section class="max-w-6xl mx-auto scroll-mt-6 pb-16">
             <div
                 class="rounded-3xl border border-slate-200 bg-white/90 p-5 md:p-6 shadow-sm dark:bg-sky-950 dark:border-sky-800/70">
                 <p class="text-xs font-bold uppercase tracking-wide text-emerald-700">Compare Features</p>
