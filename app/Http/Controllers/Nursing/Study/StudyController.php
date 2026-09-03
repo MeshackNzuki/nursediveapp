@@ -25,9 +25,17 @@ class StudyController extends Controller
     // Fetch topics for a specific chapter
     public function getChapters($id)
     {
+        if (! is_numeric($id) || (int) $id < 1) {
+            return $this->ResError('Study chapter not found', 404);
+        }
 
-        $topic = Topic::where('id', $id)->with('parentsubtopics')->first();
-        return $this->resSuccess([
+        $topic = Topic::with('parentsubtopics')->find((int) $id);
+
+        if (! $topic) {
+            return $this->ResError('Study chapter not found', 404);
+        }
+
+        return $this->ResSuccess([
             'chapter_name' => $topic->name,
             'topics' => $topic->parentsubtopics,
             'id' => $id

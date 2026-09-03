@@ -4,7 +4,6 @@ import CommonButton from '../components/Buttons/CommonButton.vue';
 import { useMainStore } from '../stores';
 import { useAuthStore } from '../stores/authStore';
 import { useRoute, useRouter } from 'vue-router';
-import Navigation from '../components/Navigation.vue';
 import { trackPaywallEvent } from '../utils/paywallEvents';
 
 type ProductCode = 'teas' | 'nursing' | 'nclex';
@@ -121,38 +120,29 @@ const primaryButtonText = (productCode: string) => {
 
 <template>
     <div
-        class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-white dark:text-gray-300">
-        <div class="absolute inset-0 pointer-events-none -z-10">
-            <div
-                class="absolute -top-24 -left-40 h-[620px] w-[620px] rounded-full bg-gradient-to-r from-sky-50 via-cyan-50 to-emerald-50 opacity-45 blur-[125px]">
-            </div>
-            <div
-                class="absolute top-28 right-8 h-[420px] w-[420px] rounded-full bg-gradient-to-r from-emerald-50 via-teal-200 to-sky-50 opacity-35 blur-[110px]">
-            </div>
-        </div>
+        class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll bg-slate-50 p-4 md:p-6 dark:bg-slate-950 dark:text-gray-300">
         <section class="py-3 px-4 text-center max-w-4xl mx-auto">
-            <!-- <Navigation /> -->
-            <h1 class="text-2xl md:text-3xl font-extrabold mb-3 text-slate-900 custom-underline-teal tracking-tight">
+            <h1 class="text-2xl md:text-3xl font-extrabold mb-3 text-slate-950 tracking-tight dark:text-white">
                 Choose Your Prep Path
             </h1>
-            <p class="text-sm md:text-base text-slate-600 max-w-2xl mx-auto">
+            <p class="text-sm md:text-base text-slate-600 max-w-2xl mx-auto dark:text-slate-300">
                 Professionally structured plans for TEAS, Nursing School, and NCLEX. Start with a focused package and
                 upgrade anytime as your exam date gets closer.
             </p>
             <div class="mt-4 flex flex-wrap justify-center gap-2 text-xs font-semibold text-slate-700">
                 <span class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1">One payment</span>
-                <span class="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">No auto-billing</span>
+                <span class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1">No auto-billing</span>
                 <span class="rounded-full border border-slate-200 bg-white px-3 py-1">Instant exam access</span>
             </div>
         </section>
 
         <section class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto pb-10 mt-12">
             <article v-for="plan in transformedBasePackages" :key="plan.id"
-                class="group relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-6 shadow-[0_14px_35px_-20px_rgba(15,23,42,0.45)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_45px_-20px_rgba(15,23,42,0.45)] dark:bg-sky-950 dark:border-sky-800/70">
+                class="group relative overflow-hidden rounded-xl border border-slate-200/80 bg-white p-6 shadow-[0_14px_35px_-20px_rgba(15,23,42,0.45)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_45px_-20px_rgba(15,23,42,0.45)] dark:bg-slate-900 dark:border-slate-700">
 
                 <div class="absolute inset-x-0 top-0 h-1" :class="[
                     plan.product_code === 'teas' ? 'bg-gradient-to-r from-cyan-400 to-sky-500' : '',
-                    plan.product_code === 'nursing' ? 'bg-gradient-to-r from-emerald-400 to-teal-500' : '',
+                    plan.product_code === 'nursing' ? 'bg-gradient-to-r from-amber-500 to-orange-500' : '',
                     plan.product_code === 'nclex' ? 'bg-gradient-to-r from-blue-500 to-indigo-500' : '',
                 ]"></div>
 
@@ -162,7 +152,7 @@ const primaryButtonText = (productCode: string) => {
                         {{ plan.product_code.toUpperCase() }}
                     </span>
                     <span v-if="savingsPercent(plan)"
-                        class="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 px-3 py-1 text-xs font-bold">
+                        class="inline-flex items-center rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-xs font-bold">
                         SAVE {{ savingsPercent(plan) }}%
                     </span>
                 </div>
@@ -172,7 +162,7 @@ const primaryButtonText = (productCode: string) => {
                 <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">{{ plan.description }}</p>
 
                 <div
-                    class="mt-5 rounded-2xl border border-slate-200 bg-slate-50/80 p-4 dark:bg-sky-900/30 dark:border-sky-800/60">
+                    class="mt-5 rounded-lg border border-slate-200 bg-slate-50/80 p-4 dark:bg-slate-800/60 dark:border-slate-700">
                     <div class="flex items-end flex-wrap gap-2">
                         <span v-if="plan.initial" class="text-sm line-through text-rose-500 font-medium">${{
                             plan.initial }}</span>
@@ -182,7 +172,7 @@ const primaryButtonText = (productCode: string) => {
                     </div>
                     <p v-if="pricePerDay(plan)" class="text-xs text-slate-600 dark:text-slate-300 mt-2">Only ${{
                         pricePerDay(plan) }} / day</p>
-                    <p v-if="savingsAmount(plan)" class="text-xs text-emerald-700 dark:text-emerald-300 mt-1">You save
+                    <p v-if="savingsAmount(plan)" class="text-xs text-amber-700 dark:text-amber-300 mt-1">You save
                         ${{ savingsAmount(plan) }} today</p>
                 </div>
 
@@ -190,17 +180,17 @@ const primaryButtonText = (productCode: string) => {
                     <li v-for="feature in plan.features" :key="feature"
                         class="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200">
                         <span
-                            class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-teal-100 text-teal-700 text-xs font-bold">&#10003;</span>
+                            class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-sky-100 text-sky-700 text-xs font-bold">&#10003;</span>
                         <span>{{ feature }}</span>
                     </li>
                 </ul>
 
                 <div class="mt-6 space-y-2.5">
                     <CommonButton :buttonText="primaryButtonText(plan.product_code)"
-                        classes="w-full bg-sky-500/95 text-white hover:bg-sky-700"
+                        classes="w-full bg-slate-900 text-white hover:bg-slate-700 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
                         :action="() => buildCheckoutUrl(plan)" />
                     <CommonButton buttonText="View All Plan Tiers"
-                        classes="w-full bg-emerald-500 text-white hover:bg-emerald-600"
+                        classes="w-full border border-slate-300 bg-white text-slate-700 shadow-none hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                         :action="() => router.push(productPricingRoute(plan.product_code))" />
                 </div>
 
@@ -212,18 +202,18 @@ const primaryButtonText = (productCode: string) => {
 
         <section class="max-w-6xl mx-auto scroll-mt-6 pb-16">
             <div
-                class="rounded-3xl border border-slate-200 bg-white/90 p-5 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 shadow-sm dark:bg-sky-950 dark:border-sky-800/70">
-                <div class="rounded-2xl bg-slate-50 dark:bg-sky-900/30 p-4">
+                class="rounded-xl border border-slate-200 bg-white p-5 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 shadow-sm dark:bg-slate-900 dark:border-slate-700">
+                <div class="rounded-lg bg-slate-50 dark:bg-slate-800/70 p-4">
                     <p class="text-xs uppercase tracking-wide text-slate-500">Built For Results</p>
                     <p class="text-sm font-semibold text-slate-800 dark:text-slate-100 mt-1">Practice with exam-style
                         questions and measurable progress tracking.</p>
                 </div>
-                <div class="rounded-2xl bg-slate-50 dark:bg-sky-900/30 p-4">
+                <div class="rounded-lg bg-slate-50 dark:bg-slate-800/70 p-4">
                     <p class="text-xs uppercase tracking-wide text-slate-500">Flexible Upgrades</p>
                     <p class="text-sm font-semibold text-slate-800 dark:text-slate-100 mt-1">Start with a core plan and
                         upgrade anytime without friction.</p>
                 </div>
-                <div class="rounded-2xl bg-slate-50 dark:bg-sky-900/30 p-4">
+                <div class="rounded-lg bg-slate-50 dark:bg-slate-800/70 p-4">
                     <p class="text-xs uppercase tracking-wide text-slate-500">Trusted Checkout</p>
                     <p class="text-sm font-semibold text-slate-800 dark:text-slate-100 mt-1">Fast, secure payment flow
                         with immediate subscription activation.</p>

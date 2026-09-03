@@ -66,7 +66,7 @@
 
       <div v-if="subChapters.length === 0"
         class="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white/80 p-10 text-center text-slate-500 shadow-sm dark:border-sky-800 dark:bg-slate-900/70 dark:text-slate-300">
-        Loading chapters...
+        {{ emptyMessage }}
       </div>
 
       <div v-else class="mt-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 w-full">
@@ -122,6 +122,7 @@ const { active, pricingRoute } = useAuthStore();
 const chapter_name = ref("");
 const subChapters = ref([] as any[]);
 const showLock = ref(false);
+const emptyMessage = ref("Loading chapters...");
 
 const accentGlowClass = (index: number) => {
   const glows = [
@@ -144,12 +145,18 @@ const accentBadgeClass = (index: number) => {
 };
 
 const fetchSubChapters = async () => {
-  if (!chapter_id.value) return;
+  if (!isValidChapterId(chapter_id.value)) {
+    setUnavailableChapter();
+    return;
+  }
+
+  emptyMessage.value = "Loading chapters...";
   try {
     const response = await axios.get(`/nursing/chapters/${chapter_id.value}`);
     chapter_name.value = response.data.data.chapter_name;
     subChapters.value = response.data.data.topics;
   } catch (error) {
+    setUnavailableChapter();
     console.error("Failed to fetch sub-chapters:", error);
   }
 };
@@ -165,6 +172,16 @@ watch(
     }
   }
 );
+
+const isValidChapterId = (value: unknown) => {
+  return typeof value === "string" && /^\d+$/.test(value) && Number(value) > 0;
+};
+
+const setUnavailableChapter = () => {
+  chapter_name.value = "Nursing";
+  subChapters.value = [];
+  emptyMessage.value = "This study chapter is being prepared. Please check back later.";
+};
 
 const goToLesson = (id: number) => {
   router.push(`/nursing/lessons/${id}?chapter=${chapter_name.value}&&chapter_id=${chapter_id.value}`);
