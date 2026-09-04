@@ -493,7 +493,7 @@ const handleExamDateUpdated = (date: string) => {
 
                     <section class="mt-4">
                         <div
-                            class="grid gap-3 rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60 lg:grid-cols-[1.2fr_0.8fr]">
+                            class="grid gap-3 rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60 md:grid-cols-2">
                             <div class="min-w-0">
                                 <p class="text-xs font-bold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-200">
                                     Personal Next Step
@@ -523,7 +523,7 @@ const handleExamDateUpdated = (date: string) => {
                                 </div>
                             </div>
 
-                            <div class="rounded-xl bg-light-blue-500 p-3 dark:bg-sky-900/70">
+                            <div class="min-w-0 rounded-xl bg-light-blue-500 p-3 dark:bg-sky-900/70">
                                 <div class="flex items-center justify-between gap-3">
                                     <span
                                         class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
