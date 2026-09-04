@@ -187,7 +187,7 @@
           </div>
           <section class="mt-4">
             <div
-              class="grid gap-3 rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60 lg:grid-cols-[1.2fr_0.8fr]">
+              class="flex gap-3 rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60 ">
               <div class="min-w-0">
                 <p class="text-xs font-bold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-200">
                   Personal Next Step
@@ -256,9 +256,19 @@
                 </template>
               </div>
             </div>
+            <div
+              class="flex flex-col mt-4 gap-3 rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60 ">
+              <div class="min-w-0">
+                <p class="text-xs font-bold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-200">
+                  Need more free days of full access
+                </p>
+              </div>
+              <div @click="$router.push('/referral')" class="flex flex-row cursor-pointer">
+                <img :src="referfriend" alt="Refer a Friend" class="h-full w-full rounded-lg" />
+              </div>
+            </div>
           </section>
         </article>
-
         <div class="min-w-0 xl:col-span-5">
           <Probability :pass-mark="75" product="nursing" />
         </div>
@@ -395,6 +405,7 @@ import router from "../../router";
 import StudySchedulePanel from "../../components/Dashboard/StudySchedulePanel.vue";
 import StreakCard from "../../components/Dashboard/StreakCard.vue";
 import ExamIcon from "../../components/ExamIcon.vue";
+import referfriend from "../../assets/images/referfriend2.png";
 
 type NursingProgressGroup = "rn" | "lpn" | "rnExit" | "lpnExit";
 

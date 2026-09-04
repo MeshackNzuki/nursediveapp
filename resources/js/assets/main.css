@@ -405,6 +405,7 @@ background: radial-gradient(60.63% 60.63% at 57.15% 51.07%, #0d5485 0, #0b2854 6
     animation-duration: 3s;
   }
 }
+
 .custom-underline-red {
   @apply relative inline-block
     after:content-['']
