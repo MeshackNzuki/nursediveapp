@@ -53,8 +53,8 @@ const tierMessage = (name: string) => {
 
 const buildCheckoutUrl = (plan: any) => {
     const params = new URLSearchParams();
+    params.append('plan_id', String(plan.id));
     params.append('amount', String(plan.price));
-    params.append('id', String(plan.id));
 
     if (typeof route.query.redirect === 'string') {
         params.append('redirect', route.query.redirect);

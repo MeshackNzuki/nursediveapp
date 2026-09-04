@@ -20,7 +20,10 @@ const paymentId = ref('')
 
 const PAYPAL_CLIENT_ID = "AVi9KDLo5yyswt5MW-tWRpSHTx2Zv5UJZ9-BofXGd6KBEH5PlKR7jGqMiIf3vll6MRt6UGUvjmiEMZuL"
 
-const planId = computed(() => (typeof route.query.id === 'string' ? route.query.id : ''))
+const planId = computed(() => {
+    if (typeof route.query.plan_id === 'string') return route.query.plan_id
+    return typeof route.query.id === 'string' ? route.query.id : ''
+})
 
 const selectedPlan = computed(() => {
     const sourcePlans = Array.isArray(mainStore.plans) ? mainStore.plans : []

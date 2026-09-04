@@ -10,7 +10,7 @@
                 Nursing Dashboard
               </p>
               <h1 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
-                Welcome back, {{ firstName }}
+                {{ welcomeHeading }}
               </h1>
               <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
                 Keep your exam prep centered: open the right bank, check readiness, and follow a weekly study rhythm.
@@ -456,7 +456,11 @@ const modalRef = ref<HTMLDialogElement | null>(null);
 const studyModalRef = ref<HTMLDialogElement | null>(null);
 const selectedExam = ref<ExamSearchResult | null>(null);
 
-const firstName = computed(() => user.value?.name?.split(" ")[0] || "Student");
+const firstName = computed(() => {
+  const name = user.value?.name?.trim();
+  return name ? name.split(/\s+/)[0] : "";
+});
+const welcomeHeading = computed(() => (firstName.value ? `Welcome back, ${firstName.value}` : "Welcome back"));
 
 const averageScore = computed(() => {
   const rawScore = dashdata.value?.average_score;

@@ -165,7 +165,10 @@ const authStore = useAuthStore()
 
 const stripeOptions = ref({})
 
-const planId = computed(() => (typeof route.query.id === "string" ? route.query.id : ""))
+const planId = computed(() => {
+  if (typeof route.query.plan_id === "string") return route.query.plan_id
+  return typeof route.query.id === "string" ? route.query.id : ""
+})
 
 const selectedPlan = computed(() => {
   const sourcePlans = Array.isArray((mainStore as any).plans) ? (mainStore as any).plans : []
@@ -368,8 +371,8 @@ const redirectToPaypal = () => {
   router.push({
     path: "/paypal-checkout",
     query: {
+      plan_id: planId.value,
       amount: displayAmount.value,
-      id: planId.value,
       ...(redirectTarget() ? { redirect: redirectTarget() } : {}),
     },
   })

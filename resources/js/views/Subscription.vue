@@ -13,10 +13,12 @@ const productMeta: Record<ProductCode, { packageName: string; description: strin
         packageName: 'TEAS 7 Questions',
         description: 'Targeted TEAS prep with high-yield practice and performance diagnostics.',
         features: [
-            'Unlimited TEAS question bank',
-            'Timed practice tests',
-            'Detailed rationales',
-            'Subject performance tracking',
+            'Science, Math, Language, and Reading prep',
+            'Study Guides per topic',
+            'Detailed Explanations and rationales',
+            'AI study assistant for weak areas',
+            'Performance tracking and analytics',
+            '24/7 human support for questions and guidance',
         ],
     },
     nursing: {
@@ -69,8 +71,8 @@ const transformedBasePackages = computed(() =>
 
 const buildCheckoutUrl = (plan: any) => {
     const params = new URLSearchParams();
+    params.append('plan_id', String(plan.id));
     params.append('amount', String(plan.price));
-    params.append('id', String(plan.id));
 
     if (typeof route.query.redirect === 'string') {
         params.append('redirect', route.query.redirect);

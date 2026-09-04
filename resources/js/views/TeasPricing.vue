@@ -10,29 +10,37 @@ const PRODUCT_CODE = 'teas';
 const PRODUCT_TITLE = 'ATI TEAS 7 Plans';
 const PRODUCT_DESCRIPTION = 'Choose the right access window for your TEAS prep and practice with confidence every day.';
 const PRODUCT_FEATURES = [
-    'Mobile and desktop access',
-    'Progress tracking',
-    'Exam analytics',
-    'Detailed rationales',
+    'Science, Math, Language, and Reading prep',
+    'Study Guides per topic',
+    'Detailed Explanations and rationales',
+    'AI study assistant for weak areas',
+    'Performance tracking and analytics',
+    '24/7 human support for questions and guidance',
 ];
 const PRODUCT_FEATURES_BY_PLAN: Record<string, string[]> = {
     standard: [
-        'Unlimited TEAS question bank',
+        'Science, Math, Language, and Reading practice',
+        'Study Guides per topic',
         'Timed practice tests',
-        'Detailed rationales',
-        'Subject performance tracking',
+        'Detailed Explanations and rationales',
+        'Performance tracking and analytics',
     ],
     premium: [
-        'Unlimited TEAS question bank',
+        'Science, Math, Language, and Reading practice',
+        'Study Guides per topic',
         'Full-length exam practice',
-        'Weak-area review tools',
-        'Mobile and desktop access',
+        'Detailed Explanations and rationales',
+        'AI study assistant for weak areas',
+        'Performance tracking and analytics',
     ],
     premium_plus: [
-        'Unlimited TEAS question bank',
+        'Science, Math, Language, and Reading practice',
+        'Study Guides per topic',
         'Full-length exam practice',
-        'Progress and score analytics',
-        'Priority support',
+        'Detailed Explanations and rationales',
+        'AI study assistant for weak areas',
+        'Performance tracking and analytics',
+        '24/7 human support for questions and guidance',
     ],
 };
 
@@ -72,8 +80,8 @@ const planFeatures = (name: string) =>
 
 const buildCheckoutUrl = (plan: any) => {
     const params = new URLSearchParams();
+    params.append('plan_id', String(plan.id));
     params.append('amount', String(plan.price));
-    params.append('id', String(plan.id));
 
     if (typeof route.query.redirect === 'string') {
         params.append('redirect', route.query.redirect);
