@@ -15,6 +15,7 @@ interface TeasModule {
     title: string;
     shortTitle: string;
     description: string;
+    ctaLabel: string;
     icon: string;
     total: number;
     color: string;
@@ -51,6 +52,7 @@ const teasModules: TeasModule[] = [
         title: "TEAS Math",
         shortTitle: "Math",
         description: "Arithmetic, algebra, and data interpretation drills.",
+        ctaLabel: "Practice Math",
         icon: "pi pi-calculator",
         total: 67,
         color: "text-sky-600 dark:text-sky-300",
@@ -61,6 +63,7 @@ const teasModules: TeasModule[] = [
         title: "TEAS Language",
         shortTitle: "Language",
         description: "Grammar, punctuation, and language usage mastery.",
+        ctaLabel: "Practice Language",
         icon: "pi pi-language",
         total: 77,
         color: "text-indigo-600 dark:text-indigo-300",
@@ -71,6 +74,7 @@ const teasModules: TeasModule[] = [
         title: "TEAS Science",
         shortTitle: "Science",
         description: "Biology, chemistry, and scientific reasoning prep.",
+        ctaLabel: "Practice Science",
         icon: "pi pi-sliders-h",
         total: 80,
         color: "text-emerald-600 dark:text-emerald-300",
@@ -81,6 +85,7 @@ const teasModules: TeasModule[] = [
         title: "TEAS Reading",
         shortTitle: "Reading",
         description: "Comprehension, inference, and text analysis training.",
+        ctaLabel: "Practice Reading",
         icon: "pi pi-book",
         total: 49,
         color: "text-orange-600 dark:text-orange-300",
@@ -435,7 +440,7 @@ const handleExamDateUpdated = (date: string) => {
 
                     <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
                         <RouterLink v-for="module in teasModulesWithProgress" :key="module.id" :to="module.route"
-                            class="group flex h-full flex-col rounded-xl border border-sky-100 bg-white p-4 shadow-custom transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50 dark:border-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-950">
+                            class="group flex h-full flex-col rounded-xl border border-sky-100 bg-gradient-to-br from-blue-200 via-white to-amber-400 p-4 shadow-custom transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50 dark:border-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-950">
                             <div class="flex items-start justify-between gap-3">
                                 <div class="flex min-w-0 items-start gap-3">
                                     <span
@@ -475,8 +480,8 @@ const handleExamDateUpdated = (date: string) => {
                                         {{ module.percent }}% complete
                                     </span>
                                     <span
-                                        class="inline-flex items-center gap-1 text-xs font-bold text-sky-700 transition group-hover:translate-x-0.5 dark:text-sky-200">
-                                        Open <i class="pi pi-arrow-right text-[10px]"></i>
+                                        class="inline-flex shrink-0 items-center gap-1 rounded-full bg-sky-800 px-3 py-1.5 text-xs font-bold text-white shadow-sm transition group-hover:translate-x-0.5 group-hover:bg-sky-900 dark:bg-sky-700 dark:group-hover:bg-sky-600">
+                                        {{ module.ctaLabel }} <i class="pi pi-arrow-right text-[10px]"></i>
                                     </span>
                                 </div>
                             </div>

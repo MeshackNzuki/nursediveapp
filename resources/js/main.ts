@@ -32,3 +32,5 @@ app.use(ToastService);
 app.component("Button", Button);
 app.component("ConfirmDialog", ConfirmDialog);
 app.mount("#app");
+
+document.getElementById("loading")?.remove();

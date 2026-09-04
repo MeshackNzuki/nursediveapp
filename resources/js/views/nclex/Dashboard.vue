@@ -121,7 +121,7 @@
 
           <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
             <RouterLink v-for="mode in modeCards" :key="mode.key" :to="mode.route"
-              class="group flex h-full flex-col rounded-xl border border-sky-100 bg-white p-4 shadow-custom transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50 dark:border-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-950">
+              class="group flex h-full flex-col rounded-xl border border-sky-100 bg-gradient-to-br from-blue-200 via-white to-amber-400 p-4 shadow-custom transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50 dark:border-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-950">
               <div class="flex items-start justify-between gap-3">
                 <div class="flex min-w-0 items-start gap-3">
                   <span
@@ -153,8 +153,8 @@
                     {{ mode.helper }}
                   </span>
                   <span
-                    class="inline-flex items-center gap-1 text-xs font-bold text-sky-700 transition group-hover:translate-x-0.5 dark:text-sky-200">
-                    Open <i class="pi pi-arrow-right text-[10px]"></i>
+                    class="inline-flex shrink-0 items-center gap-1 rounded-full bg-sky-800 px-3 py-1.5 text-xs font-bold text-white shadow-sm transition group-hover:translate-x-0.5 group-hover:bg-sky-900 dark:bg-sky-700 dark:group-hover:bg-sky-600">
+                    {{ mode.ctaLabel }} <i class="pi pi-arrow-right text-[10px]"></i>
                   </span>
                 </div>
               </div>
@@ -356,6 +356,7 @@ interface ModeCatalogItem {
   key: ModeKey;
   title: string;
   description: string;
+  ctaLabel: string;
   route: string;
   icon: string;
   fallbackTotal: number;
@@ -400,6 +401,7 @@ const modeCatalog: ModeCatalogItem[] = [
     key: "linear",
     title: "Linear Tests",
     description: "Fixed-difficulty sets for rhythm, recall, and timing.",
+    ctaLabel: "Start Linear",
     route: "/nclex/linear",
     icon: "pi pi-book",
     fallbackTotal: 12,
@@ -411,6 +413,7 @@ const modeCatalog: ModeCatalogItem[] = [
     key: "readiness",
     title: "Readiness Tests",
     description: "Exam-mode checkpoints for confidence and consistency.",
+    ctaLabel: "Check Readiness",
     route: "/nclex/readiness",
     icon: "pi pi-bullseye",
     fallbackTotal: 6,
@@ -422,6 +425,7 @@ const modeCatalog: ModeCatalogItem[] = [
     key: "cat",
     title: "CAT Simulator",
     description: "Adaptive runs that respond to your answer pattern.",
+    ctaLabel: "Start CAT",
     route: "/nclex/cat",
     icon: "pi pi-desktop",
     fallbackTotal: 3,

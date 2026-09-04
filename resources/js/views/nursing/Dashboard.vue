@@ -141,8 +141,9 @@
             </span>
           </div>
           <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <RouterLink v-for="link in nursingQuickLinksWithProgress" :key="link.route" :to="link.route"
-              class="group flex h-full flex-col rounded-xl border border-sky-100 bg-white p-4 shadow-custom transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50 dark:border-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-950">
+            <RouterLink v-for="link in nursingQuickLinksWithProgress" :key="link.route" :to="link.route" class="group flex h-full flex-col rounded-xl border border-sky-100  bg-gradient-to-br from-blue-200 via-white to-amber-400
+              p-4 shadow-custom transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50
+              dark:border-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-950">
               <div class="flex items-start justify-between gap-3">
                 <div class="flex min-w-0 items-start gap-3">
                   <span
@@ -160,7 +161,6 @@
                   {{ link.total }} sets
                 </span>
               </div>
-
               <div class="mt-auto pt-5">
                 <div class="mb-2 flex items-center justify-between text-xs">
                   <span class="font-semibold text-slate-500 dark:text-slate-300">Exam attempted</span>
@@ -178,8 +178,8 @@
                     {{ link.percent }}% complete
                   </span>
                   <span
-                    class="inline-flex items-center gap-1 text-xs font-bold text-sky-700 transition group-hover:translate-x-0.5 dark:text-sky-200">
-                    Open <i class="pi pi-arrow-right text-[10px]"></i>
+                    class=" bg-sky-800 text-white rounded-full px-4 py-2 inline-flex items-center gap-1 text-xs font-bold transition group-hover:translate-x-0.5 dark:text-sky-200">
+                    Open {{ link.title }} Exams
                   </span>
                 </div>
               </div>
