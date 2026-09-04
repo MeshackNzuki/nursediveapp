@@ -1034,7 +1034,7 @@ onMounted(() => {
 
             <section class="grid grid-cols-1 gap-5 xl:grid-cols-3">
                 <div class="rounded-[1.75rem]  md:p-6 xl:col-span-2 dark:border-slate-800 dark:bg-slate-900">
-                    <h3 class="text-lg font-semibold text-slate-950 dark:text-slate-100">Why NurseDive</h3>
+                    <h3 class="text-lg font-semibold text-slate-950 dark:text-slate-100">Why Nursedive</h3>
                     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                         Designed for consistent practice, measurable progress, and readiness decisions.
                     </p>

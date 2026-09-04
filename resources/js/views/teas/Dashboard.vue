@@ -9,6 +9,7 @@ import ExamIcon from "../../components/ExamIcon.vue";
 import PracticeProgressPeersChart from "../../components/Dashboard/PracticeProgressPeersChart.vue";
 import StudySchedulePanel from "../../components/Dashboard/StudySchedulePanel.vue";
 import StreakCard from "../../components/Dashboard/StreakCard.vue";
+import referfriend from "../../assets/images/referfriend2.png";
 
 interface TeasModule {
     id: number;
@@ -386,7 +387,8 @@ const handleExamDateUpdated = (date: string) => {
                 </article>
 
                 <aside class="hidden xl:col-span-4 xl:block">
-                    <div class="relative flex min-h-28 items-center gap-4 rounded-2xl border-b bg-sky-800 p-4 shadow-custom">
+                    <div
+                        class="relative flex min-h-28 items-center gap-4 rounded-2xl border-b bg-sky-800 p-4 shadow-custom">
                         <div
                             class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-white/95 text-sky-700 shadow-custom ring-1 ring-sky-100 dark:bg-slate-950 dark:text-sky-200 dark:ring-slate-800">
                             <ExamIcon :size="86" />
@@ -410,7 +412,8 @@ const handleExamDateUpdated = (date: string) => {
                         <div v-for="stat in summaryStats" :key="stat.label"
                             class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-sky-800 dark:bg-sky-950/60">
                             <div class="flex items-center justify-between gap-3">
-                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                                <span
+                                    class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
                                     {{ stat.label }}
                                 </span>
                                 <i :class="[stat.icon, stat.color, 'text-sm']"></i>
@@ -472,8 +475,8 @@ const handleExamDateUpdated = (date: string) => {
                                 </div>
                                 <div
                                     class="h-2.5 overflow-hidden rounded-full bg-light-blue-500 ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-slate-700">
-                                    <div class="h-full rounded-full transition-all duration-500" :class="module.barClass"
-                                        :style="{ width: `${module.percent}%` }"></div>
+                                    <div class="h-full rounded-full transition-all duration-500"
+                                        :class="module.barClass" :style="{ width: `${module.percent}%` }"></div>
                                 </div>
                                 <div class="mt-3 flex items-center justify-between gap-2">
                                     <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">
@@ -522,10 +525,12 @@ const handleExamDateUpdated = (date: string) => {
 
                             <div class="rounded-xl bg-light-blue-500 p-3 dark:bg-sky-900/70">
                                 <div class="flex items-center justify-between gap-3">
-                                    <span class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                                    <span
+                                        class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
                                         Last attempt
                                     </span>
-                                    <span class="rounded-full px-2.5 py-1 text-[11px] font-bold" :class="latestAttemptBadgeClass">
+                                    <span class="rounded-full px-2.5 py-1 text-[11px] font-bold"
+                                        :class="latestAttemptBadgeClass">
                                         {{ latestAttemptStatus }}
                                     </span>
                                 </div>
@@ -535,7 +540,8 @@ const handleExamDateUpdated = (date: string) => {
                                     </p>
                                     <div class="mt-3 flex items-end justify-between gap-3">
                                         <div>
-                                            <p class="text-2xl font-extrabold" :class="scoreToneClass(latestAttemptScore)">
+                                            <p class="text-2xl font-extrabold"
+                                                :class="scoreToneClass(latestAttemptScore)">
                                                 {{ latestAttemptScore }}%
                                             </p>
                                             <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">
@@ -560,6 +566,17 @@ const handleExamDateUpdated = (date: string) => {
                             </div>
                         </div>
                     </section>
+                    <div
+                        class="flex flex-col mt-4 gap-3 rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60 ">
+                        <div class="min-w-0">
+                            <p class="text-xs font-bold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-200">
+                                Need more free days of full access
+                            </p>
+                        </div>
+                        <div @click="$router.push('/referral')" class="flex flex-row cursor-pointer">
+                            <img :src="referfriend" alt="Refer a Friend" class="h-full w-full rounded-lg" />
+                        </div>
+                    </div>
                 </article>
 
                 <div class="min-w-0 xl:col-span-5">
@@ -628,8 +645,8 @@ const handleExamDateUpdated = (date: string) => {
             </section>
 
             <StudySchedulePanel product-code="teas" :initial-exam-date="teas_exam_date"
-                progress-route="/teas/performance-analysis" study-route="/teas/guide-topics"
-                title="TEAS Study Schedule" @updated="handleExamDateUpdated" />
+                progress-route="/teas/performance-analysis" study-route="/teas/guide-topics" title="TEAS Study Schedule"
+                @updated="handleExamDateUpdated" />
         </div>
     </div>
 </template>
