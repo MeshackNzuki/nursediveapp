@@ -25,7 +25,7 @@ Welcome to Nursedive
         and track your progress as you build confidence.
     </p>
 
-    @include('emails.partials.button', ['href' => 'https://app.nursedive.com/', 'label' => 'Start Learning'])
+    @include('emails.partials.button', ['href' => 'https://app.nursenex.com/', 'label' => 'Start Learning'])
 
     <p style="margin:0 0 18px;">
         Nursing takes discipline and calm focus. We built Nursedive to help you study with clarity, one focused session

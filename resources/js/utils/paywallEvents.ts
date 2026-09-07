@@ -23,7 +23,7 @@ export function trackPaywallEvent(
     };
 
     browserWindow.dataLayer?.push(detail);
-    window.dispatchEvent(new CustomEvent("nursedive:paywall-event", { detail }));
+    window.dispatchEvent(new CustomEvent("nursenex:paywall-event", { detail }));
 
     if (import.meta.env.DEV) {
         console.debug("[paywall-event]", detail);

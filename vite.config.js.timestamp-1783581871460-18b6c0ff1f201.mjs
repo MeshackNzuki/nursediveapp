@@ -1,8 +1,8 @@
 // vite.config.js
-import { defineConfig } from "file:///C:/Users/meshk/OneDrive/Desktop/Mesh/nursedive/node_modules/vite/dist/node/index.js";
-import vue from "file:///C:/Users/meshk/OneDrive/Desktop/Mesh/nursedive/node_modules/@vitejs/plugin-vue/dist/index.mjs";
-import laravel from "file:///C:/Users/meshk/OneDrive/Desktop/Mesh/nursedive/node_modules/laravel-vite-plugin/dist/index.js";
-import tailwindcss from "file:///C:/Users/meshk/OneDrive/Desktop/Mesh/nursedive/node_modules/@tailwindcss/vite/dist/index.mjs";
+import { defineConfig } from "file:///C:/Users/meshk/OneDrive/Desktop/Mesh/nursenex/node_modules/vite/dist/node/index.js";
+import vue from "file:///C:/Users/meshk/OneDrive/Desktop/Mesh/nursenex/node_modules/@vitejs/plugin-vue/dist/index.mjs";
+import laravel from "file:///C:/Users/meshk/OneDrive/Desktop/Mesh/nursenex/node_modules/laravel-vite-plugin/dist/index.js";
+import tailwindcss from "file:///C:/Users/meshk/OneDrive/Desktop/Mesh/nursenex/node_modules/@tailwindcss/vite/dist/index.mjs";
 var vite_config_default = defineConfig({
   plugins: [
     vue(),

@@ -108,7 +108,7 @@ const userNamePart = computed(() => {
     return email.split('@')[0]
 })
 
-const referralLink = ref(`https://app.nursedive.com/register?ref=${Math.random().toString(36).substring(2, 15)}-${userNamePart.value}`)
+const referralLink = ref(`https://app.nursenex.com/register?ref=${Math.random().toString(36).substring(2, 15)}-${userNamePart.value}`)
 const copied = ref(false)
 const totalRewards = ref(0)
 

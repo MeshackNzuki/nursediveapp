@@ -103,7 +103,7 @@ class OpenAIController extends Controller
                                     the question has an error. tell them to report an incident so our team can review it.
                                     5. If the user asks about unrelated topics, avoid engaging and steer them politely to nursing related contexts
                                     6. If the user asks for human help or support, respond:
-                                    "Please contact our support team at info@nursedive.com, or use the live chat on our website."
+                                    "Please contact our support team at info@nursenex.com, or use the live chat on our website."
                                     7. Be concise, accurate, and educational. Focus on helping students learn the clinical reasoning behind answers.
                                     8. Tell them Why the Other Options Are Incorrect
                                     9. Do not generate questions for the client

@@ -1,6 +1,6 @@
 import axios from "axios";
 //axios.defaults.baseURL = "http://localhost:8000/api";
-//axios.defaults.baseURL = "https://app.nursedive.com/api";
+//axios.defaults.baseURL = "https://app.nursenex.com/api";
 axios.defaults.baseURL = "/api";
 axios.defaults.headers.common["Access-Control-Allow-Credentials"] = "true";
 axios.defaults.headers.common["Accept"] = "application/json";

@@ -355,7 +355,7 @@ class QuestionIndexing extends Controller
 
     public function sitemap()
     {
-        $domain = 'https://www.nursedive.com';
+        $domain = 'https://www.nursenex.com';
         $chunkSize = 25000;
 
         $models = [
@@ -476,7 +476,7 @@ class QuestionIndexing extends Controller
 
     public function sitemapIncremental($startId = 0)
     {
-        $domain = 'https://www.nursedive.com';
+        $domain = 'https://www.nursenex.com';
         $type = 'nursing';
 
         try {

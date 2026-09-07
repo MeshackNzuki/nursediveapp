@@ -75,7 +75,7 @@ Payment Receipt
         Your subscription is now active. You can return to your dashboard and keep learning right away.
     </p>
 
-    @include('emails.partials.button', ['href' => 'https://app.nursedive.com/', 'label' => 'Go to Dashboard'])
+    @include('emails.partials.button', ['href' => 'https://app.nursenex.com/', 'label' => 'Go to Dashboard'])
 
     <p style="margin:28px 0 0;">
         Thanks again for choosing Nursedive.<br>

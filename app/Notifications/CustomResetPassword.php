@@ -35,7 +35,7 @@ class CustomResetPassword extends Notification // implements ShouldQueue
      */
     public function toMail(object $notifiable)
     {
-        $url = 'https://app.nursedive.com/reset-password?' . $this->query;
+        $url = 'https://app.nursenex.com/reset-password?' . $this->query;
 
         return (new \Illuminate\Notifications\Messages\MailMessage)
             ->subject('Reset Your Password - Nursedive')

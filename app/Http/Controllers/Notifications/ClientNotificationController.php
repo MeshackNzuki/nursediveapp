@@ -57,7 +57,7 @@ class ClientNotificationController extends Controller
     protected function productPricingUrl(string $product, string $event): string
     {
         $baseUrl = rtrim(
-            config('app.frontend_url', env('APP_FRONTEND_URL', 'https://app.nursedive.com')),
+            config('app.frontend_url', env('APP_FRONTEND_URL', 'https://app.nursenex.com')),
             '/'
         );
         $path = self::PRICING_ROUTES[$product] ?? '/subscription';
@@ -293,7 +293,7 @@ class ClientNotificationController extends Controller
     {
         $emails = json_decode(env('ADMIN_NOTIFICATION_EMAILS'), true);
         if (!is_array($emails)) {
-            $emails = array_map('trim', explode(',', env('ADMIN_NOTIFICATION_EMAILS', 'info@nursedive.com')));
+            $emails = array_map('trim', explode(',', env('ADMIN_NOTIFICATION_EMAILS', 'info@nursenex.com')));
         }
 
         foreach ($emails as $email) {

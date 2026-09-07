@@ -500,7 +500,7 @@ const updateVisitStreak = () => {
     if (typeof window === "undefined") return;
 
     const uid = user.value?.id || user.value?.email || "guest";
-    const key = `nursedive_streak_${uid}`;
+    const key = `nursenex_streak_${uid}`;
 
     const today = new Date();
     const todayKey = toLocalDateKey(today);
@@ -535,7 +535,7 @@ const updateVisitStreak = () => {
 };
 
 const goToSupport = () => {
-    window.location.href = "mailto:support@nursedive.com";
+    window.location.href = "mailto:support@nursenex.com";
 };
 
 watch(

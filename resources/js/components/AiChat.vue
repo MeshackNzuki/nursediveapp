@@ -8,7 +8,7 @@
                     <a href="/"
                         class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white shadow-sm ring-1 ring-white/30"
                         aria-label="Nursedive home">
-                        <img src="https://www.nursedive.com/images/favicon.png" class="h-7 w-7 object-contain"
+                        <img src="https://www.nursenex.com/images/favicon.png" class="h-7 w-7 object-contain"
                             alt="Nursedive" />
                     </a>
                     <div class="min-w-0">

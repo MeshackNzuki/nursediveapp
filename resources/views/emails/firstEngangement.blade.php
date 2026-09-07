@@ -25,7 +25,7 @@ How Is Nursedive Treating You?
         pick up where you left off.
     </p>
 
-    @include('emails.partials.button', ['href' => 'https://app.nursedive.com/', 'label' => 'Continue Studying'])
+    @include('emails.partials.button', ['href' => 'https://app.nursenex.com/', 'label' => 'Continue Studying'])
 
     <p style="margin:0 0 18px;">
         Consistency makes a real difference. Even one short practice session a day can help you build confidence.

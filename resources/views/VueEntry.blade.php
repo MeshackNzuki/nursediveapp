@@ -16,11 +16,11 @@
     <meta property="og:title" content="Nurse Dive | Nursing, TEAS/HESI & NCLEX Exam Prep">
     <meta property="og:description"
         content="Join thousands of students acing nursing exams with Nurse Dive. Get started today.">
-    <meta property="og:image" content="https://app.nursedive.com/assets/favicon.png">
+    <meta property="og:image" content="https://app.nursenex.com/assets/favicon.png">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://app.nursedive.com/assets/favicon.png">
+    <link rel="icon" type="image/png" href="https://app.nursenex.com/assets/favicon.png">
 
     <title>{{ env('APP_NAME', 'Nursedive') }}</title>
 
