@@ -1,0 +1,1 @@
+function a(t,o={}){var n;if(typeof window>"u")return;const e={event:t,timestamp:new Date().toISOString(),...o};(n=window.dataLayer)==null||n.push(e),window.dispatchEvent(new CustomEvent("nursenex:paywall-event",{detail:e}))}export{a as t};
