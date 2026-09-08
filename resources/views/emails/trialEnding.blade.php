@@ -1,11 +1,11 @@
 @extends('emails.layout')
 
 @section('title')
-Your {{ $product }} Free Trial Is Ending Soon - Nursedive
+Your {{ $product }} Free Trial Is Ending Soon - Nursenex
 @endsection
 
 @section('preheader')
-Your {{ $product }} free trial is ending soon. Upgrade to keep full access to your Nursedive tools.
+Your {{ $product }} free trial is ending soon. Upgrade to keep full access to your Nursenex tools.
 @endsection
 
 @section('heading')
@@ -18,7 +18,7 @@ Your {{ $product }} Trial Is Ending Soon
     <p style="margin:0 0 18px;">Hello <strong>{{ $firstName }}</strong>,</p>
 
     <p style="margin:0 0 18px;">
-        We hope you have enjoyed exploring <strong>Nursedive</strong> and seeing how the platform can support your exam
+        We hope you have enjoyed exploring <strong>Nursenex</strong> and seeing how the platform can support your exam
         preparation.
     </p>
 
@@ -35,6 +35,6 @@ Your {{ $product }} Trial Is Ending Soon
 
     <p style="margin:28px 0 0;">
         Stay focused. Success is closer than you think.<br>
-        <strong>The Nursedive Team</strong>
+        <strong>The Nursenex Team</strong>
     </p>
 @endsection

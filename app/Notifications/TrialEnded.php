@@ -44,7 +44,7 @@ class TrialEnded extends Notification // implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Your Free Trial on Nursedive Has Ended')
+            ->subject('Your Free Trial on Nursenex Has Ended')
             ->view('emails.trialEnded', [
                 'user' => $this->user,
                 'product' => ucfirst($this->product),

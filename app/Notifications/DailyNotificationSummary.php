@@ -41,6 +41,6 @@ class DailyNotificationSummary extends Notification implements ShouldQueue
             ->line('**First Engagements Sent:** ' . $this->summary['engagement'])
             ->line('')
             ->line('letsKeep Pushing')
-            ->salutation('— Nursedive Mailer Bot');
+            ->salutation('— Nursenex Mailer Bot');
     }
 }

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Nursedive')</title>
+    <title>@yield('title', 'Nursenex')</title>
     <style>
         @media only screen and (max-width: 640px) {
             .email-shell {
@@ -45,7 +45,7 @@
                     style="width:600px; max-width:600px; background:#ffffff; border:1px solid #dbeafe; border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(15,23,42,0.08);">
                     <tr>
                         <td align="center" class="email-header" style="background:#172554; padding:30px 28px;">
-                            <img src="https://app.nursenex.com/assets/favicon.png" alt="Nursedive" width="56"
+                            <img src="https://app.nursenex.com/assets/favicon.png" alt="Nursenex" width="56"
                                 height="56" style="display:block; width:56px; height:56px; border:0; margin:0 0 14px;">
                             <h1 class="email-title"
                                 style="margin:0; color:#ffffff; font-size:26px; line-height:1.25; font-weight:700; letter-spacing:0;">
@@ -64,11 +64,11 @@
                     <tr>
                         <td align="center" style="background:#f8fafc; padding:22px 24px; border-top:1px solid #e2e8f0;">
                             <p style="margin:0 0 6px; color:#64748b; font-size:12px; line-height:1.5;">
-                                &copy; {{ date('Y') }} Nursedive. All rights reserved.
+                                &copy; {{ date('Y') }} Nursenex. All rights reserved.
                             </p>
                             <p style="margin:0; color:#64748b; font-size:12px; line-height:1.5;">
                                 <a href="https://www.nursenex.com/"
-                                    style="color:#172554; font-weight:700; text-decoration:none;">Visit Nursedive</a>
+                                    style="color:#172554; font-weight:700; text-decoration:none;">Visit Nursenex</a>
                             </p>
                         </td>
                     </tr>

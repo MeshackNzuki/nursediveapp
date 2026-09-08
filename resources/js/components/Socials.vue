@@ -31,14 +31,14 @@
                     <h5 class="text-sm text-gray-500">LinkedIn</h5>
                     <i class="pi pi-share text-teal-500"></i>
                 </a>
-                <a href="https://www.pinterest.com/Nursedive/" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.pinterest.com/Nursenex/" target="_blank" rel="noopener noreferrer"
                     class="flex flex-col items-center cursor-pointer hover:opacity-80">
                     <i class="pi pi-pinterest text-red-600 mr-2"></i>
                     <h5 class="text-sm text-gray-500">Pinterest</h5>
                     <i class="pi pi-share text-teal-500"></i>
                 </a>
 
-                <a href="https://x.com/Nursedivenursing" target="_blank" rel="noopener noreferrer"
+                <a href="https://x.com/Nursenexnursing" target="_blank" rel="noopener noreferrer"
                     class="flex flex-col items-center cursor-pointer hover:opacity-80">
                     <i class="pi pi-twitter text-blue-400 mr-2"></i>
                     <h5 class="text-sm text-gray-500">X (Twitter)</h5>

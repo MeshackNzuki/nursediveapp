@@ -1,13 +1,13 @@
 @extends('emails.layout')
 
-@section('title', 'Honest Question - How Is Nursedive Treating You?')
+@section('title', 'Honest Question - How Is Nursenex Treating You?')
 
 @section('preheader')
-A quick check-in from Nursedive about your first few days.
+A quick check-in from Nursenex about your first few days.
 @endsection
 
 @section('heading')
-How Is Nursedive Treating You?
+How Is Nursenex Treating You?
 @endsection
 
 @section('content')
@@ -16,7 +16,7 @@ How Is Nursedive Treating You?
     <p style="margin:0 0 18px;">Hello <strong>{{ $firstName }}</strong>,</p>
 
     <p style="margin:0 0 18px;">
-        It has been a few days since you joined <strong>Nursedive</strong>, and I wanted to check in. How is everything
+        It has been a few days since you joined <strong>Nursenex</strong>, and I wanted to check in. How is everything
         going so far?
     </p>
 
@@ -33,11 +33,11 @@ How Is Nursedive Treating You?
 
     <p style="margin:0 0 18px;">
         I would also love your feedback. Was it easy to get started? Is anything confusing, or is there something that
-        would make Nursedive better for you? You can reply directly to this email.
+        would make Nursenex better for you? You can reply directly to this email.
     </p>
 
     <p style="margin:28px 0 0;">
         Wishing you confidence and calm as you study,<br>
-        <strong>Ryan from Nursedive</strong>
+        <strong>Ryan from Nursenex</strong>
     </p>
 @endsection

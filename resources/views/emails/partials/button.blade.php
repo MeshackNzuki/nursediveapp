@@ -1,6 +1,6 @@
 @php
     $buttonHref = $href ?? '#';
-    $buttonLabel = $label ?? 'Open Nursedive';
+    $buttonLabel = $label ?? 'Open Nursenex';
 @endphp
 
 <table role="presentation" align="center" cellpadding="0" cellspacing="0" style="margin:32px auto;">

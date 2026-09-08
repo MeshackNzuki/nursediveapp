@@ -108,7 +108,7 @@
                         <div class="flex items-center gap-1">
                             <i class="pi pi-user-edit text-teal-500"></i>
                             <span>Your Answer: {{ examStore.answers[examStore.currentQuestion.id] || 'Not answered'
-                            }}</span>
+                                }}</span>
                         </div>
                     </div>
                 </div>
@@ -198,7 +198,7 @@
                     <span class="">Hello {{ firstName }},</span> <span class="font-normal text-md">thank
                         you
                         for trying
-                        Nursedive!</span>
+                        Nursenex!</span>
                 </h3>
 
                 <p class="p-4 bg-blue-50/50  rounded-lg">

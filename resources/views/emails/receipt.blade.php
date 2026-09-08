@@ -1,9 +1,9 @@
 @extends('emails.layout')
 
-@section('title', 'Payment Receipt - Nursedive')
+@section('title', 'Payment Receipt - Nursenex')
 
 @section('preheader')
-Your Nursedive payment receipt is ready.
+Your Nursenex payment receipt is ready.
 @endsection
 
 @section('heading')
@@ -16,7 +16,7 @@ Payment Receipt
     <p style="margin:0 0 18px;">Hello <strong>{{ $firstName }}</strong>,</p>
 
     <p style="margin:0 0 20px;">
-        Thank you for your payment. Here are the details for your recent <strong>Nursedive</strong> transaction.
+        Thank you for your payment. Here are the details for your recent <strong>Nursenex</strong> transaction.
     </p>
 
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
@@ -78,7 +78,7 @@ Payment Receipt
     @include('emails.partials.button', ['href' => 'https://app.nursenex.com/', 'label' => 'Go to Dashboard'])
 
     <p style="margin:28px 0 0;">
-        Thanks again for choosing Nursedive.<br>
-        <strong>The Nursedive Team</strong>
+        Thanks again for choosing Nursenex.<br>
+        <strong>The Nursenex Team</strong>
     </p>
 @endsection

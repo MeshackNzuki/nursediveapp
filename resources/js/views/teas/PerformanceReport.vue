@@ -59,7 +59,7 @@
                                 <i class="pi pi-chart-pie text-sm"></i>
                             </span>
                             <div class="leading-tight">
-                                <div class="text-sm font-bold text-slate-800 dark:text-slate-100">NurseDive</div>
+                                <div class="text-sm font-bold text-slate-800 dark:text-slate-100">Nursenex</div>
                                 <div
                                     class="text-[10px] font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
                                     TEAS Readiness
@@ -83,7 +83,7 @@
                                     <span class="h-4 w-4 rounded-sm bg-emerald-500"></span>
                                     Your Score:
                                     <span class="font-bold text-slate-900 dark:text-slate-100">{{ scoreRounded
-                                    }}%</span>
+                                        }}%</span>
                                 </div>
                             </div>
 
@@ -152,8 +152,8 @@
                 <div v-if="!isCompleted"
                     class="mt-5 rounded-2xl bg-amber-50 px-4 py-3 text-sm text-amber-900 ring-1 ring-amber-100 dark:bg-amber-900/25 dark:text-amber-100 dark:ring-amber-800/50">
                     This attempt is incomplete, so scores may be lower than your true performance.
-                    <button v-if="report?.attempt_id" class="ml-1 cursor-pointer font-semibold underline decoration-dashed"
-                        @click="resumeExam">
+                    <button v-if="report?.attempt_id"
+                        class="ml-1 cursor-pointer font-semibold underline decoration-dashed" @click="resumeExam">
                         Resume exam
                     </button>
                 </div>
@@ -225,7 +225,7 @@
                                                 <i :class="[row.icon, 'text-[11px]']"></i>
                                             </span>
                                             <span class="font-semibold text-slate-900 dark:text-slate-100">{{ row.label
-                                            }}</span>
+                                                }}</span>
                                         </div>
                                     </td>
                                     <td class="px-5 py-4 font-medium text-slate-700 dark:text-slate-200">

@@ -23,12 +23,12 @@
                                 Build an exam-ready routine
                             </h2>
                             <p class="mt-2 max-w-md text-sm leading-relaxed text-slate-600">
-                                Join Nursedive to access realistic exam banks, focused remediation, and progress
+                                Join Nursenex to access realistic exam banks, focused remediation, and progress
                                 tracking.
                             </p>
                         </div>
                         <div>
-                            <h5>Why Nursedive is the best choice for your prep journey</h5>
+                            <h5>Why Nursenex is the best choice for your prep journey</h5>
                             <div class="mt-3 space-y-2 text-sm text-slate-600">
                                 <p>Our Exams are expertly crafted to reflect the actual test format and difficulty
                                     level.

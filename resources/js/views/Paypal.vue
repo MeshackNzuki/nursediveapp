@@ -55,7 +55,7 @@ const displayAmount = computed(() => {
 })
 
 const formattedAmount = computed(() => `$${displayAmount.value.toFixed(2)}`)
-const productLabel = computed(() => productLabels[selectedPlan.value?.product_code] || 'Nursedive')
+const productLabel = computed(() => productLabels[selectedPlan.value?.product_code] || 'Nursenex')
 const planName = computed(() => formatPlanName(selectedPlan.value?.name))
 const durationLabel = computed(() => {
     const days = Number(selectedPlan.value?.duration_days || 0)
@@ -226,7 +226,8 @@ onMounted(initializePaypal)
                     Back
                 </button>
 
-                <div class="flex flex-col gap-4 border-b border-slate-200 pb-5 dark:border-slate-700 sm:flex-row sm:items-center sm:justify-between">
+                <div
+                    class="flex flex-col gap-4 border-b border-slate-200 pb-5 dark:border-slate-700 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <p class="text-xs font-bold uppercase tracking-wide text-blue-700 dark:text-blue-300">
                             PayPal Checkout
@@ -241,8 +242,10 @@ onMounted(initializePaypal)
                     <img :src="paypalIcon" alt="PayPal" class="h-8 w-auto">
                 </div>
 
-                <div class="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/70">
-                    <div v-if="isPreparing" class="flex min-h-32 items-center gap-3 text-sm font-semibold text-slate-600 dark:text-slate-300">
+                <div
+                    class="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/70">
+                    <div v-if="isPreparing"
+                        class="flex min-h-32 items-center gap-3 text-sm font-semibold text-slate-600 dark:text-slate-300">
                         <i class="pi pi-spin pi-spinner text-blue-600 dark:text-blue-300"></i>
                         Preparing PayPal buttons...
                     </div>

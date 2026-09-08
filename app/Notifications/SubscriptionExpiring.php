@@ -45,7 +45,7 @@ class SubscriptionExpiring extends Notification // implements ShouldQueue
 
     {
         return (new MailMessage)
-            ->subject('Your Nursedive Subscription Is Ending Soon')
+            ->subject('Your Nursenex Subscription Is Ending Soon')
             ->view('emails.subscriptionExpiring', [
                 'user' => $this->user,
                 'product' => ucfirst($this->product),

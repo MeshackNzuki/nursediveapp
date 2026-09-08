@@ -1,9 +1,9 @@
 @extends('emails.layout')
 
-@section('title', 'Verify Your Email - Nursedive')
+@section('title', 'Verify Your Email - Nursenex')
 
 @section('preheader')
-Verify your email address to finish setting up your Nursedive account.
+Verify your email address to finish setting up your Nursenex account.
 @endsection
 
 @section('heading')
@@ -16,7 +16,7 @@ Verify Your Email
     <p style="margin:0 0 18px;">Hello <strong>{{ $firstName }}</strong>,</p>
 
     <p style="margin:0 0 18px;">
-        Thanks for joining <strong>Nursedive</strong>. Please verify your email address to finish setting up your
+        Thanks for joining <strong>Nursenex</strong>. Please verify your email address to finish setting up your
         account and keep it secure.
     </p>
 
@@ -43,6 +43,6 @@ Verify Your Email
 
     <p style="margin:28px 0 0;">
         Warm regards,<br>
-        <strong>The Nursedive Team</strong>
+        <strong>The Nursenex Team</strong>
     </p>
 @endsection

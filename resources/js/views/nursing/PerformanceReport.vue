@@ -59,7 +59,7 @@
                                 <i class="pi pi-chart-pie text-sm"></i>
                             </span>
                             <div class="leading-tight">
-                                <div class="text-sm font-bold text-slate-800 dark:text-slate-100">NurseDive</div>
+                                <div class="text-sm font-bold text-slate-800 dark:text-slate-100">Nursenex</div>
                                 <div
                                     class="text-[10px] font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
                                     Readiness Assessment
@@ -83,7 +83,7 @@
                                     <span class="h-4 w-4 rounded-sm bg-emerald-500"></span>
                                     Your Score:
                                     <span class="font-bold text-slate-900 dark:text-slate-100">{{ scoreRounded
-                                        }}%</span>
+                                    }}%</span>
                                 </div>
                             </div>
 
@@ -224,7 +224,7 @@
                                                 <i :class="[row.icon, 'text-[11px]']"></i>
                                             </span>
                                             <span class="font-semibold text-slate-900 dark:text-slate-100">{{ row.label
-                                                }}</span>
+                                            }}</span>
                                         </div>
                                     </td>
                                     <td class="px-5 py-4 font-medium text-slate-700 dark:text-slate-200">

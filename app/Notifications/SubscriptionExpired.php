@@ -45,7 +45,7 @@ class SubscriptionExpired extends Notification // implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Your Nursedive Subscription Has Expired')
+            ->subject('Your Nursenex Subscription Has Expired')
             ->view('emails.subscriptionExpired', [
                 'user' => $this->user,
                 'product' => ucfirst($this->product),

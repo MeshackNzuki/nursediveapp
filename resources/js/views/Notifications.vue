@@ -17,7 +17,7 @@ const loadMessages = async () => {
             {
                 id: 1,
                 sender: "bot",
-                name: "Arnold - Nursedive",
+                name: "Arnold - Nursenex",
                 avatar: "https://img.daisyui.com/images/profile/demo/kenobee@192.webp",
                 text: "Hi, how can I help you pass?",
                 time: "Just now",
@@ -29,7 +29,7 @@ const loadMessages = async () => {
             {
                 id: 1,
                 sender: "bot",
-                name: "Arnold - Nursedive",
+                name: "Arnold - Nursenex",
                 avatar: "https://img.daisyui.com/images/profile/demo/kenobee@192.webp",
                 text: "Hi, how can I help you pass?",
                 time: "Just now",
@@ -75,7 +75,7 @@ const sendMessage = async () => {
         const botMsg = {
             id: Date.now() + 1,
             sender: "bot",
-            name: "Arnold - Nursedive",
+            name: "Arnold - Nursenex",
             avatar: "https://img.daisyui.com/images/profile/demo/kenobee@192.webp",
             text: `Hello ${user?.name || "there"}, Please click the blue widget on bottom right for a quick chat.`,
             time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),

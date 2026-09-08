@@ -33,14 +33,13 @@
                             Welcome, <span class="text-cyan-700">{{ firstName }}</span>
                         </h1>
                         <p class="text-sm text-slate-600">
-                            Thanks for joining Nursedive. Redirecting you to your dashboard now.
+                            Thanks for joining Nursenex. Redirecting you to your dashboard now.
                         </p>
                     </div>
                 </transition>
 
                 <div class="mx-auto mt-6 w-full max-w-md rounded-full border border-slate-200 bg-slate-100 p-1">
-                    <div
-                        class="h-2 rounded-full bg-gradient-to-r from-cyan-500 to-sky-600 transition-all duration-500 ease-out"
+                    <div class="h-2 rounded-full bg-gradient-to-r from-cyan-500 to-sky-600 transition-all duration-500 ease-out"
                         :style="{ width: `${progressPercent}%` }"></div>
                 </div>
 

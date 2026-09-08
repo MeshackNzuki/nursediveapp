@@ -1,7 +1,7 @@
 @extends('emails.layout')
 
 @section('title')
-Your {{ $product }} Trial Has Ended - Nursedive
+Your {{ $product }} Trial Has Ended - Nursenex
 @endsection
 
 @section('preheader')
@@ -18,11 +18,11 @@ Your Trial Has Ended
     <p style="margin:0 0 18px;">Hello <strong>{{ $firstName }}</strong>,</p>
 
     <p style="margin:0 0 18px;">
-        Your <strong>Nursedive {{ $product }}</strong> trial ended on <strong>{{ $expired_date }}</strong>.
+        Your <strong>Nursenex {{ $product }}</strong> trial ended on <strong>{{ $expired_date }}</strong>.
     </p>
 
     <p style="margin:0 0 18px;">
-        You can continue with Nursedive Basic, or upgrade to a premium plan at any time to keep full access to your practice tools,
+        You can continue with Nursenex Basic, or upgrade to a premium plan at any time to keep full access to your practice tools,
         reports, and progress history.
     </p>
 
@@ -30,6 +30,6 @@ Your Trial Has Ended
 
     <p style="margin:28px 0 0;">
         We are here whenever you are ready to keep going.<br>
-        <strong>The Nursedive Team</strong>
+        <strong>The Nursenex Team</strong>
     </p>
 @endsection

@@ -117,7 +117,7 @@
                         <div v-if="examStore.answers[examStore.currentQuestion.id]" class="flex items-center gap-1">
                             <i class="pi pi-user-edit text-teal-500"></i>
                             <span>Your Answer was {{ examStore.answers[examStore.currentQuestion.id]
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
                 </div>
@@ -213,10 +213,10 @@
                     Hello {{ firstName }},
                 </h3>
                 <p class="text-gray-600 mb-6">
-                    Thank you for exploring <span class="font-semibold text-gray-900">Nursedive</span>.
+                    Thank you for exploring <span class="font-semibold text-gray-900">Nursenex</span>.
                     <span class="block">We hope the practice preview is giving you a clear study signal.</span>
                     <span class="hidden">
-                    We hope you’re finding it valuable so far.
+                        We hope you’re finding it valuable so far.
                     </span>
                 </p>
 

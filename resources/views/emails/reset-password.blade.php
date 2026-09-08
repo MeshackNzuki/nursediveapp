@@ -1,9 +1,9 @@
 @extends('emails.layout')
 
-@section('title', 'Reset Your Password - Nursedive')
+@section('title', 'Reset Your Password - Nursenex')
 
 @section('preheader')
-Reset your Nursedive password. This secure link expires in {{ config('auth.passwords.users.expire', 60) }} minutes.
+Reset your Nursenex password. This secure link expires in {{ config('auth.passwords.users.expire', 60) }} minutes.
 @endsection
 
 @section('heading')
@@ -16,7 +16,7 @@ Reset Your Password
     <p style="margin:0 0 18px;">Hi <strong>{{ $firstName }}</strong>,</p>
 
     <p style="margin:0 0 18px;">
-        We received a request to reset the password for your <strong>Nursedive</strong> account.
+        We received a request to reset the password for your <strong>Nursenex</strong> account.
     </p>
 
     <p style="margin:0 0 18px;">
@@ -46,6 +46,6 @@ Reset Your Password
 
     <p style="margin:28px 0 0;">
         Stay safe,<br>
-        <strong>The Nursedive Team</strong>
+        <strong>The Nursenex Team</strong>
     </p>
 @endsection

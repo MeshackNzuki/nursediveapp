@@ -27,7 +27,7 @@ class VerifyUserEmail extends Notification //implements ShouldQueue
         $url = 'https://app.nursenex.com/email-verification?' . $this->query;
 
         return (new \Illuminate\Notifications\Messages\MailMessage)
-            ->subject('Verify Your Email - Nursedive')
+            ->subject('Verify Your Email - Nursenex')
             ->view('emails.verify-email', [
                 'user' => $notifiable,
                 'url'  => $url,

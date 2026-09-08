@@ -7,14 +7,14 @@
         </button>
 
         <div class="relative z-10 flex h-full min-h-0 flex-col">
-            <router-link to="/" :class="brandClass" :title="isSidebarOpen ? undefined : 'Nursedive'">
+            <router-link to="/" :class="brandClass" :title="isSidebarOpen ? undefined : 'Nursenex'">
                 <span
                     class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/95 shadow-lg shadow-sky-950/20">
-                    <img src="../../assets/logo.png" class="h-8 w-8 object-contain" alt="Nursedive logo" />
+                    <img src="../../assets/logo.png" class="h-8 w-8 object-contain" alt="Nursenex logo" />
                 </span>
                 <span v-if="isSidebarOpen" class="min-w-0">
                     <span class="block text-xs font-bold uppercase tracking-widest text-white">
-                        Nursedive
+                        Nursenex
                     </span>
                     <span class="block text-xs text-sky-300">
                         Plan, Study, Excel
@@ -136,7 +136,7 @@
                                 <span v-if="isSidebarOpen" class="min-w-0 flex-1">
                                     <span class="block truncate text-sm font-bold text-white">{{ area.short }}</span>
                                     <span class="block truncate text-xs text-bright-sun-500 font-semibold">{{ area.label
-                                    }}</span>
+                                        }}</span>
                                 </span>
                                 <i v-if="isSidebarOpen" class="pi pi-arrow-right text-xs text-cyan-100/50"></i>
                             </a>

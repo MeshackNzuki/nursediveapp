@@ -1,7 +1,7 @@
 @extends('emails.layout')
 
 @section('title')
-Your {{ $product }} Subscription Has Expired - Nursedive
+Your {{ $product }} Subscription Has Expired - Nursenex
 @endsection
 
 @section('preheader')
@@ -18,7 +18,7 @@ Your Subscription Has Expired
     <p style="margin:0 0 18px;">Hello <strong>{{ $firstName }}</strong>,</p>
 
     <p style="margin:0 0 18px;">
-        Your <strong>Nursedive {{ $product }}</strong> subscription expired on
+        Your <strong>Nursenex {{ $product }}</strong> subscription expired on
         <strong>{{ $expired_date }}</strong>.
     </p>
 
@@ -30,6 +30,6 @@ Your Subscription Has Expired
 
     <p style="margin:28px 0 0;">
         We are ready when you are.<br>
-        <strong>The Nursedive Team</strong>
+        <strong>The Nursenex Team</strong>
     </p>
 @endsection

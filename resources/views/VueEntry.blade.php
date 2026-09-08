@@ -22,7 +22,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://app.nursenex.com/assets/favicon.png">
 
-    <title>{{ env('APP_NAME', 'Nursedive') }}</title>
+    <title>{{ env('APP_NAME', 'Nursenex') }}</title>
 
     @vite(['resources/js/main.ts'])
 </head>

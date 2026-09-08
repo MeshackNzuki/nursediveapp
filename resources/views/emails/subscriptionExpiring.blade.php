@@ -1,7 +1,7 @@
 @extends('emails.layout')
 
 @section('title')
-Your {{ $product }} Subscription Is Ending Soon - Nursedive
+Your {{ $product }} Subscription Is Ending Soon - Nursenex
 @endsection
 
 @section('preheader')
@@ -18,7 +18,7 @@ Your Subscription Is Ending Soon
     <p style="margin:0 0 18px;">Hello <strong>{{ $firstName }}</strong>,</p>
 
     <p style="margin:0 0 18px;">
-        Your <strong>Nursedive {{ $product }}</strong> subscription is scheduled to end on
+        Your <strong>Nursenex {{ $product }}</strong> subscription is scheduled to end on
         <strong>{{ $expired_date }}</strong>.
     </p>
 
@@ -30,7 +30,7 @@ Your Subscription Is Ending Soon
     @include('emails.partials.button', ['href' => $actionUrl ?? 'https://app.nursenex.com/subscription', 'label' => 'Renew Subscription'])
 
     <p style="margin:28px 0 0;">
-        Thanks for studying with Nursedive.<br>
-        <strong>The Nursedive Team</strong>
+        Thanks for studying with Nursenex.<br>
+        <strong>The Nursenex Team</strong>
     </p>
 @endsection

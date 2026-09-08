@@ -28,7 +28,7 @@ class PaymentReceipt extends Notification // implements ShouldQueue
     public function toMail(object $notifiable)
     {
         return (new \Illuminate\Notifications\Messages\MailMessage)
-            ->subject('Your Payment Receipt - Nursedive')
+            ->subject('Your Payment Receipt - Nursenex')
             ->view('emails.receipt', [
                 'user'    => $notifiable,
                 'payment' => $this->payment,

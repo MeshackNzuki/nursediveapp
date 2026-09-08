@@ -1,18 +1,18 @@
 <template>
     <section v-if="props.chatOpened"
         class="fixed left-3 right-3 bottom-3 z-50 mx-auto flex h-[min(78vh,680px)] w-auto max-w-xl flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/20 dark:border-sky-800 dark:bg-slate-950 dark:shadow-black/30 sm:left-auto sm:right-6 sm:bottom-6 sm:w-[520px]"
-        role="dialog" aria-label="Nursedive AI Assistant" :aria-busy="isStreaming">
+        role="dialog" aria-label="Nursenex AI Assistant" :aria-busy="isStreaming">
         <header class="border-b bg-sky-800 px-4 py-3 text-white">
             <div class="flex items-start justify-between gap-3">
                 <div class="flex min-w-0 items-center gap-3">
                     <a href="/"
                         class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white shadow-sm ring-1 ring-white/30"
-                        aria-label="Nursedive home">
+                        aria-label="Nursenex home">
                         <img src="https://www.nursenex.com/images/favicon.png" class="h-7 w-7 object-contain"
-                            alt="Nursedive" />
+                            alt="Nursenex" />
                     </a>
                     <div class="min-w-0">
-                        <h2 class="truncate text-base font-semibold leading-5">Nursedive AI Assistant</h2>
+                        <h2 class="truncate text-base font-semibold leading-5">Nursenex AI Assistant</h2>
                     </div>
                 </div>
                 <button type="button" @click="closeChat"
@@ -72,7 +72,7 @@
                         :class="message.role === 'user' ? 'text-teal-50' : 'text-slate-500 dark:text-slate-300'">
                         <span class="h-1.5 w-1.5 rounded-full"
                             :class="message.role === 'user' ? 'bg-white/80' : 'bg-teal-500'"></span>
-                        {{ message.role === "user" ? "You" : "Nursedive AI" }}
+                        {{ message.role === "user" ? "You" : "Nursenex AI" }}
                     </div>
                     <div class="whitespace-pre-wrap break-words text-sm leading-relaxed [&_strong]:font-semibold"
                         v-html="formatChatText(message.content)"></div>
@@ -85,7 +85,7 @@
                     class="grid h-14 w-14 place-items-center rounded-2xl bg-white text-teal-600 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700">
                     <i class="pi pi-comments text-xl"></i>
                 </div>
-                <p class="mt-3 text-sm font-medium text-slate-700 dark:text-slate-100">Start a chat with Nursedive AI
+                <p class="mt-3 text-sm font-medium text-slate-700 dark:text-slate-100">Start a chat with Nursenex AI
                     tutor</p>
                 <p v-if="isAuthenticated" class="mt-1 max-w-xs text-xs leading-5 text-slate-500 dark:text-slate-400">
                     Ask about rationales, topics, or study strategy.
