@@ -35,10 +35,9 @@
     color: rgb(255 215 49 / var(--tw-text-opacity));
 }
 
-.shadow-custom {
-    --tw-shadow: 0px 5px 15px 0px rgba(0, 19, 119, .18);
-    --tw-shadow-colored: 0px 5px 15px 0px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+@utility shadow-custom {
+  --tw-shadow: 0px 5px 15px 0px rgba(0, 19, 119, 0.18);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 @layer components {
@@ -128,6 +127,164 @@
 
   .analysis-table-td {
     @apply px-5 py-4;
+  }
+
+  /* ---- Product dashboards (teas / nursing / nclex) ----
+     Shares the analysis-* conventions; theme colour is bound in the template
+     via useThemeAccent() so it follows the user's selected theme. */
+  .dash-shell {
+    @apply relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-gray-700 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh] dark:bg-slate-900 dark:text-gray-50;
+  }
+
+  .dash-card {
+    @apply relative overflow-hidden rounded-2xl border border-sky-100 bg-light-blue-500 p-5 shadow-custom dark:border-sky-800 dark:bg-sky-900;
+  }
+
+  .dash-card-white {
+    @apply relative overflow-hidden rounded-2xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60;
+  }
+
+  .dash-tile {
+    @apply rounded-xl border border-sky-100 bg-white p-3 dark:border-sky-800 dark:bg-sky-950/60;
+  }
+
+  .dash-tile-soft {
+    @apply rounded-xl bg-light-blue-500 p-3 dark:bg-sky-900/70;
+  }
+
+  .dash-eyebrow {
+    @apply text-xs font-bold uppercase tracking-[0.14em];
+  }
+
+  .dash-title {
+    @apply text-lg font-extrabold text-slate-950 dark:text-white;
+  }
+
+  .dash-chip {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-bold transition duration-200 hover:-translate-y-0.5;
+  }
+
+  .dash-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-xs font-bold shadow-md transition duration-200 hover:-translate-y-0.5 hover:brightness-110;
+  }
+
+  .dash-btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 transition duration-200 hover:bg-slate-100 dark:border-sky-800 dark:bg-transparent dark:text-slate-100 dark:hover:bg-sky-900;
+  }
+
+  .dash-progress {
+    @apply h-2.5 overflow-hidden rounded-full bg-white ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-slate-700;
+  }
+
+  .dash-icon-tile {
+    @apply inline-flex shrink-0 items-center justify-center rounded-xl text-lg transition-transform duration-300;
+  }
+
+  .dash-hover-lift {
+    @apply transition duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+
+  /* ---- Theme-aware utilities ----
+     Read the CSS variables set on the app root from stores/Theme.js (cssVars),
+     so any component follows the user's selected theme with static classes. */
+  .theme-surface {
+    background-image: linear-gradient(100deg, var(--theme-accent), var(--theme-accent-2));
+    color: var(--theme-on);
+  }
+
+  .theme-bar {
+    background-image: linear-gradient(90deg, var(--theme-accent), var(--theme-accent-2));
+  }
+
+  .theme-dot {
+    background-color: var(--theme-accent);
+  }
+
+  .theme-glow {
+    background-color: var(--theme-glow);
+  }
+
+  .theme-text {
+    color: var(--theme-deep);
+  }
+
+  .theme-soft {
+    background-color: var(--theme-soft);
+    border-color: var(--theme-border);
+    color: var(--theme-deep);
+  }
+
+  .theme-icon {
+    background-color: var(--theme-soft);
+    color: var(--theme-deep);
+    box-shadow: inset 0 0 0 1px var(--theme-border);
+  }
+
+  .theme-border {
+    border-color: var(--theme-border);
+  }
+
+  .theme-shadow {
+    box-shadow: 0 14px 30px -14px var(--theme-glow);
+  }
+
+  /* Headline text painted with the theme gradient */
+  .theme-text-gradient {
+    background-image: linear-gradient(90deg, var(--theme-accent), var(--theme-accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Avatar / icon ring painted with the theme gradient (use as a p-[2px] wrapper) */
+  .theme-ring-gradient {
+    background-image: linear-gradient(135deg, var(--theme-accent), var(--theme-accent-2));
+  }
+
+  .theme-focus:focus-visible {
+    outline: 2px solid var(--theme-accent);
+    outline-offset: 2px;
+  }
+
+  .dark .theme-text,
+  .dark .theme-soft,
+  .dark .theme-icon {
+    color: var(--theme-light);
+  }
+
+  /* Glass chips that sit on a theme-surface and inherit its text colour */
+  .theme-chip-on-surface {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-bold transition duration-200 hover:-translate-y-0.5;
+    border-color: color-mix(in srgb, currentColor 30%, transparent);
+    background-color: color-mix(in srgb, currentColor 12%, transparent);
+  }
+
+  .theme-chip-on-surface:hover {
+    background-color: color-mix(in srgb, currentColor 20%, transparent);
+  }
+
+  /* ---- Subtle surface patterns (drawn in currentColor; set text colour + opacity on the element) ---- */
+  .pattern-grid {
+    background-image: linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  .pattern-dots {
+    background-image: radial-gradient(circle at 1px 1px, currentColor 1.3px, transparent 0);
+    background-size: 16px 16px;
+  }
+
+  /* Rows of dashes, like lines of text (rows drawn with the gradient, dash gaps cut with a mask) */
+  .pattern-lines {
+    background-image: repeating-linear-gradient(180deg, currentColor 0 1.5px, transparent 1.5px 12px);
+    -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 18px, transparent 18px 26px);
+    mask-image: repeating-linear-gradient(90deg, #000 0 18px, transparent 18px 26px);
+  }
+
+  .pattern-diagonal {
+    background-image: repeating-linear-gradient(135deg, currentColor 0 1px, transparent 1px 14px);
+    background-size: 40px 40px;
   }
 
   .guest-save-card {
@@ -309,7 +466,6 @@ background: radial-gradient(60.63% 60.63% at 57.15% 51.07%, #0d5485 0, #0b2854 6
   width: 54px;
   aspect-ratio: 1;
   position: relative;
-
   border: 1px solid rgb(3 65 108);
   border-radius: 9999px;
   background: rgb(3 65 108);
@@ -436,11 +592,100 @@ button {
     @apply cursor-pointer;
 }
 
-.shadow-custom {
-    --tw-shadow: 0px 5px 15px 0px rgba(0, 19, 119, .18);
-    /* --tw-shadow-colored: 0px 5px 15px 0px var(--tw-shadow-color); */
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+/* ---- Sidebar (components/Sidebar/Sidebar.vue) ----
+   The navy shell is brand; only the active indicator, focus ring and
+   scrollbar follow the user's theme (via --theme-light, which stays
+   readable on navy for every theme, including gold on Black). */
+.sidebar-scroll {
+    scrollbar-color: var(--theme-light, rgba(103, 232, 249, 0.32)) transparent;
+    scrollbar-width: thin;
 }
+
+.sidebar-scroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+    background: var(--theme-light, rgba(103, 232, 249, 0.28));
+    opacity: 0.6;
+    border-radius: 999px;
+}
+
+.side-item {
+    position: relative;
+}
+
+.side-item-active::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 24%;
+    height: 52%;
+    width: 3px;
+    border-radius: 999px;
+    background: var(--theme-light, #67e8f9);
+    box-shadow: 0 0 12px var(--theme-light, #67e8f9);
+}
+
+.side-icon-active {
+    border-color: color-mix(in srgb, var(--theme-light, #67e8f9) 45%, transparent);
+    background-color: color-mix(in srgb, var(--theme-light, #67e8f9) 22%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-light, #67e8f9) 25%, transparent);
+}
+
+.side-focus:focus-visible {
+    outline: 2px solid var(--theme-light, #67e8f9);
+    outline-offset: 2px;
+}
+
+.side-divider {
+    height: 1px;
+    margin: 0.75rem 0.5rem 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+}
+
+.side-tooltip {
+    position: fixed;
+    z-index: 90;
+    transform: translateY(-50%);
+    pointer-events: none;
+    white-space: nowrap;
+    padding: 0.4rem 0.7rem;
+    border-radius: 0.75rem;
+    background: rgb(11 40 69);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1px solid color-mix(in srgb, var(--theme-light, #67e8f9) 35%, transparent);
+    box-shadow: 0 12px 30px -12px rgba(2, 6, 23, 0.7);
+}
+
+.side-tooltip::before {
+    content: "";
+    position: absolute;
+    left: -5px;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    transform: translateY(-50%) rotate(45deg);
+    background: rgb(11 40 69);
+    border-left: 1px solid color-mix(in srgb, var(--theme-light, #67e8f9) 35%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--theme-light, #67e8f9) 35%, transparent);
+}
+
+/* StreakCard: the Tenor embed is decorative only */
+.streak-gif .tenor-gif-embed {
+    pointer-events: none;
+}
+
+.streak-gif .tenor-gif-embed a {
+    display: none !important;
+}
+
+::selection {
+    background-color: var(--theme-soft, rgba(14, 165, 233, 0.18));
+}
+
 
 .border-snuff-550 {
     --tw-border-opacity: 1 !important;
@@ -512,3 +757,164 @@ button {
       .brush-underline-hover:hover::after {
         transform: scaleY(1.3);
       }
+
+/* =========================================================
+   Shared page motion utilities (Account.vue, Referral.vue)
+   ========================================================= */
+
+/* Entrance: cards rise into place, staggered via inline animation-delay */
+@keyframes ui-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ui-rise {
+  animation: ui-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Ambient glows drift slowly so the page feels alive without distracting */
+@keyframes ui-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(14px, -12px, 0);
+  }
+}
+
+.ui-drift {
+  animation: ui-drift 9s ease-in-out infinite;
+}
+
+.ui-drift-slow {
+  animation: ui-drift 14s ease-in-out infinite reverse;
+}
+
+/* Light sweep across active progress bars */
+@keyframes ui-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.ui-shimmer {
+  animation: ui-shimmer 2.4s ease-in-out infinite;
+}
+
+/* Feedback banner transition (Vue <Transition name="ui-fade-slide">) */
+.ui-fade-slide-enter-active,
+.ui-fade-slide-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.ui-fade-slide-enter-from,
+.ui-fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-rise,
+  .ui-drift,
+  .ui-drift-slow,
+  .ui-shimmer {
+    animation: none;
+  }
+
+  .ui-rise {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 3D tilt on hover (used by the referral invite ticket) */
+.ui-tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease;
+}
+
+.ui-tilt:hover {
+  transform: perspective(1100px) rotateX(4deg) rotateY(-7deg) translateY(-6px);
+}
+
+/* Gentle bob for floating badges */
+@keyframes ui-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.ui-float {
+  animation: ui-float 4s ease-in-out infinite;
+}
+
+/* Pop-in for success icons (e.g. "Copied") */
+@keyframes ui-pop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.ui-pop {
+  animation: ui-pop 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Slow background pan, only while the parent .group is hovered */
+@keyframes ui-pan {
+  to {
+    background-position: 44px 44px;
+  }
+}
+
+.group:hover .ui-pan {
+  animation: ui-pan 5s linear infinite;
+}
+
+/* Marching dashes along an SVG connector line */
+@keyframes ui-dash {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.ui-dash {
+  stroke-dasharray: 6 6;
+  animation: ui-dash 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-tilt,
+  .ui-tilt:hover {
+    transform: none;
+    transition: none;
+  }
+
+  .ui-float,
+  .ui-pop,
+  .ui-dash,
+  .group:hover .ui-pan {
+    animation: none;
+  }
+}

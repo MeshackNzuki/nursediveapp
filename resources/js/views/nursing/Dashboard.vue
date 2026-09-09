@@ -1,15 +1,18 @@
 <template>
-  <div
-    class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-gray-700 dark:bg-slate-900 dark:text-gray-50 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+  <div class="dash-shell">
     <div class="mx-auto max-w-screen-2xl space-y-6">
       <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
-        <article class="rounded-2xl  p-5  xl:col-span-8">
+        <article class="ui-rise rounded-2xl p-5 xl:col-span-8">
           <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
             <div class="min-w-0">
-              <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+              <p class="dash-eyebrow theme-text inline-flex items-center gap-2">
+                <span class="relative flex h-2 w-2">
+                  <span class="theme-dot absolute inline-flex h-full w-full animate-ping rounded-full opacity-70"></span>
+                  <span class="theme-dot relative inline-flex h-2 w-2 rounded-full"></span>
+                </span>
                 Nursing Dashboard
               </p>
-              <h1 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+              <h1 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white md:text-3xl">
                 {{ welcomeHeading }}
               </h1>
               <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
@@ -21,23 +24,25 @@
               <StreakCard product-code="nursing" />
             </div>
           </div>
-          <article class="rounded-2xl border bg-light-blue-500 p-2 dark:border-sky-800 dark:bg-sky-900">
-            <div class="flex items-start justify-between gap-4">
+          <article class="dash-card mt-5 p-4">
+            <div class="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full blur-3xl theme-glow opacity-60"
+              aria-hidden="true"></div>
+            <div class="relative flex items-start justify-between gap-4">
               <div>
-                <h2 class="text-lg font-semibold text-slate-950 dark:text-white">Find Practice</h2>
+                <h2 class="dash-title">Find Practice</h2>
                 <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
                   Search topics or exam sets without leaving the dashboard.
                 </p>
               </div>
-              <span
-                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-200">
-                <i class="pi pi-search"></i>
+              <span class="dash-icon-tile theme-icon h-10 w-10">
+                <i class="pi pi-search text-base"></i>
               </span>
             </div>
 
             <div class="relative mt-4">
+              <i class="pi pi-search pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-slate-400"></i>
               <input v-model="universal_search" type="text" placeholder="Search exams or topics..."
-                class="input input-bordered w-full rounded-full border-sky-200 bg-slate-50 text-sm dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100" />
+                class="theme-focus w-full rounded-full border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-300 focus:outline-none dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100" />
 
               <div v-if="showSearchResults"
                 class="absolute left-0 right-0 top-full z-40 mt-2 max-h-[28rem] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-4 shadow-lg dark:border-sky-800 dark:bg-sky-950">
@@ -76,12 +81,12 @@
 
           <div class="mt-5 flex flex-wrap gap-2">
             <RouterLink v-for="action in quickActions" :key="action.route" :to="action.route"
-              class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-bold text-sky-800 transition hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-950/70 dark:text-sky-100 dark:hover:bg-sky-900">
+              class="dash-chip theme-soft theme-focus">
               <i :class="action.icon"></i>
               {{ action.label }}
             </RouterLink>
             <button type="button"
-              class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-2 text-xs font-bold text-orange-700 transition hover:bg-orange-100 dark:border-orange-800 dark:bg-orange-950/40 dark:text-orange-200"
+              class="dash-chip border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100 dark:border-orange-800 dark:bg-orange-950/40 dark:text-orange-200"
               @click="openStudyModal">
               <i class="pi pi-bookmark"></i>
               Study Lessons
@@ -89,7 +94,7 @@
           </div>
         </article>
 
-        <aside class="hidden xl:col-span-4 xl:block">
+        <aside class="ui-rise hidden xl:col-span-4 xl:block" style="animation-delay: 80ms">
 
           <div class="relative flex min-h-28 items-center gap-4 border-b bg-sky-800 rounded-2xl p-4 shadow-custom">
             <div
@@ -110,45 +115,43 @@
               </router-link>
             </div>
           </div>
-          <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div v-for="stat in summaryStats" :key="stat.label"
-              class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-sky-800 dark:bg-sky-950/60">
-              <div class="flex items-center justify-between gap-3">
-                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
-                  {{ stat.label }}
-                </span>
-                <i :class="[stat.icon, stat.color, 'text-sm']"></i>
-              </div>
-              <p class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">{{ stat.value }}</p>
-              <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">{{ stat.detail }}</p>
-            </div>
+          <div class="ui-rise mt-5" style="animation-delay: 140ms">
+            <DashboardSnapshot :attempts="focusAttempts" :sections="snapshotSections" :pass-mark="PASS_MARK"
+              :total-override="dashdata?.nursing_attempts ?? null" section-noun="bank" />
           </div>
 
         </aside>
       </section>
 
+      <!-- ================= CATEGORIES + PROBABILITY ================= -->
       <section class="grid grid-cols-1 gap-5 xl:grid-cols-12">
-        <article
-          class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5  dark:border-sky-800 dark:bg-sky-900 xl:col-span-7">
+        <article class="ui-rise dash-card xl:col-span-7" style="animation-delay: 160ms">
           <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <h2 class="text-lg font-extrabold text-slate-950 dark:text-white">Exam Bank Categories</h2>
+              <h2 class="dash-title">Exam Bank Categories</h2>
               <p class="text-xs text-slate-500 dark:text-slate-300">Track attempted exams against each bank.</p>
             </div>
-            <span
-              class="rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-semibold text-sky-700 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
+            <span class="analysis-pill theme-soft border">
               {{ nursingAttemptedTotal }} attempted
             </span>
           </div>
+
           <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <RouterLink v-for="link in nursingQuickLinksWithProgress" :key="link.route" :to="link.route" class="group flex h-full flex-col rounded-xl border border-sky-100  bg-gradient-to-br from-blue-200 via-white to-amber-400
-              p-4 shadow-custom transition duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50
-              dark:border-sky-800 dark:bg-sky-950/50 dark:hover:bg-sky-950">
-              <div class="flex items-start justify-between gap-3">
+            <RouterLink v-for="(link, index) in nursingQuickLinksWithProgress" :key="link.route" :to="link.route"
+              class="group dash-card-white dash-hover-lift ui-rise flex h-full flex-col" :class="link.borderClass"
+              :style="{ animationDelay: `${220 + index * 60}ms` }">
+              <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+                <div class="absolute -top-20 -right-16 h-52 w-52 rounded-full bg-linear-to-br opacity-70 blur-3xl transition duration-500 group-hover:scale-125 group-hover:opacity-100"
+                  :class="link.washClass"></div>
+                <div class="ui-pan absolute inset-0 opacity-[0.09] transition-opacity duration-500 group-hover:opacity-[0.16]"
+                  :class="[link.patternClass, link.inkClass]"></div>
+                <i class="absolute -bottom-5 -right-3 text-[104px] opacity-[0.07] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110"
+                  :class="[link.icon, link.inkClass]"></i>
+              </div>
+
+              <div class="relative flex items-start justify-between gap-3">
                 <div class="flex min-w-0 items-start gap-3">
-                  <span
-                    class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-lg ring-1 ring-sky-100 dark:bg-sky-900/70 dark:ring-sky-800"
-                    :class="link.color">
+                  <span class="dash-icon-tile h-11 w-11 shadow-lg group-hover:scale-110 group-hover:-rotate-3" :class="link.tileClass">
                     <i :class="link.icon"></i>
                   </span>
                   <div class="min-w-0">
@@ -156,42 +159,43 @@
                     <p class="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">{{ link.description }}</p>
                   </div>
                 </div>
-                <span
-                  class="shrink-0 rounded-full border border-sky-100 bg-light-blue-500 px-2.5 py-1 text-[11px] font-bold text-sky-800 dark:border-sky-800 dark:bg-sky-900 dark:text-sky-100">
+                <span class="analysis-pill shrink-0 border border-current/20 bg-white/70 text-[11px] font-bold backdrop-blur-sm dark:bg-slate-950/40"
+                  :class="link.inkClass">
                   {{ link.total }} sets
                 </span>
               </div>
-              <div class="mt-auto pt-5">
+
+              <div class="relative mt-auto pt-5">
                 <div class="mb-2 flex items-center justify-between text-xs">
                   <span class="font-semibold text-slate-500 dark:text-slate-300">Exam attempted</span>
-                  <span class="font-extrabold text-slate-950 dark:text-white">
+                  <span class="font-extrabold tabular-nums text-slate-950 dark:text-white">
                     {{ link.attempted }} / {{ link.total }}
                   </span>
                 </div>
-                <div
-                  class="h-2.5 overflow-hidden rounded-full bg-light-blue-500 ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-slate-700">
-                  <div class="h-full rounded-full transition-all duration-500" :class="link.barClass"
-                    :style="{ width: `${link.percent}%` }"></div>
+                <div class="dash-progress bg-light-blue-500">
+                  <div class="relative h-full overflow-hidden rounded-full transition-all duration-700 ease-out" :class="link.barClass"
+                    :style="{ width: `${link.percent}%` }">
+                    <span v-if="link.percent > 0"
+                      class="ui-shimmer absolute inset-0 bg-linear-to-r from-transparent via-white/60 to-transparent"></span>
+                  </div>
                 </div>
                 <div class="mt-3 flex items-center justify-between gap-2">
                   <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">
                     {{ link.percent }}% complete
                   </span>
-                  <span
-                    class=" bg-sky-800 text-white rounded-full px-4 py-2 inline-flex items-center gap-1 text-xs font-bold transition group-hover:translate-x-0.5 dark:text-sky-200">
-                    Open {{ link.title }} Exams
+                  <span class="dash-btn theme-surface shrink-0 px-3 py-1.5 group-hover:translate-x-0.5">
+                    Open {{ link.title }} <i class="pi pi-arrow-right text-[10px]"></i>
                   </span>
                 </div>
               </div>
             </RouterLink>
           </div>
+
+          <!-- Next step -->
           <section class="mt-4">
-            <div
-              class="grid gap-3 rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60 md:grid-cols-2">
+            <div class="dash-card-white grid gap-3 md:grid-cols-2">
               <div class="min-w-0">
-                <p class="text-xs font-bold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-200">
-                  Personal Next Step
-                </p>
+                <p class="dash-eyebrow theme-text">Personal Next Step</p>
                 <h3 class="mt-1 text-base font-extrabold text-slate-950 dark:text-white">
                   {{ nextPracticeMove.title }}
                 </h3>
@@ -199,30 +203,27 @@
                   {{ nextPracticeMove.detail }}
                 </p>
                 <div class="mt-4 flex flex-wrap gap-2">
-                  <RouterLink :to="nextPracticeMove.primaryRoute"
-                    class="inline-flex items-center gap-2 rounded-full bg-sky-500 px-4 py-2 text-xs font-bold text-white transition hover:bg-sky-600">
+                  <RouterLink :to="nextPracticeMove.primaryRoute" class="dash-btn theme-surface theme-shadow">
                     <i :class="nextPracticeMove.icon"></i>
                     {{ nextPracticeMove.primaryLabel }}
                   </RouterLink>
-                  <RouterLink to="/nursing/performance-analysis"
-                    class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900">
+                  <RouterLink to="/nursing/performance-analysis" class="dash-btn-ghost">
                     <i class="pi pi-chart-line"></i>
                     Analyze
                   </RouterLink>
-                  <RouterLink to="/nursing/previous-attempts"
-                    class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900">
+                  <RouterLink to="/nursing/previous-attempts" class="dash-btn-ghost">
                     <i class="pi pi-history"></i>
                     History
                   </RouterLink>
                 </div>
               </div>
 
-              <div class="min-w-0 rounded-xl bg-light-blue-500 p-3 dark:bg-sky-900/70">
+              <div class="dash-tile-soft min-w-0">
                 <div class="flex items-center justify-between gap-3">
                   <span class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
                     Last attempt
                   </span>
-                  <span class="rounded-full px-2.5 py-1 text-[11px] font-bold" :class="latestAttemptBadgeClass">
+                  <span class="analysis-pill text-[11px]" :class="latestAttemptBadgeClass">
                     {{ latestAttemptStatus }}
                   </span>
                 </div>
@@ -232,16 +233,15 @@
                   </p>
                   <div class="mt-3 flex items-end justify-between gap-3">
                     <div>
-                      <p class="text-2xl font-extrabold" :class="scoreToneClass(latestAttemptScore)">
+                      <p class="text-2xl font-extrabold tabular-nums" :class="scoreToneClass(latestAttemptScore)">
                         {{ latestAttemptScore }}%
                       </p>
                       <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">
                         {{ latestAttemptDateText }}
                       </p>
                     </div>
-                    <div
-                      class="h-2 w-24 overflow-hidden rounded-full bg-white ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-sky-800">
-                      <div class="h-full rounded-full" :class="scoreBarClass(latestAttemptScore)"
+                    <div class="dash-progress h-2 w-24">
+                      <div class="h-full rounded-full transition-all duration-700" :class="scoreBarClass(latestAttemptScore)"
                         :style="{ width: `${latestAttemptScore}%` }"></div>
                     </div>
                   </div>
@@ -256,91 +256,63 @@
                 </template>
               </div>
             </div>
-            <div
-              class="flex flex-col mt-4 gap-3 rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60 ">
-              <div class="min-w-0">
-                <p class="text-xs font-bold uppercase tracking-[0.14em] text-sky-700 dark:text-sky-200">
-                  Need more free days of full access
-                </p>
-              </div>
-              <div @click="$router.push('/referral')" class="flex flex-row cursor-pointer">
-                <img :src="referfriend" alt="Refer a Friend" class="h-full w-full rounded-lg" />
-              </div>
-            </div>
           </section>
+
+          <!-- Referral nudge -->
+          <RouterLink to="/referral"
+            class="group dash-card-white dash-hover-lift mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <div class="pointer-events-none absolute -top-12 -left-10 h-36 w-36 rounded-full bg-rose-200/50 blur-3xl dark:bg-rose-500/15"
+              aria-hidden="true"></div>
+            <div class="relative flex -space-x-2 shrink-0">
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-full border-4 border-white bg-linear-to-br from-rose-500 to-pink-600 text-white shadow dark:border-sky-950">
+                <i class="pi pi-user text-sm"></i>
+              </span>
+              <span class="theme-surface inline-flex h-11 w-11 items-center justify-center rounded-full border-4 border-white shadow dark:border-sky-950">
+                <i class="pi pi-heart-fill text-sm"></i>
+              </span>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-full border-4 border-white bg-linear-to-br from-amber-400 to-orange-500 text-white shadow dark:border-sky-950">
+                <i class="pi pi-gift text-sm"></i>
+              </span>
+            </div>
+            <div class="relative min-w-0 flex-1">
+              <p class="dash-eyebrow text-rose-600 dark:text-rose-300">Need more free days of full access?</p>
+              <p class="mt-1 text-sm font-extrabold text-slate-950 dark:text-white">
+                Refer a friend and you both get {{ REFERRAL_REWARD_DAYS }} days free.
+              </p>
+              <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-300">
+                Rewards unlock once their first payment clears.
+              </p>
+            </div>
+            <span class="dash-btn relative shrink-0 bg-linear-to-r from-rose-600 to-orange-500 text-white group-hover:translate-x-0.5">
+              Refer now <i class="pi pi-arrow-right text-[10px]"></i>
+            </span>
+          </RouterLink>
         </article>
-        <div class="min-w-0 xl:col-span-5">
-          <Probability :pass-mark="75" product="nursing" />
+
+        <div class="ui-rise min-w-0 xl:col-span-5" style="animation-delay: 200ms">
+          <Probability :pass-mark="PASS_MARK" product="nursing" section-field="question_subject_id" :section-labels="subjectLabels" />
         </div>
       </section>
 
+      <!-- ================= FOCUS + PEERS ================= -->
       <section class="grid grid-cols-1 gap-5 xl:grid-cols-12">
-        <article
-          class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900 xl:col-span-5">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <h2 class="text-lg font-semibold text-slate-950 dark:text-white">Today's Focus</h2>
-              <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
-                Two focused starts for a productive practice session.
-              </p>
-            </div>
-            <span
-              class="rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
-              Random Sets
-            </span>
-          </div>
+        <div class="ui-rise min-w-0 xl:col-span-5" style="animation-delay: 260ms">
+          <TodayFocusPanel product="nursing" :pass-mark="PASS_MARK" :sections="focusSections" :attempts="focusAttempts"
+            :days-to-exam="daysToExam" :review-task="focusReviewTask"
+            :study-link="{ label: 'Browse study lessons', route: '/nursing/study-chapters?chapter_id=7' }"
+            subtitle="Ranked per subject from your scores, recency, and coverage." />
+        </div>
 
-          <div class="mt-4 space-y-3">
-            <article v-for="card in todayFocusCards" :key="card.key"
-              class="grid grid-cols-12 gap-4 rounded-xl border border-slate-200 bg-light-blue-500 p-3 dark:border-sky-800 dark:bg-sky-950/60">
-              <div class="col-span-4 flex flex-col items-center justify-between text-center text-sm">
-                <div class="radial-progress bg-white shadow-sm dark:bg-sky-900/70" :class="card.color"
-                  :style="{ '--value': card.targetScore }" role="progressbar">
-                  {{ card.badge }}
-                </div>
-                <span class="mt-3 text-xs font-semibold text-slate-500 dark:text-slate-300">
-                  {{ card.targetCopy }}
-                </span>
-              </div>
-
-              <div class="col-span-8 min-w-0 text-sm">
-                <h3 class="truncate font-semibold text-slate-950 dark:text-white">{{ card.title }}</h3>
-                <div
-                  class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600 dark:text-slate-300">
-                  <span><i class="pi pi-arrow-up mr-1 text-teal-500"></i>{{ card.goal }}</span>
-                  <span><i class="pi pi-clock mr-1"></i>{{ card.duration }}</span>
-                </div>
-                <p
-                  class="mt-3 rounded-full bg-teal-500/15 px-3 py-1 text-center text-xs font-semibold text-teal-700 dark:text-teal-200">
-                  {{ card.helper }}
-                </p>
-                <div class="mt-4 flex flex-wrap gap-2">
-                  <span
-                    class="rounded-full border border-dashed border-teal-500 px-3 py-1 text-xs font-semibold text-slate-700 dark:text-slate-200">
-                    {{ card.community }}
-                  </span>
-                  <RouterLink v-if="card.route" :to="card.route"
-                    class="rounded-full bg-sky-500 px-4 py-1 text-xs font-semibold text-white transition hover:bg-sky-600">
-                    Start
-                  </RouterLink>
-                  <span v-else
-                    class="rounded-full bg-slate-200 px-4 py-1 text-xs font-semibold text-slate-500 dark:bg-sky-800 dark:text-slate-300">
-                    Loading
-                  </span>
-                </div>
-              </div>
-            </article>
-          </div>
-        </article>
-
-        <div class="min-w-0 xl:col-span-7">
+        <div class="ui-rise min-w-0 xl:col-span-7" style="animation-delay: 300ms">
           <PracticeProgressPeersChart />
         </div>
       </section>
 
-      <StudySchedulePanel product-code="nursing" :initial-exam-date="nursing_exam_date"
-        progress-route="/nursing/performance-analysis" study-route="/nursing/study-chapters?chapter_id=7"
-        title="Nursing Study Schedule" @updated="handleExamDateUpdated" />
+      <div class="ui-rise" style="animation-delay: 340ms">
+        <StudySchedulePanel product-code="nursing" :initial-exam-date="nursing_exam_date"
+          progress-route="/nursing/performance-analysis" study-route="/nursing/study-chapters?chapter_id=7"
+          title="Nursing Study Schedule" @updated="handleExamDateUpdated" />
+      </div>
     </div>
 
     <dialog ref="studyModalRef" class="modal">
@@ -405,7 +377,10 @@ import router from "../../router";
 import StudySchedulePanel from "../../components/Dashboard/StudySchedulePanel.vue";
 import StreakCard from "../../components/Dashboard/StreakCard.vue";
 import ExamIcon from "../../components/ExamIcon.vue";
-import referfriend from "../../assets/images/referfriend2.png";
+import TodayFocusPanel from "../../components/Dashboard/TodayFocusPanel.vue";
+import DashboardSnapshot from "../../components/Dashboard/DashboardSnapshot.vue";
+import type { SnapshotSection } from "../../components/Dashboard/DashboardSnapshot.vue";
+import type { FocusAttempt, FocusReviewTask, FocusSection } from "../../components/Dashboard/TodayFocusPanel.vue";
 
 type NursingProgressGroup = "rn" | "lpn" | "rnExit" | "lpnExit";
 
@@ -437,6 +412,9 @@ type ExamSearchResult = {
   name: string;
 };
 
+const PASS_MARK = 75;
+const REFERRAL_REWARD_DAYS = 15;
+
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
 
@@ -457,8 +435,6 @@ const {
   hesi_examTopics_pn_exit_exams,
 } = storeToRefs(nursingStore);
 
-const RandSubject1 = ref<NursingSubject | null>(null);
-const RandSubject2 = ref<NursingSubject | null>(null);
 const subjects = ref<NursingSubject[]>([]);
 const nursingAttempts = ref<NursingAttempt[]>([]);
 const universal_search = ref("");
@@ -484,30 +460,6 @@ const averageScore = computed(() => {
 
   return `${Math.max(0, Math.min(100, Math.round(score)))}%`;
 });
-
-const summaryStats = computed(() => [
-  {
-    label: "Attempts",
-    value: dashdata.value?.nursing_attempts ?? nursingAttempts.value.length,
-    detail: "All time practice",
-    icon: "pi pi-pencil",
-    color: "text-sky-600 dark:text-sky-300",
-  },
-  {
-    label: "Avg. Score",
-    value: averageScore.value,
-    detail: "Recent attempts",
-    icon: "pi pi-percentage",
-    color: "text-emerald-600 dark:text-emerald-300",
-  },
-  {
-    label: "Banks",
-    value: nursingQuickLinks.length,
-    detail: "RN, LPN, and exit prep",
-    icon: "pi pi-th-large",
-    color: "text-orange-600 dark:text-orange-300",
-  },
-]);
 
 const quickActions = [
   { label: "RN Exams", route: "/nursing/rn-t-exams", icon: "pi pi-book" },
@@ -573,12 +525,7 @@ onMounted(async () => {
 
   try {
     const response = await axios.get("/nursing/subjects", { showLoader: false });
-    const subjectData = Array.isArray(response.data?.data) ? response.data.data : [];
-    const shuffledSubjects = [...subjectData].sort(() => Math.random() - 0.5);
-
-    subjects.value = subjectData;
-    RandSubject1.value = shuffledSubjects[0] || null;
-    RandSubject2.value = shuffledSubjects[1] || shuffledSubjects[0] || null;
+    subjects.value = Array.isArray(response.data?.data) ? response.data.data : [];
   } catch {
     subjects.value = [];
   }
@@ -618,6 +565,11 @@ const nursingQuickLinks = [
     group: "rn" as NursingProgressGroup,
     color: "text-sky-600 dark:text-sky-300",
     barClass: "bg-gradient-to-r from-sky-500 to-cyan-400",
+    tileClass: "bg-linear-to-br from-sky-500 to-cyan-400 text-white shadow-sky-500/30",
+    washClass: "from-sky-400/45 to-cyan-300/25 dark:from-sky-500/30 dark:to-cyan-400/15",
+    patternClass: "pattern-grid",
+    inkClass: "text-sky-600 dark:text-sky-300",
+    borderClass: "border-sky-100 hover:border-sky-300 dark:border-sky-800 dark:hover:border-sky-600",
   },
   {
     title: "LPN Test Bank",
@@ -628,6 +580,11 @@ const nursingQuickLinks = [
     group: "lpn" as NursingProgressGroup,
     color: "text-indigo-600 dark:text-indigo-300",
     barClass: "bg-gradient-to-r from-indigo-500 to-sky-400",
+    tileClass: "bg-linear-to-br from-indigo-500 to-sky-400 text-white shadow-indigo-500/30",
+    washClass: "from-indigo-400/45 to-sky-300/25 dark:from-indigo-500/30 dark:to-sky-400/15",
+    patternClass: "pattern-lines",
+    inkClass: "text-indigo-600 dark:text-indigo-300",
+    borderClass: "border-indigo-100 hover:border-indigo-300 dark:border-indigo-900 dark:hover:border-indigo-600",
   },
   {
     title: "RN EXIT Exams",
@@ -638,6 +595,11 @@ const nursingQuickLinks = [
     group: "rnExit" as NursingProgressGroup,
     color: "text-emerald-600 dark:text-emerald-300",
     barClass: "bg-gradient-to-r from-emerald-500 to-teal-400",
+    tileClass: "bg-linear-to-br from-emerald-500 to-teal-400 text-white shadow-emerald-500/30",
+    washClass: "from-emerald-400/45 to-teal-300/25 dark:from-emerald-500/30 dark:to-teal-400/15",
+    patternClass: "pattern-dots",
+    inkClass: "text-emerald-600 dark:text-emerald-300",
+    borderClass: "border-emerald-100 hover:border-emerald-300 dark:border-emerald-900 dark:hover:border-emerald-600",
   },
   {
     title: "LPN EXIT Exams",
@@ -648,43 +610,105 @@ const nursingQuickLinks = [
     group: "lpnExit" as NursingProgressGroup,
     color: "text-orange-600 dark:text-orange-300",
     barClass: "bg-gradient-to-r from-orange-500 to-amber-400",
+    tileClass: "bg-linear-to-br from-orange-500 to-amber-400 text-white shadow-orange-500/30",
+    washClass: "from-orange-400/45 to-amber-300/25 dark:from-orange-500/30 dark:to-amber-400/15",
+    patternClass: "pattern-diagonal",
+    inkClass: "text-orange-600 dark:text-orange-300",
+    borderClass: "border-orange-100 hover:border-orange-300 dark:border-orange-900 dark:hover:border-orange-600",
   },
 ];
 
-const focusCardPresets = [
-  {
-    targetScore: 60,
-    color: "text-sky-600 dark:text-sky-300",
-    targetCopy: "At least 60%",
-    duration: "40 min",
-    helper: "Warm up with one focused set.",
-    community: "12k joined",
-  },
-  {
-    targetScore: 70,
-    color: "text-emerald-500 dark:text-emerald-300",
-    targetCopy: "At least 65%",
-    duration: "50 min",
-    helper: "Accept a mixed review challenge.",
-    community: "19k joined",
-  },
+/* ---------- Today's Focus (shared panel), ranked per subject ---------- */
+const subjectPalette = [
+  { tileClass: "bg-linear-to-br from-sky-500 to-cyan-400 text-white shadow-sky-500/30", inkClass: "text-sky-600 dark:text-sky-300" },
+  { tileClass: "bg-linear-to-br from-indigo-500 to-sky-400 text-white shadow-indigo-500/30", inkClass: "text-indigo-600 dark:text-indigo-300" },
+  { tileClass: "bg-linear-to-br from-emerald-500 to-teal-400 text-white shadow-emerald-500/30", inkClass: "text-emerald-600 dark:text-emerald-300" },
+  { tileClass: "bg-linear-to-br from-orange-500 to-amber-400 text-white shadow-orange-500/30", inkClass: "text-orange-600 dark:text-orange-300" },
+  { tileClass: "bg-linear-to-br from-rose-500 to-pink-500 text-white shadow-rose-500/30", inkClass: "text-rose-600 dark:text-rose-300" },
+  { tileClass: "bg-linear-to-br from-violet-500 to-purple-500 text-white shadow-violet-500/30", inkClass: "text-violet-600 dark:text-violet-300" },
 ];
 
-const todayFocusCards = computed(() =>
-  [RandSubject1.value, RandSubject2.value].map((subject, index) => {
-    const preset = focusCardPresets[index];
-    const examCount = toNumber(subject?.examsCount) || 10;
+const attemptedExamsBySubject = computed(() => {
+  const map = new Map<number, Set<number>>();
+  nursingAttempts.value.forEach((attempt) => {
+    const subjectId = toNumber(attempt.question_subject_id);
+    const examId = toNumber(attempt.sub_topic_id);
+    if (subjectId > 0 && examId > 0) {
+      if (!map.has(subjectId)) map.set(subjectId, new Set());
+      map.get(subjectId)!.add(examId);
+    }
+  });
+  return map;
+});
 
-    return {
-      key: `focus-${index}-${subject?.slug || "loading"}`,
-      title: subject?.name || "Analysing subject...",
-      badge: subject?.emoji || `${preset.targetScore}%`,
-      route: subject?.slug ? `/nursing/test-bank-loader/${subject.slug}` : "",
-      goal: `${examCount} exams`,
-      ...preset,
-    };
-  }),
+const focusSections = computed<FocusSection[]>(() =>
+  subjects.value
+    .filter((subject) => subject.slug && subject.id !== undefined && subject.id !== null)
+    .map((subject, index) => {
+      const id = toNumber(subject.id);
+      const total = Math.max(0, toNumber(subject.examsCount));
+      const attempted = attemptedExamsBySubject.value.get(id)?.size || 0;
+      const palette = subjectPalette[index % subjectPalette.length];
+      return {
+        id,
+        title: subject.name,
+        shortTitle: subject.name,
+        icon: "pi pi-book",
+        emoji: subject.emoji || null,
+        route: `/nursing/test-bank-loader/${subject.slug}`,
+        tileClass: palette.tileClass,
+        inkClass: palette.inkClass,
+        percent: total > 0 ? Math.min(100, Math.round((attempted / total) * 100)) : 0,
+      };
+    }),
 );
+
+const focusAttempts = computed<FocusAttempt[]>(() =>
+  nursingAttempts.value.map((attempt) => ({
+    sectionId: toNumber(attempt.question_subject_id) || null,
+    score: attempt.score === null || attempt.score === undefined || attempt.score === "" ? null : toNumber(attempt.score),
+    completed: isCompletedAttempt(attempt),
+    timestamp: attemptTimestamp(attempt),
+  })),
+);
+
+const snapshotSections = computed<SnapshotSection[]>(() =>
+  nursingQuickLinksWithProgress.value.map((link) => ({
+    id: link.group,
+    label: link.title.replace(" Test Bank", "").replace(" Exams", ""),
+    attempted: link.attempted,
+    total: link.total,
+    barClass: link.barClass,
+  })),
+);
+
+const subjectLabels = computed<Record<string, string>>(() =>
+  Object.fromEntries(subjects.value.filter((s) => s.id !== undefined && s.id !== null).map((s) => [String(s.id), s.name])),
+);
+
+const focusReviewTask = computed<FocusReviewTask | null>(() => {
+  const last = latestCompletedAttempt.value;
+  if (!last) return null;
+  const score = Math.round(toNumber(last.score));
+  const attemptId = last.attempt_id || last.id;
+  if (score >= PASS_MARK || !attemptId) return null;
+  return {
+    label: `Review your misses in ${last.sub_topic_name || "your last set"}`,
+    helper: `Scored ${score}%. Read the rationales while they are fresh.`,
+    route: `/nursing/exam/${attemptId}?mode=review`,
+  };
+});
+
+const daysToExam = computed<number | null>(() => {
+  const raw = nursing_exam_date.value as unknown;
+  if (!raw) return null;
+  const exam = raw instanceof Date ? new Date(raw) : new Date(/^\d{4}-\d{2}-\d{2}$/.test(String(raw)) ? `${raw}T00:00:00` : String(raw));
+  if (Number.isNaN(exam.getTime())) return null;
+  exam.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return Math.ceil((exam.getTime() - today.getTime()) / 86400000);
+});
 
 const attemptTimestamp = (attempt: NursingAttempt) => {
   const raw = attempt.completed_at || attempt.updated_at || attempt.created_at;

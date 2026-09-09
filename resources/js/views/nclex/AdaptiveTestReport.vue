@@ -1,13 +1,17 @@
 <template>
-    <div
-        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-slate-800 dark:bg-slate-900 dark:text-slate-100 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+    <div class="dash-shell">
         <div class="mx-auto max-w-screen-2xl space-y-6">
+            <!-- ================= HEADER + SNAPSHOT ================= -->
             <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
-                <article class="rounded-2xl p-5 xl:col-span-8">
-                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+                <article class="ui-rise rounded-2xl p-5 xl:col-span-8">
+                    <p class="dash-eyebrow theme-text inline-flex items-center gap-2">
+                        <span class="relative flex h-2 w-2">
+                            <span class="theme-dot absolute inline-flex h-full w-full animate-ping rounded-full opacity-70"></span>
+                            <span class="theme-dot relative inline-flex h-2 w-2 rounded-full"></span>
+                        </span>
                         NCLEX CAT Report
                     </p>
-                    <h1 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+                    <h1 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white md:text-3xl">
                         Adaptive Test Report
                     </h1>
                     <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
@@ -16,25 +20,14 @@
                     </p>
 
                     <div class="mt-5 flex flex-wrap gap-2">
-                        <RouterLink to="/nclex/cat"
-                            class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-bold text-sky-700 transition hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-950/40 dark:text-sky-200">
-                            <i class="pi pi-desktop"></i>
-                            CAT Simulator
-                        </RouterLink>
-                        <RouterLink to="/nclex/performance-analysis"
-                            class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3 py-2 text-xs font-bold text-orange-700 transition hover:bg-orange-100 dark:border-orange-800 dark:bg-orange-950/40 dark:text-orange-200">
-                            <i class="pi pi-chart-line"></i>
-                            Analysis
-                        </RouterLink>
-                        <RouterLink to="/nclex"
-                            class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900">
-                            <i class="pi pi-gauge"></i>
-                            Dashboard
-                        </RouterLink>
+                        <RouterLink to="/nclex/cat" class="dash-chip theme-soft theme-focus"><i class="pi pi-desktop"></i> CAT Simulator</RouterLink>
+                        <RouterLink to="/nclex/performance-analysis" class="dash-chip theme-soft theme-focus"><i class="pi pi-chart-line"></i> Analysis</RouterLink>
+                        <RouterLink to="/nclex/previous-attempts" class="dash-chip theme-soft theme-focus"><i class="pi pi-history"></i> History</RouterLink>
+                        <RouterLink to="/nclex" class="dash-chip theme-soft theme-focus"><i class="pi pi-gauge"></i> Dashboard</RouterLink>
                     </div>
                 </article>
 
-                <aside class="xl:col-span-4">
+                <aside class="ui-rise xl:col-span-4" style="animation-delay: 80ms">
                     <div class="flex h-full items-center justify-between gap-4 rounded-2xl border-b bg-sky-800 p-5 shadow-custom">
                         <div>
                             <span
@@ -53,149 +46,176 @@
                 </aside>
             </section>
 
-            <div v-if="isLoading"
-                class="rounded-2xl border border-slate-200 bg-white p-10 text-center text-slate-500 shadow-sm dark:border-sky-800 dark:bg-sky-900 dark:text-slate-300">
-                Loading adaptive report...
+            <div v-if="isLoading" class="grid gap-4 xl:grid-cols-12">
+                <div class="h-80 animate-pulse rounded-2xl bg-white/80 dark:bg-sky-950/60 xl:col-span-4"></div>
+                <div class="h-80 animate-pulse rounded-2xl bg-white/80 dark:bg-sky-950/60 xl:col-span-8"></div>
             </div>
 
-            <div v-else-if="!attempt"
-                class="rounded-2xl border border-rose-100 bg-rose-50 p-6 text-sm font-medium text-rose-700 dark:border-rose-900/60 dark:bg-rose-950/30 dark:text-rose-200">
-                This adaptive report could not be loaded.
-            </div>
+            <div v-else-if="!attempt" class="analysis-state-error">This adaptive report could not be loaded.</div>
 
             <template v-else>
+                <!-- ================= SCORE + ANALYSIS ================= -->
                 <section class="grid grid-cols-1 gap-5 xl:grid-cols-12">
-                    <article
-                        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900 xl:col-span-4">
-                        <div class="flex flex-col items-center text-center">
-                            <div class="radial-progress bg-light-blue-500 text-3xl font-extrabold shadow-sm dark:bg-sky-950/60"
-                                :class="scoreRingClass" :style="{ '--value': scoreRounded, '--size': '9rem', '--thickness': '10px' }"
-                                role="progressbar">
-                                {{ scoreRounded }}%
+                    <article class="ui-rise dash-card xl:col-span-4" style="animation-delay: 120ms">
+                        <div class="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full blur-3xl theme-glow opacity-50" aria-hidden="true"></div>
+                        <div class="relative flex flex-col items-center text-center">
+                            <div class="relative h-40 w-40">
+                                <svg class="h-40 w-40 -rotate-90" viewBox="0 0 120 120" aria-hidden="true">
+                                    <circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" stroke-width="10" class="text-slate-200 dark:text-slate-700" />
+                                    <circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"
+                                        :stroke-dasharray="bigRing" :stroke-dashoffset="bigRing * (1 - scoreRounded / 100)" :class="scoreRingClass"
+                                        class="transition-[stroke-dashoffset] duration-1000 ease-out" />
+                                    <circle cx="60" cy="60" r="50" fill="none" stroke="currentColor" stroke-width="12"
+                                        :stroke-dasharray="`2 ${bigRing - 2}`" :stroke-dashoffset="bigRing * (1 - PASS_THRESHOLD / 100)" class="text-slate-600 dark:text-slate-200" />
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center leading-none">
+                                    <span class="text-4xl font-black tabular-nums text-slate-950 dark:text-white">{{ scoreRounded }}%</span>
+                                    <span class="mt-1 text-[10px] font-bold uppercase tracking-wide text-slate-400">threshold {{ PASS_THRESHOLD }}%</span>
+                                </div>
                             </div>
 
-                            <span class="mt-5 rounded-full px-5 py-2 text-sm font-extrabold" :class="statusPillClass">
-                                {{ statusLabel }}
-                            </span>
+                            <span class="analysis-pill mt-4 border px-5 py-2 text-sm font-extrabold" :class="statusPillClass">{{ statusLabel }}</span>
                             <p class="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-300">
                                 Completed {{ formatDate(displayAttempt.completed_at) }}
                             </p>
                         </div>
 
-                        <dl class="mt-6 grid gap-3 text-sm">
-                            <div v-for="metric in scoreSummaryCards" :key="metric.label"
-                                class="flex items-center justify-between rounded-xl bg-light-blue-500 px-3 py-2 dark:bg-sky-950/60">
-                                <dt class="font-semibold text-slate-500 dark:text-slate-300">{{ metric.label }}</dt>
-                                <dd class="font-extrabold text-slate-950 dark:text-white">{{ metric.value }}</dd>
+                        <dl class="relative mt-5 grid grid-cols-2 gap-2">
+                            <div v-for="metric in scoreSummaryCards" :key="metric.label" class="dash-tile-soft px-3 py-2">
+                                <dt class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">{{ metric.label }}</dt>
+                                <dd class="mt-0.5 truncate text-sm font-extrabold tabular-nums text-slate-950 dark:text-white">{{ metric.value }}</dd>
                             </div>
                         </dl>
                     </article>
 
-                    <article
-                        class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900 xl:col-span-8">
+                    <article class="ui-rise dash-card xl:col-span-8" style="animation-delay: 160ms">
                         <div class="flex flex-wrap items-start justify-between gap-4">
                             <div>
-                                <h2 class="text-lg font-extrabold text-slate-950 dark:text-white">Performance Analysis</h2>
-                                <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
-                                    Adaptive metrics explain how the run moved and where to focus next.
-                                </p>
+                                <h2 class="dash-title">Performance Analysis</h2>
+                                <p class="analysis-muted mt-1">Adaptive metrics explain how the run moved and where to focus next.</p>
                             </div>
-                            <span class="rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-bold text-sky-700 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
+                            <span class="analysis-pill theme-soft border">
                                 {{ totalAdaptiveAttempts }} CAT {{ totalAdaptiveAttempts === 1 ? "attempt" : "attempts" }}
                             </span>
                         </div>
 
-                        <div class="mt-5 rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/60">
+                        <div class="dash-card-white mt-4">
                             <div class="flex items-start gap-3">
-                                <span
-                                    class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-700 ring-1 ring-sky-100 dark:bg-sky-900/70 dark:text-sky-200 dark:ring-sky-800">
+                                <span class="dash-icon-tile h-11 w-11 bg-linear-to-br from-amber-400 to-orange-500 text-white shadow-lg shadow-amber-500/30">
                                     <i class="pi pi-comment"></i>
                                 </span>
                                 <div>
-                                    <h3 class="font-bold text-slate-950 dark:text-white">{{ remarksTitle }}</h3>
-                                    <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                                        {{ remarksCopy }}
+                                    <h3 class="font-extrabold text-slate-950 dark:text-white">{{ remarksTitle }}</h3>
+                                    <p class="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">{{ remarksCopy }}</p>
+                                    <p v-if="weakestSubject" class="mt-2 inline-flex items-center gap-1.5 rounded-full border theme-soft px-3 py-1 text-[11px] font-bold">
+                                        <i class="pi pi-flag-fill text-[10px] text-rose-500"></i>
+                                        Weakest subject: {{ weakestSubject.name }} at {{ Math.round(weakestSubject.percentage) }}%
                                     </p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                            <div class="rounded-xl border border-sky-100 bg-white p-4 dark:border-sky-800 dark:bg-sky-950/60">
+                            <!-- Final difficulty gauge -->
+                            <div class="dash-card-white">
                                 <div class="flex items-center justify-between gap-3">
-                                    <span class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
-                                        Final Difficulty
-                                    </span>
-                                    <i class="pi pi-sliders-v text-sky-600 dark:text-sky-300"></i>
+                                    <span class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">Final difficulty</span>
+                                    <span class="dash-icon-tile theme-icon h-8 w-8 text-sm"><i class="pi pi-sliders-v"></i></span>
                                 </div>
-                                <p class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">
-                                    {{ displayAttempt.final_difficulty || 0 }}/100
+                                <p class="mt-2 text-2xl font-extrabold tabular-nums text-slate-950 dark:text-white">
+                                    {{ finalDifficulty }}<span class="text-sm font-bold text-slate-400">/100</span>
                                 </p>
+                                <div class="dash-progress mt-3 h-2.5 bg-light-blue-500">
+                                    <div class="h-full rounded-full theme-bar transition-all duration-700" :style="{ width: `${finalDifficulty}%` }"></div>
+                                </div>
+                                <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-300">{{ difficultyCopy }}</p>
                             </div>
 
-                            <div class="rounded-xl border border-sky-100 bg-white p-4 dark:border-sky-800 dark:bg-sky-950/60">
+                            <!-- Theta scale -->
+                            <div class="dash-card-white">
                                 <div class="flex items-center justify-between gap-3">
-                                    <span class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
-                                        Ability Theta
-                                    </span>
-                                    <i class="pi pi-wave-pulse text-emerald-600 dark:text-emerald-300"></i>
+                                    <span class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">Ability theta</span>
+                                    <span class="dash-icon-tile theme-icon h-8 w-8 text-sm"><i class="pi pi-wave-pulse"></i></span>
                                 </div>
-                                <p class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">
-                                    {{ thetaDisplay }}
-                                </p>
+                                <p class="mt-2 text-2xl font-extrabold tabular-nums text-slate-950 dark:text-white">{{ thetaDisplay }}</p>
+                                <div class="relative mt-3 h-2.5 rounded-full bg-linear-to-r from-rose-300 via-amber-300 to-emerald-400">
+                                    <span class="absolute top-1/2 h-4 w-0.5 -translate-y-1/2 bg-slate-500/60" style="left: 50%"></span>
+                                    <span class="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-slate-900 shadow transition-all duration-700 dark:border-slate-900 dark:bg-white"
+                                        :style="{ left: `${thetaPercent}%` }"></span>
+                                </div>
+                                <div class="mt-1 flex justify-between text-[9px] font-bold text-slate-400"><span>-3</span><span>0</span><span>+3</span></div>
+                                <p class="mt-1 text-[11px] text-slate-500 dark:text-slate-300">{{ thetaCopy }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Run comparison -->
+                        <div v-if="runHistory.length > 1" class="dash-tile mt-4">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">Your CAT runs</p>
+                                    <p class="text-sm font-extrabold text-slate-900 dark:text-white">{{ runComparisonCopy }}</p>
+                                </div>
+                                <span v-if="previousRunDelta !== null" class="inline-flex items-center gap-1 text-xs font-bold" :class="previousRunDelta >= 0 ? 'text-emerald-600 dark:text-emerald-300' : 'text-rose-600 dark:text-rose-300'">
+                                    <i :class="['pi text-[10px]', previousRunDelta >= 0 ? 'pi-arrow-up-right' : 'pi-arrow-down-right']"></i>
+                                    {{ previousRunDelta >= 0 ? "+" : "" }}{{ previousRunDelta }} vs previous run
+                                </span>
+                            </div>
+                            <div class="relative mt-3 flex h-20 items-end gap-2">
+                                <span class="pointer-events-none absolute left-0 right-0 border-t border-dashed border-slate-400/60" :style="{ bottom: `${PASS_THRESHOLD}%` }"></span>
+                                <div v-for="run in runHistory" :key="run.id" class="flex h-full flex-1 cursor-pointer flex-col items-center justify-end gap-1"
+                                    :title="`${run.score}% · ${formatDate(run.when)}`" @click="run.current ? null : router.push(`/nclex/adaptive-report/${run.id}`)">
+                                    <span class="text-[10px] font-bold tabular-nums text-slate-500 dark:text-slate-300">{{ run.score }}%</span>
+                                    <div class="w-full rounded-t-md transition-all duration-700" :class="run.current ? 'theme-bar' : run.score >= PASS_THRESHOLD ? 'bg-emerald-300 dark:bg-emerald-700' : 'bg-rose-300 dark:bg-rose-800'"
+                                        :style="{ height: `${Math.max(6, run.score)}%` }"></div>
+                                    <span class="text-[9px] font-bold" :class="run.current ? 'theme-text' : 'text-slate-400'">{{ run.current ? "this" : run.short }}</span>
+                                </div>
                             </div>
                         </div>
                     </article>
                 </section>
 
-                <section
-                    class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900">
+                <!-- ================= SUBJECT PERFORMANCE ================= -->
+                <section class="ui-rise dash-card" style="animation-delay: 220ms">
                     <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
                         <div>
-                            <h2 class="text-lg font-semibold text-slate-950 dark:text-white">Subject Performance</h2>
-                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
-                                Subject trends from this adaptive run.
-                            </p>
+                            <h2 class="dash-title">Subject Performance</h2>
+                            <p class="analysis-muted mt-1">Subject trends from this adaptive run, weakest first.</p>
                         </div>
-                        <span
-                            class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-bold text-sky-700 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
-                            {{ subjectScores.length }} sections
-                        </span>
+                        <span class="analysis-pill theme-soft border">{{ subjectScores.length }} sections</span>
                     </div>
 
-                    <div v-if="subjectScores.length > 0" class="space-y-4">
-                        <article v-for="subject in subjectScores" :key="subject.id"
-                            class="rounded-xl border border-slate-200 bg-light-blue-500 p-4 dark:border-sky-800 dark:bg-sky-950/60">
-                            <div class="mb-2 flex flex-wrap items-center justify-between gap-3">
-                                <div class="min-w-0">
-                                    <h3 class="font-bold text-slate-950 dark:text-white">{{ subject.name }}</h3>
-                                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">
-                                        {{ subject.correct }} correct out of {{ subject.total }}
-                                    </p>
-                                </div>
-                                <span class="font-extrabold" :class="subjectScoreClass(subject.percentage)">
+                    <div v-if="subjectScores.length > 0" class="grid gap-3 md:grid-cols-2">
+                        <article v-for="(subject, index) in sortedSubjects" :key="subject.id"
+                            class="dash-card-white dash-hover-lift ui-rise flex items-center gap-3" :style="{ animationDelay: `${260 + index * 40}ms` }">
+                            <div class="relative h-14 w-14 shrink-0">
+                                <svg class="h-14 w-14 -rotate-90" viewBox="0 0 48 48" aria-hidden="true">
+                                    <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="5" class="text-slate-200 dark:text-slate-700" />
+                                    <circle cx="24" cy="24" r="20" fill="none" :stroke="subject.barColor" stroke-width="5" stroke-linecap="round"
+                                        :stroke-dasharray="smallRing" :stroke-dashoffset="smallRing * (1 - Math.min(100, subject.percentage) / 100)"
+                                        class="transition-[stroke-dashoffset] duration-1000 ease-out" />
+                                </svg>
+                                <span class="absolute inset-0 flex items-center justify-center text-xs font-black tabular-nums" :class="subjectScoreClass(subject.percentage)">
                                     {{ Math.round(subject.percentage) }}%
                                 </span>
                             </div>
-                            <div class="h-2.5 overflow-hidden rounded-full bg-white ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-sky-800">
-                                <div :style="{ width: `${Math.round(subject.percentage)}%`, backgroundColor: subject.barColor }"
-                                    class="h-full rounded-full transition-all duration-500"></div>
+                            <div class="min-w-0 flex-1">
+                                <h3 class="truncate text-sm font-extrabold text-slate-950 dark:text-white">{{ subject.name }}</h3>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-300">{{ subject.correct }} correct out of {{ subject.total }}</p>
+                                <div class="dash-progress mt-2 h-1.5 bg-light-blue-500">
+                                    <div class="h-full rounded-full transition-all duration-700" :style="{ width: `${Math.round(subject.percentage)}%`, backgroundColor: subject.barColor }"></div>
+                                </div>
                             </div>
+                            <span v-if="index === 0 && subject.percentage < PASS_THRESHOLD" class="analysis-pill border border-rose-200 bg-rose-50 text-[10px] text-rose-700 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-200">Focus</span>
                         </article>
                     </div>
-                    <div v-else
-                        class="rounded-xl border border-dashed border-slate-300 bg-light-blue-500 p-10 text-center text-slate-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-slate-300">
+                    <div v-else class="dash-card-white border-dashed p-10 text-center text-sm font-semibold text-slate-500 dark:text-slate-300">
                         No subject-specific data available for this attempt.
                     </div>
                 </section>
 
-                <div class="flex flex-wrap justify-end gap-3">
-                    <CommonButton button-text="Back to CAT" icon="pi pi-arrow-left"
-                        classes="border border-slate-200 bg-white text-slate-700 shadow-none hover:bg-slate-100 dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100 dark:hover:bg-sky-900"
-                        :action="() => router.push('/nclex/cat')" />
-                    <CommonButton button-text="Start Another CAT" icon="pi pi-refresh"
-                        classes="bg-sky-500 text-white shadow-none hover:bg-sky-600"
-                        :action="() => router.push('/nclex/cat')" />
+                <div class="ui-rise flex flex-wrap justify-end gap-2" style="animation-delay: 300ms">
+                    <RouterLink to="/nclex/cat" class="dash-btn-ghost px-5 py-2.5"><i class="pi pi-arrow-left"></i> Back to CAT</RouterLink>
+                    <RouterLink to="/nclex/cat" class="dash-btn theme-surface theme-shadow px-5 py-2.5"><i class="pi pi-refresh"></i> Start another CAT</RouterLink>
                 </div>
             </template>
         </div>
@@ -206,7 +226,6 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
-import CommonButton from '../../components/Buttons/CommonButton.vue'
 
 const PASS_THRESHOLD = 65
 
@@ -305,6 +324,58 @@ const remarksCopy = computed(() => {
     }
 
     return 'This run points to larger knowledge gaps. Rebuild fundamentals with tutor mode and short linear sets before another adaptive attempt.'
+})
+
+const bigRing = 2 * Math.PI * 50
+const smallRing = 2 * Math.PI * 20
+
+const finalDifficulty = computed(() => Math.max(0, Math.min(100, Math.round(Number(displayAttempt.value.final_difficulty) || 0))))
+const difficultyCopy = computed(() => {
+    const d = finalDifficulty.value
+    if (d >= 70) return 'The engine pushed you into hard items, a strong sign.'
+    if (d >= 45) return 'You settled around mid-level difficulty.'
+    return 'Difficulty stayed low; accuracy on easier items needs work first.'
+})
+
+const thetaPercent = computed(() => {
+    const theta = Number(displayAttempt.value.theta)
+    if (!Number.isFinite(theta)) return 50
+    return Math.max(0, Math.min(100, ((theta + 3) / 6) * 100))
+})
+const thetaCopy = computed(() => {
+    const theta = Number(displayAttempt.value.theta)
+    if (!Number.isFinite(theta)) return 'Ability estimate unavailable.'
+    if (theta >= 1) return 'Well above the average candidate.'
+    if (theta >= 0) return 'At or slightly above average ability.'
+    if (theta >= -1) return 'Slightly below average; targeted review should lift this.'
+    return 'Below average; rebuild fundamentals before another run.'
+})
+
+const attemptTime = (a: any) => {
+    const t = new Date(a?.completed_at || a?.created_at || 0).getTime()
+    return Number.isFinite(t) ? t : 0
+}
+const runHistory = computed(() => {
+    const currentId = Number(displayAttempt.value?.id ?? route.params.id)
+    const list = [...attempts.value]
+        .map((a) => ({ id: Number(a.id), score: Math.max(0, Math.min(100, Math.round(Number(a.score) || 0))), when: a.completed_at || a.created_at, ts: attemptTime(a) }))
+        .sort((a, b) => a.ts - b.ts)
+        .slice(-8)
+    if (!list.some((a) => a.id === currentId) && attempt.value) {
+        list.push({ id: currentId, score: scoreRounded.value, when: displayAttempt.value.completed_at, ts: attemptTime(displayAttempt.value) })
+    }
+    return list.map((a) => ({ ...a, current: a.id === currentId, short: a.ts ? new Date(a.ts).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '' }))
+})
+const previousRunDelta = computed(() => {
+    const idx = runHistory.value.findIndex((r) => r.current)
+    if (idx <= 0) return null
+    return runHistory.value[idx].score - runHistory.value[idx - 1].score
+})
+const runComparisonCopy = computed(() => {
+    const scores = runHistory.value.map((r) => r.score)
+    const best = Math.max(...scores)
+    if (scoreRounded.value >= best) return 'Your best CAT run so far.'
+    return `Best run ${best}%. Average ${Math.round(scores.reduce((s, v) => s + v, 0) / scores.length)}%.`
 })
 
 const safeJsonParse = (value: unknown) => {
@@ -419,6 +490,12 @@ const subjectScores = computed(() => {
     }
 
     return []
+})
+
+const sortedSubjects = computed(() => [...subjectScores.value].sort((a, b) => a.percentage - b.percentage))
+const weakestSubject = computed(() => {
+    const first = sortedSubjects.value[0]
+    return first && first.percentage < PASS_THRESHOLD ? first : null
 })
 
 function subjectScoreClass(percentage: number) {

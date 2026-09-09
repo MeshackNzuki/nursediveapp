@@ -9,7 +9,7 @@
                     <stop offset="100%" stop-color="#06b6d4" />
                 </linearGradient>
                 <filter :id="glowId" x="-50%" y="-50%" width="200%" height="200%">
-                    <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#0ea5e9" flood-opacity="0.35" />
+                    <feDropShadow dx="0" dy="0" stdDeviation="2.5" :style="{ floodColor: accentColor }" flood-opacity="0.35" />
                 </filter>
             </defs>
 
@@ -23,12 +23,20 @@
                     stroke="rgba(100,116,139,0.5)" stroke-width="1.4" />
             </g>
 
+            <!-- Pass mark -->
+            <g v-if="passMark > 0 && passMark < 100">
+                <line :x1="passCoord.x1" :y1="passCoord.y1" :x2="passCoord.x2" :y2="passCoord.y2" :style="{ stroke: accentColor }"
+                    stroke-width="3" stroke-linecap="round" />
+                <text :x="passCoord.tx" :y="passCoord.ty" text-anchor="middle" font-size="9" font-weight="700"
+                    :style="{ fill: accentColor }">PASS {{ passMark }}%</text>
+            </g>
+
             <line :x1="cx" :y1="cy" :x2="needleX" :y2="needleY" :stroke="needleColor" stroke-width="3.2"
                 stroke-linecap="round" class="transition-all duration-700 ease-out" />
 
             <circle :cx="needleX" :cy="needleY" r="5.2" fill="white" :stroke="needleColor" stroke-width="2.3"
                 class="transition-all duration-700 ease-out" />
-            <circle :cx="cx" :cy="cy" r="6.5" fill="#0f172a" />
+            <circle :cx="cx" :cy="cy" r="6.5" :style="{ fill: accentColor }" />
             <circle :cx="cx" :cy="cy" r="3.2" fill="#f8fafc" />
         </svg>
 
@@ -128,6 +136,24 @@ const tickCoord = (value) => {
         y2: cy - Math.sin(theta) * outerR,
     }
 }
+
+// Theme accent is exposed as a CSS variable on the app root (stores/Theme.js -> App.vue).
+const accentColor = 'var(--theme-accent-2, #0284c7)'
+
+const passCoord = computed(() => {
+    const theta = Math.PI * (1 - props.passMark / 100)
+    const outerR = radius + 14
+    const innerR = radius - 10
+    const labelR = radius + 26
+    return {
+        x1: cx + Math.cos(theta) * innerR,
+        y1: cy - Math.sin(theta) * innerR,
+        x2: cx + Math.cos(theta) * outerR,
+        y2: cy - Math.sin(theta) * outerR,
+        tx: cx + Math.cos(theta) * labelR,
+        ty: cy - Math.sin(theta) * labelR + 3,
+    }
+})
 
 const needleColor = computed(() => {
     if (animatedLevel.value < 50) return '#e11d48'

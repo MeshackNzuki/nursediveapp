@@ -1,124 +1,123 @@
 <template>
     <div class="w-full px-3 mx-auto">
-        <section class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5 dark:border-sky-800 dark:bg-sky-900">
-            <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
-                NCLEX Builder
-            </p>
-            <h2 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">Create Custom Test</h2>
-            <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                Build a focused session by mode, topic areas, and target question count.
-            </p>
+        <section class="dash-card p-5">
+            <div class="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full blur-3xl theme-glow opacity-60" aria-hidden="true"></div>
+            <div class="relative flex items-start justify-between gap-3">
+                <div>
+                    <p class="dash-eyebrow theme-text">NCLEX Builder</p>
+                    <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white">Create Custom Test</h2>
+                    <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                        Build a focused session by mode, topic areas, and target question count.
+                    </p>
+                </div>
+                <span class="dash-icon-tile theme-icon h-11 w-11"><i class="pi pi-sliders-h"></i></span>
+            </div>
         </section>
 
         <form @submit.prevent="submitForm" class="mt-4 space-y-4 w-full">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <section class="rounded-xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-sky-950/60">
-                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Mode</h3>
+                <section class="dash-card-white">
+                    <h3 class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">Mode</h3>
                     <div class="mt-3 grid grid-cols-2 gap-2">
                         <label class="cursor-pointer">
                             <input v-model="form.mode" type="radio" class="sr-only" value="exam" />
                             <span :class="[
-                                'block rounded-xl border px-3 py-2 text-sm font-semibold text-center transition',
-                                form.mode === 'exam'
-                                    ? 'border-cyan-500 bg-cyan-50 text-cyan-700 dark:bg-cyan-950/40 dark:text-cyan-200 dark:border-cyan-700'
-                                    : 'border-slate-200 bg-white text-slate-600 hover:border-cyan-300 dark:border-sky-700 dark:bg-slate-900 dark:text-slate-300'
+                                'flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold transition duration-200',
+                                form.mode === 'exam' ? 'theme-soft shadow-sm' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-sky-700 dark:bg-slate-900 dark:text-slate-300'
                             ]">
-                                Exam
+                                <i class="pi pi-stopwatch text-xs"></i> Exam
                             </span>
                         </label>
                         <label class="cursor-pointer">
                             <input v-model="form.mode" type="radio" class="sr-only" value="tutor" />
                             <span :class="[
-                                'block rounded-xl border px-3 py-2 text-sm font-semibold text-center transition',
-                                form.mode === 'tutor'
-                                    ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-200 dark:border-emerald-700'
-                                    : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300 dark:border-sky-700 dark:bg-slate-900 dark:text-slate-300'
+                                'flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold transition duration-200',
+                                form.mode === 'tutor' ? 'theme-soft shadow-sm' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-sky-700 dark:bg-slate-900 dark:text-slate-300'
                             ]">
-                                Tutor
+                                <i class="pi pi-book text-xs"></i> Tutor
                             </span>
                         </label>
                     </div>
+                    <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-300">
+                        {{ form.mode === 'tutor' ? 'Rationales show after every question.' : 'Timed, with results at the end.' }}
+                    </p>
                 </section>
 
-                <section class="rounded-xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-sky-950/60">
-                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Number of Questions</h3>
+                <section class="dash-card-white">
+                    <h3 class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">Number of Questions</h3>
                     <div class="mt-3 flex items-center gap-3">
                         <input type="number" v-model.number="form.numQuestions" :min="MIN_QUESTIONS" :max="MAX_QUESTIONS"
                             @blur="normalizeQuestionCount"
-                            class="w-24 rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-cyan-500 focus:outline-none dark:border-sky-700 dark:bg-slate-900 dark:text-slate-100" />
-                        <p class="text-xs text-slate-500 dark:text-slate-300">
-                            {{ MIN_QUESTIONS }} - {{ MAX_QUESTIONS }} questions
-                        </p>
+                            class="theme-focus w-24 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-bold tabular-nums text-slate-800 shadow-sm focus:outline-none dark:border-sky-700 dark:bg-slate-900 dark:text-slate-100" />
+                        <p class="text-xs text-slate-500 dark:text-slate-300">{{ MIN_QUESTIONS }} - {{ MAX_QUESTIONS }} questions</p>
                     </div>
                     <div class="mt-3 flex flex-wrap gap-2">
                         <button v-for="preset in QUESTION_PRESETS" :key="preset" type="button" @click="setQuestionPreset(preset)"
-                            :class="[
-                                'rounded-full border px-3 py-1 text-xs font-semibold transition',
-                                form.numQuestions === preset
-                                    ? 'border-cyan-500 bg-cyan-50 text-cyan-700 dark:border-cyan-700 dark:bg-cyan-950/40 dark:text-cyan-200'
-                                    : 'border-slate-200 bg-white text-slate-600 hover:border-cyan-300 dark:border-sky-700 dark:bg-slate-900 dark:text-slate-300'
-                            ]">
+                            class="dash-chip py-1.5"
+                            :class="form.numQuestions === preset ? 'theme-soft' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-sky-700 dark:bg-slate-900 dark:text-slate-300'">
                             {{ preset }} Qs
                         </button>
                     </div>
                 </section>
             </div>
 
-            <section class="rounded-xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-sky-950/60">
+            <section class="dash-card-white">
                 <div class="flex items-center justify-between">
-                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Client Need Areas</h3>
-                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">{{ form.clientNeeds.length }} selected</span>
+                    <h3 class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">Client Need Areas</h3>
+                    <span class="analysis-pill theme-soft border text-[11px]">{{ form.clientNeeds.length }} selected</span>
                 </div>
                 <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <label v-for="area in clientNeedAreas" :key="area" class="cursor-pointer">
                         <input type="checkbox" class="sr-only" v-model="form.clientNeeds" :value="area" />
                         <span :class="[
-                            'block rounded-xl border px-3 py-2 text-sm transition',
-                            form.clientNeeds.includes(area)
-                                ? 'border-cyan-500 bg-cyan-50 text-cyan-700 dark:border-cyan-700 dark:bg-cyan-950/40 dark:text-cyan-200'
-                                : 'border-slate-200 bg-white text-slate-600 hover:border-cyan-300 dark:border-sky-700 dark:bg-slate-900 dark:text-slate-300'
+                            'flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition duration-200',
+                            form.clientNeeds.includes(area) ? 'theme-soft shadow-sm' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-sky-700 dark:bg-slate-900 dark:text-slate-300'
                         ]">
+                            <span class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition"
+                                :class="form.clientNeeds.includes(area) ? 'theme-dot border-transparent text-white' : 'border-slate-300 dark:border-slate-600'">
+                                <i v-if="form.clientNeeds.includes(area)" class="pi pi-check text-[8px]"></i>
+                            </span>
                             {{ area }}
                         </span>
                     </label>
                 </div>
             </section>
 
-            <section class="rounded-xl border border-slate-200 bg-white p-4 dark:border-sky-800 dark:bg-sky-950/60">
+            <section class="dash-card-white">
                 <div class="flex items-center justify-between">
-                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">Subjects</h3>
-                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">{{ form.subjects.length }} selected</span>
+                    <h3 class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">Subjects</h3>
+                    <span class="analysis-pill theme-soft border text-[11px]">{{ form.subjects.length }} selected</span>
                 </div>
                 <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                     <label v-for="subject in subjects" :key="subject" class="cursor-pointer">
                         <input type="checkbox" class="sr-only" v-model="form.subjects" :value="subject" />
                         <span :class="[
-                            'block rounded-xl border px-3 py-2 text-sm transition',
-                            form.subjects.includes(subject)
-                                ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-200'
-                                : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300 dark:border-sky-700 dark:bg-slate-900 dark:text-slate-300'
+                            'flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition duration-200',
+                            form.subjects.includes(subject) ? 'theme-soft shadow-sm' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-sky-700 dark:bg-slate-900 dark:text-slate-300'
                         ]">
+                            <span class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition"
+                                :class="form.subjects.includes(subject) ? 'theme-dot border-transparent text-white' : 'border-slate-300 dark:border-slate-600'">
+                                <i v-if="form.subjects.includes(subject)" class="pi pi-check text-[8px]"></i>
+                            </span>
                             {{ subject }}
                         </span>
                     </label>
                 </div>
             </section>
 
-            <section
-                class="rounded-xl border border-dashed border-sky-300 bg-sky-50 p-4 dark:border-sky-800 dark:bg-sky-950/40">
+            <section class="dash-card-white border-dashed">
                 <div class="flex flex-wrap items-center justify-between gap-3 text-sm">
-                    <div>
-                        <p class="font-semibold text-slate-700 dark:text-slate-200">Session summary</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">
-                            {{ form.numQuestions }} questions in {{ form.mode === 'tutor' ? 'Tutor' : 'Exam' }} mode.
-                            Estimated {{ estimatedMinutes }} minutes.
-                        </p>
+                    <div class="flex items-center gap-3">
+                        <span class="dash-icon-tile theme-icon h-10 w-10"><i class="pi pi-list-check"></i></span>
+                        <div>
+                            <p class="font-extrabold text-slate-900 dark:text-white">Session summary</p>
+                            <p class="text-xs text-slate-600 dark:text-slate-300">
+                                {{ form.numQuestions }} questions in {{ form.mode === 'tutor' ? 'Tutor' : 'Exam' }} mode.
+                                Estimated {{ estimatedMinutes }} minutes.
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">
-                            {{ selectedFiltersCount }} filters selected
-                        </p>
-                    </div>
+                    <span class="analysis-pill theme-soft border">{{ selectedFiltersCount }} filters selected</span>
                 </div>
             </section>
 
@@ -126,7 +125,9 @@
                 <p class="text-xs text-slate-500 dark:text-slate-300">
                     Pick at least one client need area or subject to continue.
                 </p>
-                <CommonButton button-text="Create Test" classes="bg-sky-500 text-white shadow-none hover:bg-sky-600" :disabled="!canSubmit" />
+                <button type="submit" :disabled="!canSubmit" class="dash-btn theme-surface theme-shadow px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-50">
+                    <i class="pi pi-play"></i> Create test
+                </button>
             </div>
         </form>
     </div>
@@ -134,7 +135,6 @@
 
 <script setup>
 import { computed, reactive } from 'vue'
-import CommonButton from '../../components/Buttons/CommonButton.vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/authStore'
 

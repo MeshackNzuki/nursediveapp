@@ -1,69 +1,72 @@
 <template>
-    <section class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900">
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-            <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-sky-600 dark:text-sky-300">Study Schedule
-                </p>
-                <h3 class="mt-1 text-xl font-semibold text-slate-800 dark:text-slate-100">{{ title }}</h3>
-                <p class="mt-2 text-sm text-slate-500 dark:text-slate-300">
+    <section id="schedule" class="dash-card scroll-mt-6">
+        <div class="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full blur-3xl theme-glow opacity-60"
+            aria-hidden="true"></div>
+
+        <div class="relative flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div class="min-w-0">
+                <p class="dash-eyebrow theme-text">Study Schedule</p>
+                <h3 class="dash-title mt-1 text-xl">{{ title }}</h3>
+                <p class="analysis-muted mt-2">
                     Set your exam date once, and your weekly focus updates automatically.
                 </p>
             </div>
 
-            <div
-                class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-sky-800 dark:bg-sky-950/70">
-                <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-300">Target Exam Date</p>
-                <p class="mt-1 text-base font-semibold text-slate-800 dark:text-slate-100">
-                    {{ formattedExamDate || "Not set yet" }}
-                </p>
-                <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">{{ countdownText }}</p>
+            <div class="dash-tile flex items-center gap-3 px-4 py-3">
+                <span class="dash-icon-tile theme-icon h-11 w-11">
+                    <i class="pi pi-calendar"></i>
+                </span>
+                <div class="min-w-0">
+                    <p class="text-[11px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">Target Exam Date</p>
+                    <p class="mt-0.5 text-base font-extrabold text-slate-900 dark:text-white">
+                        {{ formattedExamDate || "Not set yet" }}
+                    </p>
+                    <p class="text-xs font-semibold theme-text">{{ countdownText }}</p>
+                </div>
             </div>
         </div>
 
-        <div class="mt-4 grid gap-2 sm:grid-cols-3">
-            <button
-                class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-sky-700 dark:text-slate-100 dark:hover:bg-sky-800/70"
-                @click="setPresetDate(30)">
-                In 30 days
-            </button>
-            <button
-                class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-sky-700 dark:text-slate-100 dark:hover:bg-sky-800/70"
-                @click="setPresetDate(60)">
-                In 60 days
-            </button>
-            <button
-                class="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100 dark:border-sky-700 dark:text-slate-100 dark:hover:bg-sky-800/70"
-                @click="setPresetDate(90)">
-                In 90 days
+        <div class="relative mt-4 flex flex-wrap items-center gap-2">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-300">Quick set:</span>
+            <button v-for="days in [30, 60, 90]" :key="days" type="button" class="dash-chip theme-soft theme-focus"
+                @click="setPresetDate(days)">
+                <i class="pi pi-bolt text-[10px]"></i>
+                In {{ days }} days
             </button>
         </div>
 
-        <div class="mt-3 flex flex-col gap-3 md:flex-row">
+        <div class="relative mt-3 flex flex-col gap-3 md:flex-row">
             <input v-model="examDateInput" type="date"
-                class="input input-bordered w-full bg-white dark:border-sky-700 dark:bg-sky-950 dark:text-slate-100" />
-            <button
-                class="rounded-lg bg-sky-500/95 px-4 py-2 text-sm font-medium text-white transition hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+                class="theme-focus w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-300 focus:outline-none dark:border-sky-700 dark:bg-sky-950 dark:text-slate-100" />
+            <button type="button" class="dash-btn theme-surface theme-shadow shrink-0 px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-60"
                 :disabled="saving" @click="saveExamDate">
+                <i :class="saving ? 'pi pi-spin pi-spinner' : 'pi pi-save'"></i>
                 {{ saving ? "Saving..." : "Save Exam Date" }}
             </button>
         </div>
 
-        <div class="mt-5 grid gap-3 lg:grid-cols-3">
-            <article v-for="phase in schedulePhases" :key="phase.name"
-                class="rounded-xl border border-slate-200 bg-light-blue-500 p-3 dark:!border-sky-800 dark:!bg-sky-950/70">
-                <p class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-300">{{ phase.rangeLabel }}</p>
-                <h4 class="mt-1 font-semibold text-slate-800 dark:text-slate-100">{{ phase.name }}</h4>
+        <ol class="relative mt-5 grid gap-3 lg:grid-cols-3">
+            <li v-for="(phase, index) in schedulePhases" :key="phase.name"
+                class="dash-tile dash-hover-lift relative overflow-hidden">
+                <div class="mb-3 flex items-center gap-2">
+                    <span class="theme-surface inline-flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-black">
+                        {{ index + 1 }}
+                    </span>
+                    <span class="h-1 flex-1 rounded-full theme-bar opacity-70"></span>
+                </div>
+                <p class="text-[11px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">{{ phase.rangeLabel }}</p>
+                <h4 class="mt-1 font-extrabold text-slate-900 dark:text-white">{{ phase.name }}</h4>
                 <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">{{ phase.focus }}</p>
-            </article>
-        </div>
+            </li>
+        </ol>
 
-        <div class="mt-5 flex flex-col gap-2 sm:flex-row">
-            <RouterLink :to="progressRoute"
-                class="inline-flex items-center justify-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-sky-500/95 dark:hover:bg-sky-500">
+        <div class="relative mt-5 flex flex-col gap-2 sm:flex-row">
+            <RouterLink :to="progressRoute" class="dash-btn theme-surface theme-shadow px-5 py-2.5">
+                <i class="pi pi-chart-line"></i>
                 Check Progress
             </RouterLink>
-            <RouterLink :to="studyRoute"
-                class="inline-flex items-center justify-center rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-sky-700 dark:text-slate-100 dark:hover:bg-sky-800/60">
+            <RouterLink :to="studyRoute" class="dash-btn-ghost px-5 py-2.5">
+                <i class="pi pi-book"></i>
                 Open Study Resources
             </RouterLink>
         </div>

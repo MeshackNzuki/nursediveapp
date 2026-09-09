@@ -1,13 +1,16 @@
 <template>
-    <div
-        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-slate-800 dark:bg-slate-900 dark:text-slate-100 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+    <div class="dash-shell">
         <div class="mx-auto max-w-screen-2xl space-y-6">
             <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
-                <article class="rounded-2xl p-5 xl:col-span-8">
-                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+                <article class="ui-rise rounded-2xl p-5 xl:col-span-8">
+                    <p class="dash-eyebrow theme-text inline-flex items-center gap-2">
+                        <span class="relative flex h-2 w-2">
+                            <span class="theme-dot absolute inline-flex h-full w-full animate-ping rounded-full opacity-70"></span>
+                            <span class="theme-dot relative inline-flex h-2 w-2 rounded-full"></span>
+                        </span>
                         NCLEX Readiness
                     </p>
-                    <h1 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+                    <h1 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white md:text-3xl">
                         Readiness Assessment Tests
                     </h1>
                     <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
@@ -16,93 +19,86 @@
 
                     <div class="mt-5 flex flex-wrap gap-2">
                         <RouterLink to="/nclex"
-                            class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900">
+                            class="dash-chip theme-soft theme-focus">
                             <i class="pi pi-gauge"></i>
                             Dashboard
                         </RouterLink>
                         <RouterLink to="/nclex/linear"
-                            class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-bold text-sky-700 transition hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-950/40 dark:text-sky-200">
+                            class="dash-chip theme-soft theme-focus">
                             <i class="pi pi-book"></i>
                             Linear
                         </RouterLink>
                         <RouterLink to="/nclex/cat"
-                            class="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-2 text-xs font-bold text-indigo-700 transition hover:bg-indigo-100 dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-200">
+                            class="dash-chip theme-soft theme-focus">
                             <i class="pi pi-desktop"></i>
                             CAT
                         </RouterLink>
                     </div>
                 </article>
 
-                <aside class="xl:col-span-4">
-                    <div
-                        class="grid h-full grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-light-blue-500 p-4 dark:border-sky-800 dark:bg-sky-900 sm:grid-cols-3 xl:grid-cols-1">
-                        <div class="rounded-xl border border-sky-100 bg-white p-3 dark:border-sky-800 dark:bg-sky-950/60">
-                            <div class="flex items-center justify-between gap-3">
-                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
-                                    Readiness sets
-                                </span>
-                                <i class="pi pi-bullseye text-sky-600 dark:text-sky-300"></i>
+                <aside class="ui-rise xl:col-span-4" style="animation-delay: 80ms">
+                    <div class="dash-card flex h-full flex-col justify-center gap-2 p-4">
+                        <div class="pointer-events-none absolute -top-14 -right-14 h-40 w-40 rounded-full blur-3xl theme-glow opacity-50" aria-hidden="true"></div>
+                        <p class="dash-eyebrow theme-text relative">Snapshot</p>
+                        <div class="dash-tile-soft flex items-center gap-3 px-3 py-2.5">
+                            <span class="dash-icon-tile theme-icon h-9 w-9 shrink-0 text-sm"><i class="pi pi-bullseye"></i></span>
+                            <div class="min-w-0">
+                                <p class="text-lg font-extrabold leading-tight tabular-nums text-slate-950 dark:text-white">{{ exams.length }}</p>
+                                <p class="truncate text-[11px] font-semibold text-slate-500 dark:text-slate-300">Readiness sets · Available checks</p>
                             </div>
-                            <p class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">{{ exams.length }}</p>
-                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">Available checks</p>
                         </div>
-                        <div class="rounded-xl border border-sky-100 bg-white p-3 dark:border-sky-800 dark:bg-sky-950/60">
-                            <div class="flex items-center justify-between gap-3">
-                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
-                                    Attempted
-                                </span>
-                                <i class="pi pi-pencil text-emerald-600 dark:text-emerald-300"></i>
+                        <div class="dash-tile-soft flex items-center gap-3 px-3 py-2.5">
+                            <span class="dash-icon-tile theme-icon h-9 w-9 shrink-0 text-sm"><i class="pi pi-pencil"></i></span>
+                            <div class="min-w-0">
+                                <p class="text-lg font-extrabold leading-tight tabular-nums text-slate-950 dark:text-white">{{ attemptedCount }}</p>
+                                <p class="truncate text-[11px] font-semibold text-slate-500 dark:text-slate-300">Attempted · With saved scores</p>
                             </div>
-                            <p class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">{{ attemptedCount }}</p>
-                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">With saved scores</p>
                         </div>
-                        <div class="rounded-xl border border-sky-100 bg-white p-3 dark:border-sky-800 dark:bg-sky-950/60">
-                            <div class="flex items-center justify-between gap-3">
-                                <span class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">
-                                    Avg. score
-                                </span>
-                                <i class="pi pi-percentage text-orange-600 dark:text-orange-300"></i>
+                        <div class="dash-tile-soft flex items-center gap-3 px-3 py-2.5">
+                            <span class="dash-icon-tile theme-icon h-9 w-9 shrink-0 text-sm"><i class="pi pi-percentage"></i></span>
+                            <div class="min-w-0">
+                                <p class="text-lg font-extrabold leading-tight tabular-nums text-slate-950 dark:text-white">{{ averageScore }}%</p>
+                                <p class="truncate text-[11px] font-semibold text-slate-500 dark:text-slate-300">Avg. score · Across attempted sets</p>
                             </div>
-                            <p class="mt-2 text-2xl font-extrabold text-slate-950 dark:text-white">{{ averageScore }}%</p>
-                            <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">Across attempted sets</p>
                         </div>
                     </div>
                 </aside>
             </section>
 
-            <section
-                class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900">
+            <section class="ui-rise dash-card" style="animation-delay: 160ms">
                 <div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                     <div>
-                        <h2 class="text-lg font-extrabold text-slate-950 dark:text-white">
+                        <h2 class="dash-title">
                             {{ subject || "Readiness assessments" }}
                         </h2>
                         <p class="text-xs text-slate-500 dark:text-slate-300">
                             Readiness tests run in exam mode so the score reflects timed decision-making.
                         </p>
                     </div>
-                    <input v-model="searchTerm" type="search" :placeholder="`Search ${subject || 'readiness sets'}...`"
-                        class="h-10 w-full rounded-full border border-sky-200 bg-white px-4 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-300 dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100 lg:w-80" />
+                    <div class="relative lg:w-80">
+                        <i class="pi pi-search pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-slate-400"></i>
+                        <input v-model="searchTerm" type="search" :placeholder="`Search ${subject || 'readiness sets'}...`"
+                            class="theme-focus h-10 w-full rounded-full border border-slate-200 bg-white pl-9 pr-4 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-300 focus:outline-none dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100" />
+                    </div>
                 </div>
 
                 <div v-if="filteredExams.length === 0 && searchTerm === ''"
-                    class="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-slate-300">
+                    class="dash-card-white border-dashed p-10 text-center text-sm font-semibold text-slate-500 dark:text-slate-300">
                     Loading exams...
                 </div>
                 <div v-else-if="filteredExams.length === 0"
-                    class="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-slate-300">
+                    class="dash-card-white border-dashed p-10 text-center text-sm font-semibold text-slate-500 dark:text-slate-300">
                     No exams found for that search.
                 </div>
 
                 <transition-group v-else name="fade" tag="div" class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3"
                     appear>
                     <article v-for="exam in filteredExams" :key="exam.id" :class="[
-                        'group flex h-full flex-col rounded-xl border border-sky-100 bg-white p-4 shadow-custom transition duration-300 dark:border-sky-800 dark:bg-sky-950/50',
-                        isExamLocked(exam)
-                            ? 'opacity-80'
-                            : 'hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50 dark:hover:bg-sky-950'
+                        'group dash-card-white flex h-full flex-col',
+                        isExamLocked(exam) ? 'opacity-80' : 'dash-hover-lift'
                     ]">
-                        <div class="flex items-start justify-between gap-3">
+                        <div class="pointer-events-none absolute -top-12 -right-12 h-32 w-32 rounded-full opacity-0 blur-2xl transition-opacity duration-300 theme-glow group-hover:opacity-100" aria-hidden="true"></div>
+                        <div class="relative flex items-start justify-between gap-3">
                             <div class="min-w-0">
                                 <h3 class="font-bold leading-tight text-slate-950 dark:text-white">
                                     {{ normalizeText(exam.name) }}
@@ -113,7 +109,7 @@
                             </div>
                             <div class="flex shrink-0 items-center gap-2">
                                 <span
-                                    class="inline-flex h-9 min-w-9 items-center justify-center rounded-xl bg-sky-50 px-2 text-xs font-bold text-sky-700 ring-1 ring-sky-100 dark:bg-sky-900/70 dark:text-sky-200 dark:ring-sky-800">
+                                    class="theme-icon inline-flex h-9 min-w-9 items-center justify-center rounded-xl px-2 text-xs font-bold tabular-nums" title="Questions">
                                     85
                                 </span>
                                 <span v-if="isExamLocked(exam)"
@@ -124,12 +120,11 @@
                             </div>
                         </div>
 
-                        <div class="mt-auto pt-5">
-                            <div v-if="examScore(exam)"
-                                class="rounded-xl border border-slate-200 bg-light-blue-500 px-3 py-2 dark:border-sky-800 dark:bg-sky-900/70">
+                        <div class="relative mt-auto pt-5">
+                            <div v-if="examScore(exam)" class="dash-tile-soft px-3 py-2">
                                 <div class="flex items-center gap-2">
-                                    <div class="h-2 flex-1 overflow-hidden rounded-full bg-white ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-sky-800">
-                                        <div class="h-2 rounded-full" :style="dynamicProgressStyle(examScore(exam))"></div>
+                                    <div class="dash-progress h-2 flex-1">
+                                        <div class="h-2 rounded-full transition-all duration-700" :style="dynamicProgressStyle(examScore(exam))"></div>
                                     </div>
                                     <span class="text-xs font-extrabold text-slate-950 dark:text-white">{{ examScore(exam) }}%</span>
                                 </div>
@@ -137,19 +132,18 @@
                                     {{ gradeComment(examScore(exam)) }}
                                 </p>
                             </div>
-                            <div v-else
-                                class="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-3 py-2 text-xs text-slate-500 dark:border-sky-800 dark:bg-sky-900/60 dark:text-slate-300">
-                                No attempt yet.
+                            <div v-else class="dash-tile border-dashed px-3 py-2 text-xs font-semibold text-slate-500 dark:text-slate-300">
+                                <i class="pi pi-sparkles mr-1 text-[10px]"></i>No attempt yet.
                             </div>
 
                             <div class="mt-4 flex items-center justify-between gap-2">
                                 <Small :button-text="isExamLocked(exam) ? 'Unlock Check' : examScore(exam) ? 'Retake Exam' : 'Take Exam'"
                                     :icon="isExamLocked(exam) ? 'pi pi-lock-open' : examScore(exam) ? 'pi pi-refresh' : 'pi pi-play'"
                                     :classes="isExamLocked(exam)
-                                        ? 'border-0 bg-blue-600 text-white hover:bg-blue-700 shadow-none'
+                                        ? 'border-0 bg-slate-900 text-white hover:bg-slate-800 shadow-none'
                                         : examScore(exam)
                                             ? 'border-0 bg-amber-500 text-white hover:bg-amber-600 shadow-none'
-                                            : 'border-0 bg-sky-500 text-white hover:bg-sky-600 shadow-none'"
+                                            : 'border-0 shadow-none'"
                                     :action="() => goToExam(exam)" />
                                 <span
                                     class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">

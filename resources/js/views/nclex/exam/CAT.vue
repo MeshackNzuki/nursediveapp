@@ -1,13 +1,17 @@
 <template>
-    <div
-        class="relative z-10 min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll rounded-2xl bg-white-500 p-4 text-slate-800 dark:bg-slate-900 dark:text-slate-100 sm:p-6 2xl:max-h-[94vh] 2xl:min-h-[94vh]">
+    <div class="dash-shell">
         <div class="mx-auto max-w-screen-2xl space-y-6">
+            <!-- ================= HEADER + SNAPSHOT ================= -->
             <section class="grid grid-cols-1 items-stretch gap-5 xl:grid-cols-12">
-                <article class="rounded-2xl p-5 xl:col-span-8">
-                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-sky-700 dark:text-sky-200">
+                <article class="ui-rise rounded-2xl p-5 xl:col-span-8">
+                    <p class="dash-eyebrow theme-text inline-flex items-center gap-2">
+                        <span class="relative flex h-2 w-2">
+                            <span class="theme-dot absolute inline-flex h-full w-full animate-ping rounded-full opacity-70"></span>
+                            <span class="theme-dot relative inline-flex h-2 w-2 rounded-full"></span>
+                        </span>
                         NCLEX CAT Simulator
                     </p>
-                    <h1 class="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+                    <h1 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white md:text-3xl">
                         Computerized Adaptive Testing
                     </h1>
                     <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
@@ -15,28 +19,43 @@
                         before your next practice decision.
                     </p>
 
-                    <div class="mt-5 flex flex-wrap gap-3">
-                        <CommonButton button-text="Start a CAT" icon="pi pi-play"
-                            classes="bg-sky-500 text-white shadow-none hover:bg-sky-600"
-                            :action="openStartModal" :disabled="hasCatPremiumAccess && !canStartCat" />
-
-                        <CommonButton button-text="Latest Report" icon="pi pi-chart-bar"
-                            classes="border border-slate-200 bg-white text-slate-700 shadow-none hover:bg-slate-100 dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100 dark:hover:bg-sky-900"
-                            :action="goToLatestReport" :disabled="!hasAttempts" />
-
-                        <RouterLink to="/nclex/performance-analysis"
-                            class="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-1 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-100 dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100 dark:hover:bg-sky-900">
-                            <i class="pi pi-wave-pulse"></i>
-                            Analysis
+                    <div class="mt-5 flex flex-wrap items-center gap-2">
+                        <button type="button" @click="openStartModal" :disabled="hasCatPremiumAccess && !canStartCat"
+                            class="dash-btn theme-surface theme-shadow px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-50">
+                            <i class="pi pi-play"></i> Start a CAT
+                        </button>
+                        <button type="button" @click="goToLatestReport" :disabled="!hasAttempts"
+                            class="dash-btn-ghost px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-50">
+                            <i class="pi pi-chart-bar"></i> Latest report
+                        </button>
+                        <RouterLink to="/nclex/performance-analysis" class="dash-btn-ghost px-5 py-2.5">
+                            <i class="pi pi-wave-pulse"></i> Analysis
                         </RouterLink>
                     </div>
 
-                    <p class="mt-4 text-xs font-semibold" :class="hasCatPremiumAccess ? 'text-slate-500 dark:text-slate-300' : 'text-amber-700 dark:text-amber-300'">
-                        {{ monthlyAttemptSummary }}
-                    </p>
+                    <!-- Monthly run meter -->
+                    <div class="dash-card mt-5 flex flex-wrap items-center justify-between gap-4 p-4">
+                        <div class="flex items-center gap-3">
+                            <span class="dash-icon-tile theme-icon h-10 w-10"><i class="pi pi-calendar"></i></span>
+                            <div>
+                                <p class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">This month</p>
+                                <p class="text-sm font-extrabold text-slate-950 dark:text-white">
+                                    {{ remainingAttemptsThisMonth }} of {{ monthlyLimit }} {{ remainingAttemptsThisMonth === 1 ? "run" : "runs" }} left
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2" aria-label="Monthly CAT runs">
+                            <span v-for="n in monthlyLimit" :key="n" class="h-3 w-10 rounded-full transition-colors duration-500"
+                                :class="n <= attemptsThisMonth ? 'theme-bar' : 'bg-slate-200 dark:bg-slate-700'"
+                                :title="n <= attemptsThisMonth ? 'Used' : 'Available'"></span>
+                        </div>
+                        <p class="w-full text-xs font-semibold sm:w-auto" :class="hasCatPremiumAccess ? 'text-slate-500 dark:text-slate-300' : 'text-amber-700 dark:text-amber-300'">
+                            {{ monthlyAttemptSummary }}
+                        </p>
+                    </div>
                 </article>
 
-                <aside class="xl:col-span-4">
+                <aside class="ui-rise xl:col-span-4" style="animation-delay: 80ms">
                     <div class="flex h-full flex-col justify-between rounded-2xl border-b bg-sky-800 p-5 shadow-custom">
                         <div class="flex items-start justify-between gap-4">
                             <div>
@@ -56,182 +75,169 @@
                         <div class="mt-5 grid grid-cols-3 gap-2">
                             <div class="rounded-xl bg-white/10 p-3 text-white ring-1 ring-white/15">
                                 <p class="text-[10px] font-bold uppercase tracking-wide text-sky-100">Pass rate</p>
-                                <p class="mt-1 text-xl font-extrabold">{{ passRate }}%</p>
+                                <p class="mt-1 text-xl font-extrabold tabular-nums">{{ passRate }}%</p>
                             </div>
                             <div class="rounded-xl bg-white/10 p-3 text-white ring-1 ring-white/15">
                                 <p class="text-[10px] font-bold uppercase tracking-wide text-sky-100">Attempts</p>
-                                <p class="mt-1 text-xl font-extrabold">{{ attemptCount }}</p>
+                                <p class="mt-1 text-xl font-extrabold tabular-nums">{{ attemptCount }}</p>
                             </div>
                             <div class="rounded-xl bg-white/10 p-3 text-white ring-1 ring-white/15">
                                 <p class="text-[10px] font-bold uppercase tracking-wide text-sky-100">Avg.</p>
-                                <p class="mt-1 text-xl font-extrabold">{{ Math.round(averageScore) }}%</p>
+                                <p class="mt-1 text-xl font-extrabold tabular-nums">{{ Math.round(averageScore) }}%</p>
                             </div>
                         </div>
                     </div>
                 </aside>
             </section>
 
+            <!-- ================= WORKFLOW + LAST SESSION ================= -->
             <section class="grid grid-cols-1 gap-5 xl:grid-cols-12">
-                <article
-                    class="rounded-2xl border border-slate-200 bg-light-blue-500 p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900 xl:col-span-7">
+                <article class="ui-rise dash-card xl:col-span-7" style="animation-delay: 160ms">
                     <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
                         <div>
-                            <h2 class="text-lg font-extrabold text-slate-950 dark:text-white">Adaptive Workflow</h2>
+                            <h2 class="dash-title">Adaptive Workflow</h2>
                             <p class="text-xs text-slate-500 dark:text-slate-300">
                                 A CAT run should lead directly into review and targeted remediation.
                             </p>
                         </div>
-                        <span
-                            class="rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-semibold text-sky-700 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
-                            {{ remainingAttemptsThisMonth }} left this month
-                        </span>
+                        <span class="analysis-pill theme-soft border">{{ remainingAttemptsThisMonth }} left this month</span>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-                        <article v-for="card in workflowCards" :key="card.title"
-                            class="rounded-xl border border-sky-100 bg-white p-4 shadow-custom dark:border-sky-800 dark:bg-sky-950/50">
-                            <div class="flex items-start gap-3">
-                                <span
-                                    class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-50 text-lg ring-1 ring-sky-100 dark:bg-sky-900/70 dark:ring-sky-800"
-                                    :class="card.color">
+                    <ol class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                        <li v-for="(card, index) in workflowCards" :key="card.title"
+                            class="group dash-card-white dash-hover-lift ui-rise relative overflow-hidden"
+                            :style="{ animationDelay: `${220 + index * 60}ms` }">
+                            <i class="pointer-events-none absolute -bottom-5 -right-3 text-[96px] opacity-[0.06] transition-transform duration-500 group-hover:-rotate-6"
+                                :class="[card.icon, card.color]" aria-hidden="true"></i>
+                            <div class="relative flex items-start gap-3">
+                                <span class="dash-icon-tile theme-icon h-11 w-11 text-lg group-hover:scale-110">
                                     <i :class="card.icon"></i>
                                 </span>
-                                <div>
+                                <div class="min-w-0">
+                                    <p class="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Step {{ index + 1 }}</p>
                                     <h3 class="font-bold leading-tight text-slate-950 dark:text-white">{{ card.title }}</h3>
                                     <p class="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">{{ card.copy }}</p>
                                 </div>
                             </div>
-                        </article>
-                    </div>
+                        </li>
+                    </ol>
                 </article>
 
-                <article
-                    class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900 xl:col-span-5">
-                    <div class="flex items-start justify-between gap-3">
+                <article class="ui-rise dash-card xl:col-span-5" style="animation-delay: 200ms">
+                    <div class="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full blur-3xl theme-glow opacity-50" aria-hidden="true"></div>
+                    <div class="relative flex items-start justify-between gap-3">
                         <div>
-                            <h2 class="text-lg font-semibold text-slate-950 dark:text-white">Last Session Snapshot</h2>
-                            <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
-                                The newest adaptive result becomes your report shortcut.
-                            </p>
+                            <h2 class="dash-title">Last Session Snapshot</h2>
+                            <p class="analysis-muted mt-1">The newest adaptive result becomes your report shortcut.</p>
                         </div>
-                        <span class="rounded-full px-3 py-1 text-xs font-bold" :class="latestStatusPillClass">
-                            {{ latestStatusLabel }}
-                        </span>
+                        <span class="analysis-pill border" :class="latestStatusPillClass">{{ latestStatusLabel }}</span>
                     </div>
 
-                    <div class="mt-5 rounded-xl bg-light-blue-500 p-4 dark:bg-sky-950/60">
+                    <div class="dash-card-white relative mt-4">
                         <div class="flex items-end justify-between gap-4">
                             <div>
-                                <p class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
-                                    Score
-                                </p>
-                                <p class="mt-1 text-3xl font-extrabold" :class="latestScoreClass">
+                                <p class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">Score</p>
+                                <p class="mt-1 text-3xl font-extrabold tabular-nums" :class="latestScoreClass">
                                     {{ hasAttempts ? `${latestScoreRounded}%` : "--" }}
                                 </p>
                             </div>
                             <div class="min-w-0 text-right">
-                                <p class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
-                                    Completed
-                                </p>
+                                <p class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">Completed</p>
                                 <p class="mt-1 text-sm font-semibold text-slate-950 dark:text-white">
                                     {{ hasAttempts ? formatDate(recentAttempt?.completed_at || recentAttempt?.created_at) : "No run yet" }}
                                 </p>
+                                <p v-if="hasAttempts" class="text-[11px] text-slate-500 dark:text-slate-300">{{ recentAttempt?.suspend_index || 0 }}/150 questions</p>
                             </div>
                         </div>
-                        <div class="mt-4 h-2 overflow-hidden rounded-full bg-white ring-1 ring-sky-100 dark:bg-slate-800 dark:ring-sky-800">
-                            <div class="h-full rounded-full" :class="latestScoreBarClass"
-                                :style="{ width: `${hasAttempts ? latestScoreRounded : 0}%` }"></div>
+                        <div class="dash-progress relative mt-4 h-2.5 bg-light-blue-500">
+                            <div class="h-full rounded-full transition-all duration-700" :class="latestScoreBarClass" :style="{ width: `${hasAttempts ? latestScoreRounded : 0}%` }"></div>
+                            <span class="absolute top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full bg-slate-700 dark:bg-slate-200" :style="{ left: `${passThreshold}%` }" :title="`Pass threshold ${passThreshold}%`"></span>
+                        </div>
+                        <p class="mt-1.5 text-[11px] text-slate-500 dark:text-slate-300">Threshold {{ passThreshold }}%</p>
+                    </div>
+
+                    <!-- Run-by-run scores -->
+                    <div v-if="attempts.length > 1" class="dash-tile relative mt-3">
+                        <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                            <span>Run history</span>
+                            <span>{{ Math.min(attempts.length, 8) }} runs</span>
+                        </div>
+                        <div class="relative mt-2 flex h-20 items-end gap-1.5">
+                            <span class="pointer-events-none absolute left-0 right-0 border-t border-dashed border-slate-400/60" :style="{ bottom: `${passThreshold}%` }"></span>
+                            <div v-for="run in [...attempts].slice(0, 8).reverse()" :key="run.id"
+                                class="flex h-full flex-1 cursor-pointer flex-col items-center justify-end gap-1" :title="`${Math.round(run.score || 0)}% · ${formatDate(run.completed_at || run.created_at)}`" @click="viewReport(run.id)">
+                                <div class="w-full rounded-t-md transition-all duration-700" :class="Number(run.score) >= passThreshold ? 'bg-emerald-500' : 'bg-rose-400'"
+                                    :style="{ height: `${Math.max(6, Math.min(100, Math.round(run.score || 0)))}%` }"></div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="mt-4 flex flex-wrap gap-2">
-                        <button type="button" @click="openStartModal"
-                            class="inline-flex items-center gap-2 rounded-full bg-sky-500 px-4 py-2 text-xs font-bold text-white transition hover:bg-sky-600 disabled:cursor-not-allowed disabled:opacity-50"
-                            :disabled="hasCatPremiumAccess && !canStartCat">
-                            <i class="pi pi-play"></i>
-                            Start CAT
+                    <div class="relative mt-4 flex flex-wrap gap-2">
+                        <button type="button" @click="openStartModal" :disabled="hasCatPremiumAccess && !canStartCat"
+                            class="dash-btn theme-surface theme-shadow disabled:cursor-not-allowed disabled:opacity-50">
+                            <i class="pi pi-play"></i> Start CAT
                         </button>
-                        <button type="button" @click="goToLatestReport"
-                            class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900"
-                            :disabled="!hasAttempts">
-                            <i class="pi pi-chart-bar"></i>
-                            Report
+                        <button type="button" @click="goToLatestReport" :disabled="!hasAttempts" class="dash-btn-ghost disabled:cursor-not-allowed disabled:opacity-50">
+                            <i class="pi pi-chart-bar"></i> Report
                         </button>
                     </div>
                 </article>
             </section>
 
-            <section
-                class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900">
+            <!-- ================= RECENT ATTEMPTS ================= -->
+            <section class="ui-rise dash-card" style="animation-delay: 280ms">
                 <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
                     <div>
-                        <h2 class="text-lg font-semibold text-slate-950 dark:text-white">Recent CAT Attempts</h2>
-                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
-                            Review adaptive runs and compare outcomes over time.
-                        </p>
+                        <h2 class="dash-title">Recent CAT Attempts</h2>
+                        <p class="analysis-muted mt-1">Review adaptive runs and compare outcomes over time.</p>
                     </div>
-                    <span
-                        class="rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-bold text-sky-700 dark:border-sky-800 dark:bg-sky-950 dark:text-sky-200">
-                        {{ attemptCount }} logged
-                    </span>
+                    <span class="analysis-pill theme-soft border">{{ attemptCount }} logged</span>
                 </div>
 
-                <div v-if="attempts.length > 0" class="overflow-x-auto rounded-xl border border-slate-200 dark:border-sky-800">
-                    <table class="w-full min-w-[680px] text-left text-sm">
-                        <thead class="bg-slate-700 text-white dark:bg-slate-800">
-                            <tr>
-                                <th class="px-4 py-3 font-semibold">Date</th>
-                                <th class="px-4 py-3 font-semibold">Questions</th>
-                                <th class="px-4 py-3 font-semibold">Score</th>
-                                <th class="px-4 py-3 font-semibold">Status</th>
-                                <th class="px-4 py-3 font-semibold">Action</th>
+                <div v-if="attempts.length > 0" class="dash-card-white overflow-x-auto p-0">
+                    <table class="w-full min-w-[680px] border-collapse text-left text-sm">
+                        <thead>
+                            <tr class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                                <th class="px-4 py-3">Date</th>
+                                <th class="px-4 py-3">Questions</th>
+                                <th class="px-4 py-3 w-56">Score</th>
+                                <th class="px-4 py-3">Status</th>
+                                <th class="px-4 py-3 text-right">Action</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-200 dark:divide-sky-800">
+                        <tbody>
                             <tr v-for="attempt in attempts.slice(0, 5)" :key="attempt.id"
-                                class="bg-white transition hover:bg-sky-50 dark:bg-sky-950/40 dark:hover:bg-sky-950">
-                                <td class="px-4 py-3 font-medium text-slate-700 dark:text-slate-200">
-                                    {{ formatDate(attempt.completed_at || attempt.created_at) }}
-                                </td>
-                                <td class="px-4 py-3 text-slate-600 dark:text-slate-300">
-                                    {{ attempt.suspend_index || "0" }}/150
-                                </td>
+                                class="cursor-pointer border-t border-slate-100 transition hover:bg-light-blue-500 dark:border-sky-900 dark:hover:bg-sky-950/60" @click="viewReport(attempt.id)">
+                                <td class="px-4 py-3 font-semibold text-slate-800 dark:text-slate-100">{{ formatDate(attempt.completed_at || attempt.created_at) }}</td>
+                                <td class="px-4 py-3 tabular-nums text-slate-600 dark:text-slate-300">{{ attempt.suspend_index || "0" }}/150</td>
                                 <td class="px-4 py-3">
-                                    <div class="flex items-center gap-2">
-                                        <div class="h-2 w-24 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-                                            <div class="h-full rounded-full"
-                                                :class="attempt.score >= passThreshold ? 'bg-emerald-500' : 'bg-rose-500'"
-                                                :style="{ width: `${Math.max(0, Math.min(100, Math.round(attempt.score || 0)))}%` }">
-                                            </div>
+                                    <div class="flex items-center gap-3">
+                                        <div class="dash-progress h-2 flex-1 bg-light-blue-500">
+                                            <div class="h-full rounded-full transition-all duration-700" :class="attempt.score >= passThreshold ? 'bg-emerald-500' : 'bg-rose-500'"
+                                                :style="{ width: `${Math.max(0, Math.min(100, Math.round(attempt.score || 0)))}%` }"></div>
                                         </div>
-                                        <span class="font-bold text-slate-950 dark:text-white">{{ Math.round(attempt.score || 0) }}%</span>
+                                        <span class="w-12 text-right font-extrabold tabular-nums text-slate-950 dark:text-white">{{ Math.round(attempt.score || 0) }}%</span>
                                     </div>
                                 </td>
                                 <td class="px-4 py-3">
-                                    <span :class="[
-                                        'rounded-full px-3 py-1 text-xs font-semibold',
-                                        attempt.score >= passThreshold
-                                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-200'
-                                            : 'bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-200'
-                                    ]">
+                                    <span class="analysis-pill border text-[11px]" :class="attempt.score >= passThreshold
+                                        ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200'
+                                        : 'border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-200'">
                                         {{ attempt.score >= passThreshold ? 'Passed' : 'Needs review' }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3">
-                                    <button @click="viewReport(attempt.id)"
-                                        class="inline-flex items-center gap-2 rounded-full bg-sky-500 px-3 py-1 text-xs font-bold text-white transition hover:bg-sky-600">
-                                        <i class="pi pi-chart-bar"></i>
-                                        View Report
-                                    </button>
+                                <td class="px-4 py-3 text-right">
+                                    <span class="dash-btn theme-surface px-3 py-1 text-[11px]"><i class="pi pi-chart-bar text-[10px]"></i> Report</span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div v-else
-                    class="rounded-xl border border-dashed border-slate-300 bg-light-blue-500 p-10 text-center text-slate-500 dark:border-sky-800 dark:bg-sky-950/60 dark:text-slate-300">
-                    No CAT attempts yet.
+                <div v-else class="dash-card-white border-dashed p-10 text-center">
+                    <div class="dash-icon-tile theme-icon mx-auto h-12 w-12 rounded-2xl"><i class="pi pi-desktop text-lg"></i></div>
+                    <p class="mt-3 text-sm font-extrabold text-slate-900 dark:text-white">No CAT attempts yet.</p>
+                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-300">Your first adaptive run will appear here with its report.</p>
                 </div>
             </section>
         </div>
@@ -239,33 +245,29 @@
         <dialog id="my_modal_3" class="modal">
             <div class="modal-box bg-white text-slate-900 dark:bg-sky-950 dark:text-slate-100">
                 <form method="dialog">
-                    <button
-                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-slate-500 dark:text-slate-300">
-                        x
-                    </button>
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-slate-500 dark:text-slate-300">x</button>
                 </form>
 
-                <h3 class="mb-2 pr-8 text-lg font-bold">NCLEX CAT Exam Instructions</h3>
-                <p class="text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <p class="dash-eyebrow theme-text">Before you start</p>
+                <h3 class="mt-1 pr-8 text-lg font-extrabold">NCLEX CAT Exam Instructions</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                     Answer each question carefully. The adaptive engine adjusts difficulty as you move, and you cannot
                     return to previous questions during the run.
                 </p>
 
                 <div class="mt-4 grid gap-2 text-sm text-slate-600 dark:text-slate-300">
-                    <div v-for="tip in modalTips" :key="tip" class="flex items-start gap-2 rounded-xl bg-light-blue-500 p-3 dark:bg-sky-900/70">
-                        <i class="pi pi-check mt-1 text-emerald-500"></i>
+                    <div v-for="tip in modalTips" :key="tip" class="dash-tile-soft flex items-start gap-2">
+                        <span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white"><i class="pi pi-check text-[10px]"></i></span>
                         <span>{{ tip }}</span>
                     </div>
                 </div>
 
-                <div class="mt-4 rounded-xl bg-slate-100 p-3 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                    {{ modalLimitSummary }}
-                </div>
+                <div class="theme-soft mt-4 rounded-xl border p-3 text-xs font-semibold">{{ modalLimitSummary }}</div>
 
                 <div class="mt-5 flex justify-end">
-                    <CommonButton button-text="Start CAT Now" icon="pi pi-play"
-                        classes="bg-sky-500 text-white shadow-none hover:bg-sky-600"
-                        :action="startExam" :disabled="!canStartCat" />
+                    <button type="button" @click="startExam" :disabled="!canStartCat" class="dash-btn theme-surface theme-shadow px-5 py-2.5 disabled:cursor-not-allowed disabled:opacity-50">
+                        <i class="pi pi-play"></i> Start CAT now
+                    </button>
                 </div>
             </div>
         </dialog>
@@ -276,7 +278,6 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import CommonButton from '../../../components/Buttons/CommonButton.vue'
 import { useCatExamStore } from '../../../stores/catExamStore'
 import { useAuthStore } from '../../../stores/authStore'
 

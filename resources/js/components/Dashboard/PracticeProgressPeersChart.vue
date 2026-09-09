@@ -15,6 +15,7 @@ import {
     type ChartOptions,
 } from "chart.js";
 import { Line } from "vue-chartjs";
+import { useThemeStore } from "../../stores/Theme";
 
 ChartJS.register(
     CategoryScale,
@@ -35,6 +36,15 @@ const props = withDefaults(
         productLabel: "Nursing",
     },
 );
+
+const themeStore = useThemeStore();
+
+const hexToRgba = (hex: string, alpha: number) => {
+    const clean = hex.replace("#", "");
+    const full = clean.length === 3 ? clean.split("").map((c) => c + c).join("") : clean;
+    const n = parseInt(full, 16);
+    return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+};
 
 const labels = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"];
 
@@ -57,31 +67,32 @@ const chartData = computed(
                 {
                     label: "Top Peer Group",
                     data: [52, 58, 64, 71, 78, 84],
-                    borderColor: "#0ea5e9",
-                    pointBackgroundColor: "#0ea5e9",
+                    borderColor: themeStore.tokens.accent2,
+                    pointBackgroundColor: themeStore.tokens.accent2,
                     pointRadius: 2,
                     pointHoverRadius: 5,
                     tension: 0.35,
                     fill: true,
                     backgroundColor: (context: { chart: { ctx: CanvasRenderingContext2D; chartArea?: ChartArea } }) => {
                         const { ctx, chartArea } = context.chart;
-                        if (!chartArea) return "rgba(14,165,233,0.15)";
-                        return createGradient(ctx, chartArea, "rgba(14,165,233,0.28)");
+                        if (!chartArea) return hexToRgba(themeStore.tokens.accent, 0.15);
+                        return createGradient(ctx, chartArea, hexToRgba(themeStore.tokens.accent, 0.3));
                     },
                 },
                 {
                     label: "Average Peer Group",
                     data: [45, 49, 55, 60, 66, 72],
-                    borderColor: "#22c55e",
-                    pointBackgroundColor: "#22c55e",
+                    borderColor: "#94a3b8",
+                    pointBackgroundColor: "#94a3b8",
+                    borderDash: [5, 4],
                     pointRadius: 2,
                     pointHoverRadius: 5,
                     tension: 0.35,
                     fill: true,
                     backgroundColor: (context: { chart: { ctx: CanvasRenderingContext2D; chartArea?: ChartArea } }) => {
                         const { ctx, chartArea } = context.chart;
-                        if (!chartArea) return "rgba(34,197,94,0.12)";
-                        return createGradient(ctx, chartArea, "rgba(34,197,94,0.22)");
+                        if (!chartArea) return "rgba(148,163,184,0.10)";
+                        return createGradient(ctx, chartArea, "rgba(148,163,184,0.18)");
                     },
                 },
             ],
@@ -127,21 +138,25 @@ const options: ChartOptions<"line"> = {
 </script>
 
 <template>
-    <section
-        class="flex h-full w-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-sky-800 dark:bg-sky-900">
-        <div class="flex flex-wrap items-start justify-between gap-2">
-            <div>
-                <h3 class="text-base md:text-lg font-semibold text-slate-900 dark:text-white">Practice Progress for
-                    Peers</h3>
-                <p class="text-xs md:text-sm text-slate-600 dark:text-slate-300">
-                    Weekly benchmark trends from active learners using {{ props.productLabel }} practice sets.
-                </p>
+    <section class="dash-card flex h-full w-full flex-col">
+        <div class="pointer-events-none absolute -top-16 -left-16 h-44 w-44 rounded-full blur-3xl theme-glow opacity-50"
+            aria-hidden="true"></div>
+        <div class="relative flex flex-wrap items-start justify-between gap-2">
+            <div class="flex items-start gap-3">
+                <span class="dash-icon-tile theme-icon h-10 w-10">
+                    <i class="pi pi-chart-line"></i>
+                </span>
+                <div>
+                    <h3 class="dash-title text-base md:text-lg">Practice Progress for Peers</h3>
+                    <p class="text-xs md:text-sm text-slate-600 dark:text-slate-300">
+                        Weekly benchmark trends from active learners using {{ props.productLabel }} practice sets.
+                    </p>
+                </div>
             </div>
-            <span class="text-[11px] px-2 py-1 rounded-full bg-sky-100 text-sky-700 font-semibold">Benchmark View</span>
+            <span class="analysis-pill theme-soft border text-[11px]">Benchmark View</span>
         </div>
-        <div
-            class="mt-4 h-72 min-h-72 rounded-xl border border-slate-200 bg-white p-3 dark:border-sky-800 dark:bg-sky-950/60">
-            <Line :data="chartData" :options="options" />
+        <div class="dash-card-white relative mt-4 h-72 min-h-72 p-3">
+            <Line :key="themeStore.currentTheme" :data="chartData" :options="options" />
         </div>
     </section>
 </template>

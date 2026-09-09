@@ -7,6 +7,7 @@ import "vue3-toastify/dist/index.css";
 import { useAuthStore } from "./stores/authStore";
 import Sidebar from "./components/Sidebar/Sidebar.vue";
 import TopBar from "./components/TopBar/TopBar.vue";
+import FocusSessionChip from "./components/FocusSessionChip.vue";
 import { computed, ref, watch, onMounted, onBeforeUnmount, nextTick } from "vue";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
@@ -371,7 +372,7 @@ onBeforeUnmount(() => {
     ]">
         <div class="loader"></div>
     </div>
-    <div :class="[dark ? 'bg-sky-950' : 'bg-sky-800']">
+    <div :class="[dark ? 'bg-sky-950' : 'bg-sky-800']" :style="themeStore.cssVars">
         <div :class="[
             `min-h-screen select-none relative antialiased overflow-hidden ${(themeStore as any).fonts[themeStore.currentFont].font}`,
             authPages || testMode
@@ -466,6 +467,7 @@ onBeforeUnmount(() => {
             </dialog>
 
             <TopBar v-if="!authPages && !testMode" />
+            <FocusSessionChip v-if="!authPages" />
             <router-view v-slot="{ Component }">
                 <div :class="'min-h-screen w-full text-gray-800 overflow-scroll' +
                     (!authPages && !testMode ? ' mt-10' : '')

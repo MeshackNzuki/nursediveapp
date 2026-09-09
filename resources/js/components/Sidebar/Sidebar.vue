@@ -21,12 +21,16 @@
                     </span>
                 </span>
             </router-link>
-            <router-link to="/account" :class="profileClass" :title="isSidebarOpen ? undefined : 'Account'">
-                <span v-if="user?.avatar" :class="[profileAvatarClass, 'overflow-hidden']">
-                    <img :src="'/storage/' + user.avatar" class="h-full w-full object-cover" alt="User avatar" />
-                </span>
-                <span v-else :class="profileAvatarClass">
-                    {{ userInitial }}
+            <router-link to="/account" :class="profileClass" @mouseenter="showTip($event, 'Account')" @mouseleave="hideTip">
+                <span class="relative shrink-0">
+                    <span v-if="user?.avatar" :class="[profileAvatarClass, 'overflow-hidden']">
+                        <img :src="'/storage/' + user.avatar" class="h-full w-full object-cover" alt="User avatar" />
+                    </span>
+                    <span v-else :class="profileAvatarClass">
+                        {{ userInitial }}
+                    </span>
+                    <span v-if="!isAdminArea" class="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-[rgb(11_40_69)]"
+                        :class="subscriptionSummary.dotClass" :title="subscriptionSummary.statusLabel"></span>
                 </span>
 
                 <span v-if="isSidebarOpen" class="min-w-0 flex-1">
@@ -37,15 +41,19 @@
                         {{ workspaceLabel }}
                     </span>
                 </span>
+                <span v-if="isSidebarOpen && !isAdminArea" class="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wide"
+                    :class="subscriptionSummary.pillClass">
+                    {{ subscriptionSummary.statusLabel }}
+                </span>
             </router-link>
             <div class="sidebar-scroll mt-4 min-h-0 flex-1 overflow-y-auto px-3 pb-4">
                 <p v-if="isSidebarOpen"
-                    class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-wides text-bright-sun-500">
+                    class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-bright-sun-500">
                     <i class="pi pi-briefcase "></i> {{ menuSectionTitle }}
                 </p>
 
-                <button v-if="showBackButton" type="button" :class="navItemClass(false)" title="Go back"
-                    @click="router.back()">
+                <button v-if="showBackButton" type="button" :class="navItemClass(false)"
+                    @mouseenter="showTip($event, 'Go back')" @mouseleave="hideTip" @click="router.back()">
                     <span :class="sidebarIconClass(false)">
                         <i class="pi pi-arrow-left"></i>
                     </span>
@@ -53,10 +61,11 @@
                 </button>
 
                 <div class="space-y-1.5">
-                    <router-link v-for="item in activeMenuItems" :key="item.route" :to="item.route" custom
+                    <router-link v-for="(item, index) in activeMenuItems" :key="item.route" :to="item.route" custom
                         v-slot="{ href, navigate, isActive, isExactActive }">
-                        <a :href="href" :class="navItemClass(isActive || isExactActive, item)"
-                            :title="isSidebarOpen ? undefined : item.label" @click="navigate">
+                        <a :href="href" :class="[navItemClass(isActive || isExactActive, item), 'ui-rise']"
+                            :style="{ animationDelay: `${index * 30}ms` }"
+                            @mouseenter="showTip($event, item.label)" @mouseleave="hideTip" @click="navigate">
                             <span :class="sidebarIconClass(isActive || isExactActive, item)">
                                 <i :class="item.icon"></i>
                             </span>
@@ -73,7 +82,7 @@
                 <div v-if="activeDropdownItems.length" class="mt-2 space-y-1.5">
                     <div v-for="dropdown in activeDropdownItems" :key="dropdown.label" :class="dropdownShellClass">
                         <button type="button" tabindex="0" :class="navItemClass(false, dropdown)"
-                            :title="isSidebarOpen ? undefined : dropdown.label">
+                            @mouseenter="showTip($event, dropdown.label)" @mouseleave="hideTip">
                             <span :class="sidebarIconClass(false, dropdown)">
                                 <i :class="dropdown.icon"></i>
                             </span>
@@ -108,7 +117,7 @@
                         <router-link v-for="item in activeSecondaryMenuItems" :key="item.route" :to="item.route" custom
                             v-slot="{ href, navigate, isActive, isExactActive }">
                             <a :href="href" :class="navItemClass(isActive || isExactActive, item)"
-                                :title="isSidebarOpen ? undefined : item.label" @click="navigate">
+                                @mouseenter="showTip($event, item.label)" @mouseleave="hideTip" @click="navigate">
                                 <span :class="sidebarIconClass(isActive || isExactActive, item)">
                                     <i :class="item.icon"></i>
                                 </span>
@@ -120,6 +129,8 @@
                     </div>
                 </div>
 
+                <div v-if="!isSidebarOpen && !isAdminArea" class="side-divider"></div>
+
                 <div v-if="!isAdminArea" :class="switcherClass">
                     <p v-if="isSidebarOpen"
                         class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-100/70">
@@ -129,9 +140,12 @@
                         <router-link v-for="area in switchAreas" :key="area.route" :to="area.route" custom
                             v-slot="{ href, navigate, isActive, isExactActive }">
                             <a :href="href" :class="switchItemClass(isActive || isExactActive)"
-                                :title="isSidebarOpen ? undefined : area.label" @click="navigate">
-                                <span :class="switchIconClass">
-                                    <i :class="area.icon + ' text-[#75DDFF]'"></i>
+                                @mouseenter="showTip($event, area.label)" @mouseleave="hideTip" @click="navigate">
+                                <span class="relative shrink-0">
+                                    <span :class="switchIconClass">
+                                        <i :class="area.icon" class="text-white"></i>
+                                    </span>
+                                    <span class="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-[rgb(11_40_69)]" :class="area.dotClass"></span>
                                 </span>
                                 <span v-if="isSidebarOpen" class="min-w-0 flex-1">
                                     <span class="block truncate text-sm font-bold text-white">{{ area.short }}</span>
@@ -144,6 +158,8 @@
                     </div>
                 </div>
 
+                <div v-if="!isSidebarOpen && !isAdminArea" class="side-divider"></div>
+
                 <div v-if="!isAdminArea" class="mt-5">
                     <p v-if="isSidebarOpen"
                         class="mb-2 pl-1 text-xs font-extrabold uppercase tracking-widest text-sky-200/70">
@@ -153,7 +169,7 @@
                         <router-link v-for="item in welcomeMenu" :key="item.route" :to="item.route" custom
                             v-slot="{ href, navigate, isActive, isExactActive }">
                             <a :href="href" :class="navItemClass(isActive || isExactActive, item)"
-                                :title="isSidebarOpen ? undefined : item.label" @click="navigate">
+                                @mouseenter="showTip($event, item.label)" @mouseleave="hideTip" @click="navigate">
                                 <span :class="sidebarIconClass(isActive || isExactActive, item)">
                                     <i :class="item.icon"></i>
                                 </span>
@@ -205,8 +221,8 @@
                             </router-link>
                         </div>
                     </div>
-                    <router-link v-else to="/account" :title="`${subscriptionSummary.title} subscription`"
-                        :class="navItemClass(false, { icon: 'pi pi-wallet' })">
+                    <router-link v-else to="/account" :class="navItemClass(false, { icon: 'pi pi-wallet' })"
+                        @mouseenter="showTip($event, `${subscriptionSummary.title}: ${subscriptionSummary.statusLabel}`)" @mouseleave="hideTip">
                         <span :class="sidebarIconClass(false, { featured: true })">
                             <i class="pi pi-wallet"></i>
                         </span>
@@ -219,7 +235,7 @@
                     </span>
                     <span class="min-w-0">
                         <span class="block text-xs font-extrabold uppercase tracking-wide text-bright-sun-500">
-                            Get 14 days free
+                            Get 15 days free
                         </span>
                         <span class="block truncate text-xs text-white/90 font-bold italic">
                             Refer a friend to earn
@@ -229,7 +245,7 @@
                 <div class="mt-2 space-y-1.5">
                     <router-link to="/settings" custom v-slot="{ href, navigate, isActive, isExactActive }">
                         <a :href="href" :class="navItemClass(isActive || isExactActive, { icon: 'pi pi-cog' })"
-                            :title="isSidebarOpen ? undefined : 'Settings'" @click="navigate">
+                            @mouseenter="showTip($event, 'Settings')" @mouseleave="hideTip" @click="navigate">
                             <span :class="sidebarIconClass(isActive || isExactActive)">
                                 <i class="pi pi-cog"></i>
                             </span>
@@ -237,8 +253,8 @@
                         </a>
                     </router-link>
 
-                    <button type="button" :class="logoutClass" :title="isSidebarOpen ? undefined : 'Log out'"
-                        @click="logout()">
+                    <button type="button" :class="logoutClass"
+                        @mouseenter="showTip($event, 'Log out')" @mouseleave="hideTip" @click="logout()">
                         <span :class="sidebarIconClass(false, { danger: true })">
                             <i class="pi pi-power-off text-rose-400"></i>
                         </span>
@@ -247,6 +263,14 @@
                 </div>
             </div>
         </div>
+
+        <Teleport to="body">
+            <Transition name="ui-fade-slide">
+                <div v-if="tip.visible" class="side-tooltip" :style="{ top: `${tip.y}px`, left: `${tip.x}px` }" role="tooltip">
+                    {{ tip.label }}
+                </div>
+            </Transition>
+        </Teleport>
     </nav>
 </template>
 
@@ -270,21 +294,24 @@ const productAreas = [
         route: "/nursing",
         label: "Nursing School",
         short: "Nursing",
-        icon: "pi pi-graduation-cap",
+        icon: "pi pi-briefcase",
+        dotClass: "bg-emerald-400",
     },
     {
         prefix: "/teas",
         route: "/teas",
         label: "TEAS Prep",
         short: "TEAS",
-        icon: "pi pi-sparkles",
+        icon: "pi pi-file-edit",
+        dotClass: "bg-cyan-400",
     },
     {
         prefix: "/nclex",
         route: "/nclex",
         label: "NCLEX Prep",
         short: "NCLEX",
-        icon: "pi pi-shield",
+        icon: "pi pi-bolt",
+        dotClass: "bg-indigo-400",
     },
 ];
 
@@ -517,6 +544,23 @@ const currentProductArea = computed(() =>
     productAreas.find((area) => isAreaPath(area.prefix)) || null,
 );
 
+/* Collapsed-mode tooltip: rendered in <body> so the sidebar's overflow clipping can't hide it. */
+const tip = ref({ visible: false, label: "", x: 0, y: 0 });
+
+const showTip = (event, label) => {
+    if (isSidebarOpen.value || mainStore.isMobile || !label) return;
+    const rect = event.currentTarget?.getBoundingClientRect?.();
+    if (!rect) return;
+    tip.value = { visible: true, label, x: rect.right + 12, y: rect.top + rect.height / 2 };
+};
+
+const hideTip = () => {
+    tip.value.visible = false;
+};
+
+watch(isSidebarOpen, hideTip);
+watch(() => route.path, hideTip);
+
 const subscriptionSummary = computed(() => {
     const area = currentProductArea.value;
 
@@ -528,6 +572,8 @@ const subscriptionSummary = computed(() => {
             cta: "Plans",
             pricingRoute: "/subscription",
             badgeClass: "bg-sky-100 text-sky-800",
+            pillClass: "bg-white/10 text-sky-100",
+            dotClass: "bg-sky-400",
         };
     }
 
@@ -547,6 +593,8 @@ const subscriptionSummary = computed(() => {
             cta: "Upgrade",
             pricingRoute: authStore.pricingRoute(productCode),
             badgeClass: "bg-amber-100 text-amber-800",
+            pillClass: "bg-amber-400/20 text-amber-200",
+            dotClass: "bg-amber-400",
         };
     }
 
@@ -558,6 +606,8 @@ const subscriptionSummary = computed(() => {
             cta: "Extend",
             pricingRoute: authStore.pricingRoute(productCode),
             badgeClass: "bg-emerald-100 text-emerald-800",
+            pillClass: "bg-emerald-400/20 text-emerald-200",
+            dotClass: "bg-emerald-400",
         };
     }
 
@@ -569,6 +619,8 @@ const subscriptionSummary = computed(() => {
             cta: "Renew",
             pricingRoute: authStore.pricingRoute(productCode),
             badgeClass: "bg-rose-100 text-rose-800",
+            pillClass: "bg-rose-400/20 text-rose-200",
+            dotClass: "bg-rose-400",
         };
     }
 
@@ -579,6 +631,8 @@ const subscriptionSummary = computed(() => {
         cta: "Subscribe",
         pricingRoute: authStore.pricingRoute(productCode),
         badgeClass: "bg-slate-100 text-slate-700",
+        pillClass: "bg-white/10 text-slate-200",
+        dotClass: "bg-slate-400",
     };
 });
 
@@ -643,7 +697,7 @@ const brandClass = computed(() => [
 ]);
 
 const profileClass = computed(() => [
-    "mx-3 mt-3 flex items-center gap-3 rounded-2xl border border-sky-300/20 bg-white/5 text-white transition hover:-translate-y-px hover:border-sky-300/30 hover:bg-white/10",
+    "side-focus mx-3 mt-3 flex items-center gap-3 rounded-2xl border border-sky-300/20 bg-white/5 text-white transition hover:-translate-y-px hover:border-sky-300/30 hover:bg-white/10",
     isSidebarOpen.value ? "justify-start px-3 py-3" : "justify-center px-2 py-2.5",
 ]);
 
@@ -674,47 +728,32 @@ const dropdownShellClass = computed(() => [
 ]);
 
 const navItemClass = (active = false, item = {}) => [
-    "flex min-h-11 w-full items-center gap-3 rounded-2xl border border-transparent text-sm font-bold leading-tight text-slate-100/90 outline-none transition hover:-translate-y-px hover:bg-white/10 hover:text-white focus-visible:-translate-y-px focus-visible:bg-white/10 focus-visible:text-white",
+    "side-item side-focus flex min-h-11 w-full items-center gap-3 rounded-2xl border border-transparent text-sm font-bold leading-tight text-slate-100/90 outline-none transition hover:-translate-y-px hover:bg-white/10 hover:text-white focus-visible:-translate-y-px focus-visible:bg-white/10 focus-visible:text-white",
     isSidebarOpen.value ? "justify-start px-3" : "justify-center px-2",
     active
-        ? "border-cyan-300/30 bg-gradient-to-r from-sky-500/25 to-teal-500/10 text-white shadow-lg shadow-sky-950/20"
+        ? "side-item-active border-white/10 bg-white/10 text-white shadow-lg shadow-sky-950/20"
         : "",
     item.featured ? "text-amber-100" : "",
 ];
 
 const sidebarIconClass = (active = false, item = {}) => [
     sidebarIconBaseClass,
-    active ? "border-cyan-300/30 bg-sky-500/20 text-white" : "",
+    active ? "side-icon-active text-white" : "",
     item.danger ? "text-rose-200" : "",
     item.featured ? "border-amber-300/30 bg-amber-300/20 text-amber-100" : "",
 ];
 
 const switchItemClass = (active = false) => [
-    "flex min-h-11 w-full items-center gap-3 rounded-2xl border border-transparent text-sm font-bold leading-tight text-slate-100/90 outline-none transition hover:-translate-y-px hover:bg-white/10 hover:text-white focus-visible:-translate-y-px focus-visible:bg-white/10 focus-visible:text-white",
+    "side-item side-focus flex min-h-11 w-full items-center gap-3 rounded-2xl border border-transparent text-sm font-bold leading-tight text-slate-100/90 outline-none transition hover:-translate-y-px hover:bg-white/10 hover:text-white focus-visible:-translate-y-px focus-visible:bg-white/10 focus-visible:text-white",
     isSidebarOpen.value ? "justify-start px-2.5 py-2" : "justify-center px-2 py-2",
     active
-        ? "border-cyan-300/30 bg-gradient-to-r from-sky-500/25 to-teal-500/10 text-white shadow-lg shadow-sky-950/20"
+        ? "side-item-active border-white/10 bg-white/10 text-white shadow-lg shadow-sky-950/20"
         : "",
 ];
 
 const logoutClass = computed(() => [
-    "flex min-h-11 w-full items-center gap-3 rounded-2xl border border-transparent text-sm font-bold leading-tight text-slate-100/90 outline-none transition hover:-translate-y-px hover:bg-white/10 hover:text-white focus-visible:-translate-y-px focus-visible:bg-white/10 focus-visible:text-white",
+    "side-item side-focus flex min-h-11 w-full items-center gap-3 rounded-2xl border border-transparent text-sm font-bold leading-tight text-slate-100/90 outline-none transition hover:-translate-y-px hover:bg-white/10 hover:text-white focus-visible:-translate-y-px focus-visible:bg-white/10 focus-visible:text-white",
     isSidebarOpen.value ? "justify-start px-3" : "justify-center px-2",
 ]);
 </script>
 
-<style scoped>
-.sidebar-scroll {
-    scrollbar-color: rgba(103, 232, 249, 0.32) transparent;
-    scrollbar-width: thin;
-}
-
-.sidebar-scroll::-webkit-scrollbar {
-    width: 5px;
-}
-
-.sidebar-scroll::-webkit-scrollbar-thumb {
-    background: rgba(103, 232, 249, 0.28);
-    border-radius: 999px;
-}
-</style>

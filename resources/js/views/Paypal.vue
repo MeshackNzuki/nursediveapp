@@ -177,7 +177,7 @@ const initializePaypal = async () => {
             },
 
             onCancel: () => {
-                
+
                 statusMessage.value = 'Payment cancelled'
                 trackPaywallEvent('payment_abandoned', {
                     provider: 'paypal',
@@ -213,6 +213,7 @@ const initializePaypal = async () => {
 }
 
 onMounted(initializePaypal)
+
 </script>
 
 <template>
