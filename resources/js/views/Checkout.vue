@@ -27,20 +27,9 @@
           Encrypted payment
         </div>
       </div>
-
       <section class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <div class="space-y-4">
           <div class="grid gap-3 sm:grid-cols-2">
-            <button
-              class="flex min-h-24 items-center justify-between rounded-lg border border-blue-300 bg-blue-50 p-4 text-left shadow-sm ring-2 ring-blue-500/20 transition dark:border-blue-500/50 dark:bg-blue-500/10"
-              type="button" aria-pressed="true">
-              <span>
-                <span class="block text-sm font-black text-slate-950 dark:text-white">Stripe</span>
-                <span class="mt-1 block text-xs text-slate-600 dark:text-slate-300">Card, Apple Pay, Google Pay</span>
-              </span>
-              <i class="pi pi-credit-card text-xl text-blue-600 dark:text-blue-300"></i>
-            </button>
-
             <button
               class="flex min-h-24 items-center justify-between rounded-lg border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-blue-300 hover:bg-blue-50/70 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-500/60 dark:hover:bg-blue-500/10"
               type="button" @click="redirectToPaypal">
@@ -49,6 +38,16 @@
                 <span class="mt-1 block text-xs text-slate-600 dark:text-slate-300">Pay with your PayPal wallet</span>
               </span>
               <img :src="paypalIcon" alt="PayPal" class="h-6 w-auto">
+            </button>
+
+            <button
+              class="flex min-h-24 items-center justify-between rounded-lg border border-blue-300 bg-blue-50 p-4 text-left shadow-sm ring-2 ring-blue-500/20 transition dark:border-blue-500/50 dark:bg-blue-500/10"
+              type="button" aria-pressed="true">
+              <span>
+                <span class="block text-sm font-black text-slate-950 dark:text-white">Stripe</span>
+                <span class="mt-1 block text-xs text-slate-600 dark:text-slate-300">Card, Apple Pay, Google Pay</span>
+              </span>
+              <i class="pi pi-credit-card text-xl text-blue-600 dark:text-blue-300"></i>
             </button>
           </div>
 
@@ -317,8 +316,6 @@ const initializeCheckout = async () => {
   }
 }
 
-onMounted(initializeCheckout)
-
 async function handleSubmit() {
   const stripeInstance = elementsComponent.value?.instance
   const elements = elementsComponent.value?.elements
@@ -380,4 +377,6 @@ const redirectToPaypal = () => {
     },
   })
 }
+onMounted(initializeCheckout)
+
 </script>

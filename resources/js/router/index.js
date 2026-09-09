@@ -35,7 +35,10 @@ const routes = [
     {
         path: "/checkout",
         name: "Checkout",
-        component: () => import("../views/Checkout.vue"),
+        redirect: (to) => ({
+            path: "/paypal-checkout",
+            query: to.query,
+        }),
     },
     {
         path: "/paypal-checkout",
@@ -87,11 +90,6 @@ const routes = [
         path: "/referral",
         name: "Referral",
         component: () => import("../views/Referral.vue"),
-    },
-    {
-        path: "/checkout",
-        name: "Checkout",
-        component: () => import("../views/Checkout.vue"),
     },
     {
         path: "/settings",

@@ -18,7 +18,7 @@ const mainStore = useMainStore()
 const authStore = useAuthStore()
 const paymentId = ref('')
 
-const PAYPAL_CLIENT_ID = "AVi9KDLo5yyswt5MW-tWRpSHTx2Zv5UJZ9-BofXGd6KBEH5PlKR7jGqMiIf3vll6MRt6UGUvjmiEMZuL"
+const PAYPAL_CLIENT_ID = "AbJAb5dUEhL3wD4sVEa9u5rYFrVRX2mRxIpShlgsnvZ9mZzpWK8tWCYJPXpe0iV0-QKSqk9eJ3MSEdLd"
 
 const planId = computed(() => {
     if (typeof route.query.plan_id === 'string') return route.query.plan_id
@@ -139,6 +139,7 @@ const initializePaypal = async () => {
                 statusMessage.value = 'Capturing payment...'
 
                 try {
+
                     const response = await axios.post(
                         '/payments/paypal/capture-payment',
                         {
@@ -176,6 +177,7 @@ const initializePaypal = async () => {
             },
 
             onCancel: () => {
+                
                 statusMessage.value = 'Payment cancelled'
                 trackPaywallEvent('payment_abandoned', {
                     provider: 'paypal',
@@ -204,7 +206,7 @@ const initializePaypal = async () => {
             amount: displayAmount.value,
         })
     } catch (e) {
-        checkoutError.value = "We couldn't load PayPal checkout. Please try again or use Stripe."
+        checkoutError.value = "We couldn't load PayPal checkout. Please try again in a moment."
     } finally {
         isPreparing.value = false
     }
@@ -296,13 +298,6 @@ onMounted(initializePaypal)
                     <span class="text-sm font-semibold text-slate-500 dark:text-slate-400">Total due today</span>
                     <span class="text-3xl font-black text-slate-950 dark:text-white">{{ formattedAmount }}</span>
                 </div>
-
-                <button
-                    class="mt-5 flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
-                    type="button" @click="router.push({ path: '/checkout', query: route.query })">
-                    <i class="pi pi-credit-card text-xs"></i>
-                    Use Stripe Instead
-                </button>
             </aside>
         </main>
     </div>
