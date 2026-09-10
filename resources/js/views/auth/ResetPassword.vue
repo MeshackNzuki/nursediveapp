@@ -57,7 +57,7 @@
                     <div class="auth-field">
                         <i class="pi pi-lock auth-field-icon"></i>
                         <input v-model="password" :type="type" id="password" class="auth-input" required autocomplete="new-password"
-                            placeholder="At least 8 characters" autofocus />
+                            placeholder="At least 6 characters" autofocus />
                         <button type="button" class="auth-eye" @click="type = type === 'password' ? 'text' : 'password'"
                             :aria-label="type === 'password' ? 'Show password' : 'Hide password'">
                             <i :class="type === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash'" class="text-sm"></i>
@@ -136,8 +136,8 @@ const setMessage = (text, type = "info") => {
 };
 
 const validatePasswords = () => {
-    if (password.value.length < 8) {
-        setMessage("Password must be at least 8 characters long.", "error");
+    if (password.value.length < 6) {
+        setMessage("Password must be at least 6 characters long.", "error");
         return false;
     }
     if (password.value !== password_confirmation.value) {

@@ -112,7 +112,7 @@ class PasswordResetController extends Controller
         $request->validate([
             'email'    => 'required|email|exists:users,email',
             'token'    => 'required',
-            'password' => 'required|confirmed|min:8',
+            'password' => 'required|confirmed|min:6',
         ]);
 
         $record = DB::table($this->resetTokenTable())

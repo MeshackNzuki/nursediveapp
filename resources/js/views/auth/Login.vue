@@ -16,8 +16,7 @@
             </div>
         </Transition>
 
-        <GuestSavePrompt v-if="pendingAttempt" :product="pendingAttempt.product" :product-label="pendingAttempt.productLabel"
-            compact :show-actions="false" :show-benefits="false" />
+        <AuthAttemptCard mode="login" />
 
         <Transition name="slide-fade" mode="out-in">
             <form v-if="step === 1" key="step1" class="space-y-5" @submit.prevent="handleNextStep">
@@ -77,8 +76,8 @@ import { useRouter, useRoute } from "vue-router";
 import { useConfirm } from "primevue/useconfirm";
 import { useMainStore } from "../../stores";
 import AuthShell from "../../components/Auth/AuthShell.vue";
-import GuestSavePrompt from "../../components/GuestSavePrompt.vue";
-import { flushPendingAttempt, getPendingAttempt } from "../../utils/pendingAttempt";
+import AuthAttemptCard from "../../components/Auth/AuthAttemptCard.vue";
+import { flushPendingAttempt } from "../../utils/pendingAttempt";
 
 const { login } = useAuthStore();
 const { closeSidebar } = useMainStore();
@@ -91,7 +90,6 @@ const route = useRoute();
 const message = ref("");
 const type = ref("password");
 const step = ref(1);
-const pendingAttempt = ref(getPendingAttempt());
 
 const features = [
     { icon: "pi pi-history", text: "Start from where you left off" },

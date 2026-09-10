@@ -7,22 +7,23 @@
 
     <!-- SEO Meta Tags -->
     <meta name="description"
-        content="Nurse Dive - Comprehensive nursing and TEAS/HESI, NCLEX exam prep platform. Discover adaptive learning tools, rich content, and expert guidance.">
+        content="Nursenex - Comprehensive nursing school, TEAS and NCLEX exam prep. Realistic question banks, focused remediation, and performance analytics.">
     <meta name="keywords"
-        content="Nurse Dive, nursing exams, TEAS/HESI prep, NCLEX, nursing school, online test prep, adaptive learning">
-    <meta name="author" content="Nurse Dive Team">
+        content="Nursenex, nursing exams, TEAS prep, HESI, NCLEX, nursing school, online test prep, adaptive learning">
+    <meta name="author" content="Nursenex Team">
 
     <!-- Open Graph (for sharing previews) -->
-    <meta property="og:title" content="Nurse Dive | Nursing, TEAS/HESI & NCLEX Exam Prep">
+    <meta property="og:title" content="Nursenex | Nursing School, TEAS & NCLEX Exam Prep">
     <meta property="og:description"
-        content="Join thousands of students acing nursing exams with Nurse Dive. Get started today.">
+        content="Join thousands of students acing nursing exams with Nursenex. Get started free today.">
     <meta property="og:image" content="https://app.nursenex.com/assets/favicon.png">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://app.nursenex.com/assets/favicon.png">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
-    <title>{{ env('APP_NAME', 'Nursenex') }}</title>
+    <title>{{ config('app.name', 'Nursenex') }}</title>
 
     @vite(['resources/js/main.ts'])
 </head>
