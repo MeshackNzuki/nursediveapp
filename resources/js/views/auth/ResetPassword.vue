@@ -1,120 +1,93 @@
 <template>
-    <div
-        class="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-slate-50 via-rose-50/60 to-cyan-100/70 text-slate-900">
-        <div class="absolute inset-0 pointer-events-none -z-10">
-            <div
-                class="absolute -top-24 -left-20 h-[420px] w-[420px] rounded-full bg-gradient-to-r from-rose-200/65 to-orange-200/60 blur-[105px]">
+    <AuthShell eyebrow="Password recovery" title="Regain secure access fast."
+        subtitle="Use your reset link to create a new password and continue your study journey without losing momentum."
+        heading="Reset password" :lead="stepLead" :steps="['Request', 'Check inbox', 'New password']" :current-step="step"
+        :features="features" brand-chip-class="border-rose-300/30 bg-rose-400/15 text-rose-100">
+        <template #heading-action>
+            <button type="button" class="dash-btn-ghost px-3 py-1.5 text-xs" @click="router.push('/login')">
+                <i class="pi pi-arrow-left text-[10px]"></i> Log in
+            </button>
+        </template>
+
+        <Transition name="ui-fade-slide">
+            <div v-if="message" class="auth-alert" :class="messageClass" role="status">
+                <i :class="messageIcon" class="mt-0.5 text-xs"></i>
+                <span>{{ message }}</span>
             </div>
-            <div
-                class="absolute top-24 right-0 h-[380px] w-[380px] rounded-full bg-gradient-to-r from-cyan-200/65 to-sky-200/55 blur-[100px]">
+        </Transition>
+
+        <div>
+            <label for="reset-email" class="auth-label">Email address</label>
+            <div class="auth-field">
+                <i class="pi pi-envelope auth-field-icon"></i>
+                <input v-model="email" type="email" id="reset-email" class="auth-input pr-4" placeholder="name@example.com"
+                    autocomplete="email" :readonly="step === 3" />
             </div>
         </div>
 
-        <div class="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl items-center px-4 py-8 md:px-8">
-            <div class="grid w-full gap-5 lg:grid-cols-2">
-                <section
-                    class="hidden lg:flex flex-col justify-between rounded-3xl border border-white/70 bg-white/65 p-8 backdrop-blur-sm shadow-sm">
+        <Transition name="slide-fade" mode="out-in">
+            <div v-if="step === 1" key="s1" class="mt-5 space-y-4">
+                <p class="text-sm leading-6 text-slate-600">We'll email you a secure link. It works once and expires quickly.</p>
+                <button type="button" class="auth-btn theme-surface theme-shadow" :disabled="isBusy || !email" @click="InitiateResetLink">
+                    <span v-if="isBusy"><i class="pi pi-spin pi-spinner"></i> Sending...</span>
+                    <span v-else class="inline-flex items-center gap-2"><i class="pi pi-send text-xs"></i> Send reset link</span>
+                </button>
+            </div>
+
+            <div v-else-if="step === 2" key="s2" class="mt-5 space-y-4">
+                <div class="dash-tile-soft flex items-start gap-3">
+                    <span class="dash-icon-tile theme-icon h-10 w-10 shrink-0"><i class="pi pi-inbox"></i></span>
                     <div>
-                        <Logo />
-                        <p
-                            class="mt-4 inline-flex items-center rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-rose-700">
-                            Password Recovery
-                        </p>
-                        <h2 class="mt-4 text-3xl font-extrabold tracking-tight text-slate-900">
-                            Regain secure access fast
-                        </h2>
-                        <p class="mt-3 max-w-md text-sm leading-relaxed text-slate-600">
-                            Use your reset link to create a new password and continue your study journey without losing
-                            momentum.
+                        <p class="text-sm font-extrabold text-slate-900">Check your inbox</p>
+                        <p class="mt-1 text-xs leading-5 text-slate-600">
+                            Open the link we sent to <strong class="text-slate-900">{{ email }}</strong>. Check the spam folder too.
+                            If it does not arrive, request another one.
                         </p>
                     </div>
-
-                    <ul class="space-y-3 text-sm text-slate-700">
-                        <li class="flex items-start gap-2">
-                            <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-700 text-xs font-bold">1</span>
-                            Request or open your reset link.
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-700 text-xs font-bold">2</span>
-                            Verify the token automatically from the email URL.
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span
-                                class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-700 text-xs font-bold">3</span>
-                            Set a new password and sign in.
-                        </li>
-                    </ul>
-                </section>
-
-                <section class="rounded-3xl border border-white/80 bg-white/90 p-6 backdrop-blur-sm shadow-sm md:p-8">
-                    <button
-                        class="mb-5 inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-100"
-                        @click="router.push('/login')">
-                        <i class="pi pi-arrow-left text-xs"></i>
-                        Back to Login
-                    </button>
-
-                    <h1 class="mb-2 text-2xl font-extrabold tracking-tight text-slate-900">Reset Password</h1>
-                    <p class="mb-5 text-sm text-slate-600">Step {{ step }} of 3</p>
-
-                    <div v-if="message" :class="messageClass" class="mb-4 rounded-xl border px-3 py-2 text-sm">
-                        {{ message }}
-                    </div>
-
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                        <p class="text-[11px] uppercase tracking-wide text-slate-500">Email Address</p>
-                        <p class="mt-1 break-all text-sm font-semibold text-slate-800">
-                            {{ email || "No email provided yet." }}
-                        </p>
-                    </div>
-
-                    <div v-if="step === 1" class="mt-5">
-                        <CommonButton buttonText="Send reset link" :disabled="isBusy || !email"
-                            classes="w-full rounded-full bg-sky-950/95 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
-                            :action="InitiateResetLink" />
-                    </div>
-
-                    <div v-if="step === 2" class="mt-5 space-y-3">
-                        <p class="text-sm text-slate-600">
-                            Check your inbox and open the reset link (Including the spam folder). If it does not arrive,
-                            request another one.
-                        </p>
-                        <CommonButton :buttonText="isBusy ? 'Sending...' : 'Resend reset link'"
-                            :disabled="isBusy || !email"
-                            classes="w-full rounded-full bg-sky-950/95 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
-                            :action="InitiateResetLink" />
-                    </div>
-
-                    <div v-if="step === 3" class="mt-5 space-y-4">
-                        <div>
-                            <label for="password" class="mb-2 block text-sm font-semibold text-slate-800">New
-                                Password</label>
-                            <input v-model="password" type="password" id="password" required
-                                class="block w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-rose-500" />
-                        </div>
-                        <div>
-                            <label for="password_confirmation"
-                                class="mb-2 block text-sm font-semibold text-slate-800">Confirm Password</label>
-                            <input v-model="password_confirmation" type="password" id="password_confirmation" required
-                                class="block w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-rose-500" />
-                        </div>
-                        <CommonButton :buttonText="isBusy ? 'Resetting...' : 'Reset password'" :disabled="isBusy"
-                            classes="w-full rounded-full bg-sky-950/95 py-2.5 text-sm font-semibold text-white hover:bg-sky-700 shadow-none"
-                            :action="changePassword" />
-                    </div>
-                </section>
+                </div>
+                <button type="button" class="auth-btn dash-btn-ghost" :disabled="isBusy || !email" @click="InitiateResetLink">
+                    <span v-if="isBusy"><i class="pi pi-spin pi-spinner"></i> Sending...</span>
+                    <span v-else class="inline-flex items-center gap-2"><i class="pi pi-refresh text-xs"></i> Resend reset link</span>
+                </button>
             </div>
-        </div>
-    </div>
+
+            <form v-else key="s3" class="mt-5 space-y-4" @submit.prevent="changePassword">
+                <div>
+                    <label for="password" class="auth-label">New password</label>
+                    <div class="auth-field">
+                        <i class="pi pi-lock auth-field-icon"></i>
+                        <input v-model="password" :type="type" id="password" class="auth-input" required autocomplete="new-password"
+                            placeholder="At least 8 characters" autofocus />
+                        <button type="button" class="auth-eye" @click="type = type === 'password' ? 'text' : 'password'"
+                            :aria-label="type === 'password' ? 'Show password' : 'Hide password'">
+                            <i :class="type === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash'" class="text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label for="password_confirmation" class="auth-label">Confirm password</label>
+                    <div class="auth-field">
+                        <i class="pi pi-check-circle auth-field-icon"></i>
+                        <input v-model="password_confirmation" :type="type" id="password_confirmation" class="auth-input pr-4" required
+                            autocomplete="new-password" placeholder="Repeat the password" />
+                    </div>
+                    <p v-if="password_confirmation && password !== password_confirmation" class="mt-1.5 text-[11px] font-bold text-rose-600">
+                        Passwords do not match yet.
+                    </p>
+                </div>
+                <button type="submit" class="auth-btn theme-surface theme-shadow" :disabled="isBusy">
+                    <span v-if="isBusy"><i class="pi pi-spin pi-spinner"></i> Resetting...</span>
+                    <span v-else class="inline-flex items-center gap-2"><i class="pi pi-key text-xs"></i> Reset password</span>
+                </button>
+            </form>
+        </Transition>
+    </AuthShell>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import axios from "axios";
-import CommonButton from "../../components/Buttons/CommonButton.vue";
-import Logo from "../../components/Logo.vue";
+import AuthShell from "../../components/Auth/AuthShell.vue";
 import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "../../stores/authStore";
 
@@ -125,6 +98,7 @@ const route = useRoute();
 const email = ref("");
 const password = ref("");
 const password_confirmation = ref("");
+const type = ref("password");
 const Usertoken = ref("");
 const Systemtoken = ref("");
 const message = ref("");
@@ -132,10 +106,28 @@ const messageType = ref("info");
 const step = ref(1);
 const isBusy = ref(false);
 
+const features = [
+    { icon: "pi pi-send", text: "Request or open your reset link." },
+    { icon: "pi pi-shield", text: "The token is verified automatically from the email URL." },
+    { icon: "pi pi-key", text: "Set a new password and you're signed straight in." },
+];
+
+const stepLead = computed(() => {
+    if (step.value === 1) return "Enter the email on your account and we'll send a reset link.";
+    if (step.value === 2) return "Your link is on its way.";
+    return "Link verified. Choose a new password.";
+});
+
 const messageClass = computed(() => {
     if (messageType.value === "success") return "border-emerald-200 bg-emerald-50 text-emerald-700";
     if (messageType.value === "error") return "border-rose-200 bg-rose-50 text-rose-700";
     return "border-sky-200 bg-sky-50 text-sky-700";
+});
+
+const messageIcon = computed(() => {
+    if (messageType.value === "success") return "pi pi-check-circle";
+    if (messageType.value === "error") return "pi pi-exclamation-circle";
+    return "pi pi-info-circle";
 });
 
 const setMessage = (text, type = "info") => {

@@ -14,7 +14,7 @@
         </div>
 
         <!-- Headline numbers -->
-        <div class="relative mt-3 grid grid-cols-3 gap-2">
+        <div class="relative mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
             <div class="dash-tile-soft flex items-center gap-2 px-2.5 py-2">
                 <span class="dash-icon-tile theme-icon h-7 w-7 shrink-0 text-xs"><i class="pi pi-pencil"></i></span>
                 <div class="min-w-0">

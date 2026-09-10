@@ -1,141 +1,80 @@
 <template>
-    <div
-        class="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-slate-50 via-teal-50/70 to-cyan-100/70 text-slate-900">
-        <div class="absolute inset-0 pointer-events-none -z-10">
-            <div
-                class="absolute -top-24 -left-16 h-[430px] w-[430px] rounded-full bg-gradient-to-r from-emerald-200/70 to-teal-200/60 blur-[105px]">
+    <AuthShell eyebrow="Start free" title="Build an exam-ready routine."
+        subtitle="Join Nursenex for realistic exam banks, focused remediation, and progress tracking across TEAS, nursing school, and NCLEX."
+        heading="Create your account" lead="Set up your profile to start your prep journey." :features="features"
+        brand-chip-class="border-emerald-300/30 bg-emerald-400/15 text-emerald-100">
+        <GuestSavePrompt v-if="pendingAttempt" :product="pendingAttempt.product" :product-label="pendingAttempt.productLabel"
+            compact :show-actions="false" :show-benefits="false" />
+
+        <Transition name="ui-fade-slide">
+            <div v-if="message" class="auth-alert border-rose-200 bg-rose-50 text-rose-700" role="alert">
+                <i class="pi pi-exclamation-circle mt-0.5 text-xs"></i>
+                <span>{{ message }}</span>
             </div>
-            <div
-                class="absolute top-24 right-0 h-[390px] w-[390px] rounded-full bg-gradient-to-r from-sky-200/65 to-blue-200/55 blur-[100px]">
-            </div>
-        </div>
-        <div class="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl items-center px-4 py-8 md:px-8">
-            <div
-                class="flex flex-col items-center justify-center gap-3 mx-auto   bg-white py-6 px-10 lg:py-16 lg:px-16 rounded-3xl border border-white/70  backdrop-blur-sm">
-                <div class="w-full text-start md:px-8">
-                    <Logo />
+        </Transition>
+
+        <form class="space-y-5" @submit.prevent="handleRegister">
+            <div>
+                <label for="name" class="auth-label">Full name</label>
+                <div class="auth-field">
+                    <i class="pi pi-user auth-field-icon"></i>
+                    <input v-model="name" type="text" id="name" class="auth-input pr-4" placeholder="Your name" autocomplete="name" autofocus />
                 </div>
-                <div class="grid w-full gap-5 lg:grid-cols-2">
-                    <section
-                        class="hidden lg:flex flex-col justify-between    border-r border-gray-200 p-8 backdrop-blur-sm">
-                        <div>
-                            <h2 class="text-2xl  font-bold text-slate-900  brush-underline-hover">
-                                Build an exam-ready routine
-                            </h2>
-                            <p class="mt-2 max-w-md text-sm leading-relaxed text-slate-600">
-                                Join Nursenex to access realistic exam banks, focused remediation, and progress
-                                tracking.
-                            </p>
-                        </div>
-                        <div>
-                            <h5>Why Nursenex is the best choice for your prep journey</h5>
-                            <div class="mt-3 space-y-2 text-sm text-slate-600">
-                                <p>Our Exams are expertly crafted to reflect the actual test format and difficulty
-                                    level.
-                                    <strong>No AI-generated content.</strong>
-                                </p>
-                                <p><strong>Questions</strong> are from <strong>real past exams,</strong> ensuring
-                                    you get
-                                    authentic practice that builds
-                                    confidence and readiness for test day.
-                                </p>
-                            </div>
-                        </div>
+            </div>
 
-                        <ul class="space-y-3 text-sm text-slate-700">
-                            <li class="flex items-start gap-2">
-                                <span
-                                    class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs ">1</span>
-                                Exam-style questions and rationales
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span
-                                    class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-100 text-rose-700 text-xs ">2</span>
-                                Weak-area focus and adaptive practice
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span
-                                    class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs ">3</span>
-                                Performance analytics across products
-                            </li>
-                        </ul>
-                    </section>
+            <div>
+                <label for="email" class="auth-label">Email address</label>
+                <div class="auth-field">
+                    <i class="pi pi-envelope auth-field-icon"></i>
+                    <input v-model="email" type="email" id="email" class="auth-input pr-4" autocomplete="email"
+                        :placeholder="`${route.query?.email == undefined ? '' : route.query?.email}` || 'you@example.com'" />
+                </div>
+            </div>
 
-                    <section class="rounded-3xl border border-white/80 bg-white/90 p-1 backdrop-blur-sm md:p-8">
-
-
-                        <h1 class="mb-2 text-2xl font-extrabold tracking-tight text-sky-600">Register</h1>
-
-                        <p class="mb-5 text-sm text-slate-600">Set up your profile to start your prep journey.</p>
-
-                        <GuestSavePrompt v-if="pendingAttempt" :product="pendingAttempt.product"
-                            :product-label="pendingAttempt.productLabel" compact :show-actions="false"
-                            :show-benefits="false" />
-
-                        <span v-if="message"
-                            class="mb-4 block rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
-                            {{ message }}
+            <div>
+                <label for="password" class="auth-label">Password</label>
+                <div class="auth-field">
+                    <i class="pi pi-lock auth-field-icon"></i>
+                    <input v-model="password" :type="type" id="password" class="auth-input" placeholder="At least 8 characters"
+                        autocomplete="new-password" />
+                    <button type="button" class="auth-eye" @click="togglePasswordVisibility"
+                        :aria-label="type === 'password' ? 'Show password' : 'Hide password'">
+                        <i :class="type === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash'" class="text-sm"></i>
+                    </button>
+                </div>
+                <div class="auth-strength" aria-hidden="true">
+                    <span v-for="n in 4" :key="n" :class="n <= strength.score ? strength.barClass : ''"></span>
+                </div>
+                <div class="mt-1.5 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                    <span class="font-bold" :class="strength.textClass">{{ strength.label }}</span>
+                    <span class="flex flex-wrap gap-x-3 text-slate-500">
+                        <span v-for="check in strength.checks" :key="check.label" class="inline-flex items-center gap-1" :class="check.ok ? 'text-emerald-600' : ''">
+                            <i :class="check.ok ? 'pi pi-check-circle' : 'pi pi-circle'" class="text-[10px]"></i>{{ check.label }}
                         </span>
-
-                        <form class="space-y-5" @submit.prevent="handleRegister">
-                            <div>
-                                <label for="name" class="mb-2 block text-sm font-semibold text-slate-800">
-                                    Full Name
-                                </label>
-                                <input v-model="name" type="text" id="name"
-                                    class="block w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-emerald-500"
-                                    placeholder="Your name" />
-                            </div>
-
-                            <div>
-                                <label for="email" class="mb-2 block text-sm font-semibold text-slate-800">
-                                    Email Address
-                                </label>
-                                <input v-model="email" type="email" id="email"
-                                    class="block w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-emerald-500"
-                                    :placeholder="`${route.query?.email == undefined ? '' : route.query?.email}` || 'you@example.com'" />
-                            </div>
-
-                            <div class="relative">
-                                <label for="password" class="mb-2 block text-sm font-semibold text-slate-800">
-                                    Password
-                                </label>
-                                <input v-model="password" :type="type" id="password"
-                                    class="block w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none transition focus:border-emerald-500"
-                                    placeholder="Your password" />
-                                <button type="button" @click="togglePasswordVisibility"
-                                    class="absolute inset-y-0 right-0 mt-7 flex items-center pe-3 text-slate-500">
-                                    <i :class="type === 'password' ? 'pi pi-eye' : 'pi pi-eye-slash'"></i>
-                                </button>
-                            </div>
-
-                            <button type="submit"
-                                class="w-full cursor-pointer rounded-full bg-sky-500/95 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-700">
-                                <span v-if="isLoading">Creating...</span>
-                                <span v-else>Register</span>
-                            </button>
-
-                            <p class="text-end text-sm text-slate-600">
-                                Already have an account?
-                                <router-link :to="{ path: '/login', query: route.query }"
-                                    class=" text-sky-500 hover:underline">Log In
-                                </router-link>
-                            </p>
-                        </form>
-                    </section>
+                    </span>
                 </div>
             </div>
-        </div>
-    </div>
+
+            <button type="submit" class="auth-btn theme-surface theme-shadow" :disabled="isLoading">
+                <span v-if="isLoading"><i class="pi pi-spin pi-spinner"></i> Creating your account...</span>
+                <span v-else class="inline-flex items-center gap-2"><i class="pi pi-user-plus text-xs"></i> Create account</span>
+            </button>
+
+            <p class="text-center text-sm text-slate-600">
+                Already have an account?
+                <router-link :to="{ path: '/login', query: route.query }" class="auth-link">Log in</router-link>
+            </p>
+        </form>
+    </AuthShell>
 </template>
 
 <script setup lang="ts">
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/authStore";
-import Logo from "../../components/Logo.vue";
 import { useMainStore } from "../../stores";
+import AuthShell from "../../components/Auth/AuthShell.vue";
 import GuestSavePrompt from "../../components/GuestSavePrompt.vue";
 import { flushPendingAttempt, getPendingAttempt } from "../../utils/pendingAttempt";
 
@@ -146,12 +85,37 @@ const route = useRoute();
 const router = useRouter();
 
 const name = ref("");
-const email = ref(route.query?.email || "");
+const email = ref((route.query?.email as string) || "");
 const password = ref("");
 const type = ref("password");
 const message = ref();
 const isLoading = ref(false);
 const pendingAttempt = ref(getPendingAttempt());
+
+const features = [
+    { icon: "pi pi-verified", text: "Exam-style questions from real past exams. No AI-generated content." },
+    { icon: "pi pi-bullseye", text: "Weak-area focus and adaptive practice" },
+    { icon: "pi pi-chart-line", text: "Performance analytics across every product" },
+];
+
+const strength = computed(() => {
+    const value = password.value || "";
+    const checks = [
+        { label: "8+ characters", ok: value.length >= 8 },
+        { label: "A number", ok: /\d/.test(value) },
+        { label: "A letter", ok: /[a-zA-Z]/.test(value) },
+        { label: "A symbol", ok: /[^\w\s]/.test(value) },
+    ];
+    const score = value ? checks.filter((c) => c.ok).length : 0;
+    const levels = [
+        { label: "Enter a password", barClass: "", textClass: "text-slate-400" },
+        { label: "Weak", barClass: "bg-rose-500", textClass: "text-rose-600" },
+        { label: "Fair", barClass: "bg-amber-500", textClass: "text-amber-600" },
+        { label: "Good", barClass: "bg-emerald-500", textClass: "text-emerald-600" },
+        { label: "Strong", barClass: "bg-emerald-500", textClass: "text-emerald-600" },
+    ];
+    return { score, checks, ...levels[score] };
+});
 
 function togglePasswordVisibility() {
     type.value = type.value === "password" ? "text" : "password";

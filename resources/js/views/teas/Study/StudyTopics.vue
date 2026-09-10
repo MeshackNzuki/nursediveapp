@@ -1,7 +1,8 @@
 <template>
   <div
     class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-slate-50 dark:bg-sky-950 text-slate-800 dark:text-slate-100">
-    <div class="absolute inset-0 pointer-events-none -z-10">
+        <ProductBreadcrumb product="teas" :items="[{ label: 'Study guides' }]" />
+    <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
       <div
         class="absolute -top-20 -left-40 h-[500px] w-[500px] bg-gradient-to-r from-cyan-50 via-sky-50 to-emerald-50 opacity-35 blur-[120px] rounded-full">
       </div>
@@ -130,6 +131,7 @@
 </template>
 
 <script setup>
+import ProductBreadcrumb from "../../../components/ProductBreadcrumb.vue"
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import CommonButton from "../../../components/Buttons/CommonButton.vue";

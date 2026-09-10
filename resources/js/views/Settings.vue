@@ -1,7 +1,7 @@
 <template>
     <div
         class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-4 sm:p-6 bg-slate-50">
-        <div class="absolute inset-0 pointer-events-none -z-10">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
             <div
                 class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-cyan-300 via-sky-300 to-emerald-200 opacity-30 blur-[120px] rounded-full">
             </div>

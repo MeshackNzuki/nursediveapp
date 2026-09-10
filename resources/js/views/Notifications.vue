@@ -94,7 +94,7 @@ onMounted(() => {
 <template>
     <div class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] overflow-y-scroll p-2 bg-white">
         <!-- Gradient Background -->
-        <div class="absolute inset-0 pointer-events-none -z-10">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
             <div
                 class="absolute -top-20 -left-40 h-[600px] w-[600px] bg-gradient-to-r from-purple-300 via-sky-300 to-teal-200 opacity-30 blur-[120px] rounded-full" />
             <div

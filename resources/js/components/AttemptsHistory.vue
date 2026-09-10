@@ -30,7 +30,7 @@
 
             <template v-else>
                 <!-- Summary -->
-                <section class="grid grid-cols-2 gap-3 xl:grid-cols-4">
+                <section class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
                     <div v-for="(stat, index) in summary" :key="stat.label" class="ui-rise dash-card-white flex items-center gap-3 p-3"
                         :style="{ animationDelay: `${60 + index * 50}ms` }">
                         <span class="dash-icon-tile theme-icon h-10 w-10 shrink-0"><i :class="stat.icon"></i></span>

@@ -158,6 +158,7 @@ const averageScore = computed(() => {
 const averageScoreNumber = computed(() => {
     const score = Number(dashdata.value?.average_score);
     if (!Number.isFinite(score)) return null;
+    if (score === 0 && teasAttempts.value.length === 0) return null;
     return Math.max(0, Math.min(100, Math.round(score)));
 });
 

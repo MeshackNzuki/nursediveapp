@@ -56,7 +56,7 @@
 
                 <template v-else>
                     <!-- ================= STAT STRIP ================= -->
-                    <section class="grid grid-cols-2 gap-3 xl:grid-cols-4">
+                    <section class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
                         <div v-for="(stat, index) in statStrip" :key="stat.label"
                             class="ui-rise dash-card-white dash-hover-lift flex items-center gap-3 p-3"
                             :style="{ animationDelay: `${60 + index * 50}ms` }">

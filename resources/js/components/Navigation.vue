@@ -11,17 +11,17 @@
         </div>
 
         <div class="relative z-10">
-            <div class="flex items-center justify-between gap-3 mb-3 px-1">
+            <div class="hidden items-center justify-between gap-3 mb-3 px-1 sm:flex">
                 <p class="text-xs md:text-sm font-semibold tracking-wide text-slate-500 uppercase">Switch Workspace</p>
                 <span class="text-[11px] md:text-xs text-slate-500">Pick a prep product</span>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div class="grid grid-cols-3 gap-2">
                 <router-link v-for="item in navItems" :key="item.to" :to="item.to"
-                    class="group rounded-2xl border p-3 transition duration-200" :class="isActive(item.to)
+                    class="group rounded-2xl border p-2 sm:p-3 transition duration-200" :class="isActive(item.to)
                         ? `${item.activeClass} border-transparent shadow-[0_14px_28px_-18px_rgba(15,23,42,0.55)]`
                         : 'border-slate-200 bg-white/90 hover:border-slate-300 hover:-translate-y-0.5'">
-                    <div class="flex items-center gap-2.5">
+                    <div class="flex flex-col items-center gap-1.5 text-center sm:flex-row sm:gap-2.5 sm:text-left">
                         <span
                             class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold"
                             :class="isActive(item.to) ? item.iconActiveClass : item.iconClass">
@@ -32,11 +32,11 @@
                                 :class="isActive(item.to) ? 'text-white' : 'text-slate-800'">
                                 {{ item.label }}
                             </p>
-                            <p class="text-[11px]" :class="isActive(item.to) ? 'text-white/90' : 'text-slate-500'">
+                            <p class="hidden text-[11px] sm:block" :class="isActive(item.to) ? 'text-white/90' : 'text-slate-500'">
                                 {{ item.subtitle }}
                             </p>
                         </div>
-                        <i class="pi pi-arrow-right ml-auto text-xs transition-transform duration-200" :class="isActive(item.to)
+                        <i class="pi pi-arrow-right ml-auto hidden text-xs transition-transform duration-200 sm:inline" :class="isActive(item.to)
                             ? 'text-white'
                             : 'text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5'"></i>
                     </div>

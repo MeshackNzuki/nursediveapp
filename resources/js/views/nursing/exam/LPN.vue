@@ -1,5 +1,5 @@
 <template>
-  <Tabs :tabs="['ATI_LPN', 'HESI_LPN', 'REGULAR_LPN']">
+  <Tabs :tabs="['ATI_LPN', 'HESI_LPN', 'REGULAR_LPN']" product="nursing" :crumbs="[{ label: 'LPN Test Bank' }]">
     <template #tab-ATI_LPN>
       <section
         class="relative overflow-hidden rounded-[28px] border border-sky-100 bg-gradient-to-br from-white via-sky-50 to-cyan-50 p-5 mb-5 dark:border-sky-800 dark:from-slate-900 dark:via-sky-900 dark:to-cyan-950">

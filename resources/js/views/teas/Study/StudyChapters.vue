@@ -1,7 +1,8 @@
 <template>
   <div
     class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-slate-50 dark:bg-sky-950 text-slate-800 dark:text-slate-100">
-    <div class="absolute inset-0 pointer-events-none -z-10">
+        <ProductBreadcrumb product="teas" :items="[{ label: 'Study guides', to: '/teas/guide-topics' }, { label: 'Chapters' }]" />
+    <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
       <div
         class="absolute -top-20 -left-40 h-[300px] w-[300px] lg:h-[620px] lg:w-[620px] bg-gradient-to-r from-cyan-50 via-sky-50 to-emerald-50 opacity-30 blur-[120px] rounded-full">
       </div>
@@ -130,6 +131,7 @@
 </template>
 
 <script setup lang="ts">
+import ProductBreadcrumb from "../../../components/ProductBreadcrumb.vue"
 import { ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";

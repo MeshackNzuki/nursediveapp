@@ -578,20 +578,29 @@ onMounted(() => {
             <!-- ================= SIGNED-IN HERO ================= -->
             <section v-if="isAuthenticated" class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-6">
                 <div class="ui-rise">
-                    <div class="dash-card p-4 sm:p-6">
+                    <div class="relative overflow-hidden rounded-3xl p-4 sm:p-6">
                         <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-                            <div class="ui-drift absolute -top-28 -right-20 h-80 w-80 rounded-full blur-3xl theme-glow opacity-70"></div>
-                            <div class="ui-drift-slow absolute -bottom-36 left-1/3 h-72 w-72 rounded-full bg-amber-200/40 blur-3xl dark:bg-amber-500/10"></div>
-                            <div class="absolute inset-0 opacity-[0.28] [background-image:radial-gradient(circle_at_1px_1px,var(--theme-border)_1px,transparent_0)] [background-size:24px_24px]"></div>
+                            <div
+                                class="ui-drift absolute -top-28 -right-20 h-80 w-80 rounded-full blur-3xl theme-glow opacity-70">
+                            </div>
+                            <div
+                                class="ui-drift-slow absolute -bottom-36 left-1/3 h-72 w-72 rounded-full bg-amber-200/40 blur-3xl dark:bg-amber-500/10">
+                            </div>
+                            <div
+                                class="absolute inset-0 opacity-[0.28] [background-image:radial-gradient(circle_at_1px_1px,var(--theme-border)_1px,transparent_0)] [background-size:24px_24px]">
+                            </div>
                         </div>
 
                         <div class="relative flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                             <div class="flex min-w-0 items-start gap-3 sm:gap-4">
                                 <div class="theme-ring-gradient shrink-0 rounded-2xl p-[2px] shadow-lg">
-                                    <div v-if="user?.avatar" class="h-14 w-14 overflow-hidden rounded-[14px] bg-white sm:h-16 sm:w-16 dark:bg-slate-900">
-                                        <img :src="'/storage/' + user.avatar" class="h-full w-full object-cover" alt="User Avatar" />
+                                    <div v-if="user?.avatar"
+                                        class="h-14 w-14 overflow-hidden rounded-[14px] bg-white sm:h-16 sm:w-16 dark:bg-slate-900">
+                                        <img :src="'/storage/' + user.avatar" class="h-full w-full object-cover"
+                                            alt="User Avatar" />
                                     </div>
-                                    <div v-else class="theme-surface flex h-14 w-14 items-center justify-center rounded-[14px] text-base font-black sm:h-16 sm:w-16 sm:text-lg">
+                                    <div v-else
+                                        class="theme-surface flex h-14 w-14 items-center justify-center rounded-[14px] text-base font-black sm:h-16 sm:w-16 sm:text-lg">
                                         {{ initials }}
                                     </div>
                                 </div>
@@ -600,33 +609,41 @@ onMounted(() => {
                                     <div class="flex flex-wrap items-center gap-2">
                                         <span class="dash-chip theme-soft py-1 text-[11px]">
                                             <span class="relative flex h-1.5 w-1.5">
-                                                <span class="theme-dot absolute inline-flex h-full w-full animate-ping rounded-full opacity-70"></span>
-                                                <span class="theme-dot relative inline-flex h-1.5 w-1.5 rounded-full"></span>
+                                                <span
+                                                    class="theme-dot absolute inline-flex h-full w-full animate-ping rounded-full opacity-70"></span>
+                                                <span
+                                                    class="theme-dot relative inline-flex h-1.5 w-1.5 rounded-full"></span>
                                             </span>
                                             <span class="truncate">{{ primaryProduct?.name || "Study Hub" }}</span>
                                         </span>
-                                        <span class="dash-chip border-amber-200 bg-amber-50 py-1 text-[11px] text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+                                        <span
+                                            class="dash-chip border-amber-200 bg-amber-50 py-1 text-[11px] text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
                                             <i class="pi pi-bolt text-[10px]"></i>
                                             {{ streakDays }}d streak
                                         </span>
                                     </div>
 
-                                    <h1 class="mt-3 max-w-3xl break-words text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl xl:text-4xl dark:text-slate-100">
+                                    <h1
+                                        class="mt-3 max-w-3xl break-words text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl xl:text-4xl dark:text-slate-100">
                                         Ready when you are,
                                         <span class="theme-text-gradient">{{ firstName }}</span>
                                     </h1>
-                                    <p class="mt-3 max-w-2xl text-sm font-medium leading-6 text-slate-600 dark:text-slate-300">
+                                    <p
+                                        class="mt-3 max-w-2xl text-sm font-medium leading-6 text-slate-600 dark:text-slate-300">
                                         {{ focusTip }}
                                     </p>
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:w-56 lg:grid-cols-1">
-                                <button type="button" class="dash-btn theme-surface theme-shadow min-h-11 w-full text-sm" @click="router.push(primaryActionRoute)">
+                                <button type="button"
+                                    class="dash-btn theme-surface theme-shadow min-h-11 w-full text-sm"
+                                    @click="router.push(primaryActionRoute)">
                                     <span class="truncate">{{ primaryActionLabel }}</span>
                                     <i class="pi pi-arrow-right text-xs"></i>
                                 </button>
-                                <button type="button" class="dash-btn-ghost min-h-11 w-full text-sm" @click="router.push('/subscription')">
+                                <button type="button" class="dash-btn-ghost min-h-11 w-full text-sm"
+                                    @click="router.push('/subscription')">
                                     <i class="pi pi-credit-card text-xs"></i>
                                     <span>Plans</span>
                                 </button>
@@ -639,65 +656,95 @@ onMounted(() => {
                                 <div class="min-w-0 flex-1">
                                     <div class="flex flex-wrap items-center gap-2">
                                         <p class="dash-eyebrow theme-text">Latest attempt</p>
-                                        <span v-if="lastProduct" class="analysis-pill theme-soft border text-[11px]">{{ lastProduct.name }}</span>
+                                        <span v-if="lastProduct" class="analysis-pill theme-soft border text-[11px]">{{
+                                            lastProduct.name }}</span>
                                     </div>
 
                                     <div v-if="latestAttemptLoading" class="mt-3">
-                                        <div class="h-4 w-44 animate-pulse rounded bg-slate-200 dark:bg-slate-800"></div>
-                                        <div class="mt-3 h-2 w-full animate-pulse rounded-full bg-slate-200 dark:bg-slate-800"></div>
+                                        <div class="h-4 w-44 animate-pulse rounded bg-slate-200 dark:bg-slate-800">
+                                        </div>
+                                        <div
+                                            class="mt-3 h-2 w-full animate-pulse rounded-full bg-slate-200 dark:bg-slate-800">
+                                        </div>
                                     </div>
 
                                     <div v-else-if="latestAttempt" class="mt-3">
                                         <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                                             <div class="min-w-0">
-                                                <h3 class="break-words text-base font-extrabold text-slate-950 dark:text-slate-100">
+                                                <h3
+                                                    class="break-words text-base font-extrabold text-slate-950 dark:text-slate-100">
                                                     {{ latestAttempt.sub_topic_name }}
                                                 </h3>
-                                                <p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
-                                                    <span><i class="pi pi-calendar mr-1 text-[10px]"></i>{{ latestAttemptDate }}</span>
+                                                <p
+                                                    class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+                                                    <span><i class="pi pi-calendar mr-1 text-[10px]"></i>{{
+                                                        latestAttemptDate }}</span>
                                                     <span aria-hidden="true">&middot;</span>
-                                                    <span><i class="pi pi-clock mr-1 text-[10px]"></i>{{ latestAttemptTime }}</span>
+                                                    <span><i class="pi pi-clock mr-1 text-[10px]"></i>{{
+                                                        latestAttemptTime }}</span>
                                                     <span aria-hidden="true">&middot;</span>
-                                                    <span class="analysis-pill px-2 py-0.5 text-[10px]" :class="latestAttemptStatusLabel === 'Completed' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-200' : 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-200'">
+                                                    <span class="analysis-pill px-2 py-0.5 text-[10px]"
+                                                        :class="latestAttemptStatusLabel === 'Completed' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-200' : 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-200'">
                                                         {{ latestAttemptStatusLabel }}
                                                     </span>
                                                 </p>
                                             </div>
-                                            <p class="text-sm font-bold" :class="scoreToneClass(latestAttemptScore)">{{ scoreSummary(latestAttemptScore) }}</p>
+                                            <p class="text-sm font-bold" :class="scoreToneClass(latestAttemptScore)">{{
+                                                scoreSummary(latestAttemptScore) }}</p>
                                         </div>
                                         <div class="mt-4">
-                                            <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wide">
-                                                <span class="text-slate-500 dark:text-slate-400">Score vs {{ PASS_MARK }}% pass mark</span>
-                                                <span :class="scoreToneClass(latestAttemptScore)">{{ latestAttemptScore }}%</span>
+                                            <div
+                                                class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wide">
+                                                <span class="text-slate-500 dark:text-slate-400">Score vs {{ PASS_MARK
+                                                }}% pass mark</span>
+                                                <span :class="scoreToneClass(latestAttemptScore)">{{ latestAttemptScore
+                                                }}%</span>
                                             </div>
                                             <div class="dash-progress relative mt-2 h-2.5 bg-light-blue-500">
-                                                <div class="relative h-full overflow-hidden rounded-full transition-all duration-700" :class="scoreFillClass(latestAttemptScore)" :style="latestAttemptLinearStyle">
-                                                    <span class="ui-shimmer absolute inset-0 bg-linear-to-r from-transparent via-white/60 to-transparent"></span>
+                                                <div class="relative h-full overflow-hidden rounded-full transition-all duration-700"
+                                                    :class="scoreFillClass(latestAttemptScore)"
+                                                    :style="latestAttemptLinearStyle">
+                                                    <span
+                                                        class="ui-shimmer absolute inset-0 bg-linear-to-r from-transparent via-white/60 to-transparent"></span>
                                                 </div>
-                                                <span class="absolute top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full bg-slate-700 dark:bg-slate-200" :style="{ left: `${PASS_MARK}%` }"></span>
+                                                <span
+                                                    class="absolute top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full bg-slate-700 dark:bg-slate-200"
+                                                    :style="{ left: `${PASS_MARK}%` }"></span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div v-else class="mt-3">
-                                        <h3 class="text-base font-extrabold text-slate-950 dark:text-slate-100">{{ latestAttemptError || "No recent attempt yet" }}</h3>
-                                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Open a product and complete an attempt to light up this report.</p>
+                                        <h3 class="text-base font-extrabold text-slate-950 dark:text-slate-100">{{
+                                            latestAttemptError || "No recent attempt yet" }}</h3>
+                                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Open a product and
+                                            complete an attempt to light up this report.</p>
                                     </div>
                                 </div>
 
-                                <div v-if="latestAttempt && !latestAttemptLoading" class="flex w-full shrink-0 items-center gap-4 md:w-auto md:flex-col md:justify-center">
+                                <div v-if="latestAttempt && !latestAttemptLoading"
+                                    class="flex w-full shrink-0 items-center gap-4 md:w-auto md:flex-col md:justify-center">
                                     <div class="relative h-20 w-20 shrink-0">
                                         <svg class="h-20 w-20 -rotate-90" viewBox="0 0 72 72" aria-hidden="true">
-                                            <circle cx="36" cy="36" r="30" fill="none" stroke="currentColor" stroke-width="7" class="text-slate-200 dark:text-slate-700" />
-                                            <circle cx="36" cy="36" r="30" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"
-                                                :stroke-dasharray="latestRing" :stroke-dashoffset="latestRingOffset" :class="scoreToneClass(latestAttemptScore)"
+                                            <circle cx="36" cy="36" r="30" fill="none" stroke="currentColor"
+                                                stroke-width="7" class="text-slate-200 dark:text-slate-700" />
+                                            <circle cx="36" cy="36" r="30" fill="none" stroke="currentColor"
+                                                stroke-width="7" stroke-linecap="round" :stroke-dasharray="latestRing"
+                                                :stroke-dashoffset="latestRingOffset"
+                                                :class="scoreToneClass(latestAttemptScore)"
                                                 class="transition-[stroke-dashoffset] duration-1000 ease-out" />
-                                            <circle cx="36" cy="36" r="30" fill="none" stroke="currentColor" stroke-width="9"
-                                                :stroke-dasharray="`1.5 ${latestRing - 1.5}`" :stroke-dashoffset="latestRing * (1 - PASS_MARK / 100)" class="text-slate-600 dark:text-slate-200" />
+                                            <circle cx="36" cy="36" r="30" fill="none" stroke="currentColor"
+                                                stroke-width="9" :stroke-dasharray="`1.5 ${latestRing - 1.5}`"
+                                                :stroke-dashoffset="latestRing * (1 - PASS_MARK / 100)"
+                                                class="text-slate-600 dark:text-slate-200" />
                                         </svg>
-                                        <span class="absolute inset-0 flex items-center justify-center text-sm font-black tabular-nums text-slate-900 dark:text-white">{{ latestAttemptScore }}%</span>
+                                        <span
+                                            class="absolute inset-0 flex items-center justify-center text-sm font-black tabular-nums text-slate-900 dark:text-white">{{
+                                                latestAttemptScore }}%</span>
                                     </div>
-                                    <button v-if="latestAttemptReportRoute" type="button" class="dash-btn theme-surface theme-shadow px-4 py-2 text-xs" @click="router.push(latestAttemptReportRoute)">
+                                    <button v-if="latestAttemptReportRoute" type="button"
+                                        class="dash-btn theme-surface theme-shadow px-4 py-2 text-xs"
+                                        @click="router.push(latestAttemptReportRoute)">
                                         <span>View report</span>
                                         <i class="pi pi-arrow-right text-[10px]"></i>
                                     </button>
@@ -708,34 +755,45 @@ onMounted(() => {
                     <EmailVerification v-if="!user?.email_verified" class="mt-5 lg:hidden" />
                 </div>
 
-                <aside class="ui-rise relative hidden overflow-hidden rounded-3xl border border-sky-100 bg-light-blue-500 p-5 lg:block dark:!border-slate-800 dark:!bg-slate-900" style="animation-delay: 80ms">
-                    <div class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-br from-sky-800 via-sky-700 to-cyan-700"></div>
-                    <EmailVerification v-if="!user?.email_verified" class="max-w-none" />
-                    <div class="relative flex min-h-28 items-center gap-4 border-b border-white/25 pb-5 dark:border-slate-800">
-                        <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-white/95 shadow-custom ring-1 ring-sky-100 dark:!bg-slate-950 dark:ring-slate-800">
+                <aside
+                    class="ui-rise relative hidden overflow-hidden rounded-3xl border border-sky-100 bg-light-blue-500 p-5 lg:block dark:!border-slate-800 dark:!bg-slate-900"
+                    style="animation-delay: 80ms">
+                    <div
+                        class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-br from-sky-800 via-sky-700 to-cyan-700">
+                    </div>
+                    <div
+                        class="relative flex min-h-28 items-center gap-4 border-b border-white/25 pb-5 dark:border-slate-800">
+                        <div
+                            class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-white/95 shadow-custom ring-1 ring-sky-100 dark:!bg-slate-950 dark:ring-slate-800">
                             <ExamIcon size="78" class="drop-shadow-sm" />
                         </div>
                         <div class="min-w-0">
-                            <span class="inline-flex max-w-full items-center rounded-3xl bg-white/10 px-2.5 py-1 text-[11px] font-semibold leading-tight text-bright-sun-500 break-words ring-1 ring-white/20">
+                            <span
+                                class="inline-flex max-w-full items-center rounded-3xl bg-white/10 px-2.5 py-1 text-[11px] font-semibold leading-tight text-bright-sun-500 break-words ring-1 ring-white/20">
                                 {{ focusTip }}
                             </span>
                             <p class="mt-2 text-xs leading-tight text-white">Last activity: {{ lastActivityText }}</p>
                         </div>
                     </div>
-
+                    <EmailVerification v-if="!user?.email_verified" class="relative mt-4 max-w-none" />
                     <div class="relative mt-4 grid grid-cols-3 gap-2">
-                        <div v-for="stat in commandStats" :key="stat.label" class="dash-tile-soft px-2 py-2 text-center">
+                        <div v-for="stat in commandStats" :key="stat.label"
+                            class="dash-tile-soft px-2 py-2 text-center">
                             <i :class="[stat.icon, 'text-xs theme-text']"></i>
-                            <p class="mt-1 text-base font-extrabold leading-tight tabular-nums text-slate-950 dark:text-white">{{ stat.value }}</p>
-                            <p class="text-[9px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">{{ stat.label }}</p>
+                            <p
+                                class="mt-1 text-base font-extrabold leading-tight tabular-nums text-slate-950 dark:text-white">
+                                {{ stat.value }}</p>
+                            <p class="text-[9px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-300">
+                                {{ stat.label }}</p>
                         </div>
                     </div>
-
                     <div class="relative mt-4 flex flex-col gap-2">
-                        <button type="button" class="dash-btn theme-surface theme-shadow w-full py-2.5" @click="router.push(primaryActionRoute)">
+                        <button type="button" class="dash-btn theme-surface theme-shadow w-full py-2.5"
+                            @click="router.push(primaryActionRoute)">
                             {{ primaryActionLabel }} <i class="pi pi-arrow-right text-[10px]"></i>
                         </button>
-                        <button type="button" class="dash-btn-ghost w-full py-2.5" @click="router.push('/subscription')">
+                        <button type="button" class="dash-btn-ghost w-full py-2.5"
+                            @click="router.push('/subscription')">
                             <i class="pi pi-credit-card"></i> View subscription plans
                         </button>
                         <router-link v-if="isAdmin" to="/admin" class="dash-btn-ghost w-full py-2.5">
@@ -744,54 +802,54 @@ onMounted(() => {
                     </div>
                 </aside>
             </section>
-
             <!-- ================= GUEST HERO ================= -->
             <section v-else class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-stretch lg:gap-6">
-                <div class="ui-rise dash-card p-4 sm:p-6">
-                    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-                        <div class="ui-drift absolute -top-28 -right-20 h-80 w-80 rounded-full blur-3xl theme-glow opacity-70"></div>
-                        <div class="ui-drift-slow absolute -bottom-36 left-1/4 h-72 w-72 rounded-full bg-emerald-200/40 blur-3xl dark:bg-emerald-500/10"></div>
-                        <div class="absolute inset-0 opacity-[0.28] [background-image:radial-gradient(circle_at_1px_1px,var(--theme-border)_1px,transparent_0)] [background-size:24px_24px]"></div>
-                    </div>
+                <div class="ui-rise relative overflow-hidden rounded-3xl p-4 sm:p-6">
 
                     <div class="relative flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                         <div class="min-w-0 flex-1">
                             <div class="flex flex-wrap items-center gap-2">
-                                <span class="dash-chip theme-soft py-1 text-[11px]"><i class="pi pi-sparkles text-[10px]"></i> Start free</span>
-                                <span class="dash-chip border-amber-200 bg-amber-50 py-1 text-[11px] text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
+                                <span class="dash-chip theme-soft py-1 text-[11px]"><i
+                                        class="pi pi-sparkles text-[10px]"></i> Start free</span>
+                                <span
+                                    class="dash-chip border-amber-200 bg-amber-50 py-1 text-[11px] text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
                                     <i class="pi pi-shield text-[10px]"></i> No auto-billing
                                 </span>
                             </div>
-
-                            <h1 class="mt-3 max-w-3xl break-words text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl xl:text-4xl dark:text-slate-100">
+                            <h1
+                                class="mt-3 max-w-3xl break-words text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl xl:text-4xl dark:text-slate-100">
                                 Practice smarter for
                                 <span class="theme-text-gradient">TEAS, nursing school, and NCLEX</span>
                             </h1>
 
-                            <p class="mt-3 max-w-2xl text-sm font-medium text-slate-600 md:text-base dark:text-slate-300">
+                            <p
+                                class="mt-3 max-w-2xl text-sm font-medium text-slate-600 md:text-base dark:text-slate-300">
                                 Build readiness with realistic questions, focused remediation, timed practice,
                                 and progress insights across every major nursing exam track.
                             </p>
                         </div>
-
                         <div class="grid grid-cols-1 gap-2 sm:grid-cols-3 lg:w-56 lg:grid-cols-1">
-                            <button type="button" class="dash-btn theme-surface theme-shadow min-h-11 w-full text-sm" @click="router.push('/register')">
+                            <button type="button" class="dash-btn theme-surface theme-shadow min-h-11 w-full text-sm"
+                                @click="router.push('/register')">
                                 <i class="pi pi-user-plus text-xs"></i>
                                 <span class="text-center leading-tight">Create free account</span>
                             </button>
-                            <button type="button" class="dash-btn-ghost min-h-11 w-full text-sm" @click="router.push('/login')">
+                            <button type="button" class="dash-btn-ghost min-h-11 w-full text-sm"
+                                @click="router.push('/login')">
                                 <i class="pi pi-sign-in text-xs"></i>
                                 <span>Sign in</span>
                             </button>
-                            <button type="button" class="dash-btn-ghost min-h-11 w-full text-sm" @click="router.push('/subscription')">
+                            <button type="button" class="dash-btn-ghost min-h-11 w-full text-sm"
+                                @click="router.push('/subscription')">
                                 <i class="pi pi-credit-card text-xs"></i>
                                 <span>Plans</span>
                             </button>
                         </div>
                     </div>
-
                     <div class="relative mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-                        <div v-for="stat in guestHeroStats" :key="stat.label" class="rounded-2xl border border-white/60 p-3 shadow-sm dark:border-white/5" :class="stat.class">
+                        <div v-for="stat in guestHeroStats" :key="stat.label"
+                            class="rounded-2xl border border-white/60 p-3 shadow-sm dark:border-white/5"
+                            :class="stat.class">
                             <div class="flex items-center justify-between gap-3">
                                 <p class="text-[10px] font-bold uppercase tracking-wide">{{ stat.label }}</p>
                                 <i :class="[stat.icon, 'text-sm']"></i>
@@ -800,7 +858,6 @@ onMounted(() => {
                             <p class="mt-1 text-xs font-semibold opacity-80">{{ stat.detail }}</p>
                         </div>
                     </div>
-
                     <div class="dash-card-white relative mt-5">
                         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div>
@@ -810,8 +867,8 @@ onMounted(() => {
                                 </p>
                             </div>
                             <div class="flex flex-wrap gap-2">
-                                <router-link v-for="product in products" :key="`guest-chip-${product.code}`" :to="product.dashboardRoute"
-                                    class="dash-btn theme-surface px-3 py-1.5 text-xs">
+                                <router-link v-for="product in products" :key="`guest-chip-${product.code}`"
+                                    :to="product.dashboardRoute" class="dash-btn theme-surface px-3 py-1.5 text-xs">
                                     <i :class="product.icon" class="text-[10px]"></i> {{ product.name }}
                                 </router-link>
                             </div>
@@ -819,29 +876,42 @@ onMounted(() => {
                     </div>
                 </div>
 
-                <aside class="ui-rise relative hidden overflow-hidden rounded-3xl border border-sky-100 bg-light-blue-500 p-5 lg:block dark:!border-slate-800 dark:!bg-slate-900" style="animation-delay: 80ms">
-                    <div class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-br from-sky-800 via-sky-700 to-cyan-700"></div>
-                    <div class="relative flex min-h-28 items-center gap-4 border-b border-white/25 pb-5 dark:border-slate-800">
-                        <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-white/95 shadow-custom ring-1 ring-sky-100 dark:!bg-slate-950 dark:ring-slate-800">
+                <aside
+                    class="ui-rise relative hidden overflow-hidden rounded-3xl border border-sky-100 bg-light-blue-500 p-5 lg:block dark:!border-slate-800 dark:!bg-slate-900"
+                    style="animation-delay: 80ms">
+                    <div
+                        class="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-br from-sky-800 via-sky-700 to-cyan-700">
+                    </div>
+                    <div
+                        class="relative flex min-h-28 items-center gap-4 border-b border-white/25 pb-5 dark:border-slate-800">
+                        <div
+                            class="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-white/95 shadow-custom ring-1 ring-sky-100 dark:!bg-slate-950 dark:ring-slate-800">
                             <ExamIcon size="78" class="drop-shadow-sm" />
                         </div>
                         <div class="min-w-0">
-                            <span class="inline-flex items-center rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-bright-sun-500 ring-1 ring-white/20">Select your path</span>
-                            <p class="mt-2 text-lg font-extrabold leading-tight text-white">What are you studying today?</p>
+                            <span
+                                class="inline-flex items-center rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-bright-sun-500 ring-1 ring-white/20">Select
+                                your path</span>
+                            <p class="mt-2 text-lg font-extrabold leading-tight text-white">What are you studying today?
+                            </p>
                         </div>
                     </div>
                     <div class="relative mt-4 space-y-2">
                         <button v-for="product in products" :key="`guest-${product.code}`" type="button"
                             class="group dash-tile flex w-full items-center gap-3 text-left transition duration-200 hover:-translate-y-0.5 hover:shadow-md"
                             @click="router.push(product.dashboardRoute)">
-                            <span class="dash-icon-tile h-10 w-10 shadow-lg group-hover:scale-110 group-hover:-rotate-3" :class="product.tileClass">
+                            <span class="dash-icon-tile h-10 w-10 shadow-lg group-hover:scale-110 group-hover:-rotate-3"
+                                :class="product.tileClass">
                                 <i :class="product.icon"></i>
                             </span>
                             <span class="min-w-0 flex-1">
-                                <span class="block text-sm font-extrabold text-slate-950 dark:text-white">{{ product.name }}</span>
-                                <span class="block truncate text-xs text-slate-500 dark:text-slate-300">{{ product.subtitle }}</span>
+                                <span class="block text-sm font-extrabold text-slate-950 dark:text-white">{{
+                                    product.name }}</span>
+                                <span class="block truncate text-xs text-slate-500 dark:text-slate-300">{{
+                                    product.subtitle }}</span>
                             </span>
-                            <i class="pi pi-arrow-right text-xs text-slate-400 transition-transform group-hover:translate-x-0.5"></i>
+                            <i
+                                class="pi pi-arrow-right text-xs text-slate-400 transition-transform group-hover:translate-x-0.5"></i>
                         </button>
                     </div>
                 </aside>
@@ -849,12 +919,16 @@ onMounted(() => {
 
             <!-- ================= PRODUCTS ================= -->
             <section class="space-y-4">
-                <div class="ui-rise flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between" style="animation-delay: 120ms">
+                <div class="ui-rise flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between"
+                    style="animation-delay: 120ms">
                     <div>
                         <p class="dash-eyebrow theme-text">Your tracks</p>
-                        <h2 class="mt-1 text-xl font-extrabold tracking-tight text-slate-950 md:text-2xl dark:text-slate-100">Select a product</h2>
+                        <h2
+                            class="mt-1 text-xl font-extrabold tracking-tight text-slate-950 md:text-2xl dark:text-slate-100">
+                            Select a product</h2>
                     </div>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Choose a track and continue from where you left off.</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Choose a track and continue from where you
+                        left off.</p>
                 </div>
 
                 <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -863,32 +937,45 @@ onMounted(() => {
                         :class="primaryProduct?.code === product.code ? 'ring-2 theme-border' : ''"
                         :style="{ animationDelay: `${160 + index * 70}ms`, ...(primaryProduct?.code === product.code ? { '--tw-ring-color': 'var(--theme-accent)' } : {}) }">
                         <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-                            <div class="absolute -top-20 -right-16 h-52 w-52 rounded-full bg-linear-to-br opacity-70 blur-3xl transition duration-500 group-hover:scale-125 group-hover:opacity-100" :class="product.washClass"></div>
-                            <div class="ui-pan absolute inset-0 opacity-[0.08] transition-opacity duration-500 group-hover:opacity-[0.15]" :class="[product.patternClass, product.inkClass]"></div>
-                            <i class="absolute -bottom-6 -right-4 text-[110px] opacity-[0.06] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110" :class="[product.icon, product.inkClass]"></i>
+                            <div class="absolute -top-20 -right-16 h-52 w-52 rounded-full bg-linear-to-br opacity-70 blur-3xl transition duration-500 group-hover:scale-125 group-hover:opacity-100"
+                                :class="product.washClass"></div>
+                            <div class="ui-pan absolute inset-0 opacity-[0.08] transition-opacity duration-500 group-hover:opacity-[0.15]"
+                                :class="[product.patternClass, product.inkClass]"></div>
+                            <i class="absolute -bottom-6 -right-4 text-[110px] opacity-[0.06] transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110"
+                                :class="[product.icon, product.inkClass]"></i>
                         </div>
 
                         <div class="relative flex items-start justify-between gap-3">
                             <div class="flex items-center gap-3">
-                                <span class="dash-icon-tile h-12 w-12 text-xl shadow-lg group-hover:scale-110 group-hover:-rotate-3" :class="product.tileClass">
+                                <span
+                                    class="dash-icon-tile h-12 w-12 text-xl shadow-lg group-hover:scale-110 group-hover:-rotate-3"
+                                    :class="product.tileClass">
                                     <i :class="product.icon"></i>
                                 </span>
                                 <div class="min-w-0">
-                                    <p class="text-[10px] font-black uppercase tracking-[0.18em]" :class="product.inkClass">{{ product.abb }}</p>
-                                    <h3 class="text-lg font-extrabold leading-tight tracking-tight text-slate-950 dark:text-slate-100">{{ product.name }}</h3>
+                                    <p class="text-[10px] font-black uppercase tracking-[0.18em]"
+                                        :class="product.inkClass">{{ product.abb }}</p>
+                                    <h3
+                                        class="text-lg font-extrabold leading-tight tracking-tight text-slate-950 dark:text-slate-100">
+                                        {{ product.name }}</h3>
                                 </div>
                             </div>
                             <div class="flex flex-col items-end gap-1.5">
-                                <span class="analysis-pill border text-[11px]" :class="statusClass(product.code)">{{ statusLabel(product.code) }}</span>
-                                <span v-if="primaryProduct?.code === product.code" class="analysis-pill theme-soft border text-[10px]">
+                                <span class="analysis-pill border text-[11px]" :class="statusClass(product.code)">{{
+                                    statusLabel(product.code) }}</span>
+                                <span v-if="primaryProduct?.code === product.code"
+                                    class="analysis-pill theme-soft border text-[10px]">
                                     <i class="pi pi-compass mr-1"></i>Continue here
                                 </span>
                             </div>
                         </div>
 
-                        <p class="relative mt-3 text-sm leading-5 text-slate-600 dark:text-slate-300">{{ product.subtitle }}</p>
+                        <p class="relative mt-3 text-sm leading-5 text-slate-600 dark:text-slate-300">{{
+                            product.subtitle }}</p>
 
-                        <span class="relative mt-3 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold" :class="product.bundleClass">
+                        <span
+                            class="relative mt-3 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold"
+                            :class="product.bundleClass">
                             <i class="pi pi-gift text-[10px]"></i>{{ product.bundleLabel }}
                         </span>
 
@@ -896,28 +983,37 @@ onMounted(() => {
                             <button v-for="module in product.modules" :key="module.label" type="button"
                                 class="dash-tile-soft flex flex-col items-center gap-1.5 px-2 py-2.5 text-center transition duration-200 hover:-translate-y-0.5 hover:shadow-md"
                                 @click="router.push(product.dashboardRoute)">
-                                <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl text-sm" :class="module.iconClass"><i :class="module.icon"></i></span>
-                                <span class="text-[11px] font-bold text-slate-700 dark:text-slate-200">{{ module.label }}</span>
+                                <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl text-sm"
+                                    :class="module.iconClass"><i :class="module.icon"></i></span>
+                                <span class="text-[11px] font-bold text-slate-700 dark:text-slate-200">{{ module.label
+                                }}</span>
                             </button>
                         </div>
 
                         <div class="dash-tile relative mt-4 flex items-start gap-3">
-                            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-base shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">
+                            <span
+                                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-base shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">
                                 <i :class="accessIconClass(product.code)"></i>
                             </span>
                             <div class="min-w-0">
-                                <p class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ accessHeading(product.code) }}</p>
-                                <p class="mt-0.5 text-sm font-extrabold text-slate-950 dark:text-slate-100">{{ accessValue(product.code) }}</p>
-                                <p class="mt-0.5 text-xs font-medium text-slate-500 dark:text-slate-400">{{ accessDetail(product.code) }}</p>
+                                <p
+                                    class="text-[10px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                                    {{ accessHeading(product.code) }}</p>
+                                <p class="mt-0.5 text-sm font-extrabold text-slate-950 dark:text-slate-100">{{
+                                    accessValue(product.code) }}</p>
+                                <p class="mt-0.5 text-xs font-medium text-slate-500 dark:text-slate-400">{{
+                                    accessDetail(product.code) }}</p>
                             </div>
                         </div>
 
                         <div class="relative mt-auto grid grid-cols-1 gap-2 pt-5 sm:grid-cols-[1fr_auto]">
-                            <button type="button" class="dash-btn theme-surface theme-shadow min-h-11 w-full text-sm" @click="router.push(productPrimaryRoute(product))">
+                            <button type="button" class="dash-btn theme-surface theme-shadow min-h-11 w-full text-sm"
+                                @click="router.push(productPrimaryRoute(product))">
                                 <span>{{ productPrimaryLabel(product.code) }}</span>
                                 <i class="pi pi-arrow-right text-xs"></i>
                             </button>
-                            <button type="button" class="dash-btn-ghost min-h-11 text-sm" @click="router.push(product.pricingRoute)">
+                            <button type="button" class="dash-btn-ghost min-h-11 text-sm"
+                                @click="router.push(product.pricingRoute)">
                                 <i class="pi pi-credit-card text-xs"></i>
                                 <span>Pricing</span>
                             </button>
@@ -933,15 +1029,23 @@ onMounted(() => {
                         <p class="dash-eyebrow theme-text">Account snapshot</p>
                         <h2 class="dash-title mt-1">Where you stand</h2>
                     </div>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Quick access, trial, and streak visibility.</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Quick access, trial, and streak visibility.
+                    </p>
                 </div>
                 <dl class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                    <div v-for="stat in summaryStats" :key="stat.label" class="dash-tile-soft flex items-center gap-3 px-3 py-2.5">
-                        <span v-if="stat.blob" class="dash-icon-tile h-9 w-9 shrink-0 bg-orange-100 text-base ring-1 ring-orange-200 dark:bg-orange-900/30 dark:ring-orange-800/60">{{ stat.blob }}</span>
-                        <span v-else class="dash-icon-tile theme-icon h-9 w-9 shrink-0 text-sm"><i :class="stat.icon"></i></span>
+                    <div v-for="stat in summaryStats" :key="stat.label"
+                        class="dash-tile-soft flex items-center gap-3 px-3 py-2.5">
+                        <span v-if="stat.blob"
+                            class="dash-icon-tile h-9 w-9 shrink-0 bg-orange-100 text-base ring-1 ring-orange-200 dark:bg-orange-900/30 dark:ring-orange-800/60">{{
+                                stat.blob }}</span>
+                        <span v-else class="dash-icon-tile theme-icon h-9 w-9 shrink-0 text-sm"><i
+                                :class="stat.icon"></i></span>
                         <div class="min-w-0">
-                            <dd class="text-lg font-extrabold leading-tight tabular-nums text-slate-950 dark:text-slate-100">{{ stat.value }}</dd>
-                            <dt class="truncate text-[11px] font-semibold text-slate-500 dark:text-slate-300">{{ stat.label }} · {{ stat.detail }}</dt>
+                            <dd
+                                class="text-lg font-extrabold leading-tight tabular-nums text-slate-950 dark:text-slate-100">
+                                {{ stat.value }}</dd>
+                            <dt class="truncate text-[11px] font-semibold text-slate-500 dark:text-slate-300">{{
+                                stat.label }} · {{ stat.detail }}</dt>
                         </div>
                     </div>
                 </dl>
@@ -952,12 +1056,17 @@ onMounted(() => {
                 <div class="ui-rise dash-card xl:col-span-2" style="animation-delay: 340ms">
                     <p class="dash-eyebrow theme-text">Why Nursenex</p>
                     <h3 class="dash-title mt-1">Built for consistent practice</h3>
-                    <p class="analysis-muted mt-1">Measurable progress and readiness decisions, not just question counts.</p>
+                    <p class="analysis-muted mt-1">Measurable progress and readiness decisions, not just question
+                        counts.</p>
                     <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        <div v-for="item in whyItems" :key="item.title" class="group dash-card-white dash-hover-lift flex items-start gap-3">
-                            <span class="dash-icon-tile h-10 w-10 shrink-0 text-white shadow-lg group-hover:scale-110 group-hover:-rotate-3" :class="item.tile"><i :class="item.icon"></i></span>
+                        <div v-for="item in whyItems" :key="item.title"
+                            class="group dash-card-white dash-hover-lift flex items-start gap-3">
+                            <span
+                                class="dash-icon-tile h-10 w-10 shrink-0 text-white shadow-lg group-hover:scale-110 group-hover:-rotate-3"
+                                :class="item.tile"><i :class="item.icon"></i></span>
                             <div>
-                                <p class="text-sm font-extrabold text-slate-900 dark:text-slate-100">{{ item.title }}</p>
+                                <p class="text-sm font-extrabold text-slate-900 dark:text-slate-100">{{ item.title }}
+                                </p>
                                 <p class="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">{{ item.copy }}</p>
                             </div>
                         </div>
@@ -965,17 +1074,21 @@ onMounted(() => {
                 </div>
 
                 <div class="ui-rise dash-card flex flex-col justify-between gap-4" style="animation-delay: 380ms">
-                    <div class="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full blur-3xl theme-glow opacity-50" aria-hidden="true"></div>
+                    <div class="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full blur-3xl theme-glow opacity-50"
+                        aria-hidden="true"></div>
                     <div class="relative">
                         <span class="dash-icon-tile theme-icon h-11 w-11"><i class="pi pi-comments"></i></span>
                         <h3 class="dash-title mt-3">Need help?</h3>
-                        <p class="analysis-muted mt-1 leading-6">We value your feedback and are here to support your preparation journey.</p>
+                        <p class="analysis-muted mt-1 leading-6">We value your feedback and are here to support your
+                            preparation journey.</p>
                     </div>
                     <div class="relative space-y-2.5">
-                        <button type="button" class="dash-btn theme-surface theme-shadow w-full py-2.5" @click="goToSupport">
+                        <button type="button" class="dash-btn theme-surface theme-shadow w-full py-2.5"
+                            @click="goToSupport">
                             <i class="pi pi-envelope"></i> Contact support
                         </button>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">You can also use the live chat at the bottom-right corner.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">You can also use the live chat at the
+                            bottom-right corner.</p>
                     </div>
                 </div>
             </section>
@@ -987,7 +1100,8 @@ onMounted(() => {
                         <p class="dash-eyebrow theme-text">Community</p>
                         <h3 class="dash-title mt-1">Share and connect</h3>
                     </div>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Join our social channels for updates, tips, and success stories.</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Join our social channels for updates, tips,
+                        and success stories.</p>
                 </div>
                 <Socials />
             </section>

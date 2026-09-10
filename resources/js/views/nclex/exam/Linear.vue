@@ -38,9 +38,9 @@
                 </article>
 
                 <aside class="ui-rise xl:col-span-4" style="animation-delay: 80ms">
-                    <div class="dash-card flex h-full flex-col justify-center gap-2 p-4">
+                    <div class="dash-card grid h-full gap-2 p-4 sm:grid-cols-3 xl:grid-cols-1 xl:content-center">
                         <div class="pointer-events-none absolute -top-14 -right-14 h-40 w-40 rounded-full blur-3xl theme-glow opacity-50" aria-hidden="true"></div>
-                        <p class="dash-eyebrow theme-text relative">Snapshot</p>
+                        <p class="dash-eyebrow theme-text relative sm:col-span-3 xl:col-span-1">Snapshot</p>
                         <div class="dash-tile-soft flex items-center gap-3 px-3 py-2.5">
                             <span class="dash-icon-tile theme-icon h-9 w-9 shrink-0 text-sm"><i class="pi pi-book"></i></span>
                             <div class="min-w-0">

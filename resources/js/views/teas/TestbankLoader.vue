@@ -1,6 +1,7 @@
 <template>
     <div
         class="relative z-10 rounded-2xl min-h-[93.5vh] max-h-[93.5vh] 2xl:max-h-[94vh] 2xl:min-h-[94vh] overflow-y-scroll p-6 bg-slate-50 dark:bg-sky-950 text-slate-800 dark:text-slate-100">
+        <ProductBreadcrumb product="teas" :items="[{ label: 'Test bank' }]" />
 
         <div class="max-w-screen-2xl mx-auto">
             <section
@@ -128,6 +129,7 @@
 </template>
 
 <script setup lang="ts">
+import ProductBreadcrumb from "../../components/ProductBreadcrumb.vue"
 import { useRoute, useRouter } from 'vue-router'
 import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import axios from 'axios'

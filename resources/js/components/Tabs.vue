@@ -1,13 +1,16 @@
 <template>
   <div class="w-full h-[calc(100vh-45px)] max-h-[calc(100vh-45px)] flex flex-col overflow-hidden bg-sky-800 p-2 ">
-    <div ref="tabContainer" class=" flex space-x-2 pb-2 ps-3 pt-2   sticky top-0 z-10">
+    <div v-if="product" class="px-2 pt-2 [&_nav]:mb-2 [&_.dash-chip]:border-white/25 [&_.dash-chip]:bg-white/10 [&_.dash-chip]:text-white [&_.dash-btn-ghost]:border-white/20 [&_.dash-btn-ghost]:bg-white/10 [&_.dash-btn-ghost]:text-white [&_.dash-btn-ghost]:hover:bg-white/20 [&_ol]:text-sky-100 [&_ol_span]:text-white">
+      <ProductBreadcrumb :product="product" :items="crumbs" />
+    </div>
+    <div ref="tabContainer" class="no-scrollbar flex space-x-2 overflow-x-auto pb-2 ps-3 pt-2 sticky top-0 z-10">
       <!-- Sliding Bubble -->
       <div
         class="absolute h-12 mx-3.5 rounded-t-lg w-24 bg-gray-50 bubble-box -bottom-0.5 2xl:bottom-0 transition-all duration-300 z-0"
         :style="bubbleStyle" />
       <!-- Tab Buttons -->
       <button v-for="(tab, index) in tabs" :key="index" @click="changeTab(index)" ref="tabRefs"
-        class="ps-7 py-2 rounded-t-lg font-semibold text-sm 2xl:text-base transition-all cursor-pointer duration-200 z-10  sticky top-10"
+        class="shrink-0 whitespace-nowrap ps-7 pe-2 py-2 rounded-t-lg font-semibold text-sm 2xl:text-base transition-all cursor-pointer duration-200 z-10 sticky top-10"
         :class="{
           'text-sky-800 font-bold': activeTab === index,
           'text-gray-50 hover:text-sky-400': activeTab !== index,
@@ -24,10 +27,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick, watch } from 'vue'
+import ProductBreadcrumb from './ProductBreadcrumb.vue'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   tabs: string[]
-}>()
+  product?: 'teas' | 'nursing' | 'nclex'
+  crumbs?: { label: string; to?: string }[]
+}>(), { product: undefined, crumbs: () => [] })
 
 const activeTab = ref(0)
 const tabContainer = ref<HTMLElement | null>(null)

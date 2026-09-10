@@ -1,7 +1,7 @@
 <template>
     <div
         class="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-slate-50 via-amber-50/50 to-sky-100/70 text-slate-900">
-        <div class="absolute inset-0 pointer-events-none -z-10">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
             <div
                 class="absolute -top-24 -left-40 h-[620px] w-[620px] rounded-full bg-gradient-to-r from-sky-50 via-cyan-50 to-emerald-50 opacity-45 blur-[125px]">
             </div>
