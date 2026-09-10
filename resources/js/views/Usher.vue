@@ -590,7 +590,6 @@ onMounted(() => {
                                 class="absolute inset-0 opacity-[0.28] [background-image:radial-gradient(circle_at_1px_1px,var(--theme-border)_1px,transparent_0)] [background-size:24px_24px]">
                             </div>
                         </div>
-
                         <div class="relative flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                             <div class="flex min-w-0 items-start gap-3 sm:gap-4">
                                 <div class="theme-ring-gradient shrink-0 rounded-2xl p-[2px] shadow-lg">
@@ -604,7 +603,6 @@ onMounted(() => {
                                         {{ initials }}
                                     </div>
                                 </div>
-
                                 <div class="min-w-0 flex-1">
                                     <div class="flex flex-wrap items-center gap-2">
                                         <span class="dash-chip theme-soft py-1 text-[11px]">
@@ -622,7 +620,6 @@ onMounted(() => {
                                             {{ streakDays }}d streak
                                         </span>
                                     </div>
-
                                     <h1
                                         class="mt-3 max-w-3xl break-words text-2xl font-black leading-tight tracking-tight text-slate-950 sm:text-3xl xl:text-4xl dark:text-slate-100">
                                         Ready when you are,
@@ -634,7 +631,6 @@ onMounted(() => {
                                     </p>
                                 </div>
                             </div>
-
                             <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:w-56 lg:grid-cols-1">
                                 <button type="button"
                                     class="dash-btn theme-surface theme-shadow min-h-11 w-full text-sm"
@@ -696,9 +692,9 @@ onMounted(() => {
                                             <div
                                                 class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wide">
                                                 <span class="text-slate-500 dark:text-slate-400">Score vs {{ PASS_MARK
-                                                }}% pass mark</span>
+                                                    }}% pass mark</span>
                                                 <span :class="scoreToneClass(latestAttemptScore)">{{ latestAttemptScore
-                                                }}%</span>
+                                                    }}%</span>
                                             </div>
                                             <div class="dash-progress relative mt-2 h-2.5 bg-light-blue-500">
                                                 <div class="relative h-full overflow-hidden rounded-full transition-all duration-700"
@@ -986,7 +982,7 @@ onMounted(() => {
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl text-sm"
                                     :class="module.iconClass"><i :class="module.icon"></i></span>
                                 <span class="text-[11px] font-bold text-slate-700 dark:text-slate-200">{{ module.label
-                                }}</span>
+                                    }}</span>
                             </button>
                         </div>
 
