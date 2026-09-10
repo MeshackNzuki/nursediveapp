@@ -53,6 +53,10 @@
                             {{ monthlyAttemptSummary }}
                         </p>
                     </div>
+
+                    <UpgradePrompt v-if="!hasCatPremiumAccess" product="nclex" variant="inline" placement="nclex_cat"
+                        title="The adaptive simulator is a Premium feature." :show-continue="false" class="mt-4"
+                        message="Three CAT runs a month, each with a difficulty trace, ability estimate and subject breakdown. Your linear and readiness sets are still open in the meantime." />
                 </article>
 
                 <aside class="ui-rise xl:col-span-4" style="animation-delay: 80ms">
@@ -278,6 +282,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import UpgradePrompt from '../../../components/UpgradePrompt.vue'
 import { useCatExamStore } from '../../../stores/catExamStore'
 import { useAuthStore } from '../../../stores/authStore'
 

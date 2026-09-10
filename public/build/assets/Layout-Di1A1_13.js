@@ -1,1 +1,0 @@
-import{E as o,e as r,f as t,g as c}from"./main-Dl3bFD7n.js";const n={};function s(_,a){const e=r("router-view");return c(),t(e)}const p=o(n,[["render",s]]);export{p as default};

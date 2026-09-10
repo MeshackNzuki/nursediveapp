@@ -326,7 +326,9 @@ const subscriptionKindLabel = computed(() =>
 
 const daysLeftSummary = computed(() => {
     if (!currentProduct.value) return "";
-    return `${daysLeft(currentProduct.value)} days left in your ${currentProduct.value} ${subscriptionKindLabel.value}`;
+    const labels: Record<ProductCode, string> = { teas: "TEAS", nursing: "Nursing", nclex: "NCLEX" };
+    const days = daysLeft(currentProduct.value);
+    return `${days} ${days === 1 ? "day" : "days"} left in your ${labels[currentProduct.value]} ${subscriptionKindLabel.value}`;
 });
 
 const paywallCtaLabel = computed(() =>
@@ -388,76 +390,65 @@ onBeforeUnmount(() => {
 
             <dialog v-if="showModal" ref="dialogRef" class="modal modal-middle" @close="handleDialogClose"
                 @cancel="handleDialogClose">
-                <div
-                    class="modal-box animation relative overflow-hidden rounded-[28px] border border-slate-200/80 bg-white/95 dark:bg-slate-900/95 dark:border-slate-700 shadow-[0_24px_70px_-30px_rgba(15,23,42,0.55)] dark:shadow-[0_24px_70px_-25px_rgba(2,6,23,0.9)] p-0">
-                    <div class="absolute inset-0 pointer-events-none">
-                        <div
-                            class="absolute -top-16 -left-12 h-40 w-40 rounded-full bg-gradient-to-r from-amber-200/70 via-orange-200/70 to-yellow-200/70 blur-3xl dark:from-amber-500/20 dark:via-orange-500/20 dark:to-yellow-500/20">
-                        </div>
-                        <div
-                            class="absolute -bottom-16 -right-12 h-44 w-44 rounded-full bg-gradient-to-r from-cyan-200/60 via-sky-200/60 to-emerald-200/60 blur-3xl dark:from-cyan-500/15 dark:via-sky-500/15 dark:to-emerald-500/15">
-                        </div>
-                    </div>
-                    <div
-                        class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-400">
+                <div class="modal-box relative max-w-2xl overflow-hidden rounded-[28px] bg-white p-0 shadow-[0_24px_70px_-30px_rgba(15,23,42,0.55)] dark:bg-slate-900">
+                    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+                        <div class="ui-drift absolute -top-24 -right-16 h-64 w-64 rounded-full bg-amber-300/30 blur-3xl"></div>
+                        <div class="ui-drift-slow absolute -bottom-28 -left-16 h-64 w-64 rounded-full blur-3xl theme-glow opacity-70"></div>
+                        <div class="absolute inset-0 opacity-[0.28] [background-image:radial-gradient(circle_at_1px_1px,var(--theme-border)_1px,transparent_0)] [background-size:22px_22px]"></div>
                     </div>
 
-                    <div class="relative z-10 p-6 md:p-7 text-center space-y-4">
-                        <form method="dialog">
-                            <button @click="handleDismissClick"
-                                class="absolute right-3 top-3 h-8 w-8 rounded-full border border-slate-200/90 bg-white/90 dark:bg-slate-800 dark:border-slate-600 text-slate-500 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition"
-                                aria-label="Close paywall modal">
-                                x
-                            </button>
-                        </form>
+                    <form method="dialog" class="absolute right-3 top-3 z-10">
+                        <button @click="handleDismissClick" class="dash-btn-ghost h-9 w-9 rounded-full p-0" aria-label="Close">
+                            <i class="pi pi-times text-xs"></i>
+                        </button>
+                    </form>
 
-                        <p
-                            class="inline-flex items-center rounded-full border border-amber-200/80 dark:border-amber-400/30 bg-amber-50/90 dark:bg-amber-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-amber-700 dark:text-amber-300">
-                            Premium Access
-                        </p>
-                        <h3 class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
-                            Avoid interruptions, {{ userFirstName }}
+                    <div class="relative p-6 md:p-8">
+                        <span class="dash-chip border-amber-200 bg-amber-50 py-1 text-[11px] text-amber-700">
+                            <i class="pi pi-sparkles text-[10px]"></i> You're on a roll, {{ userFirstName }}
+                        </span>
+                        <h3 class="mt-3 text-2xl font-black tracking-tight text-slate-950 dark:text-slate-100">
+                            Keep every score, rationale and trend you've earned.
                         </h3>
-
-                        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                            You're on the right path. Students who practice consistently with
-                            <span class="font-semibold">full-length exams, rationales, and analytics</span>
-                            perform significantly better in licensing exams.
-                        </p>
-                        <p
-                            class="text-sm leading-relaxed rounded-xl border border-rose-200/70 dark:border-rose-400/30 bg-rose-50/90 dark:bg-rose-500/10 text-rose-700 dark:text-rose-300 px-3 py-2">
-                            To avoid interruptions and the risk of losing your performance tracking data, consider
-                            upgrading to Premium.
+                        <p class="mt-2 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+                            Learners who practise with full-length exams, rationales and analytics perform noticeably better on exam day.
+                            Premium keeps all of that in one place, with no interruptions to your streak.
                         </p>
 
-                        <div
-                            class="rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-slate-50/90 dark:bg-slate-800/70 p-4 text-left text-sm space-y-2">
-                            <div v-for="benefit in paywallBenefits" :key="benefit" class="flex items-center gap-2">
-                                <span
-                                    class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold">&#10003;</span>
-                                <span class="text-slate-700 dark:text-slate-200">{{ benefit }}</span>
-                            </div>
-                        </div>
-                        <form method="dialog">
-                            <button @click="handleUpgradeClick"
-                                class="w-full mt-2 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-orange-500 to-amber-400 hover:brightness-110 transition cursor-pointer shadow-[0_12px_25px_-10px_rgba(251,146,60,0.65)]">
-                                {{ paywallCtaLabel }}
-                            </button>
-                        </form>
+                        <ul class="mt-5 grid gap-2 sm:grid-cols-2">
+                            <li v-for="(benefit, index) in paywallBenefits" :key="benefit"
+                                class="ui-rise flex items-start gap-2.5 rounded-xl border border-white/70 bg-white/80 px-3 py-2 text-sm text-slate-700 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-800/70 dark:text-slate-200"
+                                :style="{ animationDelay: `${120 + index * 60}ms` }">
+                                <span class="dash-icon-tile theme-icon mt-0.5 h-6 w-6 shrink-0 text-[11px]"><i class="pi pi-check"></i></span>
+                                <span class="leading-5">{{ benefit }}</span>
+                            </li>
+                        </ul>
 
-                        <div class="flex justify-center">
-                            <div v-if="currentProduct"
-                                class="inline-flex items-center rounded-full border border-slate-200/80 dark:border-slate-600 bg-white/80 dark:bg-slate-800/80 px-3 py-1.5 text-xs text-slate-600 dark:text-slate-300">
-                                {{ daysLeftSummary }}
+                        <div v-if="currentProduct" class="dash-tile-soft mt-5 flex items-center gap-3">
+                            <span class="dash-icon-tile theme-icon h-9 w-9 shrink-0"><i class="pi pi-clock"></i></span>
+                            <div class="min-w-0">
+                                <p class="text-sm font-extrabold text-slate-900 dark:text-white">{{ daysLeftSummary }}</p>
+                                <p class="text-xs text-slate-600 dark:text-slate-300">Upgrade before it ends and nothing resets.</p>
                             </div>
                         </div>
 
-                        <form method="dialog">
-                            <button @click="handleDismissClick"
-                                class="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:underline cursor-pointer">
-                                Continue with limited access
-                            </button>
-                        </form>
+                        <div class="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center">
+                            <form method="dialog" class="flex-1">
+                                <button @click="handleUpgradeClick" class="dash-btn theme-surface theme-shadow min-h-11 w-full text-sm">
+                                    <i class="pi pi-unlock text-xs"></i> {{ paywallCtaLabel }}
+                                </button>
+                            </form>
+                            <form method="dialog">
+                                <button @click="handleDismissClick" class="dash-btn-ghost min-h-11 w-full px-5 text-sm sm:w-auto">
+                                    Continue with limited access
+                                </button>
+                            </form>
+                        </div>
+
+                        <p class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-semibold text-slate-500">
+                            <span class="inline-flex items-center gap-1"><i class="pi pi-shield text-[10px] text-emerald-500"></i> One payment, no auto-billing</span>
+                            <span class="inline-flex items-center gap-1"><i class="pi pi-bolt text-[10px] text-amber-500"></i> Instant access</span>
+                        </p>
                     </div>
                 </div>
 

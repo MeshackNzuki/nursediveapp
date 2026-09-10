@@ -105,7 +105,7 @@
                                     {{ normalizeText(exam.name) }}
                                 </h3>
                                 <p class="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">
-                                    {{ isExamLocked(exam) ? "Unlock this set for full NCLEX practice, rationales, and saved scoring." : examScore(exam) ? "Retake or review your saved performance." : "Start this set to create a score baseline." }}
+                                    {{ isExamLocked(exam) ? "Premium set. Unlock it to practise with rationales and saved scoring." : examScore(exam) ? "Retake or review your saved performance." : "Start this set to create a score baseline." }}
                                 </p>
                             </div>
                             <div class="flex shrink-0 items-center gap-2">
@@ -139,7 +139,7 @@
 
                             <div class="mt-4 flex items-center justify-between gap-2">
                                 <Small
-                                    :button-text="isExamLocked(exam) ? 'Unlock Set' : examScore(exam) ? 'Retake Exam' : 'Take Exam'"
+                                    :button-text="isExamLocked(exam) ? 'Unlock' : examScore(exam) ? 'Retake Exam' : 'Take Exam'"
                                     :icon="isExamLocked(exam) ? 'pi pi-lock-open' : examScore(exam) ? 'pi pi-refresh' : 'pi pi-play'"
                                     :classes="isExamLocked(exam)
                                         ? 'border-0 bg-slate-900 text-white hover:bg-slate-800 shadow-none'
@@ -149,7 +149,7 @@
                                     :action="() => openModal(exam)" />
                                 <span
                                     class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
-                                    {{ isExamLocked(exam) ? 'Upgrade' : examScore(exam) ? 'Attempted' : 'New' }}
+                                    {{ isExamLocked(exam) ? 'Premium' : examScore(exam) ? 'Attempted' : 'New' }}
                                 </span>
                             </div>
                         </div>

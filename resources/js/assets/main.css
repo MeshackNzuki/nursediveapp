@@ -303,6 +303,86 @@
     @apply h-1.5 flex-1 rounded-full bg-slate-200 transition-colors duration-300;
   }
 
+  /* ---- Upgrade prompt (components/UpgradePrompt.vue) ---- */
+  .upgrade-card {
+    @apply relative overflow-hidden rounded-3xl border border-amber-100 bg-linear-to-br from-white via-amber-50/60 to-white p-6 shadow-custom md:p-7;
+  }
+
+  .upgrade-card--inline {
+    @apply rounded-2xl p-4 md:p-5;
+  }
+
+  /* ---- Study reader (lesson HTML from the API) ---- */
+  .study-reader {
+    @apply text-[15px] leading-7 text-slate-700 dark:text-slate-200;
+  }
+
+  .study-reader h1,
+  .study-reader h2,
+  .study-reader h3,
+  .study-reader h4 {
+    @apply mt-6 mb-2 font-extrabold tracking-tight text-slate-950 dark:text-white;
+  }
+
+  .study-reader h1 { @apply text-2xl; }
+  .study-reader h2 { @apply text-xl; }
+  .study-reader h3 { @apply text-lg; }
+  .study-reader h4 { @apply text-base; }
+
+  .study-reader p {
+    @apply my-3;
+  }
+
+  .study-reader ul,
+  .study-reader ol {
+    @apply my-3 space-y-1.5 pl-6;
+  }
+
+  .study-reader ul { list-style: disc; }
+  .study-reader ol { list-style: decimal; }
+
+  .study-reader li::marker {
+    color: var(--theme-accent-2);
+    font-weight: 700;
+  }
+
+  .study-reader strong {
+    @apply font-extrabold text-slate-900 dark:text-white;
+  }
+
+  .study-reader a {
+    color: var(--theme-deep);
+    @apply font-bold underline decoration-dotted underline-offset-4;
+  }
+
+  .study-reader blockquote {
+    @apply my-4 rounded-r-2xl border-l-4 bg-light-blue-500 px-4 py-3 italic text-slate-700 dark:bg-sky-950/60 dark:text-slate-200;
+    border-left-color: var(--theme-accent);
+  }
+
+  .study-reader table {
+    @apply my-4 w-full border-collapse overflow-hidden rounded-2xl text-sm;
+  }
+
+  .study-reader th {
+    @apply bg-light-blue-500 px-3 py-2 text-left font-bold text-slate-800 dark:bg-sky-950/60 dark:text-slate-100;
+  }
+
+  .study-reader td {
+    @apply border-t border-slate-100 px-3 py-2 align-top dark:border-sky-900;
+  }
+
+  .study-reader img {
+    @apply my-4 max-w-full rounded-2xl;
+  }
+
+  .study-reader code {
+    @apply rounded-md bg-slate-100 px-1.5 py-0.5 font-mono text-[13px] dark:bg-slate-800;
+  }
+
+  .study-reader--lg { @apply text-[17px] leading-8; }
+  .study-reader--sm { @apply text-[14px] leading-6; }
+
   /* ---- Theme-aware utilities ----
      Read the CSS variables set on the app root from stores/Theme.js (cssVars),
      so any component follows the user's selected theme with static classes. */

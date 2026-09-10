@@ -645,7 +645,6 @@ onMounted(() => {
                                 </button>
                             </div>
                         </div>
-
                         <!-- Latest attempt -->
                         <div class="dash-card-white relative mt-5">
                             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -692,9 +691,9 @@ onMounted(() => {
                                             <div
                                                 class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wide">
                                                 <span class="text-slate-500 dark:text-slate-400">Score vs {{ PASS_MARK
-                                                    }}% pass mark</span>
+                                                }}% pass mark</span>
                                                 <span :class="scoreToneClass(latestAttemptScore)">{{ latestAttemptScore
-                                                    }}%</span>
+                                                }}%</span>
                                             </div>
                                             <div class="dash-progress relative mt-2 h-2.5 bg-light-blue-500">
                                                 <div class="relative h-full overflow-hidden rounded-full transition-all duration-700"
@@ -982,7 +981,7 @@ onMounted(() => {
                                 <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl text-sm"
                                     :class="module.iconClass"><i :class="module.icon"></i></span>
                                 <span class="text-[11px] font-bold text-slate-700 dark:text-slate-200">{{ module.label
-                                    }}</span>
+                                }}</span>
                             </button>
                         </div>
 
