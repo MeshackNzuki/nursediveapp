@@ -19,7 +19,6 @@ const TawkService = {
         this._scriptEl.setAttribute("crossorigin", "*");
         const firstScript = document.getElementsByTagName("script")[0];
         firstScript.parentNode.insertBefore(this._scriptEl, firstScript);
-
     },   
 };
 
