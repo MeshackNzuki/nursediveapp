@@ -41,4 +41,36 @@ class TeasTopicController extends Controller
             'subject' => $category->name,
         ]);
     }
+
+    /**
+     * Search practice-test and study-guide topics by name (dashboard search).
+     */
+    public function searchTopics(Request $request)
+    {
+        $term = trim((string) $request->query('query', ''));
+        if (mb_strlen($term) < 2) {
+            return $this->ResSuccess([]);
+        }
+
+        $topics = Topic::with('category:id,name,slug')
+            ->where('name', 'LIKE', '%' . $term . '%')
+            ->orderBy('name')
+            ->limit(30)
+            ->get()
+            ->map(function ($topic) {
+                $slug = (string) ($topic->category?->slug ?? '');
+                return [
+                    'id'             => $topic->id,
+                    'name'           => $topic->name,
+                    'slug'           => $topic->slug,
+                    'question_count' => $topic->question_count,
+                    'category_id'    => $topic->category_id,
+                    'category_name'  => $topic->category?->name,
+                    'category_slug'  => $slug,
+                    'kind'           => str_ends_with($slug, '_guide') ? 'guide' : 'exam',
+                ];
+            });
+
+        return $this->ResSuccess($topics);
+    }
 }

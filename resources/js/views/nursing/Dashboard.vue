@@ -24,59 +24,8 @@
               <StreakCard product-code="nursing" />
             </div>
           </div>
-          <article class="dash-card mt-5 p-4">
-            <div class="pointer-events-none absolute -top-16 -right-16 h-44 w-44 rounded-full blur-3xl theme-glow opacity-60"
-              aria-hidden="true"></div>
-            <div class="relative flex items-start justify-between gap-4">
-              <div>
-                <h2 class="dash-title">Find Practice</h2>
-                <p class="mt-1 text-sm text-slate-500 dark:text-slate-300">
-                  Search topics or exam sets without leaving the dashboard.
-                </p>
-              </div>
-              <span class="dash-icon-tile theme-icon h-10 w-10">
-                <i class="pi pi-search text-base"></i>
-              </span>
-            </div>
-
-            <div class="relative mt-4">
-              <i class="pi pi-search pointer-events-none absolute left-4 top-1/2 z-10 -translate-y-1/2 text-sm text-slate-400"></i>
-              <input v-model="universal_search" type="text" placeholder="Search exams or topics..."
-                class="theme-focus w-full rounded-full border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-300 focus:outline-none dark:border-sky-800 dark:bg-sky-950 dark:text-slate-100" />
-
-              <div v-if="showSearchResults"
-                class="absolute left-0 right-0 top-full z-40 mt-2 max-h-[28rem] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-4 shadow-lg dark:border-sky-800 dark:bg-sky-950">
-                <div v-if="filteredSubjects.length || examTopicsSearchResult.length" class="space-y-4">
-                  <div v-if="filteredSubjects.length">
-                    <p class="mb-2 text-xs font-bold uppercase tracking-wide text-slate-400">Topics</p>
-                    <div class="space-y-2">
-                      <button v-for="subject in filteredSubjects" :key="subject.id" type="button"
-                        class="flex w-full items-center justify-between gap-3 rounded-xl bg-sky-50 px-3 py-2 text-left text-sm font-semibold text-slate-700 transition hover:bg-sky-100 dark:bg-sky-900/70 dark:text-slate-100 dark:hover:bg-sky-800"
-                        @click="goToSubject(subject)">
-                        <span>{{ subject.name }}</span>
-                        <i class="pi pi-arrow-right text-xs text-sky-600 dark:text-sky-200"></i>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div v-if="examTopicsSearchResult.length">
-                    <p class="mb-2 text-xs font-bold uppercase tracking-wide text-slate-400">Exams</p>
-                    <div class="space-y-2">
-                      <button v-for="exam in examTopicsSearchResult" :key="exam.id" type="button"
-                        class="flex w-full items-center justify-between gap-3 rounded-xl bg-emerald-50 px-3 py-2 text-left text-sm font-semibold text-slate-700 transition hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-slate-100 dark:hover:bg-emerald-900/60"
-                        @click="openModal(exam)">
-                        <span>{{ exam.name }}</span>
-                        <i class="pi pi-play text-xs text-emerald-600 dark:text-emerald-200"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <p v-else class="text-sm text-slate-500 dark:text-slate-300">
-                  No matches yet. Try a broader keyword.
-                </p>
-              </div>
-            </div>
-          </article>
+          <DashboardSearch nudge-key="nursing" class="mt-5" :groups="searchGroups" :suggestions="searchSuggestions"
+            placeholder="Search exam sets or topics, e.g. pharmacology" @select="onSearchSelect" />
 
 
           <div class="mt-5 flex flex-wrap gap-2">
@@ -366,7 +315,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import axios from "axios";
 import PracticeProgressPeersChart from "../../components/Dashboard/PracticeProgressPeersChart.vue";
@@ -379,6 +328,8 @@ import StreakCard from "../../components/Dashboard/StreakCard.vue";
 import ExamIcon from "../../components/ExamIcon.vue";
 import TodayFocusPanel from "../../components/Dashboard/TodayFocusPanel.vue";
 import DashboardSnapshot from "../../components/Dashboard/DashboardSnapshot.vue";
+import DashboardSearch from "../../components/Dashboard/DashboardSearch.vue";
+import type { SearchGroupDef, SearchItem } from "../../components/Dashboard/DashboardSearch.vue";
 import type { SnapshotSection } from "../../components/Dashboard/DashboardSnapshot.vue";
 import type { FocusAttempt, FocusReviewTask, FocusSection } from "../../components/Dashboard/TodayFocusPanel.vue";
 
@@ -437,8 +388,6 @@ const {
 
 const subjects = ref<NursingSubject[]>([]);
 const nursingAttempts = ref<NursingAttempt[]>([]);
-const universal_search = ref("");
-const examTopicsSearchResult = ref<ExamSearchResult[]>([]);
 const modalRef = ref<HTMLDialogElement | null>(null);
 const studyModalRef = ref<HTMLDialogElement | null>(null);
 const selectedExam = ref<ExamSearchResult | null>(null);
@@ -469,24 +418,50 @@ const quickActions = [
   { label: "Performance", route: "/nursing/performance-analysis", icon: "pi pi-chart-line" },
 ];
 
-const searchTerm = computed(() => universal_search.value.trim().toLowerCase());
+const searchSuggestions = ["Pharmacology", "Fundamentals", "Med-Surg", "Pediatrics", "Mental Health"];
 
-const showSearchResults = computed(() => searchTerm.value.length >= 3);
+const searchGroups = computed<SearchGroupDef[]>(() => [
+  {
+    key: "topic",
+    label: "Topics",
+    cta: "Open bank",
+    icon: "pi pi-folder",
+    rowIcon: "pi pi-folder-open",
+    tile: "theme-icon",
+    ink: "theme-text",
+    items: subjects.value.map((subject) => ({
+      id: subject.id,
+      name: subject.name,
+      slug: subject.slug,
+      meta: subject.examsCount ? `${subject.examsCount} exam sets` : undefined,
+    })),
+  },
+  {
+    key: "exam",
+    label: "Exam sets",
+    cta: "Start",
+    icon: "pi pi-file-edit",
+    rowIcon: "pi pi-play",
+    tile: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200",
+    ink: "text-emerald-600 dark:text-emerald-300",
+    fetch: async (query: string) => {
+      const response = await axios.get(`/nursing/search/subtopics?query=${encodeURIComponent(query)}`, { showLoader: false });
+      const rows = Array.isArray(response.data?.data) ? response.data.data : [];
+      return rows.map((row: ExamSearchResult) => ({ id: row.id, name: row.name }));
+    },
+  },
+]);
 
-const filteredSubjects = computed(() => {
-  if (!showSearchResults.value) {
-    return [];
+const onSearchSelect = ({ group, item }: { group: string; item: SearchItem }) => {
+  if (group === "topic") {
+    goToSubject({ id: Number(item.id), name: item.name, slug: item.slug });
+  } else {
+    openModal({ id: item.id, name: item.name });
   }
-
-  return subjects.value.filter((subject) =>
-    subject.name.toLowerCase().includes(searchTerm.value),
-  );
-});
+};
 
 const openModal = async (exam: ExamSearchResult) => {
   selectedExam.value = exam;
-  universal_search.value = "";
-  examTopicsSearchResult.value = [];
   await nextTick();
   modalRef.value?.showModal();
 };
@@ -502,8 +477,6 @@ const closeStudyModal = () => {
 const goToSubject = (subject: NursingSubject) => {
   if (!subject.slug) return;
 
-  universal_search.value = "";
-  examTopicsSearchResult.value = [];
   router.push(`/nursing/test-bank-loader/${subject.slug}`);
 };
 
@@ -914,23 +887,4 @@ const nursingQuickLinksWithProgress = computed(() =>
 const nursingAttemptedTotal = computed(() =>
   new Set(nursingAttempts.value.map((attempt) => toNumber(attempt.sub_topic_id)).filter((id) => id > 0)).size,
 );
-
-watch(universal_search, (newVal) => {
-  const query = newVal.trim();
-
-  if (query.length < 3) {
-    examTopicsSearchResult.value = [];
-    return;
-  }
-
-  axios
-    .get(`/nursing/search/subtopics?query=${encodeURIComponent(query)}`, { showLoader: false })
-    .then((response) => {
-      examTopicsSearchResult.value = Array.isArray(response.data?.data) ? response.data.data : [];
-    })
-    .catch((error) => {
-      console.error("Error fetching search results:", error);
-      examTopicsSearchResult.value = [];
-    });
-});
 </script>

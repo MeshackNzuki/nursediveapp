@@ -39,6 +39,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Teas\MainTeasController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\AppSettingsController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Nclex\NclexTopicController;
 use App\Http\Controllers\Nursing\Study\StudyController;
@@ -97,6 +98,7 @@ Route::group(['prefix' => 'nursing', 'middleware' => 'optional.auth'], function 
 Route::group(['prefix' => 'teas', 'middleware' => 'optional.auth'], function () {
     Route::get('/exam-topics-per-subject/{slug}', [TeasTopicController::class, 'getTopicsBySubject']);
     Route::get('/study-chapters', [TeasTopicController::class, 'getGuideChapters']);
+    Route::get('/search/topics', [TeasTopicController::class, 'searchTopics']);
     Route::get('/exam/{id}', [TeasExamController::class, 'showByTitle']);
 });
 
@@ -209,6 +211,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('signups-filter', [AdminController::class, 'filterSignups']);
         Route::get('exam-feedback', [AdminController::class, 'examFeedback']);
+
+        // App constants (key/value settings)
+        Route::get('settings', [AppSettingsController::class, 'listAppSettings']);
+        Route::post('settings/{key}', [AppSettingsController::class, 'updateAppSettings']);
+        Route::delete('settings/{key}', [AppSettingsController::class, 'deleteAppSettings']);
     });
 });
 

@@ -256,6 +256,12 @@ const fetchSubChapters = async () => {
     const response = await axios.get("/teas/study-chapters", { params: { slug: topicId.value } });
     subChapters.value = response.data.data.topics;
     chapter_name_backend.value = response.data.data.subject;
+    // Deep link from dashboard search: /teas/guide-chapters/:slug?chapter=<id>
+    const wanted = Number(route.query.chapter);
+    if (wanted) {
+      const hit = subChapters.value.find((sub) => Number(sub.id) === wanted);
+      if (hit) showModal(hit);
+    }
   } catch (error) {
     console.error("Failed to fetch sub-chapters:", error);
   }

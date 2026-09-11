@@ -184,6 +184,69 @@
     @apply transition duration-300 hover:-translate-y-1 hover:shadow-xl;
   }
 
+  /* ---- Dashboard search (components/Dashboard/DashboardSearch.vue) ----
+     Results render in normal flow (never absolute) so overflow-hidden cards
+     cannot clip them; the ring + badge animate to pull the eye. */
+  .dash-search {
+    @apply relative overflow-hidden rounded-2xl border border-sky-100 bg-light-blue-500 p-4 transition-shadow duration-300 dark:border-sky-800 dark:bg-sky-900;
+  }
+
+  .dash-search--active {
+    box-shadow: 0 18px 40px -18px var(--theme-glow);
+  }
+
+  .dash-search-ring {
+    background-size: 200% 200%;
+    animation: dash-search-ring 6s ease-in-out infinite;
+    box-shadow: 0 10px 30px -14px var(--theme-glow);
+  }
+
+  .dash-search--active .dash-search-ring {
+    animation-duration: 2.2s;
+    box-shadow: 0 0 0 4px var(--theme-soft), 0 16px 34px -14px var(--theme-glow);
+  }
+
+  .dash-search-badge {
+    animation: dash-search-badge 2.6s ease-in-out infinite;
+  }
+
+  .dash-search--active .dash-search-badge {
+    animation: none;
+  }
+
+  .dash-search-nudge {
+    @apply relative mt-4 flex flex-col gap-3 rounded-2xl p-3 sm:flex-row sm:items-center;
+    background-image: linear-gradient(100deg, var(--theme-accent), var(--theme-accent-2));
+    color: var(--theme-on);
+    box-shadow: 0 14px 30px -14px var(--theme-glow);
+  }
+
+  .dash-search-kbd {
+    @apply inline-flex h-6 min-w-6 items-center justify-center rounded-md border border-slate-200 bg-white px-1.5 font-mono text-[10px] font-bold text-slate-500 dark:border-sky-700 dark:bg-sky-900 dark:text-slate-300;
+  }
+
+  .dash-search-row {
+    @apply flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition duration-150;
+  }
+
+  .dash-search-row:hover,
+  .dash-search-row--active {
+    background-color: var(--theme-soft);
+  }
+
+  .dash-search-mark {
+    @apply rounded-sm bg-transparent px-0 font-extrabold;
+    color: var(--theme-deep);
+    text-decoration: underline;
+    text-decoration-color: var(--theme-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+  }
+
+  .dark .dash-search-mark {
+    color: var(--theme-light);
+  }
+
   /* ---- Authentication (components/Auth/AuthShell.vue + views/auth/*) ---- */
   .auth-shell {
     @apply grid min-h-screen w-full grid-cols-1 lg:grid-cols-[minmax(0,11fr)_minmax(0,13fr)] xl:grid-cols-2;
@@ -1125,4 +1188,14 @@ button {
   .group:hover .ui-pan {
     animation: none;
   }
+}
+
+@keyframes dash-search-ring {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes dash-search-badge {
+  0%, 100% { transform: translateY(0) rotate(0deg); box-shadow: 0 0 0 0 var(--theme-soft); }
+  50% { transform: translateY(-2px) rotate(-8deg); box-shadow: 0 0 0 6px transparent; }
 }

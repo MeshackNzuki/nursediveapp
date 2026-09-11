@@ -88,6 +88,26 @@ class AdminController extends Controller
         $active12h = $this->activeUsersSince($now->copy()->subHours(12));
         $active6h = $this->activeUsersSince($now->copy()->subHours(6));
 
+        // Rolling "active in the last N days" windows (last_seen_at is refreshed on every authenticated request).
+        $activeByDays = [];
+        foreach ([2, 3, 4, 5, 6, 7, 14, 30] as $days) {
+            $activeByDays["active_{$days}d"] = $this->activeUsersSince($now->copy()->subDays($days));
+        }
+
+        // 7-day retention: of users who signed up 7 to 14 days ago, how many were seen in the last 7 days.
+        $retentionCohort = User::whereBetween('created_at', [$now->copy()->subDays(14), $now->copy()->subDays(7)]);
+        $retentionCohortSize = (clone $retentionCohort)->count();
+        $retentionRetained = (clone $retentionCohort)->where('last_seen_at', '>=', $now->copy()->subDays(7))->count();
+        $retention7dPct = $retentionCohortSize > 0 ? round(($retentionRetained / $retentionCohortSize) * 100, 1) : 0.0;
+
+        // Practice activity across all three products (attempt tables).
+        $attemptsLast7 = TA::where('created_at', '>=', $now->copy()->subDays(7))->count()
+            + NA::where('created_at', '>=', $now->copy()->subDays(7))->count()
+            + NCA::where('created_at', '>=', $now->copy()->subDays(7))->count();
+        $attemptsLast30 = TA::where('created_at', '>=', $now->copy()->subDays(30))->count()
+            + NA::where('created_at', '>=', $now->copy()->subDays(30))->count()
+            + NCA::where('created_at', '>=', $now->copy()->subDays(30))->count();
+
 
         // Unique users who have taken exams
         $teasUsers = TA::distinct('user_id')->count('user_id');
@@ -105,6 +125,7 @@ class AdminController extends Controller
         $teasSubscribed = 0;
         $nclexSubscribed = 0;
         $allSubscribed = 0;
+        $onTrialOnly = 0;
 
         foreach ($users as $user) {
             if (!$user->subscription || !$user->subscription->subscriptions) continue;
@@ -118,6 +139,7 @@ class AdminController extends Controller
             }
 
             $hasActive = false;
+            $hasLiveTrial = false;
 
             foreach (['nursing', 'teas', 'nclex'] as $product) {
                 if (empty($subscriptions[$product]) || !is_array($subscriptions[$product])) continue;
@@ -128,7 +150,11 @@ class AdminController extends Controller
                     $expires = Carbon::parse($plan['expires']);
                     $planName = strtolower((string) ($plan['plan_name'] ?? $plan['name'] ?? ''));
 
-                    if ($planName === 'trial' || !$expires->isFuture()) {
+                    if ($planName === 'trial') {
+                        if ($expires->isFuture()) $hasLiveTrial = true;
+                        continue;
+                    }
+                    if (!$expires->isFuture()) {
                         continue;
                     }
 
@@ -141,6 +167,7 @@ class AdminController extends Controller
             }
 
             if ($hasActive) $allSubscribed++;
+            if (!$hasActive && $hasLiveTrial) $onTrialOnly++;
         }
 
         $signupLast30 = User::where('created_at', '>=', $now->copy()->subDays(30))->count();
@@ -182,9 +209,33 @@ class AdminController extends Controller
             ->orderBy('day')
             ->pluck('total', 'day');
 
+        $activityRows = DB::query()
+            ->fromSub(
+                TA::selectRaw('user_id, DATE(created_at) as day')->where('created_at', '>=', $trendStart)
+                    ->unionAll(NA::selectRaw('user_id, DATE(created_at) as day')->where('created_at', '>=', $trendStart))
+                    ->unionAll(NCA::selectRaw('user_id, DATE(created_at) as day')->where('created_at', '>=', $trendStart)),
+                'activity'
+            )
+            ->selectRaw('day, COUNT(*) as attempts, COUNT(DISTINCT user_id) as learners')
+            ->groupBy('day')
+            ->get()
+            ->keyBy('day');
+
+        $activeLearnersLast7 = DB::query()
+            ->fromSub(
+                TA::selectRaw('user_id')->where('created_at', '>=', $now->copy()->subDays(7))
+                    ->unionAll(NA::selectRaw('user_id')->where('created_at', '>=', $now->copy()->subDays(7)))
+                    ->unionAll(NCA::selectRaw('user_id')->where('created_at', '>=', $now->copy()->subDays(7))),
+                'recent'
+            )
+            ->distinct()
+            ->count('user_id');
+
         $labels = [];
         $signupsTrend = [];
         $revenueTrend = [];
+        $attemptsTrend = [];
+        $learnersTrend = [];
 
         $cursor = $trendStart->copy();
         while ($cursor->lte($now)) {
@@ -192,6 +243,8 @@ class AdminController extends Controller
             $labels[] = $cursor->format('M j');
             $signupsTrend[] = (int) ($signupTrendRaw[$dayKey] ?? 0);
             $revenueTrend[] = round((float) ($revenueTrendRaw[$dayKey] ?? 0), 2);
+            $attemptsTrend[] = (int) ($activityRows[$dayKey]->attempts ?? 0);
+            $learnersTrend[] = (int) ($activityRows[$dayKey]->learners ?? 0);
             $cursor->addDay();
         }
 
@@ -221,6 +274,15 @@ class AdminController extends Controller
             'active_24hr'       => $active24h,
             'active_12hr'       => $active12h,
             'active_6hr'        => $active6h,
+            ...$activeByDays,
+            'retention_7d_pct'  => $retention7dPct,
+            'retention_cohort_size' => $retentionCohortSize,
+            'retention_retained' => $retentionRetained,
+            'attempts_last_7_days' => $attemptsLast7,
+            'attempts_last_30_days' => $attemptsLast30,
+            'active_learners_last_7_days' => $activeLearnersLast7,
+            'trial_only_users'  => $onTrialOnly,
+            'signups_today'     => User::where('created_at', '>=', $now->copy()->startOfDay())->count(),
 
             'total_payments'    => $totalPayments,
             'teas_payments'     => $teasAmount,
@@ -269,6 +331,8 @@ class AdminController extends Controller
                 'labels' => $labels,
                 'signups' => $signupsTrend,
                 'revenue' => $revenueTrend,
+                'attempts' => $attemptsTrend,
+                'learners' => $learnersTrend,
             ],
 
             'product_breakdown' => [

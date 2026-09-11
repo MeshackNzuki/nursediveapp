@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\AppSettings;
 use Illuminate\Http\Request;
-use App\Models\Term;
 use App\Http\Controllers\Controller;
 
 class AppSettingsController extends Controller
@@ -37,24 +36,6 @@ class AppSettingsController extends Controller
                 'key' => $key,
                 'value' => $request->value
             ]);
-        }
-
-        if ($key == 'term_start_date' || $key == 'term_end_date') {
-
-            $term = Term::first();
-
-            $fieldToUpdate = $key == 'term_start_date' ? 'start_date' : 'end_date';
-
-            if ($term) {
-                $term->update([
-                    $fieldToUpdate => $request->value,
-                ]);
-            } else {
-                Term::create([
-                    'start_date' => $key == 'term_start_date' ? $request->value : null,
-                    'end_date'   => $key == 'term_end_date' ? $request->value : null,
-                ]);
-            }
         }
 
         // Return a success response

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import axios from "axios";
 import { useAuthStore } from "../../stores/authStore";
@@ -11,6 +11,9 @@ import StudySchedulePanel from "../../components/Dashboard/StudySchedulePanel.vu
 import StreakCard from "../../components/Dashboard/StreakCard.vue";
 import TodayFocusPanel from "../../components/Dashboard/TodayFocusPanel.vue";
 import DashboardSnapshot from "../../components/Dashboard/DashboardSnapshot.vue";
+import DashboardSearch from "../../components/Dashboard/DashboardSearch.vue";
+import type { SearchGroupDef, SearchItem } from "../../components/Dashboard/DashboardSearch.vue";
+import { useRouter } from "vue-router";
 import type { SnapshotSection } from "../../components/Dashboard/DashboardSnapshot.vue";
 import type { FocusAttempt, FocusReviewTask, FocusSection } from "../../components/Dashboard/TodayFocusPanel.vue";
 
@@ -123,6 +126,87 @@ const teasModules: TeasModule[] = [
         borderClass: "border-orange-100 hover:border-orange-300 dark:border-orange-900 dark:hover:border-orange-600",
     },
 ];
+
+const router = useRouter();
+const searchModalRef = ref<HTMLDialogElement | null>(null);
+const selectedSearchExam = ref<SearchItem | null>(null);
+const searchSuggestions = ["Fractions", "Cell biology", "Commas", "Main idea", "Ratios"];
+
+type TeasSearchRow = {
+    id: number;
+    name: string;
+    question_count?: number | null;
+    category_id?: number | null;
+    category_name?: string | null;
+    category_slug?: string | null;
+    kind: "exam" | "guide";
+};
+
+let teasSearchCache: TeasSearchRow[] | null = null;
+let teasSearchCacheQuery = "";
+const fetchTeasSearch = async (query: string): Promise<TeasSearchRow[]> => {
+    if (teasSearchCache && teasSearchCacheQuery === query) return teasSearchCache;
+    const response = await axios.get("/teas/search/topics", { params: { query }, showLoader: false });
+    teasSearchCache = Array.isArray(response.data?.data) ? response.data.data : [];
+    teasSearchCacheQuery = query;
+    return teasSearchCache as TeasSearchRow[];
+};
+const cleanCategory = (name?: string | null) => String(name || "").replace(/practice tests?|study guide/i, "").replace(/TEAS( 7)?/i, "").trim();
+
+const searchGroups: SearchGroupDef[] = [
+    {
+        key: "module",
+        label: "Sections",
+        cta: "Open",
+        icon: "pi pi-th-large",
+        rowIcon: "pi pi-folder-open",
+        tile: "theme-icon",
+        ink: "theme-text",
+        items: teasModules.map((m) => ({ id: m.id, name: m.title, meta: `${m.total} practice sets`, route: `/teas/test-bank-loader/${m.id}` })),
+    },
+    {
+        key: "exam",
+        label: "Practice sets",
+        cta: "Start",
+        icon: "pi pi-file-edit",
+        rowIcon: "pi pi-play",
+        tile: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200",
+        ink: "text-emerald-600 dark:text-emerald-300",
+        fetch: async (query) =>
+            (await fetchTeasSearch(query))
+                .filter((r) => r.kind === "exam")
+                .map((r) => ({ id: r.id, name: r.name, meta: `${cleanCategory(r.category_name)} · ${r.question_count ?? 0} questions` })),
+    },
+    {
+        key: "guide",
+        label: "Study guide chapters",
+        cta: "Read",
+        icon: "pi pi-map",
+        rowIcon: "pi pi-book",
+        tile: "bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-200",
+        ink: "text-orange-600 dark:text-orange-300",
+        fetch: async (query) =>
+            (await fetchTeasSearch(query))
+                .filter((r) => r.kind === "guide")
+                .map((r) => ({ id: r.id, name: r.name, meta: `${cleanCategory(r.category_name)} guide`, route: `/teas/guide-chapters/${r.category_slug}?chapter=${r.id}` })),
+    },
+];
+
+const onSearchSelect = async ({ group, item }: { group: string; item: SearchItem }) => {
+    if (group === "exam") {
+        selectedSearchExam.value = item;
+        await nextTick();
+        searchModalRef.value?.showModal();
+        return;
+    }
+    if (typeof item.route === "string") router.push(item.route);
+};
+
+const goToSearchExam = (mode: "tutor" | "exam") => {
+    if (!selectedSearchExam.value) return;
+    searchModalRef.value?.close();
+    router.push(`/teas/exam/${selectedSearchExam.value.id}?mode=${mode}`);
+};
 
 const quickActions = [
     { label: "Math", route: "/teas/test-bank-loader/2", icon: "pi pi-calculator" },
@@ -434,6 +518,10 @@ const handleExamDateUpdated = (date: string) => {
                         </div>
                     </div>
 
+                    <DashboardSearch nudge-key="teas" :groups="searchGroups" :suggestions="searchSuggestions"
+                        title="What do you want to practise?" subtitle="Search TEAS practice sets and study-guide chapters."
+                        placeholder="Search e.g. fractions, cell biology, commas" @select="onSearchSelect" />
+
                     <!-- Instrument panel: readiness + countdown on the theme surface -->
                     <div class="theme-surface theme-shadow relative overflow-hidden rounded-2xl p-4">
                         <div class="pointer-events-none absolute inset-0" aria-hidden="true">
@@ -716,5 +804,26 @@ const handleExamDateUpdated = (date: string) => {
                     @updated="handleExamDateUpdated" />
             </div>
         </div>
+
+        <dialog ref="searchModalRef" class="modal">
+            <div class="modal-box rounded-2xl bg-white text-slate-900 dark:bg-sky-950 dark:text-slate-100">
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2">✕</button>
+                </form>
+                <p class="dash-eyebrow theme-text">Practice set</p>
+                <h3 class="mt-1 pr-8 text-lg font-extrabold">{{ selectedSearchExam?.name }}</h3>
+                <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                    {{ selectedSearchExam?.meta }} · choose tutor mode for guided explanations or exam mode for a timed simulation.
+                </p>
+                <div class="mt-5 flex flex-wrap justify-end gap-2">
+                    <button type="button" class="dash-btn-ghost px-4 py-2" @click="goToSearchExam('tutor')">
+                        <i class="pi pi-comments text-[10px]"></i> Tutor mode
+                    </button>
+                    <button type="button" class="dash-btn theme-surface theme-shadow px-5 py-2" @click="goToSearchExam('exam')">
+                        <i class="pi pi-bolt text-[10px]"></i> Exam mode
+                    </button>
+                </div>
+            </div>
+        </dialog>
     </div>
 </template>

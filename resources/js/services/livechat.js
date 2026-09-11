@@ -9,20 +9,17 @@ const TawkService = {
 
     init() {
         if (typeof window === "undefined" || this._initialized) return;
-
         this._initialized = true;
         window.Tawk_API = window.Tawk_API || {};
         window.Tawk_LoadStart = new Date();
-
         this._scriptEl = document.createElement("script");
         this._scriptEl.async = true;
         this._scriptEl.src = `https://embed.tawk.to/${TAWK_PROPERTY_ID}/${TAWK_WIDGET_ID}`;
         this._scriptEl.charset = "UTF-8";
         this._scriptEl.setAttribute("crossorigin", "*");
-
         const firstScript = document.getElementsByTagName("script")[0];
-        firstScript.parentNode.insertBefore(this._scriptEl, firstScript);    
-      
+        firstScript.parentNode.insertBefore(this._scriptEl, firstScript);
+
     },   
 };
 
