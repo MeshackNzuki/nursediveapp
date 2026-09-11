@@ -19,10 +19,10 @@
         </template>
       </ExamSetList>
     </template>
-
-    <ExamModeModal ref="modeModal" product="nursing" :exam="selectedExam" :modes="['tutor', 'exam', 'review']"
-      @select="(mode) => goToExam(mode, mode === 'review')" />
   </Tabs>
+
+  <ExamModeModal ref="modeModal" product="nursing" :exam="selectedExam" :modes="['tutor', 'exam', 'review']"
+    @select="(mode) => goToExam(mode, mode === 'review')" />
 </template>
 
 <script setup lang="ts">
