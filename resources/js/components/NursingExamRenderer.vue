@@ -215,7 +215,7 @@ const progress = ref('Preparing Test...')
 const { zoomIn, zoomOut } = useMainStore();
 const store = useMainStore();
 const authStore = useAuthStore();
-const { active, is_authenticated } = authStore;
+const { active } = authStore;
 const route = useRoute()
 const router = useRouter()
 const examStore = useNursingExamStore() as any
@@ -618,7 +618,7 @@ async function loadExam() {
                 },
                 questions: examData.questions,
                 notes: parseRecordPayload(examData.notes),
-                is_exam_full_length: !is_authenticated ? examStore.hasReachedUnathenticatedThreshold() : examData.full_length,
+                is_exam_full_length: examData.full_length,
             })
         } else {
             const { data } = await axios.get(`/nursing/exam-attempts/${examId}`, { showLoader: false })
@@ -676,7 +676,7 @@ async function loadExam() {
                         },
                         questions: examData.questions,
                         notes: parseRecordPayload(examData.notes),
-                        is_exam_full_length: !is_authenticated ? examStore.hasReachedUnathenticatedThreshold() : examData.full_length,
+                        is_exam_full_length: examData.full_length,
                     })
                 })
                 .catch((error) => {

@@ -331,7 +331,7 @@ class NursingExamController extends Controller
     public function shouldTakeWholeExam($request)
     {
         if (!$request->user()) {
-            return true;
+            return false;
         }
 
         $plan = $this->currentNursingPlan($request);

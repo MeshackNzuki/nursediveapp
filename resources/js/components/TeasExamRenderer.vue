@@ -222,7 +222,6 @@ const difficulty = ref('')
 const ChatOpenned = ref(false);
 
 const authStore = useAuthStore()
-const { is_authenticated } = authStore
 const firstName = computed(() => authStore.user?.name?.split(' ')[0] || 'there')
 
 watch(() => examStore.show_paywall, (shown) => {
@@ -482,7 +481,7 @@ async function loadExam() {
             questions: attempt.questions,
             answers: JSON.parse(attempt.answers),
             results: JSON.parse(attempt.results),
-            is_exam_full_length: !is_authenticated ? examStore.hasReachedUnathenticatedThreshold() : attempt.full_length,
+            is_exam_full_length: attempt.full_length,
             mode: 'review'
 
         })
@@ -519,7 +518,7 @@ async function loadExam() {
                             description: examData.description
                         },
                         questions: examData.questions,
-                        is_exam_full_length: is_authenticated ? examData.full_length : examStore.hasReachedUnathenticatedThreshold(),
+                        is_exam_full_length: examData.full_length,
                     })
                 })
                 .catch((error) => {
