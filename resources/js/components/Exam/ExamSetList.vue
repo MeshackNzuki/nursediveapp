@@ -83,7 +83,6 @@
                         </span>
                         <div class="min-w-0">
                             <h3 class="text-sm font-extrabold leading-snug text-slate-950 dark:text-white">{{ displayName(exam) }}</h3>
-                            <p v-if="exam.description" class="mt-0.5 line-clamp-2 text-[11px] text-slate-500 dark:text-slate-300">{{ exam.description }}</p>
                         </div>
                     </div>
                     <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-sky-700 px-2 py-0.5 text-[10px] font-bold text-white" :title="`${questionCount(exam)} questions`">
