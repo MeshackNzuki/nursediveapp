@@ -46,10 +46,43 @@
         // CONTENT PROTECT GLOBAL SCRIPT
         // =========================
         (function(window, document) {
+            function isProtectedExamPage() {
+                const path = window.location.pathname;
+                return path.startsWith('/nursing/exam/') ||
+                    path.startsWith('/teas/exam/') ||
+                    path === '/nclex/exam' ||
+                    path.startsWith('/nclex/exam/');
+            }
+
+            function syncProtectionState() {
+                const protected = isProtectedExamPage();
+                document.body.classList.toggle('exam-content-protected', protected);
+                if (!protected) document.body.style.filter = 'none';
+            }
+
+            function onRouteChange() {
+                setTimeout(syncProtectionState, 0);
+            }
+
+            ['pushState', 'replaceState'].forEach(method => {
+                const original = history[method];
+                history[method] = function() {
+                    const result = original.apply(this, arguments);
+                    onRouteChange();
+                    return result;
+                };
+            });
+
+            window.addEventListener('popstate', onRouteChange);
+            window.addEventListener('hashchange', onRouteChange);
+            syncProtectionState();
+
             // =========================
             // BLUR + OVERLAY FUNCTION
             // =========================
             function screenshotBlur(message = 'Screenshot detected') {
+                if (!isProtectedExamPage()) return;
+
                 document.body.style.filter = 'blur(8px)';
 
                 const overlay = document.createElement('div');
@@ -84,14 +117,16 @@
             // COPY / PASTE / CUT / SELECT / RIGHT CLICK
             // =========================
             ['copy', 'cut', 'paste', 'contextmenu', 'selectstart', 'dragstart'].forEach(ev => {
-                document.addEventListener(ev, e => e.preventDefault());
+                document.addEventListener(ev, e => {
+                    if (isProtectedExamPage()) e.preventDefault();
+                });
             });
 
             const styleSelect = document.createElement('style');
             styleSelect.type = 'text/css';
             styleSelect.media = 'screen';
             styleSelect.innerHTML = `
-            * {
+            body.exam-content-protected * {
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -107,13 +142,15 @@
             const stylePrint = document.createElement('style');
             stylePrint.type = 'text/css';
             stylePrint.media = 'print';
-            stylePrint.innerHTML = 'body{display:none !important;}';
+            stylePrint.innerHTML = 'body.exam-content-protected{display:none !important;}';
             document.head.appendChild(stylePrint);
 
             // =========================
             // KEYBOARD BLOCKING
             // =========================
             document.addEventListener('keydown', e => {
+                if (!isProtectedExamPage()) return;
+
                 const key = e.key.toLowerCase();
                 if ((e.ctrlKey || e.metaKey) && ['s', 'p', 'u'].includes(key)) e.preventDefault();
                 if (key === 'f12') e.preventDefault();
@@ -127,6 +164,8 @@
             // =========================
             function blurOnTab() {
                 function toBlur() {
+                    if (!isProtectedExamPage()) return;
+
                     document.body.style.filter = 'blur(6px)';
                 }
 
@@ -147,6 +186,8 @@
             // SCREENSHOT DETECTION
             // =========================
             document.addEventListener('keyup', e => {
+                if (!isProtectedExamPage()) return;
+
                 const k = e.key.toLowerCase();
                 if (k === 'printscreen') screenshotBlur();
                 if (e.metaKey && e.shiftKey && k === 's') screenshotBlur('Win+Shift+S detected');
@@ -155,6 +196,8 @@
             });
 
             document.addEventListener('keydown', e => {
+                if (!isProtectedExamPage()) return;
+
                 if (e.shiftKey && e.key.toLowerCase() === 's') screenshotBlur(
                     'Possible screenshot attempt (Shift+S)');
             });
