@@ -12,6 +12,7 @@ import StreakCard from "../../components/Dashboard/StreakCard.vue";
 import TodayFocusPanel from "../../components/Dashboard/TodayFocusPanel.vue";
 import DashboardSnapshot from "../../components/Dashboard/DashboardSnapshot.vue";
 import DashboardSearch from "../../components/Dashboard/DashboardSearch.vue";
+import ExamModeModal from "../../components/Exam/ExamModeModal.vue";
 import type { SearchGroupDef, SearchItem } from "../../components/Dashboard/DashboardSearch.vue";
 import { useRouter } from "vue-router";
 import type { SnapshotSection } from "../../components/Dashboard/DashboardSnapshot.vue";
@@ -128,8 +129,8 @@ const teasModules: TeasModule[] = [
 ];
 
 const router = useRouter();
-const searchModalRef = ref<HTMLDialogElement | null>(null);
-const selectedSearchExam = ref<SearchItem | null>(null);
+const searchModeModal = ref<InstanceType<typeof ExamModeModal> | null>(null);
+const selectedSearchExam = ref<{ id: number | string; name: string } | null>(null);
 const searchSuggestions = ["Fractions", "Cell biology", "Commas", "Main idea", "Ratios"];
 
 type TeasSearchRow = {
@@ -194,9 +195,9 @@ const searchGroups: SearchGroupDef[] = [
 
 const onSearchSelect = async ({ group, item }: { group: string; item: SearchItem }) => {
     if (group === "exam") {
-        selectedSearchExam.value = item;
+        selectedSearchExam.value = { id: item.id, name: item.name };
         await nextTick();
-        searchModalRef.value?.showModal();
+        searchModeModal.value?.open();
         return;
     }
     if (typeof item.route === "string") router.push(item.route);
@@ -204,7 +205,7 @@ const onSearchSelect = async ({ group, item }: { group: string; item: SearchItem
 
 const goToSearchExam = (mode: "tutor" | "exam") => {
     if (!selectedSearchExam.value) return;
-    searchModalRef.value?.close();
+    searchModeModal.value?.close();
     router.push(`/teas/exam/${selectedSearchExam.value.id}?mode=${mode}`);
 };
 
@@ -805,25 +806,6 @@ const handleExamDateUpdated = (date: string) => {
             </div>
         </div>
 
-        <dialog ref="searchModalRef" class="modal">
-            <div class="modal-box rounded-2xl bg-white text-slate-900 dark:bg-sky-950 dark:text-slate-100">
-                <form method="dialog">
-                    <button class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2">✕</button>
-                </form>
-                <p class="dash-eyebrow theme-text">Practice set</p>
-                <h3 class="mt-1 pr-8 text-lg font-extrabold">{{ selectedSearchExam?.name }}</h3>
-                <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                    {{ selectedSearchExam?.meta }} · choose tutor mode for guided explanations or exam mode for a timed simulation.
-                </p>
-                <div class="mt-5 flex flex-wrap justify-end gap-2">
-                    <button type="button" class="dash-btn-ghost px-4 py-2" @click="goToSearchExam('tutor')">
-                        <i class="pi pi-comments text-[10px]"></i> Tutor mode
-                    </button>
-                    <button type="button" class="dash-btn theme-surface theme-shadow px-5 py-2" @click="goToSearchExam('exam')">
-                        <i class="pi pi-bolt text-[10px]"></i> Exam mode
-                    </button>
-                </div>
-            </div>
-        </dialog>
+        <ExamModeModal ref="searchModeModal" product="teas" :exam="selectedSearchExam" :modes="['tutor', 'exam']" @select="goToSearchExam" />
     </div>
 </template>

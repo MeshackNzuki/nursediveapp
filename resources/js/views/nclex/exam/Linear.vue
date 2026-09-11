@@ -122,20 +122,7 @@
                         </div>
 
                         <div class="relative mt-auto pt-5">
-                            <div v-if="examScore(exam)" class="dash-tile-soft px-3 py-2">
-                                <div class="flex items-center gap-2">
-                                    <div class="dash-progress h-2 flex-1">
-                                        <div class="h-2 rounded-full transition-all duration-700" :style="dynamicProgressStyle(examScore(exam))"></div>
-                                    </div>
-                                    <span class="text-xs font-extrabold text-slate-950 dark:text-white">{{ examScore(exam) }}%</span>
-                                </div>
-                                <p class="mt-2 text-xs font-semibold" :class="gradeColor(examScore(exam))">
-                                    {{ gradeComment(examScore(exam)) }}
-                                </p>
-                            </div>
-                            <div v-else class="dash-tile border-dashed px-3 py-2 text-xs font-semibold text-slate-500 dark:text-slate-300">
-                                <i class="pi pi-sparkles mr-1 text-[10px]"></i>No attempt yet.
-                            </div>
+                            <ExamSetProgress :score="examScore(exam)" :completed="completed(exam)" :questions="examQuestionCount(exam)" :last-attempt-at="lastAttemptAt(exam)" />
 
                             <div class="mt-4 flex items-center justify-between gap-2">
                                 <Small
@@ -191,7 +178,7 @@ import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 import Small from '../../../components/Buttons/Small.vue'
 import { normalizeText } from '../../../utils/normalizeText'
-import { dynamicProgressStyle, gradeColor, gradeComment } from '../../../utils/grader'
+import ExamSetProgress from '../../../components/Exam/ExamSetProgress.vue'
 import { useAuthStore } from '../../../stores/authStore'
 import { trackPaywallEvent } from '../../../utils/paywallEvents'
 
@@ -228,6 +215,17 @@ const examScore = (exam: { id: number }) => {
     const attempt = attempts.value?.find(a => a.sub_topic_id == exam.id)
     if (!attempt) return 0
     return Math.round(attempt.score)
+}
+
+const attemptFor = (exam: { id: number }) => attempts.value?.find((a: any) => a.sub_topic_id == exam.id)
+const lastAttemptAt = (exam: { id: number }) => {
+    const attempt = attemptFor(exam)
+    return attempt ? (attempt.completed_at || attempt.updated_at || attempt.created_at || null) : null
+}
+const completed = (exam: { id: number }) => {
+    const attempt = attemptFor(exam)
+    if (!attempt) return null
+    return Boolean(attempt.completed)
 }
 
 const examQuestionCount = (exam: { question_count?: number; questions_count?: number }) => {

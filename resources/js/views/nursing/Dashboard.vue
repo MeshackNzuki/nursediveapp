@@ -284,33 +284,8 @@
       </div>
     </dialog>
 
-    <dialog ref="modalRef" id="examModal" class="modal">
-      <div class="modal-box bg-white text-gray-900 dark:bg-sky-950 dark:text-white">
-        <form method="dialog">
-          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">x</button>
-        </form>
-        <h3 class="mb-4 pr-8 text-lg">
-          Start <span class="font-bold italic">{{ selectedExam?.name }}</span> in:
-        </h3>
-        <div class="flex flex-wrap justify-end gap-3">
-          <button type="button"
-            class="rounded-lg bg-teal-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-600"
-            @click="goToExam('tutor')">
-            Tutor Mode
-          </button>
-          <button type="button"
-            class="rounded-lg bg-sky-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-600"
-            @click="goToExam('exam')">
-            Exam Mode
-          </button>
-          <button type="button"
-            class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-sky-800 dark:text-slate-100 dark:hover:bg-sky-900"
-            @click="goToExam('review', true)">
-            Review Mode
-          </button>
-        </div>
-      </div>
-    </dialog>
+    <ExamModeModal ref="modeModal" product="nursing" :exam="selectedExam" :modes="['tutor', 'exam', 'review']"
+      @select="(mode) => goToExam(mode, mode === 'review')" />
   </div>
 </template>
 
@@ -329,6 +304,7 @@ import ExamIcon from "../../components/ExamIcon.vue";
 import TodayFocusPanel from "../../components/Dashboard/TodayFocusPanel.vue";
 import DashboardSnapshot from "../../components/Dashboard/DashboardSnapshot.vue";
 import DashboardSearch from "../../components/Dashboard/DashboardSearch.vue";
+import ExamModeModal from "../../components/Exam/ExamModeModal.vue";
 import type { SearchGroupDef, SearchItem } from "../../components/Dashboard/DashboardSearch.vue";
 import type { SnapshotSection } from "../../components/Dashboard/DashboardSnapshot.vue";
 import type { FocusAttempt, FocusReviewTask, FocusSection } from "../../components/Dashboard/TodayFocusPanel.vue";
@@ -388,7 +364,7 @@ const {
 
 const subjects = ref<NursingSubject[]>([]);
 const nursingAttempts = ref<NursingAttempt[]>([]);
-const modalRef = ref<HTMLDialogElement | null>(null);
+const modeModal = ref<InstanceType<typeof ExamModeModal> | null>(null);
 const studyModalRef = ref<HTMLDialogElement | null>(null);
 const selectedExam = ref<ExamSearchResult | null>(null);
 
@@ -463,7 +439,7 @@ const onSearchSelect = ({ group, item }: { group: string; item: SearchItem }) =>
 const openModal = async (exam: ExamSearchResult) => {
   selectedExam.value = exam;
   await nextTick();
-  modalRef.value?.showModal();
+  modeModal.value?.open();
 };
 
 const openStudyModal = () => {
@@ -489,7 +465,7 @@ const goToExam = (mode: "review" | "tutor" | "exam", examreview = false) => {
         ...(examreview ? { examreview: "true" } : {}),
       },
     });
-    modalRef.value?.close();
+    modeModal.value?.close();
   }
 };
 

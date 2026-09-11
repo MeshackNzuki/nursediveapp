@@ -1,288 +1,191 @@
 <template>
-    <div class="h-[100dvh] overflow-y-scroll bg-white dark:bg-sky-950 dark:text-slate-300 font-sans relative px-2">
-        <!-- Topbar -->
-        <div
-            class="p-2 2xl:p-3 bg-sky-700  flex items-center justify-between fixed top-0 left-0 right-0  mb-4 text-white z-50 select-none">
-            <!-- Left side: Exam title -->
-            <div v-if="examStore.questions.length > 0" class="hidden md:flex items-center gap-2 font-semibold ">
-                <i class="pi pi-book text-white"></i>
-                <span class="">{{ examStore.exam?.title }}</span>
-                <span class="font-normal">| Test Mode:{{ examStore.testMode.toLocaleUpperCase() }}</span>
+    <div class="exam-shell">
+        <!-- ================= TOP BAR ================= -->
+        <header class="exam-bar exam-bar--top">
+            <div class="hidden min-w-0 flex-1 items-center gap-3 md:flex">
+                <span class="exam-bar-logo"><i class="pi pi-book"></i></span>
+                <div v-if="examStore.questions.length > 0" class="hidden min-w-0 md:block">
+                    <p class="truncate text-sm font-bold leading-tight">{{ examStore.exam?.title }}</p>
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-100/80">Nursing · {{ modeLabel }}</p>
+                </div>
             </div>
-            <span v-if="examStore.questions.length > 0" class="flex flex-row gap-1"><span class="lg:hidden">Q</span>
-                <span class="hidden lg:block">Question</span> {{
-                    Number(examStore.currentIndex) + 1
-                }} <span class="hidden lg:block">of</span>
-                <span class="lg:hidden">/</span>
-                {{ examStore.questions.length }}</span>
-            <button v-if="examStore.testMode != 'exam'" type="button" aria-label="Ask AI"
-                @click="ChatOpenned = !ChatOpenned"
-                class="cursor-pointer whitespace-nowrap font-semibold hover:underline">
-                Ask AI
-            </button>
-            <!-- Right side: Controls -->
-            <div class="flex items-center gap-4">
-                <ExamFeedbackModal source-product="nursing" :exam-mode="examStore.testMode"
-                    :question-id="examStore.currentQuestion?.id" :exam-id="examStore.exam?.id" />
-                <!-- Calculator Button -->
-                <button @click="showModal('calculator_id')" class="inline-flex items-center gap-1 cursor-pointer">
-                    <i class="pi pi-calculator"></i> <span class="hidden 2xl:block">Calculator</span>
+
+            <div v-if="examStore.questions.length > 0" class="exam-bar-center">
+                <span class="whitespace-nowrap text-sm"><span class="hidden sm:inline">Question </span><span class="sm:hidden">Q</span><strong class="tabular-nums">{{ Number(examStore.currentIndex) + 1 }}</strong><span class="opacity-80"> / {{ examStore.questions.length }}</span></span>
+                <span class="exam-bar-progress hidden sm:block" aria-hidden="true"><span :style="{ width: `${progressPercent}%` }"></span></span>
+                <span class="text-[9px] font-bold uppercase tracking-wide text-sky-100/80 md:hidden">{{ modeLabel }}</span>
+            </div>
+
+            <div class="flex flex-1 items-center justify-end gap-0.5 sm:gap-1">
+                <button v-if="examStore.testMode != 'exam'" type="button" class="exam-bar-btn exam-bar-btn--ai" :class="{ 'exam-bar-btn--on': ChatOpenned }" aria-label="Ask AI about this question" @click="ChatOpenned = !ChatOpenned">
+                    <i class="pi pi-sparkles"></i><span>Ask AI</span>
                 </button>
-                <button v-if="examStore.testMode != 'exam'" @click="toggleNotes" class="inline-flex items-center gap-1">
-                    <i class="pi pi-pencil"></i> <span class="hidden 2xl:block">Notes</span>
+                <span class="exam-bar-btn">
+                    <ExamFeedbackModal source-product="nursing" :exam-mode="examStore.testMode" :question-id="examStore.currentQuestion?.id" :exam-id="examStore.exam?.id" />
+                </span>
+                <button type="button" class="exam-bar-btn" aria-label="Calculator" @click="showModal('calculator_id')">
+                    <i class="pi pi-calculator"></i><span class="hidden xl:inline">Calculator</span>
+                </button>
+                <button v-if="examStore.testMode != 'exam'" type="button" class="exam-bar-btn" :class="{ 'exam-bar-btn--on': examStore.showNotes }" aria-label="Notes" @click="toggleNotes">
+                    <i class="pi pi-pencil"></i><span class="hidden xl:inline">Notes</span>
                 </button>
                 <Calculator />
-                <!-- Timer Display (placeholder or reactive) -->
-                <div class="flex items-center gap-1">
-                    <i class="pi pi-clock"></i>
-                    <span class="text-sm">{{ examStore.timerDisplay || '00:00' }}</span>
-                </div>
-                <span class="font-bold border rounded-full hidden lg:flex flex-row gap-3 px-1 cursor-pointer"><svg
-                        @click="zoomOut" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke-width="1.5" stroke="currentColor" class="size-6 hover:scale-105">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM13.5 10.5h-6" />
-                    </svg>
-
-                    <svg @click="zoomIn" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke-width="1.5" stroke="currentColor" class="size-6 hover:scale-105">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6" />
-                    </svg>
+                <span class="exam-bar-timer" :title="examStore.timer == null ? 'Paused' : 'Elapsed'">
+                    <i :class="examStore.timer == null ? 'pi pi-pause' : 'pi pi-clock'" class="hidden sm:inline"></i>
+                    <span class="tabular-nums">{{ examStore.timerDisplay || '00:00' }}</span>
                 </span>
-                <!-- Exit Button -->
-                <span class="cursor-pointer text-lg">
-                    <i v-if='isDark' class="pi pi-sun text-lg" @click="toggleDark()"></i>
-                    <i v-else class="pi pi-moon" @click="toggleDark()"></i>
+                <span class="exam-bar-zoom hidden lg:inline-flex" title="Text size">
+                    <button type="button" aria-label="Smaller text" @click="zoomOut"><i class="pi pi-minus"></i></button>
+                    <span>Aa</span>
+                    <button type="button" aria-label="Larger text" @click="zoomIn"><i class="pi pi-plus"></i></button>
                 </span>
+                <button type="button" class="exam-bar-btn" :aria-label="isDark ? 'Light mode' : 'Dark mode'" @click="toggleDark()">
+                    <i :class="isDark ? 'pi pi-sun' : 'pi pi-moon'"></i>
+                </button>
             </div>
-        </div>
-        <!-- Question area -->
-        <div v-if="examStore.questions.length > 0"
-            class="flex flex-col lg:flex-row  relative justify-between mb-16 w-full">
-            <div v-if="examStore.currentQuestion"
-                :class="[`mt-24 p-2 mb-4 md:mb-24 w-full min-w-1/2`, store?.currentZoom]">
-                <QuestionRenderer :examStore="examStore" :question="examStore.currentQuestion" v-model="currentAnswer"
-                    :readonly="examStore.testMode === 'review'"
-                    :result="examStore.results[examStore.currentQuestion.id]" />
-                <div v-if="examStore.testMode != 'exam'"
-                    class="mt-8 flex flex-col gap-4 border-t border-gray-200 pt-6 dark:border-gray-200/30">
-                    <div class="flex items flex-col">
-                        <h3 class="text-lg font-semibold mb-6 underline underline-offset-2 decoration-teal-500">Full
-                            Question
-                            Solution <button @click="openNotes" class="ml-auto text-sm text-teal-500 hover:underline">
-                                <i class="pi pi-pencil ms-1"></i>Notes
-                            </button></h3>
-                        <span v-if="!showSolution" class="text-gray-500 mb-2">Answer the question to reveal
-                            solution.</span>
-                        <div :class="[!showSolution ? 'pb-12 mb-6 blur-sm bg-gray-950/25' : 'pb-12 mb-6', store?.currentZoom]"
-                            v-html="examStore.currentQuestion?.solution">
-                        </div>
+        </header>
+
+        <!-- ================= BODY ================= -->
+        <div v-if="examStore.questions.length > 0" class="exam-body">
+            <main v-if="examStore.currentQuestion" class="exam-main" :class="store?.currentZoom">
+                <section class="exam-question-card">
+                    <div class="exam-question-head">
+                        <span class="exam-question-num">Q{{ Number(examStore.currentIndex) + 1 }}</span>
+                        <span v-if="questionTypeLabel" class="exam-question-type">{{ questionTypeLabel }}</span>
+                        <span v-if="hasQuestionAnswer(examStore.currentQuestion)" class="exam-question-state exam-question-state--answered"><i class="pi pi-check"></i> Answered</span>
+                        <span v-else class="exam-question-state"><i class="pi pi-circle"></i> Not answered</span>
                     </div>
-                    <button type="button"
-                        class="group inline-flex w-fit items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-700 shadow-sm transition hover:border-teal-300 hover:bg-teal-100 hover:text-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 dark:border-teal-400/30 dark:bg-teal-400/10 dark:text-teal-200 dark:hover:bg-teal-400/15 dark:hover:text-teal-100 dark:focus:ring-offset-sky-950"
-                        @click="ChatOpenned = !ChatOpenned">
-                        <i class="pi pi-comments text-sm transition group-hover:scale-110"></i>
-                        Dive deeper with AI
+                    <QuestionRenderer :examStore="examStore" :question="examStore.currentQuestion" v-model="currentAnswer"
+                        :readonly="examStore.testMode === 'review'" :result="examStore.results[examStore.currentQuestion.id]" />
+                </section>
+
+                <section v-if="examStore.testMode != 'exam'" class="exam-solution" :class="{ 'exam-solution--locked': !showSolution }">
+                    <div class="exam-solution-head">
+                        <span class="exam-solution-title"><i class="pi pi-lightbulb"></i> Full question solution</span>
+                        <button type="button" class="exam-link" @click="openNotes"><i class="pi pi-pencil"></i> Notes</button>
+                    </div>
+                    <p v-if="!showSolution" class="exam-solution-hint"><i class="pi pi-lock"></i> Answer the question to reveal the rationale.</p>
+                    <div class="exam-solution-body" :class="store?.currentZoom" v-html="examStore.currentQuestion?.solution"></div>
+                    <button v-if="showSolution" type="button" class="exam-ai-btn" @click="ChatOpenned = !ChatOpenned">
+                        <i class="pi pi-comments"></i> Dive deeper with AI
                     </button>
-                </div>
-                <div v-if="examStore.testMode === 'review' && hasCurrentReviewNote"
-                    class="mt-6 rounded-lg border border-amber-200 bg-amber-50/80 px-4 py-3 text-gray-800 shadow-sm dark:border-amber-300/30 dark:bg-amber-300/10 dark:text-amber-50">
-                    <div class="mb-2 flex items-center gap-2 text-sm font-semibold text-amber-700 dark:text-amber-200">
-                        <i class="pi pi-pencil"></i>
-                        <span>My Notes</span>
-                    </div>
-                    <div class="max-w-none text-sm leading-relaxed" v-html="currentReviewNote"></div>
-                </div>
-                <div v-if="examStore.testMode === 'tutor'" class="text-center mt-2 text-lg font-semibold text-gray-800">
-                </div>
-                <div v-if="['tutor', 'review'].includes(examStore.testMode)"
-                    class="mt-12 px-4 py-1 bg-sky-50 rounded-xl border border-gray-200">
-                    <div class="flex items-center gap-1">
-                        <span class="mb-2 font-semibold text-sky-500"> <i
-                                class="pi pi-wave-pulse text-rose-500 me-2 mt-1 "></i>Question
-                            Stats</span>
-                    </div>
-                    <div class="flex mb-2 flex-wrap items-start gap-4 lg:mb-12 text-sm text-gray-700 font-medium">
-                        <div class="flex items-center gap-1">
-                            <i class="pi pi-pi-gauge text-yellow-500"></i>
-                            <span>Difficulty: {{ difficulty }}</span>
-                        </div>
+                </section>
 
-                        <div class="flex items-center gap-1">
-                            <i class="pi pi-clock text-teal-500"></i>
-                            <span>Time Taken: {{ localTimer }}s</span>
-                        </div>
+                <section v-if="examStore.testMode === 'review' && hasCurrentReviewNote" class="exam-note">
+                    <p class="exam-note-title"><i class="pi pi-pencil"></i> My notes</p>
+                    <div class="text-sm leading-relaxed" v-html="currentReviewNote"></div>
+                </section>
 
-                        <div v-if="examStore.answers[examStore.currentQuestion.id]" class="flex items-center gap-1">
-                            <i class="pi pi-user-edit text-teal-500"></i>
-                            <span>Your Answer was {{ examStore.answers[examStore.currentQuestion.id]
-                            }}</span>
-                        </div>
-                    </div>
+                <div v-if="['tutor', 'review'].includes(examStore.testMode)" class="exam-stats">
+                    <span class="exam-stat"><i class="pi pi-gauge text-amber-500"></i> Difficulty <strong>{{ difficulty }}</strong></span>
+                    <span class="exam-stat"><i class="pi pi-clock text-teal-500"></i> Time on question <strong class="tabular-nums">{{ localTimer }}s</strong></span>
+                    <span v-if="examStore.answers[examStore.currentQuestion.id]" class="exam-stat"><i class="pi pi-user-edit text-sky-500"></i> Your answer <strong>{{ examStore.answers[examStore.currentQuestion.id] }}</strong></span>
                 </div>
-            </div>
-            <div v-if="showQuestionNavigator"
-                :class="['flex mt-0 md:mt-24 mb-24 flex-col w-full lg:w-lg lg:max-w-[20rem] xl:max-w-[22rem] border-l border-gray-400 border-dashed dark:border-gray-200 px-2 ', store?.currentZoom]">
-                <div class="bg-sky-950 p-3 flex flex-col gap-4 rounded-xl">
-                    <div class="flex  gap-2 flex-wrap">
+            </main>
+
+            <!-- Navigator -->
+            <aside v-if="showQuestionNavigator" class="exam-side" :class="store?.currentZoom">
+                <div class="exam-nav">
+                    <div class="exam-nav-head">
+                        <div>
+                            <p class="exam-nav-title">Navigator</p>
+                            <p class="exam-nav-sub"><strong class="tabular-nums">{{ answeredCount }}</strong> of {{ examStore.questions.length }} answered</p>
+                        </div>
+                        <span class="exam-nav-ring" :style="{ '--p': `${answeredPercent}%` }"><span>{{ answeredPercent }}%</span></span>
+                    </div>
+
+                    <button v-if="lockedFrom >= 0" type="button" class="exam-nav-preview" @click="examStore.show_paywall = true">
+                        <i class="pi pi-lock"></i>
+                        <span><strong>Preview:</strong> {{ lockedFrom }} of {{ examStore.questions.length }} questions are open. Tap to unlock the full set.</span>
+                        <i class="pi pi-arrow-right"></i>
+                    </button>
+
+                    <div class="exam-nav-grid">
                         <button v-for="(question, index) in examStore.questions" :key="question.id" type="button"
                             :aria-current="index === examStore.currentIndex ? 'true' : undefined"
-                            :title="questionNavTitle(question, index as any)"
-                            :class="questionNavClass(question, index as any)" @click="goToQuestion(index as any)">
-                            <span>{{ index as any + 1 }}</span>
-                            <span v-if="shouldShowQuestionResult(question)" :class="questionResultBadgeClass(question)"
-                                v-html="questionResultMark(question)"></span>
+                            :title="questionNavTitle(question, index as any)" :class="questionNavClass(question, index as any)"
+                            @click="goToQuestion(index as any)">
+                            <span>{{ (index as any) + 1 }}</span>
+                            <i v-if="isQuestionLocked(index as any)" class="pi pi-lock exam-nav-lock" aria-hidden="true"></i>
+                            <span v-else-if="shouldShowQuestionResult(question)" :class="questionResultBadgeClass(question)" v-html="questionResultMark(question)"></span>
                         </button>
                     </div>
-                </div>
-            </div>
-            <div v-if="examStore.showNotes && examStore.testMode != 'exam'"
-                class="flex mt-0 md:mt-24 mx-4  md:mb-16 flex-col gap-4 w-full md:max-w-1/2 border-l border-gray-400 border-dashed dark:border-gray-200 px-2 ">
-                <div class="flex items">
-                    <h3 class="text-lg font-semibold">Revision Notes</h3>
-                    <button @click="closeNotes" class="ml-auto text-sm text-sky-500 hover:underline font-semibold">
-                        <i class="pi pi-times "></i> Close
-                    </button>
-                </div>
-                <ExamNotes v-model="notes" />
-            </div>
-        </div>
-        <div v-else class="flex items-center justify-center h-screen">
-            <span class="text-gray-500 text-lg select-none">{{ progress }}</span>
-        </div>
-        <!-- Bottom bar -->
-        <div class="flex fixed bottom-0 left-0 right-0 justify-between bg-sky-700  text-white">
-            <div class="flex justify-between items-center flex-row  border-s border-e mx-2 px-3 h-full p-1 gap-2">
-                <button class="px-4 py-2 cursor-pointer rounded flex justify-center items-center gap-1 font-semibold "
-                    @click="exitExamConfirm">
-                    <i class="pi pi-sign-out"></i>
-                    <span class="">End</span>
-                </button>
-                <button
-                    class="px-4 hidden md:flex py-2 cursor-pointer rounded  justify-center items-center gap-1 font-semibold"
-                    @click="pauseExam">
-                    <i class="pi pi-pause"></i>
-                    <span class="flex items-center gap-1 font-semibold ">Pause</span>
-                </button>
-            </div>
-            <div class="flex items-center justify-between flex-row  border-s border-e mx-2 gap-2 h-full">
-                <button v-if="!examStore.isFirstQuestion" @click="goToPreviousQuestion"
-                    :disabled="examStore.isFirstQuestion"
-                    class="px-4 py-2 cursor-pointer rounded flex justify-center items-center gap-1 font-semibold">
-                    <i class="pi pi-arrow-left"></i> Previous
-                </button>
-                <button v-if="examStore.testMode === 'review'" @click="goToNextQuestion"
-                    :disabled="examStore.isLastQuestion"
-                    class="px-4 py-2 cursor-pointer rounded flex justify-center items-center gap-1 font-semibold">
-                    <span v-if="!examStore.isLastQuestion">Next</span>
-                    <span v-else>Done</span>
-                    <i class="pi pi-arrow-right"></i>
-                </button>
-                <button v-else @click="submitOrNextQuestion"
-                    class="px-4 py-2  cursor-pointer rounded flex justify-center items-center gap-1 font-semibold">
-                    <span v-if="!examStore.isLastQuestion">Next</span>
-                    <span v-else>Complete</span>
-                    <i class="pi pi-arrow-right"></i>
-                </button>
-            </div>
-        </div>
-        <!-- 
-        Review Mode: Score
-        <div v-if="examStore.testMode === 'review'" class="text-center mt-2 text-lg font-semibold text-gray-800">
-            Score: {{ scoreDisplay }}
-        </div> -->
-        <!-- Pause Overlay -->
-        <div v-if="examStore.timer == null"
-            class="absolute inset-0 z-50 bg-sky-950/35 flex items-center justify-center">
-            <CommonButton icon2="pi pi-refresh"
-                classes="ml-4 text-white  bg-rose-500 hover:bg-teal-600 px-6 py-3 rounded-full shadow-lg transition-all"
-                :action="() => examStore.startTimer()" button-text="Resume Exam" />
-        </div>
-        <!-- Paywall Modal -->
-        <div v-if="examStore.show_paywall" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm
-         flex items-center justify-center z-50 text-gray-700">
-            <div class="relative bg-white rounded-2xl p-8 w-full max-w-lg
-           shadow-xl text-center">
-                <button type="button" aria-label="Close paywall" @click="examStore.show_paywall = false"
-                    class="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-400">
-                    <i class="pi pi-times"></i>
-                </button>
-                <!-- Header -->
-                <h3 class="font-semibold text-2xl mb-2 px-8">
-                    Hello {{ firstName }},
-                </h3>
-                <p class="text-gray-600 mb-6">
-                    Thank you for exploring <span class="font-semibold text-gray-900">Nursenex</span>.
-                    <span class="block">We hope the practice preview is giving you a clear study signal.</span>
-                    <span class="hidden">
-                        We hope you’re finding it valuable so far.
-                    </span>
-                </p>
 
-                <!-- Info box -->
-                <div class="bg-blue-50/60 rounded-xl p-5 text-left mb-6">
-                    <p class="mb-4 text-gray-700">
-                        You have reached the end of this Nursing preview. Upgrade to continue your full-length
-                        assessment and keep access to the tools that make each attempt easier to learn from:
-                    </p>
-                    <p class="mb-4 text-gray-700 hidden">
-                        You’ve reached the limit of the <span class="font-semibold">trial tier</span>.
-                        Upgrade your plan to continue your full-length assessment and unlock all
-                        premium features, including:
-                    </p>
-                    <!-- Feature checklist -->
-                    <ul class="space-y-3">
-                        <li class="flex items-start gap-3">
-                            <i class="pi pi-check text-emerald-500 text-lg"></i>
-                            <span>Unlimited exam attempts and question access</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="pi pi-check text-emerald-500 text-lg"></i>
-                            <span>Detailed performance reports and analytics</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="pi pi-check text-emerald-500 text-lg"></i>
-                            <span>Full tutor mode with explanations and rationales</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="pi pi-check text-emerald-500 text-lg"></i>
-                            <span>Access to all current and future question banks</span>
-                        </li>
-                    </ul>
-                    <ul class="space-y-3 hidden">
-                        <li class="flex items-start gap-3">
-                            <span class="text-emerald-500 text-lg">✔</span>
-                            <span>Unlimited exam attempts and question access</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-emerald-500 text-lg">✔</span>
-                            <span>Detailed performance reports and analytics</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-emerald-500 text-lg">✔</span>
-                            <span>Full tutor mode with explanations and rationales</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span class="text-emerald-500 text-lg">✔</span>
-                            <span>Access to all current and future question banks</span>
-                        </li>
-                    </ul>
+                    <div class="exam-nav-legend">
+                        <span><i class="exam-nav-dot exam-nav-dot--current"></i> Current</span>
+                        <span v-if="examStore.testMode === 'exam'"><i class="exam-nav-dot exam-nav-dot--answered"></i> Answered</span>
+                        <template v-else>
+                            <span><i class="exam-nav-dot exam-nav-dot--correct"></i> Correct</span>
+                            <span><i class="exam-nav-dot exam-nav-dot--wrong"></i> Incorrect</span>
+                        </template>
+                        <span v-if="lockedFrom >= 0"><i class="exam-nav-dot exam-nav-dot--locked"></i> Locked</span>
+                    </div>
                 </div>
-                <!-- CTA -->
-                <button @click="upgradeToNursing" class="w-full py-4 rounded-full font-semibold text-white text-lg
-                    bg-gradient-to-r from-orange-500 to-yellow-400
-                    hover:opacity-90 transition cursor-pointer shadow-md">
-                    Unlock Full Nursing Access
+            </aside>
+
+            <!-- Notes -->
+            <aside v-if="examStore.showNotes && examStore.testMode != 'exam'" class="exam-side exam-side--notes">
+                <div class="exam-nav">
+                    <div class="exam-nav-head">
+                        <div>
+                            <p class="exam-nav-title">Revision notes</p>
+                            <p class="exam-nav-sub">Saved automatically for this question.</p>
+                        </div>
+                        <button type="button" class="exam-link" @click="closeNotes"><i class="pi pi-times"></i> Close</button>
+                    </div>
+                    <ExamNotes v-model="notes" />
+                </div>
+            </aside>
+        </div>
+        <div v-else class="exam-loading">
+            <span class="dash-icon-tile theme-icon h-12 w-12"><i class="pi pi-spin pi-spinner"></i></span>
+            <span class="text-sm font-semibold text-slate-500 select-none dark:text-slate-300">{{ progress }}</span>
+        </div>
+
+        <!-- ================= BOTTOM BAR ================= -->
+        <footer class="exam-bar exam-bar--bottom">
+            <div class="flex items-center gap-1">
+                <button type="button" class="exam-bar-btn" @click="exitExamConfirm">
+                    <i class="pi pi-sign-out"></i><span>End</span>
                 </button>
-                <!-- Subtle footer -->
-                <p class="mt-4 text-sm text-gray-500">
-                    One payment. No auto-billing. No interruption to your progress.
-                </p>
+                <button type="button" class="exam-bar-btn hidden md:inline-flex" @click="pauseExam">
+                    <i class="pi pi-pause"></i><span>Pause</span>
+                </button>
+            </div>
+            <div class="flex items-center gap-2">
+                <button type="button" class="exam-bar-btn" :disabled="examStore.isFirstQuestion" @click="goToPreviousQuestion">
+                    <i class="pi pi-arrow-left"></i><span>Previous</span>
+                </button>
+                <button v-if="examStore.testMode === 'review'" type="button" class="exam-bar-next" :disabled="examStore.isLastQuestion" @click="goToNextQuestion">
+                    <span>{{ examStore.isLastQuestion ? 'Done' : 'Next' }}</span><i class="pi pi-arrow-right"></i>
+                </button>
+                <button v-else type="button" class="exam-bar-next" @click="submitOrNextQuestion">
+                    <span>{{ examStore.isLastQuestion ? 'Complete' : 'Next' }}</span><i :class="examStore.isLastQuestion ? 'pi pi-check' : 'pi pi-arrow-right'"></i>
+                </button>
+            </div>
+        </footer>
+
+        <!-- Pause overlay -->
+        <div v-if="examStore.timer == null" class="exam-overlay">
+            <div class="exam-overlay-card">
+                <span class="dash-icon-tile mx-auto h-14 w-14 bg-sky-700 text-2xl text-white shadow-lg"><i class="pi pi-pause"></i></span>
+                <h3 class="mt-4 text-xl font-extrabold text-slate-950 dark:text-white">Exam paused</h3>
+                <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">Your timer is stopped at {{ examStore.timerDisplay }}. Take a breath, then pick up where you left off.</p>
+                <button type="button" class="dash-btn mt-5 bg-sky-700 px-6 py-2.5 text-white" @click="examStore.startTimer()"><i class="pi pi-play text-[10px]"></i> Resume exam</button>
             </div>
         </div>
-        <AiChat v-if="ChatOpenned && examStore.testMode != 'exam'" @close="ChatOpenned = false"
-            :question="examStore.currentQuestion" />
+
+        <!-- Paywall -->
+        <div v-if="examStore.show_paywall" class="exam-overlay exam-overlay--blur">
+            <div class="w-full max-w-xl">
+                <UpgradePrompt product="nursing" variant="card" feature="the rest of this exam" placement="nursing_preview_modal"
+                    :title="`Nice work, ${firstName}. You've finished the preview.`"
+                    :message="`The first ${examStore.no_of_qns_before_paywall} questions are open on your current plan. Upgrade to continue this full-length set with rationales, analytics, and saved progress.`"
+                    primary-label="Unlock full Nursing access" continue-label="Keep reviewing the open questions" @continue="examStore.show_paywall = false" />
+            </div>
+        </div>
+
+        <AiChat v-if="ChatOpenned && examStore.testMode != 'exam'" @close="ChatOpenned = false" :question="examStore.currentQuestion" />
     </div>
 </template>
 
@@ -302,6 +205,7 @@ import { useAuthStore } from '../stores/authStore'
 import ExamFeedbackModal from './ExamFeedbackModal.vue'
 import AiChat from './AiChat.vue'
 import { trackPaywallEvent } from '../utils/paywallEvents'
+import UpgradePrompt from './UpgradePrompt.vue'
 
 
 const isDark = useDark({ disableTransition: false });
@@ -323,20 +227,6 @@ const ChatOpenned = ref(false);
 const pendingNoteValues = new Map<number, string>();
 const noteSaveTimers = new Map<number, ReturnType<typeof setTimeout>>();
 const firstName = computed(() => authStore.user?.name?.split(' ')[0] || 'there')
-
-function upgradeToNursing() {
-    trackPaywallEvent('pricing_clicked', {
-        product: 'nursing',
-        placement: 'nursing_preview_modal',
-        exam_id: examStore.exam?.id,
-        question_index: examStore.currentIndex,
-    })
-
-    router.push({
-        path: authStore.pricingRoute('nursing'),
-        query: { redirect: route.fullPath },
-    })
-}
 
 watch(() => examStore.show_paywall, (shown) => {
     if (!shown) return
@@ -495,39 +385,57 @@ function shouldShowQuestionResult(question: any) {
     return ['tutor', 'review'].includes(examStore.testMode) && hasQuestionAnswer(question);
 }
 
-function questionNavClass(question: any, index: number) {
-    const baseClass = 'relative flex h-8 w-11 items-center justify-center rounded-md border text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 dark:focus:ring-offset-sky-950';
-    const activeClass = index === examStore.currentIndex
-        ? 'ring-2 ring-sky-500 ring-offset-2 dark:ring-offset-sky-950 font-semibold'
-        : 'hover:border-sky-300 hover:bg-sky-50';
-    const answered = hasQuestionAnswer(question);
-
-    let stateClass = 'border-gray-200 bg-white text-gray-600 dark:border-gray-600 dark:bg-sky-950 dark:text-slate-300';
-
-    if (['tutor', 'review'].includes(examStore.testMode) && answered) {
-        stateClass = isQuestionCorrect(question)
-            ? 'border-emerald-400 bg-emerald-100 text-emerald-800 dark:border-emerald-400/40 dark:bg-emerald-400/15 dark:text-emerald-100'
-            : 'border-rose-400 bg-rose-100 text-rose-700 dark:border-rose-400/40 dark:bg-rose-400/15 dark:text-rose-100';
-    } else if (examStore.testMode === 'exam' && answered) {
-        stateClass = 'border-teal-400 bg-teal-100 text-teal-800 dark:border-teal-400/40 dark:bg-teal-400/15 dark:text-teal-100';
-    }
-    return `${baseClass} ${stateClass} ${activeClass}`;
+function questionNavClass(question: any, index: any) {
+    const classes = ['exam-nav-btn'];
+    if (index === examStore.currentIndex) classes.push('exam-nav-btn--current');
+    if (isQuestionLocked(index)) classes.push('exam-nav-btn--locked');
+    else if (shouldShowQuestionResult(question)) classes.push(isQuestionCorrect(question) ? 'exam-nav-btn--correct' : 'exam-nav-btn--wrong');
+    else if (hasQuestionAnswer(question)) classes.push('exam-nav-btn--answered');
+    return classes.join(' ');
 }
 
 function questionResultBadgeClass(question: any) {
-    return isQuestionCorrect(question)
-        ? 'absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-600 text-[9px] text-white'
-        : 'absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] text-white';
+    return isQuestionCorrect(question) ? 'exam-nav-badge exam-nav-badge--ok' : 'exam-nav-badge exam-nav-badge--bad';
 }
 
 function questionResultMark(question: any) {
     return isQuestionCorrect(question) ? '&#x2713' : '&#10007;';
 }
 
+const MODE_LABELS: Record<string, string> = { exam: 'Exam mode', tutor: 'Tutor mode', review: 'Review mode' };
+const modeLabel = computed(() => MODE_LABELS[examStore.testMode] || examStore.testMode);
+const TYPE_LABELS: Record<string, string> = {
+    MSA: 'Single answer', MMA: 'Multiple answers', FIB: 'Fill in the blank', DRD: 'Dropdown', ORD: 'Ordering', HL: 'Highlight',
+    GRP: 'Grouping', GRPCHCKBOX: 'Grouping', MTX: 'Matrix', MMC: 'Matrix single choice', MMN: 'Matrix multiple choice',
+    BOW: 'Bow-tie', DDC: 'Drag and drop', DRDCLOZE: 'Cloze dropdown',
+};
+const questionTypeLabel = computed(() => {
+    const type = examStore.currentQuestion?.question_type;
+    if (!type) return '';
+    return type.name || TYPE_LABELS[String(type.code || '').toUpperCase()] || String(type.code || '');
+});
+const answeredCount = computed(() => (examStore.questions as any[]).filter((q) => hasQuestionAnswer(q)).length);
+const answeredPercent = computed(() => examStore.questions.length ? Math.round((answeredCount.value / examStore.questions.length) * 100) : 0);
+const progressPercent = computed(() => examStore.questions.length ? Math.round(((Number(examStore.currentIndex) + 1) / examStore.questions.length) * 100) : 0);
+
+function isQuestionLocked(index: number) {
+    if (!examStore.is_current_exam_full_length && index >= examStore.no_of_qns_before_paywall) return true;
+    if (!active('nursing') && examStore.questions.length > 100 && index > 50) return true;
+    return false;
+}
+
+/** Index of the first locked question, or -1 when the whole set is open. */
+const lockedFrom = computed(() => {
+    const total = examStore.questions.length;
+    for (let i = 0; i < total; i++) if (isQuestionLocked(i)) return i;
+    return -1;
+});
+
 function questionNavTitle(question: any, index: number) {
     const states = [`Question ${index + 1}`];
 
     if (index === examStore.currentIndex) states.push('current');
+    if (isQuestionLocked(index)) states.push('locked - upgrade to open');
     if (examStore.testMode === 'exam' && hasQuestionAnswer(question)) states.push('attempted');
     if (shouldShowQuestionResult(question)) states.push(isQuestionCorrect(question) ? 'correct' : 'incorrect');
 

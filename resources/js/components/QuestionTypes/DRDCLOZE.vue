@@ -41,7 +41,7 @@
 
             <div v-if="showRevealButton" class="mt-4 text-center">
 
-                <button class="px-6 py-2 text-white rounded-sm bg-sky-500/95 border-0 cursor-pointer"
+                <button class="exam-submit-btn"
                     :disabled="!canSubmit" @click="revealSolution">
                     Submit
                 </button>

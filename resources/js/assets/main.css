@@ -247,6 +247,432 @@
     color: var(--theme-light);
   }
 
+  /* ---- Exam console (components/NursingExamRenderer.vue, TeasExamRenderer.vue)
+     Keeps the ATI / YouWorld-style sky-700 bars; everything else is compact. ---- */
+  .exam-shell {
+    @apply relative h-[100dvh] overflow-y-auto bg-slate-50 font-sans text-slate-800 dark:bg-sky-950 dark:text-slate-200;
+  }
+
+  .exam-bar {
+    @apply fixed right-0 left-0 z-50 flex h-12 items-center justify-between gap-2 px-2 text-white select-none sm:px-3;
+    background-image: linear-gradient(90deg, var(--color-sky-700), var(--color-sky-800));
+  }
+
+  .exam-bar--top {
+    @apply top-0 shadow-md shadow-sky-900/20;
+  }
+
+  .exam-bar--bottom {
+    @apply bottom-0 border-t border-white/10;
+  }
+
+  .exam-bar-logo {
+    @apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/15 text-sm;
+  }
+
+  .exam-bar-pill {
+    @apply rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide whitespace-nowrap;
+  }
+
+  .exam-bar-center {
+    @apply flex shrink-0 flex-col items-center gap-1;
+  }
+
+  .exam-bar-progress {
+    @apply h-1 w-28 overflow-hidden rounded-full bg-white/20 lg:w-40;
+  }
+
+  .exam-bar-progress > span {
+    @apply block h-full rounded-full bg-amber-300 transition-[width] duration-500;
+  }
+
+  .exam-bar-btn {
+    @apply inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-lg px-1.5 text-xs font-semibold text-white/95 transition hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent sm:px-2.5;
+  }
+
+  .exam-bar-btn i {
+    @apply text-sm;
+  }
+
+  .exam-bar-btn--on {
+    @apply bg-white/20;
+  }
+
+  .exam-bar-btn--ai {
+    @apply bg-white/15 text-amber-200 ring-1 ring-white/30 ring-inset whitespace-nowrap hover:bg-white/25;
+  }
+
+  .exam-bar-btn--ai i {
+    @apply text-amber-300;
+  }
+
+  .exam-bar-timer {
+    @apply inline-flex h-8 items-center gap-1.5 rounded-lg bg-black/20 px-2.5 text-xs font-bold;
+  }
+
+  .exam-bar-zoom {
+    @apply h-8 items-center overflow-hidden rounded-lg border border-white/25 text-xs font-bold;
+  }
+
+  .exam-bar-zoom button {
+    @apply inline-flex h-full cursor-pointer items-center px-2 transition hover:bg-white/15;
+  }
+
+  .exam-bar-zoom button i {
+    @apply text-[10px];
+  }
+
+  .exam-bar-zoom > span {
+    @apply border-x border-white/25 px-1.5;
+  }
+
+  .exam-bar-next {
+    @apply inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg bg-white px-4 text-sm font-extrabold text-sky-800 shadow-sm transition hover:bg-sky-50 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .exam-body {
+    @apply mx-auto flex w-full max-w-screen-2xl flex-col gap-4 px-3 pt-15 pb-16 lg:flex-row lg:items-start lg:px-5;
+  }
+
+  .exam-main {
+    @apply min-w-0 flex-1 space-y-4;
+  }
+
+  .exam-side {
+    @apply w-full shrink-0 lg:sticky lg:top-15 lg:w-72 xl:w-80;
+  }
+
+  .exam-side--notes {
+    @apply lg:w-96 xl:w-[28rem];
+  }
+
+  .exam-question-card {
+    @apply rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6 dark:border-sky-800 dark:bg-sky-950/60;
+  }
+
+  .exam-question-head {
+    @apply mb-4 flex flex-wrap items-center gap-2 border-b border-slate-100 pb-3 text-[11px] dark:border-sky-800;
+  }
+
+  .exam-question-num {
+    @apply rounded-md bg-sky-700 px-2 py-0.5 font-extrabold text-white;
+  }
+
+  .exam-question-type {
+    @apply rounded-md bg-sky-50 px-2 py-0.5 font-semibold text-sky-700 dark:bg-sky-900/60 dark:text-sky-200;
+  }
+
+  .exam-question-state {
+    @apply ml-auto inline-flex items-center gap-1 font-semibold text-slate-400;
+  }
+
+  .exam-question-state i {
+    @apply text-[9px];
+  }
+
+  .exam-question-state--answered {
+    @apply text-emerald-600 dark:text-emerald-300;
+  }
+
+  .exam-solution {
+    @apply relative overflow-hidden rounded-2xl border border-teal-200 bg-white p-4 shadow-sm sm:p-5 dark:border-teal-700/50 dark:bg-sky-950/60;
+  }
+
+  .exam-solution-head {
+    @apply mb-3 flex items-center justify-between gap-3;
+  }
+
+  .exam-solution-title {
+    @apply inline-flex items-center gap-2 text-sm font-extrabold text-slate-950 dark:text-white;
+  }
+
+  .exam-solution-title i {
+    @apply text-teal-500;
+  }
+
+  .exam-solution-hint {
+    @apply mb-3 inline-flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300;
+  }
+
+  .exam-solution-body {
+    @apply text-sm leading-relaxed text-slate-700 dark:text-slate-200;
+  }
+
+  .exam-solution--locked .exam-solution-body {
+    @apply max-h-32 overflow-hidden blur-sm select-none;
+  }
+
+  .exam-ai-btn {
+    @apply mt-4 inline-flex cursor-pointer items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-4 py-2 text-xs font-bold text-teal-700 transition hover:bg-teal-100 dark:border-teal-400/30 dark:bg-teal-400/10 dark:text-teal-200;
+  }
+
+  .exam-link {
+    @apply inline-flex cursor-pointer items-center gap-1 text-xs font-bold text-sky-700 hover:underline dark:text-sky-300;
+  }
+
+  .exam-note {
+    @apply rounded-2xl border border-amber-200 bg-amber-50/80 p-4 text-slate-800 dark:border-amber-300/30 dark:bg-amber-300/10 dark:text-amber-50;
+  }
+
+  .exam-note-title {
+    @apply mb-2 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-amber-700 dark:text-amber-200;
+  }
+
+  .exam-stats {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .exam-stat {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-600 dark:border-sky-800 dark:bg-sky-950/60 dark:text-slate-300;
+  }
+
+  .exam-stat strong {
+    @apply text-slate-900 dark:text-white;
+  }
+
+  .exam-nav {
+    @apply rounded-2xl border border-slate-200 bg-white p-3 shadow-sm dark:border-sky-800 dark:bg-sky-950/60;
+  }
+
+  .exam-nav-head {
+    @apply mb-3 flex items-center justify-between gap-3;
+  }
+
+  .exam-nav-title {
+    @apply text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-300;
+  }
+
+  .exam-nav-sub {
+    @apply text-sm text-slate-600 dark:text-slate-300;
+  }
+
+  .exam-nav-ring {
+    @apply relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[10px] font-extrabold text-sky-800 dark:text-sky-100;
+    background: conic-gradient(var(--color-sky-600) var(--p, 0%), var(--color-sky-100) 0);
+  }
+
+  .dark .exam-nav-ring {
+    background: conic-gradient(var(--color-sky-400) var(--p, 0%), var(--color-sky-900) 0);
+  }
+
+  .exam-nav-ring > span {
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-full bg-white dark:bg-sky-950;
+  }
+
+  .exam-nav-preview {
+    @apply mb-3 flex w-full cursor-pointer items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-left text-[11px] text-amber-800 transition hover:bg-amber-100 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-100;
+  }
+
+  .exam-nav-preview > span {
+    @apply flex-1;
+  }
+
+  .exam-nav-grid {
+    @apply grid grid-cols-8 gap-1.5 sm:grid-cols-10 lg:grid-cols-6 xl:grid-cols-7;
+  }
+
+  .exam-nav-btn {
+    @apply relative flex h-9 cursor-pointer items-center justify-center rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-600 transition hover:border-sky-300 hover:bg-sky-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 dark:border-sky-800 dark:bg-sky-950 dark:text-slate-300 dark:hover:bg-sky-900;
+  }
+
+  .exam-nav-btn--answered {
+    @apply border-sky-300 bg-sky-100 text-sky-800 dark:border-sky-600 dark:bg-sky-800/60 dark:text-sky-100;
+  }
+
+  .exam-nav-btn--correct {
+    @apply border-emerald-300 bg-emerald-100 text-emerald-800 dark:border-emerald-500/40 dark:bg-emerald-400/15 dark:text-emerald-100;
+  }
+
+  .exam-nav-btn--wrong {
+    @apply border-rose-300 bg-rose-100 text-rose-700 dark:border-rose-500/40 dark:bg-rose-400/15 dark:text-rose-100;
+  }
+
+  .exam-nav-btn--current {
+    @apply border-sky-700 bg-sky-700 text-white shadow-md shadow-sky-700/30 hover:bg-sky-700 dark:border-sky-400 dark:bg-sky-500 dark:hover:bg-sky-500;
+  }
+
+  .exam-nav-btn--locked {
+    @apply cursor-pointer border-dashed border-slate-300 bg-slate-100 text-slate-400 hover:border-amber-300 hover:bg-amber-50 dark:border-slate-600 dark:bg-slate-800/60 dark:text-slate-500;
+    background-image: repeating-linear-gradient(135deg, transparent 0 6px, rgba(148, 163, 184, 0.12) 6px 7px);
+  }
+
+  .exam-nav-btn--locked > span {
+    @apply opacity-70;
+  }
+
+  .exam-nav-lock {
+    @apply absolute -top-1.5 -right-1.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-500 text-[8px] text-white shadow dark:bg-slate-400 dark:text-slate-900;
+  }
+
+  .exam-nav-badge {
+    @apply absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] text-white shadow;
+  }
+
+  .exam-nav-badge--ok {
+    @apply bg-emerald-600;
+  }
+
+  .exam-nav-badge--bad {
+    @apply bg-rose-600;
+  }
+
+  .exam-nav-legend {
+    @apply mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-slate-100 pt-3 text-[10px] font-semibold text-slate-500 dark:border-sky-800 dark:text-slate-400;
+  }
+
+  .exam-nav-legend > span {
+    @apply inline-flex items-center gap-1;
+  }
+
+  .exam-nav-dot {
+    @apply inline-block h-2.5 w-2.5 rounded-sm border;
+  }
+
+  .exam-nav-dot--current {
+    @apply border-sky-700 bg-sky-700;
+  }
+
+  .exam-nav-dot--answered {
+    @apply border-sky-300 bg-sky-100;
+  }
+
+  .exam-nav-dot--correct {
+    @apply border-emerald-300 bg-emerald-100;
+  }
+
+  .exam-nav-dot--wrong {
+    @apply border-rose-300 bg-rose-100;
+  }
+
+  .exam-nav-dot--locked {
+    @apply border-dashed border-slate-400 bg-slate-100;
+  }
+
+  .exam-loading {
+    @apply flex h-[100dvh] flex-col items-center justify-center gap-3;
+  }
+
+  .exam-overlay {
+    @apply fixed inset-0 z-[60] flex items-center justify-center bg-sky-950/40 p-4;
+  }
+
+  .exam-overlay--blur {
+    @apply backdrop-blur-sm;
+  }
+
+  .exam-overlay-card {
+    @apply w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl dark:bg-sky-950;
+  }
+
+  .exam-submit-btn {
+    @apply inline-flex cursor-pointer items-center gap-2 rounded-full bg-sky-700 px-6 py-2 text-sm font-bold text-white shadow-md shadow-sky-700/25 transition hover:bg-sky-800 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* ---- Exam set progress (components/Exam/ExamSetProgress.vue) ----
+     Used on every exam listing card: test bank loaders, exit exams, NCLEX sets. */
+  .set-progress {
+    --sp-a: var(--color-slate-300);
+    --sp-b: var(--color-slate-400);
+    --sp-ink: var(--color-slate-600);
+    @apply rounded-2xl border border-slate-200 bg-slate-50/80 px-3 py-2.5 dark:border-sky-800 dark:bg-sky-950/40;
+  }
+
+  .set-progress--pass {
+    --sp-a: var(--color-emerald-400);
+    --sp-b: var(--color-teal-600);
+    --sp-ink: var(--color-emerald-700);
+    @apply border-emerald-200 bg-emerald-50/70 dark:border-emerald-800/60 dark:bg-emerald-950/30;
+  }
+
+  .set-progress--near {
+    --sp-a: var(--color-amber-300);
+    --sp-b: var(--color-orange-500);
+    --sp-ink: var(--color-amber-700);
+    @apply border-amber-200 bg-amber-50/70 dark:border-amber-800/60 dark:bg-amber-950/30;
+  }
+
+  .set-progress--low {
+    --sp-a: var(--color-rose-400);
+    --sp-b: var(--color-rose-600);
+    --sp-ink: var(--color-rose-700);
+    @apply border-rose-200 bg-rose-50/70 dark:border-rose-800/60 dark:bg-rose-950/30;
+  }
+
+  .set-progress--empty {
+    @apply border-dashed;
+  }
+
+  .set-progress-ink {
+    color: var(--sp-ink);
+  }
+
+  .dark .set-progress-ink {
+    color: var(--sp-a);
+  }
+
+  .set-progress-ring {
+    @apply relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full;
+    background: conic-gradient(var(--sp-b) var(--p, 0%), color-mix(in oklab, var(--sp-a) 25%, white) 0);
+  }
+
+  .dark .set-progress-ring {
+    background: conic-gradient(var(--sp-a) var(--p, 0%), color-mix(in oklab, var(--sp-a) 20%, black) 0);
+  }
+
+  .set-progress-ring > span {
+    @apply inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-[11px] font-extrabold tabular-nums text-slate-900 dark:bg-sky-950 dark:text-white;
+  }
+
+  .set-progress-ring small {
+    @apply text-[8px] font-bold;
+  }
+
+  .set-progress--empty .set-progress-ring > span {
+    @apply text-slate-400;
+  }
+
+  .set-progress-status {
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold;
+  }
+
+  .set-progress-status i {
+    @apply text-[9px];
+  }
+
+  .set-progress-track {
+    @apply relative mt-2.5 h-2 w-full overflow-visible rounded-full bg-white ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700;
+  }
+
+  .set-progress-fill {
+    @apply block h-full rounded-full transition-[width] duration-700 ease-out;
+    background-image: linear-gradient(90deg, var(--sp-a), var(--sp-b));
+  }
+
+  .set-progress-tick {
+    @apply absolute -top-1 h-4 w-0.5 -translate-x-1/2 rounded-full bg-slate-500 dark:bg-slate-300;
+  }
+
+  /* ---- Exam mode picker (components/Exam/ExamModeModal.vue) ---- */
+  .exam-mode-box {
+    @apply w-11/12 max-w-2xl rounded-2xl;
+  }
+
+  .exam-mode-preview {
+    @apply mt-3 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800;
+  }
+
+  .exam-mode-preview i {
+    @apply mt-0.5 text-[11px];
+  }
+
+  .exam-mode-card {
+    @apply flex cursor-pointer flex-col items-start rounded-2xl border border-slate-200 bg-white p-4 text-left transition duration-200 hover:-translate-y-0.5 hover:shadow-lg;
+  }
+
+  .exam-mode-cta {
+    @apply inline-flex w-full items-center justify-center gap-1.5 rounded-full px-3 py-2 text-xs font-bold transition;
+  }
+
   /* ---- Authentication (components/Auth/AuthShell.vue + views/auth/*) ---- */
   .auth-shell {
     @apply grid min-h-screen w-full grid-cols-1 lg:grid-cols-[minmax(0,11fr)_minmax(0,13fr)] xl:grid-cols-2;
@@ -1198,4 +1624,22 @@ button {
 @keyframes dash-search-badge {
   0%, 100% { transform: translateY(0) rotate(0deg); box-shadow: 0 0 0 0 var(--theme-soft); }
   50% { transform: translateY(-2px) rotate(-8deg); box-shadow: 0 0 0 6px transparent; }
+}
+
+/* Exam mode picker stays light in dark mode. Unlayered on purpose: daisyUI's
+   .modal-box colours are unlayered too, and unlayered rules beat @layer ones. */
+.modal .exam-mode-box,
+.dark .modal .exam-mode-box {
+  background-color: #ffffff;
+  color: var(--color-slate-900);
+  color-scheme: light;
+}
+
+.exam-mode-box .btn-ghost {
+  color: var(--color-slate-500);
+}
+
+.exam-mode-box .btn-ghost:hover {
+  background-color: var(--color-slate-100);
+  color: var(--color-slate-900);
 }
