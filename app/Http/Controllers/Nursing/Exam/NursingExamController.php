@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
 
 class NursingExamController extends Controller
 {
+    private const TRIAL_QUESTION_LIMIT = 15;
 
     public function getSubjects()
     {
@@ -196,6 +197,13 @@ class NursingExamController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
+        if ($this->isNursingTrial($request)) {
+            $trialLimitError = $this->trialQuestionLimitError($request);
+
+            if ($trialLimitError) {
+                return $this->ResError($trialLimitError, 403);
+            }
+        }
 
         ExamAttempt::where('user_id', auth()->id())
             ->where('sub_topic_id', $request->sub_topic_id)
@@ -322,26 +330,86 @@ class NursingExamController extends Controller
 
     public function shouldTakeWholeExam($request)
     {
-
-        if ($request->user()) {
-            $user = User::find($request->user()->id);
-        } else return true;
-
-        $nursing_sub = json_decode($user->subscription->subscriptions)->nursing;
-
-        if ($nursing_sub[0]->plan_name == 'trial' ||  Carbon::parse($nursing_sub[0]->expires)->isPast()) {
-            if (
-                ExamAttempt::where('user_id', $request->user()->id)
-                ->count() >= 4
-            ) {
-                return false;
-            }
+        if (!$request->user()) {
+            return true;
         }
-        if (isset($nursing_sub[0]->expires) && Carbon::parse($nursing_sub[0]->expires)->isPast()) {
+
+        $plan = $this->currentNursingPlan($request);
+
+        if (!$plan) {
             return false;
         }
 
-        return true;
+        $planName = strtolower((string) ($plan['plan_name'] ?? $plan['name'] ?? ''));
+        if ($planName === 'trial') {
+            return false;
+        }
+
+        $expires = $plan['expires'] ?? null;
+
+        return $expires && !Carbon::parse($expires)->isPast();
+    }
+
+    private function isNursingTrial(Request $request): bool
+    {
+        $plan = $this->currentNursingPlan($request);
+        if (!$plan) {
+            return false;
+        }
+
+        $planName = strtolower((string) ($plan['plan_name'] ?? $plan['name'] ?? ''));
+
+        return $planName === 'trial'
+            && isset($plan['expires'])
+            && !Carbon::parse($plan['expires'])->isPast();
+    }
+
+    private function currentNursingPlan(Request $request): ?array
+    {
+        $userId = $request->user()?->id;
+        if (!$userId) {
+            return null;
+        }
+
+        $user = User::with('subscription')->find($userId);
+        $subscriptions = $user?->subscription?->subscriptions ?? [];
+
+        if (is_string($subscriptions)) {
+            $subscriptions = json_decode($subscriptions, true) ?: [];
+        }
+
+        if (!is_array($subscriptions)) {
+            return null;
+        }
+
+        $plans = $subscriptions['nursing'] ?? [];
+        if (!is_array($plans) || empty($plans)) {
+            return null;
+        }
+
+        $plan = $plans[0] ?? null;
+
+        if (is_object($plan)) {
+            $plan = (array) $plan;
+        }
+
+        return is_array($plan) ? $plan : null;
+    }
+
+    private function trialQuestionLimitError(Request $request): ?array
+    {
+        $limit = self::TRIAL_QUESTION_LIMIT;
+        $suspendIndex = (int) $request->input('suspend_index', 0);
+        $questionCount = SubTopic::find($request->sub_topic_id)?->questions()->count() ?? 0;
+
+        if ($suspendIndex > $limit || ($request->boolean('completed') && $questionCount > $limit)) {
+            return [
+                'message' => 'trial_question_limit_reached',
+                'details' => "Trial access is limited to {$limit} Nursing questions per exam.",
+            ];
+        }
+
+        return null;
     }
 
     private function questionNotesFor(Request $request, array $questionIds): array

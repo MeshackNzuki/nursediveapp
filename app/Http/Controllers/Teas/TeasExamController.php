@@ -13,32 +13,14 @@ use Illuminate\Support\Carbon;
 
 class TeasExamController extends Controller
 {
+    private const TRIAL_QUESTION_LIMIT = 4;
+
     /**
      * Fetch all topics for a given subject.
      */
     public function showByTitle(Request $request, $id)
     {
-        $user = $request->user();
-        $full_length = false;
-
-        if ($user) {
-            $full_length = true;
-            $subscriptionData = json_decode(optional($user->subscription)->subscriptions ?? '{}');
-            $teas_sub = $subscriptionData->teas ?? [];
-
-            if (!empty($teas_sub) && isset($teas_sub[0])) {
-                $plan = $teas_sub[0];
-
-                if ($plan->plan_name === 'trial' || Carbon::parse($plan->expires)->isPast()) {
-                    $attemptCount = ExamAttempt::where('user_id', $user->id)->count();
-                    if ($attemptCount >= 2) {
-                        $full_length = false;
-                    }
-                }
-            } else {
-                $full_length = false;
-            }
-        }
+        $full_length = $this->shouldTakeWholeExam($request);
 
         $exam = Topic::with('questions.answer')->where('id', $id)->first();
 
@@ -105,6 +87,14 @@ class TeasExamController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
+        if ($this->isTeasTrial($request)) {
+            $trialLimitError = $this->trialQuestionLimitError($request);
+
+            if ($trialLimitError) {
+                return $this->ResError($trialLimitError, 403);
+            }
+        }
+
         // Ensure unique attempt per user per sub_topic
         ExamAttempt::where('user_id', auth()->id())
             ->where('topic_id', $request->sub_topic_id)
@@ -138,27 +128,14 @@ class TeasExamController extends Controller
 
         $exam = $attempt->topic;
 
-        $full_length = true;
-
-
-        $subscriptionData = json_decode(optional($user->subscription)->subscriptions ?? '{}');
-        $teas_sub = $subscriptionData->teas ?? [];
-
-        if (empty($teas_sub) || !isset($teas_sub[0])) {
+        if (!$this->currentTeasPlan($request)) {
             return $this->ResError([
                 'message' => 'no_subscription',
                 'details' => 'No valid TEAS subscription found.'
             ]);
         }
 
-        $plan = $teas_sub[0];
-
-        if ($plan->plan_name === 'trial' || Carbon::parse($plan->expires)->isPast()) {
-            $attemptCount = ExamAttempt::where('user_id', $user->id)->count();
-            if ($attemptCount >= 2) {
-                $full_length = false;
-            }
-        }
+        $full_length = $this->shouldTakeWholeExam($request);
 
 
 
@@ -281,5 +258,88 @@ class TeasExamController extends Controller
             'created_at' => $attempt->created_at,
             'updated_at' => $attempt->updated_at,
         ]);
+    }
+
+    private function shouldTakeWholeExam(Request $request): bool
+    {
+        if (!$request->user()) {
+            return false;
+        }
+
+        $plan = $this->currentTeasPlan($request);
+
+        if (!$plan) {
+            return false;
+        }
+
+        $planName = strtolower((string) ($plan['plan_name'] ?? $plan['name'] ?? ''));
+        if ($planName === 'trial') {
+            return false;
+        }
+
+        $expires = $plan['expires'] ?? null;
+
+        return $expires && !Carbon::parse($expires)->isPast();
+    }
+
+    private function isTeasTrial(Request $request): bool
+    {
+        $plan = $this->currentTeasPlan($request);
+        if (!$plan) {
+            return false;
+        }
+
+        $planName = strtolower((string) ($plan['plan_name'] ?? $plan['name'] ?? ''));
+
+        return $planName === 'trial'
+            && isset($plan['expires'])
+            && !Carbon::parse($plan['expires'])->isPast();
+    }
+
+    private function currentTeasPlan(Request $request): ?array
+    {
+        $user = $request->user();
+        if (!$user) {
+            return null;
+        }
+
+        $subscriptions = $user->subscription?->subscriptions ?? [];
+
+        if (is_string($subscriptions)) {
+            $subscriptions = json_decode($subscriptions, true) ?: [];
+        }
+
+        if (!is_array($subscriptions)) {
+            return null;
+        }
+
+        $plans = $subscriptions['teas'] ?? [];
+        if (!is_array($plans) || empty($plans)) {
+            return null;
+        }
+
+        $plan = $plans[0] ?? null;
+
+        if (is_object($plan)) {
+            $plan = (array) $plan;
+        }
+
+        return is_array($plan) ? $plan : null;
+    }
+
+    private function trialQuestionLimitError(Request $request): ?array
+    {
+        $limit = self::TRIAL_QUESTION_LIMIT;
+        $suspendIndex = (int) $request->input('suspend_index', 0);
+        $questionCount = Topic::find($request->topic_id)?->questions()->count() ?? 0;
+
+        if ($suspendIndex > $limit || ($request->boolean('completed') && $questionCount > $limit)) {
+            return [
+                'message' => 'trial_question_limit_reached',
+                'details' => "Trial access is limited to {$limit} TEAS questions per exam.",
+            ];
+        }
+
+        return null;
     }
 }

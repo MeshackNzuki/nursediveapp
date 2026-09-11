@@ -193,7 +193,7 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
         // Essentials
         exams: null,
 
-        no_of_qns_before_paywall: 10,
+        no_of_qns_before_paywall: 15,
 
         show_paywall: false,
 
@@ -279,7 +279,11 @@ export const useNursingExamStore = defineStore("useNursingExamStore", {
             this.notes = normalizeNotes(payload.notes);
             this.results = payload.results;
             this.is_current_exam_full_length = payload.is_exam_full_length;
-            this.currentIndex = payload.suspend_index || 0;
+
+            const resumeIndex = Number(payload.suspend_index || 0);
+            this.currentIndex = payload.is_exam_full_length
+                ? resumeIndex
+                : Math.min(resumeIndex, this.no_of_qns_before_paywall - 1);
         },
         setMode(mode: "exam" | "review" | "tutor" | "review") {
             this.testMode = mode;

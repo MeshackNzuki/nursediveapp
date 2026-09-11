@@ -134,8 +134,12 @@ export const useTeasExamStore = defineStore("useTeasExamStore", {
             this.answers = payload.answers;
             this.results = payload.results;
             this.testMode = payload.mode;
-            this.currentIndex = payload.suspend_index || 0;
             this.is_exam_full_length = payload.is_exam_full_length;
+
+            const resumeIndex = Number(payload.suspend_index || 0);
+            this.currentIndex = payload.is_exam_full_length
+                ? resumeIndex
+                : Math.min(resumeIndex, this.no_of_qns_before_paywall - 1);
         },
         setMode(mode: "exam" | "review" | "tutor") {
             this.testMode = mode;
