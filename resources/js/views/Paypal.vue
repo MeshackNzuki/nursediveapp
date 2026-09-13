@@ -228,7 +228,6 @@ onMounted(initializePaypal)
                     <i class="pi pi-arrow-left text-xs"></i>
                     Back
                 </button>
-
                 <div
                     class="flex flex-col gap-4 border-b border-slate-200 pb-5 dark:border-slate-700 sm:flex-row sm:items-center sm:justify-between">
                     <div>
@@ -241,6 +240,12 @@ onMounted(initializePaypal)
                         <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300">
                             Continue with PayPal to approve the payment and unlock your access.
                         </p>
+                        <div
+                            class="bg-success p-3 mt-4 rounded-lg border border-success/30 text-sm text-success dark:border-success/50 dark:bg-success/10 text-success/90">
+                            <p class="text-sm font-semibold text-green-700 dark:text-green-300">Dear Customer, Our
+                                payment gateways is being updated. Please try again in a moment. takes about 24 hours.
+                                We are sorry for the inconvenience.</p>
+                        </div>
                     </div>
                     <img :src="paypalIcon" alt="PayPal" class="h-8 w-auto">
                 </div>
