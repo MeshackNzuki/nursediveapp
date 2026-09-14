@@ -142,7 +142,7 @@ import { useRoute } from "vue-router"
 import router from "../router"
 import { trackPaywallEvent } from "../utils/paywallEvents"
 
-const stripeKey = "pk_live_51QrMHdGoaQAS8lwkRA9eBoYkAzAv5h9RxwX3R7837iYEHXglHmRFFOxQ5AiuNKGRRRxZuSXTJQYzuFayFNrzA4GV00eWr6EowA"
+const stripeKey = "pk_live_51QrMHdoaQAS8lwkRA9eBoYkAzAv5h9RxwX3R7837iYEHXglHmRFFOxQ5AiuNKGRRRxZuSXTJQYzuFayFNrzA4GV00eWr6EowA"
 const stripeLoaded = ref(false)
 const clientSecret = ref("")
 const paymentId = ref("")
