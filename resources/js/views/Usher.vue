@@ -1082,8 +1082,6 @@ onMounted(() => {
                             @click="goToSupport">
                             <i class="pi pi-envelope"></i> Contact support
                         </button>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">You can also use the live chat at the
-                            bottom-right corner.</p>
                     </div>
                 </div>
             </section>

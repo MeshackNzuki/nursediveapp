@@ -77,7 +77,7 @@ const sendMessage = async () => {
             sender: "bot",
             name: "Arnold - Nursenex",
             avatar: "https://img.daisyui.com/images/profile/demo/kenobee@192.webp",
-            text: `Hello ${user?.name || "there"}, Please click the blue widget on bottom right for a quick chat.`,
+            text: `Hello ${user?.name || "there"}, please contact support at info@nursenex.com for help.`,
             time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         };
 
