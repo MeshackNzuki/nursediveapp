@@ -17,7 +17,7 @@
             Complete your {{ productLabel }} access
           </h1>
           <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300 md:text-base">
-            Use card, bank, or wallet options through Stripe, or switch to PayPal before placing your order.
+            Use card, bank, or wallet options through Stripe to complete your order.
           </p>
         </div>
 
@@ -29,17 +29,7 @@
       </div>
       <section class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <div class="space-y-4">
-          <div class="grid gap-3 sm:grid-cols-2">
-            <button
-              class="flex min-h-24 items-center justify-between rounded-lg border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-blue-300 hover:bg-blue-50/70 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-blue-500/60 dark:hover:bg-blue-500/10"
-              type="button" @click="redirectToPaypal">
-              <span>
-                <span class="block text-sm font-black text-slate-950 dark:text-white">PayPal</span>
-                <span class="mt-1 block text-xs text-slate-600 dark:text-slate-300">Pay with your PayPal wallet</span>
-              </span>
-              <img :src="paypalIcon" alt="PayPal" class="h-6 w-auto">
-            </button>
-
+          <div class="grid gap-3">
             <button
               class="flex min-h-24 items-center justify-between rounded-lg border border-blue-300 bg-blue-50 p-4 text-left shadow-sm ring-2 ring-blue-500/20 transition dark:border-blue-500/50 dark:bg-blue-500/10"
               type="button" aria-pressed="true">
@@ -149,7 +139,6 @@ import axios from "axios"
 import { useMainStore } from "../stores"
 import { useAuthStore } from "../stores/authStore.js"
 import { useRoute } from "vue-router"
-import paypalIcon from "../assets/images/paypal-icon.svg"
 import router from "../router"
 import { trackPaywallEvent } from "../utils/paywallEvents"
 
@@ -312,7 +301,7 @@ const initializeCheckout = async () => {
       amount: displayAmount.value,
     })
   } catch (error) {
-    checkoutError.value = "We couldn't prepare checkout. Please refresh or try PayPal."
+    checkoutError.value = "We couldn't prepare checkout. Please refresh and try again."
   }
 }
 
@@ -356,27 +345,6 @@ async function handleSubmit() {
   }
 }
 
-const redirectToPaypal = () => {
-  if (!planId.value) {
-    checkoutError.value = "Choose a plan before opening PayPal checkout."
-    return
-  }
-
-  trackPaywallEvent("checkout_started", {
-    provider: "paypal",
-    plan_id: planId.value,
-    amount: displayAmount.value,
-  })
-
-  router.push({
-    path: "/paypal-checkout",
-    query: {
-      plan_id: planId.value,
-      amount: displayAmount.value,
-      ...(redirectTarget() ? { redirect: redirectTarget() } : {}),
-    },
-  })
-}
 onMounted(initializeCheckout)
 
 </script>

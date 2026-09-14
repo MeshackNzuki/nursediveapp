@@ -13,7 +13,6 @@ use App\Http\Controllers\Payments\Stripe\StripeWebhookController;
 use App\Http\Controllers\Payments\PlanController;
 use App\Http\Controllers\Payments\SubscriptionController;
 use App\Http\Controllers\Payments\Paypal\PaypalController;
-use App\Http\Controllers\Payments\Paypal\PaypalWebhookController;
 
 // Auth
 use App\Http\Controllers\Auth\LoginController;
@@ -64,7 +63,7 @@ Route::post('/verify-email/confirm', [EmailVerificationController::class, 'verif
 //stripe webhook
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle']);
 //paypal webhook
-Route::post('/paypal/webhook', [PaypalWebhookController::class, 'handle']);
+Route::post('/paypal/webhook', [PaypalController::class, 'disabled']);
 
 
 
@@ -121,8 +120,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('check-access', [SubscriptionController::class, 'checkAccess']);
         Route::get('/', [PaymentController::class, 'index']); // /api/payments
         Route::get('/payment/{id?}', [PaymentController::class, 'show']); // /api/payments/payment OR /api/payments/payment/{id}
-        Route::post('/paypal/create-payment-intent', [PaypalController::class, 'createPaymentIntent']);
-        Route::post('/paypal/capture-payment', [PaypalController::class, 'capturePayment']);
+        Route::post('/paypal/create-payment-intent', [PaypalController::class, 'disabled']);
+        Route::post('/paypal/capture-payment', [PaypalController::class, 'disabled']);
     });
     //user account
     Route::post('/account', [AccountController::class, 'update']);

@@ -205,7 +205,6 @@ const modalBlockedExactPaths = new Set([
     "/email-verification",
     "/welcome",
     "/checkout",
-    "/paypal-checkout",
     "/order-complete",
     "/subscription",
     "/account",

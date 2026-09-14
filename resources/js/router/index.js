@@ -35,15 +35,15 @@ const routes = [
     {
         path: "/checkout",
         name: "Checkout",
-        redirect: (to) => ({
-            path: "/paypal-checkout",
-            query: to.query,
-        }),
+        component: () => import("../views/Checkout.vue"),
     },
     {
         path: "/paypal-checkout",
         name: "PayPalCheckout",
-        component: () => import("../views/Paypal.vue"),
+        redirect: (to) => ({
+            path: "/checkout",
+            query: to.query,
+        }),
     },
     {
         path: "/order-complete",

@@ -16,6 +16,13 @@ class PaypalController extends Controller
 {
     use ManageSubscriptions;
 
+    public function disabled()
+    {
+        return $this->ResError([
+            'message' => 'PayPal payments are currently disabled. Please use Stripe checkout.',
+        ], 410);
+    }
+
     /**
      * Create PayPal Order (Payment Intent)
      */
