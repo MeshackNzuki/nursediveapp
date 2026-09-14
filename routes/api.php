@@ -246,7 +246,7 @@ Route::group([
     ],
 
 ], function () {
-    Route::get('/incident-assistant', [OpenAIController::class, 'incidentAssistant']);
-    Route::post('/incident-assistant', [OpenAIController::class, 'incidentAssistant']);
-    Route::get('/incident-assistant-history', [OpenAIController::class, 'incidentAssistantHistory']);
+    Route::get('/incident-assistant', [OpenAIController::class, 'disabled']);
+    Route::post('/incident-assistant', [OpenAIController::class, 'disabled']);
+    Route::get('/incident-assistant-history', [OpenAIController::class, 'disabled']);
 });

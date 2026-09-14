@@ -15,7 +15,6 @@ import axios from "axios";
 import "./AxiosConfig";
 import { useThemeStore } from "./stores/Theme";
 import { useDark } from "@vueuse/core";
-import TawkService from "./services/livechat";
 
 const route = useRoute();
 const router = useRouter();
@@ -31,10 +30,8 @@ const dark = useDark();
 
 
 onMounted(async () => {
-    TawkService.init();
     mainStore.initializeStoreServices();
     checkExcludedPages();
-    manageChat();
     trackCurrentProductActivity();
     scheduleModalOpen();
 });
@@ -66,41 +63,10 @@ const checkExcludedPages = () => {
     );
 };
 
-const manageChat = () => {
-
-    let attempts = 0;
-    const maxAttempts = 30;
-
-    const interval = setInterval(() => {
-
-        const api = (window as any).Tawk_API;
-
-        console.log('api', api)
-
-        if (api && typeof api.hideWidget === "function") {
-
-            if (testMode.value) {
-                api.hideWidget();
-            } else {
-                api.showWidget();
-            }
-
-            clearInterval(interval);
-        }
-
-        attempts++;
-
-        if (attempts >= maxAttempts) {
-            clearInterval(interval);
-        }
-    }, 500);
-};
-
 watch(
     () => route.path,
     () => {
         checkExcludedPages();
-        manageChat();
     },
 );
 

@@ -38,14 +38,6 @@ const routes = [
         component: () => import("../views/Checkout.vue"),
     },
     {
-        path: "/paypal-checkout",
-        name: "PayPalCheckout",
-        redirect: (to) => ({
-            path: "/checkout",
-            query: to.query,
-        }),
-    },
-    {
         path: "/order-complete",
         name: "OrderComplete",
         component: () => import("../views/OrderCompleted.vue"),

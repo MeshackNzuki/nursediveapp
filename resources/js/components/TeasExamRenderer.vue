@@ -17,9 +17,6 @@
             </div>
 
             <div class="flex flex-1 items-center justify-end gap-0.5 sm:gap-1">
-                <button v-if="examStore.testMode != 'exam'" type="button" class="exam-bar-btn exam-bar-btn--ai" :class="{ 'exam-bar-btn--on': ChatOpenned }" aria-label="Ask AI about this question" @click="ChatOpenned = !ChatOpenned">
-                    <i class="pi pi-sparkles"></i><span>Ask AI</span>
-                </button>
                 <span class="exam-bar-btn">
                     <ExamFeedbackModal source-product="teas" :exam-mode="examStore.testMode" :question-id="examStore.currentQuestion?.id" :exam-id="examStore.exam?.id" />
                 </span>
@@ -66,9 +63,6 @@
                     </div>
                     <p v-if="!showSolution" class="exam-solution-hint"><i class="pi pi-lock"></i> Answer the question to reveal the rationale.</p>
                     <div class="exam-solution-body" :class="store?.currentZoom" v-html="examStore.currentQuestion?.solution"></div>
-                    <button v-if="showSolution" type="button" class="exam-ai-btn" @click="ChatOpenned = !ChatOpenned">
-                        <i class="pi pi-comments"></i> Dive deeper with AI
-                    </button>
                 </section>
 
                 <div v-if="['tutor', 'review'].includes(examStore.testMode)" class="exam-stats">
@@ -180,7 +174,6 @@
             </div>
         </div>
 
-        <AiChat v-if="ChatOpenned && examStore.testMode != 'exam'" @close="ChatOpenned = false" :question="examStore.currentQuestion" />
     </div>
 </template>
 
@@ -198,7 +191,6 @@ import ExamNotes from './ExamNotes.vue'
 import CommonButton from './Buttons/CommonButton.vue'
 import { useAuthStore } from '../stores/authStore'
 import ExamFeedbackModal from './ExamFeedbackModal.vue'
-import AiChat from './AiChat.vue'
 import { trackPaywallEvent } from '../utils/paywallEvents'
 import UpgradePrompt from './UpgradePrompt.vue'
 
@@ -219,7 +211,6 @@ const examStore = useTeasExamStore() as any
 const confirm = useConfirm()
 const notes = ref('')
 const difficulty = ref('')
-const ChatOpenned = ref(false);
 
 const authStore = useAuthStore()
 const firstName = computed(() => authStore.user?.name?.split(' ')[0] || 'there')
