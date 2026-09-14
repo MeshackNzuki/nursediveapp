@@ -6,7 +6,7 @@
             <ExamSetList :exams="exams" :attempts="attempts" :loading="loading" eyebrow="Nursing test bank"
                 :title="subject ? `${subject} exams` : 'Loading subject...'"
                 subtitle="Continue where you left off, review completed attempts, or start a fresh set."
-                :search-placeholder="`Search in ${subject || 'this bank'}...`" @start="openModal" @resume="resumeExam" @review="reviewAttempt">
+                :search-placeholder="`Search in ${subject || 'this bank'}...`" :max-exam-year="2023" @start="openModal" @resume="resumeExam" @review="reviewAttempt">
                 <template #lead>
                     <button type="button" class="mb-3 inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:underline dark:text-slate-300" @click="router.back()">
                         <i class="pi pi-arrow-left text-[10px]"></i> {{ parentLabel }}

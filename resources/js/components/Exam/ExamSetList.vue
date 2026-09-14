@@ -150,9 +150,10 @@ const props = withDefaults(
         passMark?: number;
         startLabel?: string;
         retakeLabel?: string;
+        maxExamYear?: number | null;
         sortDefault?: (a: ExamSetItem, b: ExamSetItem) => number;
     }>(),
-    { subtitle: "", eyebrow: "Exam sets", loading: false, searchPlaceholder: "Search exam sets...", namePrefix: "", columns: 3, passMark: 75, startLabel: "Take exam", retakeLabel: "Retake", sortDefault: undefined },
+    { subtitle: "", eyebrow: "Exam sets", loading: false, searchPlaceholder: "Search exam sets...", namePrefix: "", columns: 3, passMark: 75, startLabel: "Take exam", retakeLabel: "Retake", maxExamYear: null, sortDefault: undefined },
 );
 const emit = defineEmits<{ (e: "start", exam: ExamSetItem): void; (e: "resume", attemptId: number, exam: ExamSetItem): void; (e: "review", attemptId: number, exam: ExamSetItem): void }>();
 
@@ -167,10 +168,11 @@ const displayName = (exam: ExamSetItem) => {
 };
 const questionCount = (exam: ExamSetItem) => Number(exam.questions_count ?? exam.question_count ?? 0) || 0;
 const isAllowedExam = (exam: ExamSetItem) => {
+    if (props.maxExamYear == null) return true;
     if (!exam.created_at) return true;
     const parsed = new Date(exam.created_at);
     if (Number.isNaN(parsed.getTime())) return true;
-    return parsed.getFullYear() <= 2024;
+    return parsed.getFullYear() <= props.maxExamYear;
 };
 
 const attemptFor = (exam: ExamSetItem) => props.attempts?.find((a) => String(a.sub_topic_id) === String(exam.id));

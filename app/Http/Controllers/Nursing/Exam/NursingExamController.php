@@ -17,7 +17,7 @@ use Illuminate\Support\Carbon;
 class NursingExamController extends Controller
 {
     private const TRIAL_QUESTION_LIMIT = 15;
-    private const MAX_EXAM_YEAR = 2024;
+    private const MAX_EXAM_YEAR = 2023;
 
     public function getSubjects()
     {
