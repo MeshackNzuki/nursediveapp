@@ -6,17 +6,21 @@ use App\Models\Teas\Topic;
 use App\Models\Teas\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class TeasTopicController extends Controller
 {
+    private const MAX_EXAM_YEAR = 2024;
+
     /**
      * Fetch all topics for a given subject.
      */
     public function getTopicsBySubject($categoryId)
     {
         $category = Category::find($categoryId);
-        $topics = Topic::where('category_id', $categoryId)
+        $topics = $this->eligibleTopicsQuery()
+            ->where('category_id', $categoryId)
             ->orderBy('name', 'asc')
             ->get();
         return $this->ResSuccess(
@@ -52,7 +56,8 @@ class TeasTopicController extends Controller
             return $this->ResSuccess([]);
         }
 
-        $topics = Topic::with('category:id,name,slug')
+        $topics = $this->eligibleTopicsQuery()
+            ->with('category:id,name,slug')
             ->where('name', 'LIKE', '%' . $term . '%')
             ->orderBy('name')
             ->limit(30)
@@ -72,5 +77,14 @@ class TeasTopicController extends Controller
             });
 
         return $this->ResSuccess($topics);
+    }
+
+    private function eligibleTopicsQuery(): Builder
+    {
+        return Topic::query()->where(function (Builder $query) {
+            $query
+                ->whereNull('created_at')
+                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+        });
     }
 }

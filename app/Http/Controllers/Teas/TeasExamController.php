@@ -7,6 +7,7 @@ use App\Models\Teas\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Teas\ExamAttempt;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Carbon;
 
@@ -14,6 +15,7 @@ use Illuminate\Support\Carbon;
 class TeasExamController extends Controller
 {
     private const TRIAL_QUESTION_LIMIT = 4;
+    private const MAX_EXAM_YEAR = 2024;
 
     /**
      * Fetch all topics for a given subject.
@@ -22,7 +24,10 @@ class TeasExamController extends Controller
     {
         $full_length = $this->shouldTakeWholeExam($request);
 
-        $exam = Topic::with('questions.answer')->where('id', $id)->first();
+        $exam = $this->eligibleTopicsQuery()
+            ->with('questions.answer')
+            ->where('id', $id)
+            ->first();
 
         if (!$exam) {
             return $this->ResError('Exam not found');
@@ -331,7 +336,7 @@ class TeasExamController extends Controller
     {
         $limit = self::TRIAL_QUESTION_LIMIT;
         $suspendIndex = (int) $request->input('suspend_index', 0);
-        $questionCount = Topic::find($request->topic_id)?->questions()->count() ?? 0;
+        $questionCount = $this->eligibleTopicsQuery()->find($request->topic_id)?->questions()->count() ?? 0;
 
         if ($suspendIndex > $limit || ($request->boolean('completed') && $questionCount > $limit)) {
             return [
@@ -341,5 +346,14 @@ class TeasExamController extends Controller
         }
 
         return null;
+    }
+
+    private function eligibleTopicsQuery(): Builder
+    {
+        return Topic::query()->where(function (Builder $query) {
+            $query
+                ->whereNull('created_at')
+                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+        });
     }
 }

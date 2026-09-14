@@ -8,25 +8,29 @@ use App\Models\Nclex\Subject;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Nclex\ExamAttempt;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class NclexExamController extends Controller
 {
     private const MONTHLY_CAT_LIMIT = 3;
+    private const MAX_EXAM_YEAR = 2024;
 
     /**
      * Fetch all topics for a given subject.
      */
     public function showByTitle($id)
     {
-
-        $exam = SubTopic::with([
-            'questions.questionType',
-            'questions.caseStudy',
-            'questions.subQuestions.questionType',
-            'questions.subQuestions.caseStudy',
-        ])->where('id', $id)->first();
+        $exam = $this->eligibleSubtopicsQuery()
+            ->with([
+                'questions.questionType',
+                'questions.caseStudy',
+                'questions.subQuestions.questionType',
+                'questions.subQuestions.caseStudy',
+            ])
+            ->where('id', $id)
+            ->first();
 
         if (!$exam) {
             return $this->ResError('Exam not found');
@@ -182,7 +186,7 @@ class NclexExamController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $subTopic = SubTopic::find($request->sub_topic_id);
+        $subTopic = $this->eligibleSubtopicsQuery()->find($request->sub_topic_id);
         if (!$subTopic) {
             return $this->ResError('Exam not found');
         }
@@ -319,7 +323,7 @@ class NclexExamController extends Controller
     public function computerized_assessment()
     {
         //fetch all client ned araeas available
-        $areas = SubTopic::all();
+        $areas = $this->eligibleSubtopicsQuery()->get();
         //now for each area, fetch 10 qns
 
     }
@@ -334,12 +338,17 @@ class NclexExamController extends Controller
                 return $this->ResError($this->monthlyCatLimitMessage(), 429);
             }
 
-            $exam = SubTopic::with([
-                'questions.questionType',
-                'questions.caseStudy',
-                'questions.subject',
-            ])->where('slug', 'like', '%adaptive%')
-                ->orWhere('name', 'like', '%CAT%')
+            $exam = $this->eligibleSubtopicsQuery()
+                ->with([
+                    'questions.questionType',
+                    'questions.caseStudy',
+                    'questions.subject',
+                ])
+                ->where(function (Builder $query) {
+                    $query
+                        ->where('slug', 'like', '%adaptive%')
+                        ->orWhere('name', 'like', '%CAT%');
+                })
                 ->first();
 
             if (!$exam) {
@@ -682,6 +691,15 @@ class NclexExamController extends Controller
     private function monthlyCatLimitMessage(): string
     {
         return 'You can only take the CAT exam 3 times per month. Please wait until next month.';
+    }
+
+    private function eligibleSubtopicsQuery(): Builder
+    {
+        return SubTopic::query()->where(function (Builder $query) {
+            $query
+                ->whereNull('created_at')
+                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+        });
     }
 
 

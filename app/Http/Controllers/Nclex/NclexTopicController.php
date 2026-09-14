@@ -6,9 +6,12 @@ use App\Models\Nclex\Topic;
 use App\Models\Nclex\Category;
 use App\Http\Controllers\Controller;
 use App\Models\Nclex\SubTopic;
+use Illuminate\Database\Eloquent\Builder;
 
 class NclexTopicController extends Controller
 {
+    private const MAX_EXAM_YEAR = 2024;
+
     /**
      * Fetch all topics for a given subject.
      */
@@ -31,7 +34,8 @@ class NclexTopicController extends Controller
     public function Readiness()
 
     {
-        $topics = SubTopic::where('exam_type_id', 1)
+        $topics = $this->eligibleSubtopicsQuery()
+            ->where('exam_type_id', 1)
             ->orderBy('name', 'asc')
             ->get();
 
@@ -44,7 +48,8 @@ class NclexTopicController extends Controller
 
     public function Mock()
     {
-        $topics = SubTopic::where('exam_type_id', 3)
+        $topics = $this->eligibleSubtopicsQuery()
+            ->where('exam_type_id', 3)
             ->orderBy('name', 'asc')
             ->get();
 
@@ -53,5 +58,14 @@ class NclexTopicController extends Controller
                 'subtopics' => $topics,
             ]
         );
+    }
+
+    private function eligibleSubtopicsQuery(): Builder
+    {
+        return SubTopic::query()->where(function (Builder $query) {
+            $query
+                ->whereNull('created_at')
+                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+        });
     }
 }
