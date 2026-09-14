@@ -16,6 +16,7 @@ class TeasExamController extends Controller
 {
     private const TRIAL_QUESTION_LIMIT = 4;
     private const MAX_EXAM_YEAR = 2024;
+    private const MAX_EXAM_QUESTIONS = 60;
 
     /**
      * Fetch all topics for a given subject.
@@ -350,10 +351,12 @@ class TeasExamController extends Controller
 
     private function eligibleTopicsQuery(): Builder
     {
-        return Topic::query()->where(function (Builder $query) {
-            $query
-                ->whereNull('created_at')
-                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
-        });
+        return Topic::query()
+            ->has('questions', '<=', self::MAX_EXAM_QUESTIONS)
+            ->where(function (Builder $query) {
+                $query
+                    ->whereNull('created_at')
+                    ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+            });
     }
 }

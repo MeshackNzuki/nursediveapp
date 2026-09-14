@@ -43,7 +43,7 @@
                         <div class="dash-tile-soft flex items-center gap-3 px-3 py-2.5">
                             <span class="dash-icon-tile theme-icon h-9 w-9 shrink-0 text-sm"><i class="pi pi-bullseye"></i></span>
                             <div class="min-w-0">
-                                <p class="text-lg font-extrabold leading-tight tabular-nums text-slate-950 dark:text-white">{{ exams.length }}</p>
+                                <p class="text-lg font-extrabold leading-tight tabular-nums text-slate-950 dark:text-white">{{ eligibleExams.length }}</p>
                                 <p class="truncate text-[11px] font-semibold text-slate-500 dark:text-slate-300">Readiness sets · Available checks</p>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                             <div class="flex shrink-0 items-center gap-2">
                                 <span
                                     class="theme-icon inline-flex h-9 min-w-9 items-center justify-center rounded-xl px-2 text-xs font-bold tabular-nums" title="Questions">
-                                    85
+                                    {{ examQuestionCount(exam) }}
                                 </span>
                                 <span v-if="isExamLocked(exam)"
                                     class="inline-flex h-9 min-w-9 items-center justify-center rounded-xl bg-rose-100 px-2 text-xs font-bold text-rose-700 dark:bg-rose-950/50 dark:text-rose-200"
@@ -121,7 +121,7 @@
                         </div>
 
                         <div class="relative mt-auto pt-5">
-                            <ExamSetProgress :score="examScore(exam)" :completed="completed(exam)" :questions="exam.question_count ?? exam.questions_count" :last-attempt-at="lastAttemptAt(exam)" />
+                            <ExamSetProgress :score="examScore(exam)" :completed="completed(exam)" :questions="examQuestionCount(exam)" :last-attempt-at="lastAttemptAt(exam)" />
 
                             <div class="mt-4 flex items-center justify-between gap-2">
                                 <Small :button-text="isExamLocked(exam) ? 'Unlock' : examScore(exam) ? 'Retake Exam' : 'Take Exam'"
@@ -155,6 +155,7 @@ import ExamSetProgress from '../../../components/Exam/ExamSetProgress.vue'
 import { useAuthStore } from '../../../stores/authStore'
 import { trackPaywallEvent } from '../../../utils/paywallEvents'
 
+const MAX_EXAM_QUESTIONS = 60
 const exams = ref<{ id: number; name: string; description?: string; question_count?: number; questions_count?: number; trial_mode?: number | boolean }[]>([])
 const searchTerm = ref('')
 const subject = ref('Readiness assessments')
@@ -163,6 +164,8 @@ const attempts = ref<any[]>([])
 const router = useRouter()
 const authStore = useAuthStore()
 const hasPremiumAccess = computed(() => authStore.isActive('nclex'))
+const examQuestionCount = (exam: { question_count?: number; questions_count?: number }) => Number(exam.question_count ?? exam.questions_count ?? 0)
+const eligibleExams = computed(() => exams.value.filter((exam) => examQuestionCount(exam) <= MAX_EXAM_QUESTIONS))
 
 onMounted(async () => {
     try {
@@ -183,8 +186,8 @@ onMounted(async () => {
 })
 
 const filteredExams = computed(() => {
-    if (!searchTerm.value.trim()) return exams.value
-    return exams.value.filter((exam) => exam.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
+    if (!searchTerm.value.trim()) return eligibleExams.value
+    return eligibleExams.value.filter((exam) => exam.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
 })
 
 const examScore = (exam: { id: number }) => {
@@ -204,10 +207,10 @@ const completed = (exam: { id: number }) => {
     return Boolean(attempt.completed)
 }
 
-const attemptedCount = computed(() => exams.value.filter((exam) => examScore(exam) > 0).length)
+const attemptedCount = computed(() => eligibleExams.value.filter((exam) => examScore(exam) > 0).length)
 
 const averageScore = computed(() => {
-    const scores = exams.value.map((exam) => examScore(exam)).filter((score) => score > 0)
+    const scores = eligibleExams.value.map((exam) => examScore(exam)).filter((score) => score > 0)
     if (!scores.length) return 0
     const total = scores.reduce((sum, score) => sum + score, 0)
     return Math.round(total / scores.length)
@@ -246,7 +249,7 @@ function goToUpgrade(exam: { id: number; name: string }) {
 function trackLockedPaywallShown() {
     if (hasPremiumAccess.value) return
 
-    const lockedCount = exams.value.filter((exam) => isExamLocked(exam)).length
+    const lockedCount = eligibleExams.value.filter((exam) => isExamLocked(exam)).length
     if (!lockedCount) return
 
     trackPaywallEvent('paywall_shown', {

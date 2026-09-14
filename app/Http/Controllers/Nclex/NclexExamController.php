@@ -16,6 +16,7 @@ class NclexExamController extends Controller
 {
     private const MONTHLY_CAT_LIMIT = 3;
     private const MAX_EXAM_YEAR = 2024;
+    private const MAX_EXAM_QUESTIONS = 60;
 
     /**
      * Fetch all topics for a given subject.
@@ -695,11 +696,13 @@ class NclexExamController extends Controller
 
     private function eligibleSubtopicsQuery(): Builder
     {
-        return SubTopic::query()->where(function (Builder $query) {
-            $query
-                ->whereNull('created_at')
-                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
-        });
+        return SubTopic::query()
+            ->has('questions', '<=', self::MAX_EXAM_QUESTIONS)
+            ->where(function (Builder $query) {
+                $query
+                    ->whereNull('created_at')
+                    ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+            });
     }
 
 

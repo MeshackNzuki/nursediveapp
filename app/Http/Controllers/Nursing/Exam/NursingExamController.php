@@ -18,6 +18,7 @@ class NursingExamController extends Controller
 {
     private const TRIAL_QUESTION_LIMIT = 15;
     private const MAX_EXAM_YEAR = 2023;
+    private const MAX_EXAM_QUESTIONS = 60;
 
     public function getSubjects()
     {
@@ -416,7 +417,7 @@ class NursingExamController extends Controller
     {
         $limit = self::TRIAL_QUESTION_LIMIT;
         $suspendIndex = (int) $request->input('suspend_index', 0);
-        $questionCount = SubTopic::find($request->sub_topic_id)?->questions()->count() ?? 0;
+        $questionCount = $this->eligibleSubtopicsQuery()->find($request->sub_topic_id)?->questions()->count() ?? 0;
 
         if ($suspendIndex > $limit || ($request->boolean('completed') && $questionCount > $limit)) {
             return [
@@ -462,19 +463,23 @@ class NursingExamController extends Controller
 
     private function eligibleSubtopicsQuery(): Builder
     {
-        return SubTopic::query()->where(function (Builder $query) {
-            $query
-                ->whereNull('created_at')
-                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
-        });
+        return SubTopic::query()
+            ->has('questions', '<=', self::MAX_EXAM_QUESTIONS)
+            ->where(function (Builder $query) {
+                $query
+                    ->whereNull('created_at')
+                    ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+            });
     }
 
     private function applyExamYearCutoff(Builder $query): Builder
     {
-        return $query->where(function (Builder $nested) {
-            $nested
-                ->whereNull('created_at')
-                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
-        });
+        return $query
+            ->has('questions', '<=', self::MAX_EXAM_QUESTIONS)
+            ->where(function (Builder $nested) {
+                $nested
+                    ->whereNull('created_at')
+                    ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+            });
     }
 }

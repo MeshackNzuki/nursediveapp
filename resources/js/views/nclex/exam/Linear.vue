@@ -44,7 +44,7 @@
                         <div class="dash-tile-soft flex items-center gap-3 px-3 py-2.5">
                             <span class="dash-icon-tile theme-icon h-9 w-9 shrink-0 text-sm"><i class="pi pi-book"></i></span>
                             <div class="min-w-0">
-                                <p class="text-lg font-extrabold leading-tight tabular-nums text-slate-950 dark:text-white">{{ exams.length }}</p>
+                                <p class="text-lg font-extrabold leading-tight tabular-nums text-slate-950 dark:text-white">{{ eligibleExams.length }}</p>
                                 <p class="truncate text-[11px] font-semibold text-slate-500 dark:text-slate-300">Exam sets · Available linear sets</p>
                             </div>
                         </div>
@@ -182,6 +182,7 @@ import ExamSetProgress from '../../../components/Exam/ExamSetProgress.vue'
 import { useAuthStore } from '../../../stores/authStore'
 import { trackPaywallEvent } from '../../../utils/paywallEvents'
 
+const MAX_EXAM_QUESTIONS = 60
 const exams = ref<{ id: number; name: string; description?: string; question_count?: number; questions_count?: number; trial_mode?: number | boolean }[]>([])
 const searchTerm = ref('')
 const subject = ref('Linear assessments')
@@ -191,6 +192,8 @@ const authStore = useAuthStore()
 const attempts = ref<any[]>([])
 const selectedExam = ref<{ id: number; name: string; trial_mode?: number | boolean } | null>(null)
 const hasPremiumAccess = computed(() => authStore.isActive('nclex'))
+const examQuestionCount = (exam: { question_count?: number; questions_count?: number }) => Number(exam.question_count ?? exam.questions_count ?? 0)
+const eligibleExams = computed(() => exams.value.filter((exam) => examQuestionCount(exam) <= MAX_EXAM_QUESTIONS))
 
 onMounted(async () => {
     try {
@@ -207,8 +210,8 @@ onMounted(async () => {
 })
 
 const filteredExams = computed(() => {
-    if (!searchTerm.value.trim()) return exams.value
-    return exams.value.filter((exam) => exam.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
+    if (!searchTerm.value.trim()) return eligibleExams.value
+    return eligibleExams.value.filter((exam) => exam.name.toLowerCase().includes(searchTerm.value.toLowerCase()))
 })
 
 const examScore = (exam: { id: number }) => {
@@ -228,14 +231,10 @@ const completed = (exam: { id: number }) => {
     return Boolean(attempt.completed)
 }
 
-const examQuestionCount = (exam: { question_count?: number; questions_count?: number }) => {
-    return Number(exam.question_count ?? exam.questions_count ?? 85)
-}
-
-const attemptedCount = computed(() => exams.value.filter((exam) => examScore(exam) > 0).length)
+const attemptedCount = computed(() => eligibleExams.value.filter((exam) => examScore(exam) > 0).length)
 
 const averageScore = computed(() => {
-    const scores = exams.value.map((exam) => examScore(exam)).filter((score) => score > 0)
+    const scores = eligibleExams.value.map((exam) => examScore(exam)).filter((score) => score > 0)
     if (!scores.length) return 0
     const total = scores.reduce((sum, score) => sum + score, 0)
     return Math.round(total / scores.length)
@@ -272,7 +271,7 @@ function goToUpgrade(exam: { id: number; name: string }) {
 function trackLockedPaywallShown() {
     if (hasPremiumAccess.value) return
 
-    const lockedCount = exams.value.filter((exam) => isExamLocked(exam)).length
+    const lockedCount = eligibleExams.value.filter((exam) => isExamLocked(exam)).length
     if (!lockedCount) return
 
     trackPaywallEvent('paywall_shown', {

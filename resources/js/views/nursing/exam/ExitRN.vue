@@ -3,7 +3,7 @@
     <template #tab-ATI_RN_EXIT_EXAMS>
       <ExamSetList :exams="atiExams" :attempts="attempts" :loading="loading" eyebrow="RN exit exams" title="ATI RN exit exams"
         subtitle="Exit-level ATI sets with resume, review, and retake." search-placeholder="Search ATI exams..." :columns="2"
-        :max-exam-year="2023"
+        :max-exam-year="2023" :max-questions="60"
         @start="openModal" @resume="resumeExam" @review="reviewAttempt">
         <template #actions>
           <RouterLink to="/nursing/performance-analysis" class="dash-btn-ghost px-4 py-2"><i class="pi pi-chart-line text-[10px]"></i> Performance</RouterLink>
@@ -14,7 +14,7 @@
     <template #tab-HESI_RN_EXIT_EXAMS>
       <ExamSetList :exams="hesiExams" :attempts="attempts" :loading="loading" eyebrow="RN exit exams" title="HESI RN exit exams"
         subtitle="Exit-level HESI sets with resume, review, and retake." search-placeholder="Search HESI exams..." :columns="2"
-        :max-exam-year="2023"
+        :max-exam-year="2023" :max-questions="60"
         @start="openModal" @resume="resumeExam" @review="reviewAttempt">
         <template #actions>
           <RouterLink to="/nursing/performance-analysis" class="dash-btn-ghost px-4 py-2"><i class="pi pi-chart-line text-[10px]"></i> Performance</RouterLink>

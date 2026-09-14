@@ -151,9 +151,10 @@ const props = withDefaults(
         startLabel?: string;
         retakeLabel?: string;
         maxExamYear?: number | null;
+        maxQuestions?: number | null;
         sortDefault?: (a: ExamSetItem, b: ExamSetItem) => number;
     }>(),
-    { subtitle: "", eyebrow: "Exam sets", loading: false, searchPlaceholder: "Search exam sets...", namePrefix: "", columns: 3, passMark: 75, startLabel: "Take exam", retakeLabel: "Retake", maxExamYear: null, sortDefault: undefined },
+    { subtitle: "", eyebrow: "Exam sets", loading: false, searchPlaceholder: "Search exam sets...", namePrefix: "", columns: 3, passMark: 75, startLabel: "Take exam", retakeLabel: "Retake", maxExamYear: null, maxQuestions: null, sortDefault: undefined },
 );
 const emit = defineEmits<{ (e: "start", exam: ExamSetItem): void; (e: "resume", attemptId: number, exam: ExamSetItem): void; (e: "review", attemptId: number, exam: ExamSetItem): void }>();
 
@@ -168,6 +169,7 @@ const displayName = (exam: ExamSetItem) => {
 };
 const questionCount = (exam: ExamSetItem) => Number(exam.questions_count ?? exam.question_count ?? 0) || 0;
 const isAllowedExam = (exam: ExamSetItem) => {
+    if (props.maxQuestions != null && questionCount(exam) > props.maxQuestions) return false;
     if (props.maxExamYear == null) return true;
     if (!exam.created_at) return true;
     const parsed = new Date(exam.created_at);

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 class TeasTopicController extends Controller
 {
     private const MAX_EXAM_YEAR = 2024;
+    private const MAX_EXAM_QUESTIONS = 60;
 
     /**
      * Fetch all topics for a given subject.
@@ -81,10 +82,12 @@ class TeasTopicController extends Controller
 
     private function eligibleTopicsQuery(): Builder
     {
-        return Topic::query()->where(function (Builder $query) {
-            $query
-                ->whereNull('created_at')
-                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
-        });
+        return Topic::query()
+            ->has('questions', '<=', self::MAX_EXAM_QUESTIONS)
+            ->where(function (Builder $query) {
+                $query
+                    ->whereNull('created_at')
+                    ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+            });
     }
 }

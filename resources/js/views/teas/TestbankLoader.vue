@@ -6,7 +6,7 @@
             <ExamSetList :exams="exams" :attempts="attempts" :loading="loading" eyebrow="TEAS test bank"
                 :title="subject ? `${subject}` : 'Loading subject...'"
                 subtitle="Timed practice sets in exam order. Start fresh, resume, or review a finished set."
-                :search-placeholder="`Search in ${subject || 'this section'}...`" name-prefix="TEAS 7 " :sort-default="byTrailingNumber"
+                :search-placeholder="`Search in ${subject || 'this section'}...`" name-prefix="TEAS 7 " :sort-default="byTrailingNumber" :max-questions="60"
                 @start="openModal" @resume="resumeExam" @review="reviewAttempt">
                 <template #lead>
                     <RouterLink to="/teas" class="mb-3 inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:underline dark:text-slate-300">

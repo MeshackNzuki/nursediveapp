@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 class NclexTopicController extends Controller
 {
     private const MAX_EXAM_YEAR = 2024;
+    private const MAX_EXAM_QUESTIONS = 60;
 
     /**
      * Fetch all topics for a given subject.
@@ -62,10 +63,12 @@ class NclexTopicController extends Controller
 
     private function eligibleSubtopicsQuery(): Builder
     {
-        return SubTopic::query()->where(function (Builder $query) {
-            $query
-                ->whereNull('created_at')
-                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
-        });
+        return SubTopic::query()
+            ->has('questions', '<=', self::MAX_EXAM_QUESTIONS)
+            ->where(function (Builder $query) {
+                $query
+                    ->whereNull('created_at')
+                    ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+            });
     }
 }
