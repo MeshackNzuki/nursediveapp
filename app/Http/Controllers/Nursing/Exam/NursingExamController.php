@@ -11,17 +11,28 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Nursing\ParentSubTopic;
 use App\Models\Nursing\QuestionSubject;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
-
-
 
 class NursingExamController extends Controller
 {
     private const TRIAL_QUESTION_LIMIT = 15;
+    private const MAX_EXAM_YEAR = 2024;
 
     public function getSubjects()
     {
-        $questionSubjects = QuestionSubject::all();
+        $questionSubjects = QuestionSubject::query()
+            ->whereHas('subtopics', fn (Builder $query) => $this->applyExamYearCutoff($query))
+            ->withCount([
+                'subtopics as exams_count' => fn (Builder $query) => $this->applyExamYearCutoff($query),
+            ])
+            ->get()
+            ->map(function ($questionSubject) {
+                $data = $questionSubject->questionSubjectData();
+                $data['examsCount'] = (int) ($questionSubject->exams_count ?? 0);
+                return $data;
+            });
+
         return $this->ResSuccess(
             $questionSubjects
         );
@@ -39,11 +50,16 @@ class NursingExamController extends Controller
             throw new \Exception('Parent SubTopic not found');
         }
 
-        $questionSubjects = QuestionSubject::with('subtopics')
+        $questionSubjects = QuestionSubject::query()
             ->where('parent_sub_topic_id', $parentSubTopic->id)
-            ->get()->map(function ($questionSubject) {
+            ->whereHas('subtopics', fn (Builder $query) => $this->applyExamYearCutoff($query))
+            ->withCount([
+                'subtopics as exams_count' => fn (Builder $query) => $this->applyExamYearCutoff($query),
+            ])
+            ->get()
+            ->map(function ($questionSubject) {
                 $data = $questionSubject->questionSubjectData();
-                $data['examsCount'] = isset($questionSubject->subtopics) ? $questionSubject->subtopics->count() : 0;
+                $data['examsCount'] = (int) ($questionSubject->exams_count ?? 0);
                 return $data;
             });
 
@@ -58,10 +74,9 @@ class NursingExamController extends Controller
         ]);
     }
 
-
     public function index()
     {
-        $exams = SubTopic::all();
+        $exams = $this->eligibleSubtopicsQuery()->get();
 
         if ($exams->isEmpty()) {
             return $this->ResError(
@@ -76,7 +91,6 @@ class NursingExamController extends Controller
 
     public function showByTitle(Request $request, $id)
     {
-
         //Old gurds for trial and expiry
         // if ($nursing_sub[0]->plan_name == 'trial') {
         //     if (
@@ -98,9 +112,10 @@ class NursingExamController extends Controller
         // }
 
         //new guard for expiry
-
-
-        $exam = SubTopic::with('questions.questionType')->where('id', $id)->first();
+        $exam = $this->eligibleSubtopicsQuery()
+            ->with('questions.questionType')
+            ->where('id', $id)
+            ->first();
 
         if (!$exam) {
             return $this->ResError('Exam not found');
@@ -158,16 +173,19 @@ class NursingExamController extends Controller
     {
         $searchTerm = $request->input('query');
 
-        $examTopics = SubTopic::where('name', 'LIKE', '%' . $searchTerm . '%')
+        $examTopics = $this->eligibleSubtopicsQuery()
+            ->where('name', 'LIKE', '%' . $searchTerm . '%')
             ->get();
         return $this->ResSuccess($examTopics);
     }
 
-
     public function getSubtopicsPerSubject($slug, Request $request)
     {
         $questionSubject = QuestionSubject::where('slug', $slug)
-            ->with(['parentsubtopic', 'subtopics'])
+            ->with([
+                'parentsubtopic',
+                'subtopics' => fn (Builder $query) => $this->applyExamYearCutoff($query),
+            ])
             ->first();
 
         if (!$questionSubject) {
@@ -225,7 +243,6 @@ class NursingExamController extends Controller
         return $this->ResSuccess($attempt);
     }
 
-
     public function review_attempt(Request $request, $id)
     {
         $attempt = ExamAttempt::with('subTopic.questions.questionType')
@@ -276,7 +293,7 @@ class NursingExamController extends Controller
     public function previous_attempts(Request $request)
     {
         $attempts = ExamAttempt::with('subTopic')
-            ->where('user_id', auth()->id()) // Ensure user can only view their own
+            ->where('user_id', auth()->id())
             ->get();
         return $this->ResSuccess(
             $attempts->map(function ($attempt) {
@@ -326,7 +343,6 @@ class NursingExamController extends Controller
             'updated_at' => $attempt->updated_at,
         ]);
     }
-
 
     public function shouldTakeWholeExam($request)
     {
@@ -414,7 +430,6 @@ class NursingExamController extends Controller
 
     private function questionNotesFor(Request $request, array $questionIds): array
     {
-
         if (empty($questionIds && $request->user())) {
             return [];
         }
@@ -443,5 +458,23 @@ class NursingExamController extends Controller
         }
 
         return is_array($decoded) ? $decoded : [];
+    }
+
+    private function eligibleSubtopicsQuery(): Builder
+    {
+        return SubTopic::query()->where(function (Builder $query) {
+            $query
+                ->whereNull('created_at')
+                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+        });
+    }
+
+    private function applyExamYearCutoff(Builder $query): Builder
+    {
+        return $query->where(function (Builder $nested) {
+            $nested
+                ->whereNull('created_at')
+                ->orWhereYear('created_at', '<=', self::MAX_EXAM_YEAR);
+        });
     }
 }

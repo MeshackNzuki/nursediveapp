@@ -54,7 +54,7 @@
                             <option value="recent">Recently attempted</option>
                             <option value="high">Highest score</option>
                             <option value="low">Lowest score</option>
-                            <option value="name">Name A–Z</option>
+                            <option value="name">Name A-Z</option>
                         </select>
                     </label>
                 </div>
@@ -68,9 +68,9 @@
 
         <div v-else-if="visibleExams.length === 0" class="dash-card-white flex flex-col items-center gap-2 py-12 text-center">
             <span class="dash-icon-tile theme-icon h-12 w-12"><i class="pi pi-inbox"></i></span>
-            <p class="text-sm font-bold text-slate-800 dark:text-slate-100">{{ exams.length === 0 ? "No exam sets here yet" : "Nothing matches that search or filter" }}</p>
-            <p class="text-xs text-slate-500 dark:text-slate-300">{{ exams.length === 0 ? "Check back soon." : "Try a different keyword or switch the filter back to all sets." }}</p>
-            <button v-if="exams.length > 0" type="button" class="dash-btn-ghost mt-2 px-4 py-1.5 text-xs" @click="resetFilters">Show all sets</button>
+            <p class="text-sm font-bold text-slate-800 dark:text-slate-100">{{ eligibleExams.length === 0 ? "No exam sets here yet" : "Nothing matches that search or filter" }}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-300">{{ eligibleExams.length === 0 ? "Check back soon." : "Try a different keyword or switch the filter back to all sets." }}</p>
+            <button v-if="eligibleExams.length > 0" type="button" class="dash-btn-ghost mt-2 px-4 py-1.5 text-xs" @click="resetFilters">Show all sets</button>
         </div>
 
         <TransitionGroup v-else name="fade" tag="div" class="grid gap-4" :class="gridClass" appear>
@@ -115,8 +115,24 @@
 import { computed, ref } from "vue";
 import ExamSetProgress from "./ExamSetProgress.vue";
 
-export type ExamSetItem = { id: number; name: string; description?: string | null; questions_count?: number | string | null; question_count?: number | string | null };
-export type ExamAttemptLike = { id: number; sub_topic_id: number | string; score?: number | string | null; completed?: boolean | number | string | null; completed_at?: string | null; updated_at?: string | null; created_at?: string | null };
+export type ExamSetItem = {
+    id: number;
+    name: string;
+    description?: string | null;
+    questions_count?: number | string | null;
+    question_count?: number | string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+};
+export type ExamAttemptLike = {
+    id: number;
+    sub_topic_id: number | string;
+    score?: number | string | null;
+    completed?: boolean | number | string | null;
+    completed_at?: string | null;
+    updated_at?: string | null;
+    created_at?: string | null;
+};
 type Status = "new" | "progress" | "completed";
 type Filter = "all" | Status;
 
@@ -134,7 +150,6 @@ const props = withDefaults(
         passMark?: number;
         startLabel?: string;
         retakeLabel?: string;
-        /** Optional custom ordering for the default sort. */
         sortDefault?: (a: ExamSetItem, b: ExamSetItem) => number;
     }>(),
     { subtitle: "", eyebrow: "Exam sets", loading: false, searchPlaceholder: "Search exam sets...", namePrefix: "", columns: 3, passMark: 75, startLabel: "Take exam", retakeLabel: "Retake", sortDefault: undefined },
@@ -151,6 +166,12 @@ const displayName = (exam: ExamSetItem) => {
     return `${props.namePrefix}${n.charAt(0).toUpperCase()}${n.slice(1)}`;
 };
 const questionCount = (exam: ExamSetItem) => Number(exam.questions_count ?? exam.question_count ?? 0) || 0;
+const isAllowedExam = (exam: ExamSetItem) => {
+    if (!exam.created_at) return true;
+    const parsed = new Date(exam.created_at);
+    if (Number.isNaN(parsed.getTime())) return true;
+    return parsed.getFullYear() <= 2024;
+};
 
 const attemptFor = (exam: ExamSetItem) => props.attempts?.find((a) => String(a.sub_topic_id) === String(exam.id));
 const scoreOf = (exam: ExamSetItem) => {
@@ -173,21 +194,23 @@ const statusOf = (exam: ExamSetItem): Status => {
     return completedOf(exam) ? "completed" : "progress";
 };
 
+const eligibleExams = computed(() => props.exams.filter(isAllowedExam));
+
 const counts = computed(() => ({
-    all: props.exams.length,
-    new: props.exams.filter((e) => statusOf(e) === "new").length,
-    progress: props.exams.filter((e) => statusOf(e) === "progress").length,
-    completed: props.exams.filter((e) => statusOf(e) === "completed").length,
+    all: eligibleExams.value.length,
+    new: eligibleExams.value.filter((e) => statusOf(e) === "new").length,
+    progress: eligibleExams.value.filter((e) => statusOf(e) === "progress").length,
+    completed: eligibleExams.value.filter((e) => statusOf(e) === "completed").length,
 }));
 const averageScore = computed(() => {
-    const scores = props.exams.map(scoreOf).filter((s) => s > 0);
+    const scores = eligibleExams.value.map(scoreOf).filter((s) => s > 0);
     return scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
 });
 const stats = computed(() => [
     { label: "Exam sets", value: counts.value.all, icon: "pi pi-list", tile: "theme-icon" },
     { label: "Completed", value: counts.value.completed, icon: "pi pi-check-circle", tile: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200" },
     { label: "In progress", value: counts.value.progress, icon: "pi pi-history", tile: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200" },
-    { label: "Avg score", value: averageScore.value ? `${averageScore.value}%` : "–", icon: "pi pi-chart-line", tile: averageScore.value >= props.passMark ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200" : "bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-200" },
+    { label: "Avg score", value: averageScore.value ? `${averageScore.value}%` : "-", icon: "pi pi-chart-line", tile: averageScore.value >= props.passMark ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200" : "bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-200" },
 ]);
 const filterChips = computed(() => [
     { key: "all" as Filter, label: "All", count: counts.value.all },
@@ -197,7 +220,7 @@ const filterChips = computed(() => [
 ]);
 
 const visibleExams = computed(() => {
-    let list = [...props.exams];
+    let list = [...eligibleExams.value];
     const q = search.value.trim().toLowerCase();
     if (q) list = list.filter((e) => displayName(e).toLowerCase().includes(q));
     if (filter.value !== "all") list = list.filter((e) => statusOf(e) === filter.value);
