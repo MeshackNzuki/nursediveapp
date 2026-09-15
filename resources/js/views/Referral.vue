@@ -504,7 +504,7 @@ interface ReferredUser {
 }
 
 /** Days of free access granted to both sides once the referred friend pays. */
-const REWARD_DAYS = 15;
+const REWARD_DAYS = 7;
 
 const authStore = useAuthStore();
 const user = computed<any>(() => authStore.user || {});

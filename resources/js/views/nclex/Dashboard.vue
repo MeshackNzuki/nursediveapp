@@ -138,9 +138,9 @@
               <div class="relative mt-auto pt-5">
                 <div class="mb-2 flex items-center justify-between text-xs">
                   <span class="font-semibold text-slate-500 dark:text-slate-300">{{ mode.progressLabel }}</span>
-                  <span class="font-extrabold tabular-nums text-slate-950 dark:text-white">
+                  <!-- <span class="font-extrabold tabular-nums text-slate-950 dark:text-white">
                     {{ mode.attempted }} / {{ mode.total }}
-                  </span>
+                  </span> -->
                 </div>
                 <div class="dash-progress bg-light-blue-500">
                   <div class="relative h-full overflow-hidden rounded-full transition-all duration-700 ease-out" :class="mode.barClass"

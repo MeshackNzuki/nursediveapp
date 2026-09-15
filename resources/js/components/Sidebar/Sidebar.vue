@@ -235,7 +235,7 @@
                     </span>
                     <span class="min-w-0">
                         <span class="block text-xs font-extrabold uppercase tracking-wide text-bright-sun-500">
-                            Get 15 days free
+                            Get 7 days free
                         </span>
                         <span class="block truncate text-xs text-white/90 font-bold italic">
                             Refer a friend to earn
@@ -756,4 +756,3 @@ const logoutClass = computed(() => [
     isSidebarOpen.value ? "justify-start px-3" : "justify-center px-2",
 ]);
 </script>
-

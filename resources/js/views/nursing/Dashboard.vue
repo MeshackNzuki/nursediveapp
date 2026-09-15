@@ -108,18 +108,18 @@
                     <p class="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">{{ link.description }}</p>
                   </div>
                 </div>
-                <span class="analysis-pill shrink-0 border border-current/20 bg-white/70 text-[11px] font-bold backdrop-blur-sm dark:bg-slate-950/40"
+                <!-- <span class="analysis-pill shrink-0 border border-current/20 bg-white/70 text-[11px] font-bold backdrop-blur-sm dark:bg-slate-950/40"
                   :class="link.inkClass">
                   {{ link.total }} sets
-                </span>
+                </span> -->
               </div>
 
               <div class="relative mt-auto pt-5">
                 <div class="mb-2 flex items-center justify-between text-xs">
                   <span class="font-semibold text-slate-500 dark:text-slate-300">Exam attempted</span>
-                  <span class="font-extrabold tabular-nums text-slate-950 dark:text-white">
+                  <!-- <span class="font-extrabold tabular-nums text-slate-950 dark:text-white">
                     {{ link.attempted }} / {{ link.total }}
-                  </span>
+                  </span> -->
                 </div>
                 <div class="dash-progress bg-light-blue-500">
                   <div class="relative h-full overflow-hidden rounded-full transition-all duration-700 ease-out" :class="link.barClass"
@@ -340,7 +340,7 @@ type ExamSearchResult = {
 };
 
 const PASS_MARK = 75;
-const REFERRAL_REWARD_DAYS = 15;
+const REFERRAL_REWARD_DAYS = 7;
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
